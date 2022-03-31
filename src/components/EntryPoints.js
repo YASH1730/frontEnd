@@ -2,7 +2,7 @@ import React,{useContext} from 'react'
 import {Button,Container,MenuItem,TextField,Typography,Grid,Box} from '@mui/material';
 import loginPoster from '../assets/img/login.jpeg';
 import signupPoster from '../assets/img/signup.jpeg';
-import  '../assets/custom/css/Login.css'
+import  '../assets/custom/css/enteryPoint.css'
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
@@ -86,7 +86,7 @@ export default function EntryPoints() {
                         <TextField  fullWidth id="fullWidth"  type = 'password' label="Password" variant="outlined"  />
 
                     
-                        <Button variant = 'contained' color = 'success' sx = {{width : '100%',marginTop : '5%',marginBottom : '8%',backgroundColor : '#0e9f6e'}}  > Log In</Button>
+                        <Button variant = 'contained' color =  'primary' sx = {{width : '100%',marginTop : '5%',marginBottom : '8%'}}  > Log In</Button>
                     </Box>
                     </form>
 
@@ -115,11 +115,11 @@ export default function EntryPoints() {
                       
                     />
 
-                  <Typography variant = 'caption' sx = {{color : '#0e9f6e',display : 'block', marginTop : '8%'}} >Forgot Password?</Typography>  
+                  <Typography variant = 'caption' color =  'primary' sx = {{display : 'block', marginTop : '8%'}} >Forgot Password?</Typography>  
                 
 
-                  <Typography variant = 'caption'>
-                  <Link className = 'links' to = '/register' >I do not have an account. Create Account  
+                  <Typography variant = 'caption' color =  'primary'>
+                  <Link className = 'links'  to = '/register' >I do not have an account. Create Account  
                     </Link></Typography>  
 
                   </Grid>
@@ -173,7 +173,7 @@ export default function EntryPoints() {
                       </TextField>
 
                     
-                        <Button variant = 'contained' color = 'success' sx = {{width : '100%',marginTop : '5%',marginBottom : '8%',backgroundColor : '#0e9f6e'}}  > Log In</Button>
+                        <Button variant = 'contained' color =  'primary' sx = {{width : '100%',marginTop : '5%',marginBottom : '8%'}}  > Register</Button>
                     </Box>
                     </form>
 

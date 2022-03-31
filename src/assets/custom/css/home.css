@@ -1,0 +1,44 @@
+.topNav{
+    position : fixed;
+    background-color: rgb(247, 247, 247);
+
+}
+
+.tabPanel{
+    position: absolute;
+    top: 8%;
+    left: 15%;
+    width : 85%;
+    /* background-color : rgba(224, 223, 223, 0.233); */
+    z-index: -1;
+}
+
+.tabs{
+    position : fixed;
+    top : 8%;
+    height: 100%;
+    background-color: rgb(247, 247, 247);
+}
+
+@media (max-width : 800px) {
+
+    .tabPanel{
+        left: 30%;
+        width : 70%;
+     }
+
+}
+@media (max-width : 600px) {
+    
+    .tabs{
+        display: none !important;
+    }
+    .tabPanel{
+        position: absolute;
+        top: 8%;
+        left: auto;
+        width : inherit;
+        /* background-color : rgba(224, 223, 223, 0.233); */
+        z-index: -1;
+    }
+}
