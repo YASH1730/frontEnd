@@ -1,6 +1,7 @@
 .topNav{
     position : fixed;
     background-color: rgb(247, 247, 247);
+    z-index : 2;
 
 }
 
@@ -18,7 +19,23 @@
     top : 8%;
     height: 100%;
     background-color: rgb(247, 247, 247);
+    width: 200px !important;
 }
+
+.tabs2
+{
+    position : fixed;
+    top : 0% ;
+    left : 0%;
+    height: 100% ;
+    background-color: rgb(247, 247, 247);
+    width :  200px !important ;   
+}
+
+.hamIcon{
+    display : none !important;
+}
+
 
 @media (max-width : 800px) {
 
@@ -30,8 +47,16 @@
 }
 @media (max-width : 600px) {
     
+.hamIcon{
+
+    display : block !important;
+
+}
     .tabs{
-        display: none !important;
+        width: 0px !important;
+    }
+    .hamMenu{
+        display: block !important;
     }
     .tabPanel{
         position: absolute;
