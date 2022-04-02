@@ -5,6 +5,7 @@ import Slide from '@mui/material/Slide';
 import Backdrop from '@mui/material/Backdrop';
 // inner components
 import Dashboard from './Dashboard';
+import Products from './Products';
 
 // icons 
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -81,6 +82,9 @@ const Home = () => {
               open={ShowTabs}
               onClick={handleClose}
                 >
+                  <Typography align = 'center' pt={3} pb = {3} color = 'primary' variant = 'h5' {...a11yProps(-1)}>
+                            WoodSala
+                        </Typography>
             <Tabs
               orientation="vertical"
               value={value}
@@ -95,9 +99,7 @@ const Home = () => {
                 left: 0, width : '5px' 
               }}}
             >
-               <Typography align = 'center' pt={3} pb = {3} color = 'primary' variant = 'h5' {...a11yProps(-1)}>
-                            WoodSala
-                        </Typography>
+               
               <Tab wrapped icon = {<GridViewIcon/>} label="Dashboard" {...a11yProps(0)} />
               <Tab wrapped icon = {<ShoppingBagOutlinedIcon/>} label="Product" {...a11yProps(1)} />
               <Tab wrapped icon = {<FormatListBulletedOutlinedIcon/>} label="Category" {...a11yProps(2)} />
@@ -105,7 +107,7 @@ const Home = () => {
               <Tab wrapped icon = {<ExploreOutlinedIcon/>} label="Orders" {...a11yProps(4)} />
               <Tab wrapped icon = {<CardGiftcardOutlinedIcon/>} label="Coupons" {...a11yProps(5)} />
               <Tab wrapped icon = {<PersonOutlineOutlinedIcon/>} label="Our Staff" {...a11yProps(6)} />
-              <Tab wrapped icon = {<SettingsOutlinedIcon/>} label="Settings" {...a11yProps(6)} />
+              <Tab wrapped icon = {<SettingsOutlinedIcon/>} label="Settings" {...a11yProps(7)} />
             </Tabs>
             </Backdrop>
   </Slide>
@@ -125,9 +127,7 @@ const Home = () => {
               left: 0, width : '5px' 
             }}}
           >
-           <Typography   {...a11yProps(-1)}>
-                            
-                        </Typography> 
+          
             <Tab wrapped icon = {<GridViewIcon/>} label="Dashboard" {...a11yProps(0)} />
             <Tab wrapped icon = {<ShoppingBagOutlinedIcon/>} label="Product" {...a11yProps(1)} />
             <Tab wrapped icon = {<FormatListBulletedOutlinedIcon/>} label="Category" {...a11yProps(2)} />
@@ -135,7 +135,7 @@ const Home = () => {
             <Tab wrapped icon = {<ExploreOutlinedIcon/>} label="Orders" {...a11yProps(4)} />
             <Tab wrapped icon = {<CardGiftcardOutlinedIcon/>} label="Coupons" {...a11yProps(5)} />
             <Tab wrapped icon = {<PersonOutlineOutlinedIcon/>} label="Our Staff" {...a11yProps(6)} />
-            <Tab wrapped icon = {<SettingsOutlinedIcon/>} label="Settings" {...a11yProps(6)} />
+            <Tab wrapped icon = {<SettingsOutlinedIcon/>} label="Settings" {...a11yProps(7)} />
           </Tabs>
 
 
@@ -145,10 +145,10 @@ const Home = () => {
               <Dashboard/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <Dashboard/>
+            <Products/>
             </TabPanel>
             <TabPanel   value={value} index={2}>
-            Item Two
+           {/* <Products/> */}
             </TabPanel>
             <TabPanel  value={value} index={3}>
               Item Three
@@ -164,9 +164,6 @@ const Home = () => {
             </TabPanel>
             <TabPanel  value={value} index={7}>
             <Dashboard/>
-            </TabPanel>
-            <TabPanel  value={value} index={8}>
-              Item Five
             </TabPanel>
           </Box>
         );
