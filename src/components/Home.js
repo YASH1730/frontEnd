@@ -6,6 +6,12 @@ import Backdrop from '@mui/material/Backdrop';
 // inner components
 import Dashboard from './Dashboard';
 import Products from './Products';
+import Category from './Category';
+import Customers from './Customers';
+import Orders from './Orders';
+import Coupons from './Coupons';
+import OurStaff from './OurStaff';
+import Setting from './Setting';
 
 // icons 
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -144,27 +150,35 @@ const Home = () => {
             <TabPanel value={value} index={0}>
               <Dashboard/>
             </TabPanel>
+            
             <TabPanel value={value} index={1}>
-            <Products/>
+              <Products/>
             </TabPanel>
+            
             <TabPanel   value={value} index={2}>
-           {/* <Products/> */}
+              <Category/>
             </TabPanel>
+            
             <TabPanel  value={value} index={3}>
-              Item Three
+              <Customers/> 
             </TabPanel>
+
             <TabPanel  value={value} index={4}>
-              Item Four
+            <Orders/>
             </TabPanel>
+            
             <TabPanel  value={value} index={5}>
-              Item Six
+              <Coupons/>
             </TabPanel>
+            
             <TabPanel  value={value} index={6}>
-              Item Seven
+              <OurStaff/>
             </TabPanel>
+
             <TabPanel  value={value} index={7}>
-            <Dashboard/>
+              <Setting/>
             </TabPanel>
+
           </Box>
         );
       }
