@@ -80,7 +80,7 @@ export default function OurStaff() {
   return (
       <>
         <Typography sx = {{display : 'block'}} variant = "h5">
-           Orders   
+           Our Staff   
         </Typography>
 
         <br></br>

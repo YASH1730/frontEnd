@@ -1,5 +1,5 @@
 import React ,{useState}from 'react';
-import {Tabs,Tab,Typography,IconButton,Box,Grid} from '@mui/material'
+import {Tabs,Tab,Typography,IconButton,Box,Grid,Button} from '@mui/material'
 import '../assets/custom/css/home.css'
 import Slide from '@mui/material/Slide';
 import Backdrop from '@mui/material/Backdrop';
@@ -28,6 +28,7 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Home = () => {
 
@@ -88,9 +89,7 @@ const Home = () => {
               open={ShowTabs}
               onClick={handleClose}
                 >
-                  <Typography align = 'center' pt={3} pb = {3} color = 'primary' variant = 'h5' {...a11yProps(-1)}>
-                            WoodSala
-                        </Typography>
+                  
             <Tabs
               orientation="vertical"
               value={value}
@@ -105,8 +104,12 @@ const Home = () => {
                 left: 0, width : '5px' 
               }}}
             >
+
+              
                
-              <Tab wrapped icon = {<GridViewIcon/>} label="Dashboard" {...a11yProps(0)} />
+              <Tab wrapped label= {<Typography align = 'center' pt={3} pb = {3} color = 'primary' variant = 'h5'>
+                            WoodSala
+                        </Typography>} {...a11yProps(0)} />
               <Tab wrapped icon = {<ShoppingBagOutlinedIcon/>} label="Product" {...a11yProps(1)} />
               <Tab wrapped icon = {<FormatListBulletedOutlinedIcon/>} label="Category" {...a11yProps(2)} />
               <Tab wrapped icon = {<PeopleAltOutlinedIcon/>} label="Customers" {...a11yProps(3)} />
@@ -114,6 +117,8 @@ const Home = () => {
               <Tab wrapped icon = {<CardGiftcardOutlinedIcon/>} label="Coupons" {...a11yProps(5)} />
               <Tab wrapped icon = {<PersonOutlineOutlinedIcon/>} label="Our Staff" {...a11yProps(6)} />
               <Tab wrapped icon = {<SettingsOutlinedIcon/>} label="Settings" {...a11yProps(7)} />
+             <Button color = 'primary' sx = {{margin : 'auto' , }}  startIcon={<LogoutIcon />} variant = 'contained' >Log Out</Button>
+
             </Tabs>
             </Backdrop>
   </Slide>
@@ -142,6 +147,7 @@ const Home = () => {
             <Tab wrapped icon = {<CardGiftcardOutlinedIcon/>} label="Coupons" {...a11yProps(5)} />
             <Tab wrapped icon = {<PersonOutlineOutlinedIcon/>} label="Our Staff" {...a11yProps(6)} />
             <Tab wrapped icon = {<SettingsOutlinedIcon/>} label="Settings" {...a11yProps(7)} />
+
           </Tabs>
 
 
@@ -178,6 +184,8 @@ const Home = () => {
             <TabPanel  value={value} index={7}>
               <Setting/>
             </TabPanel>
+
+
 
           </Box>
         );
