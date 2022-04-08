@@ -1,12 +1,16 @@
-import React,{useState} from 'react'
+import React,{useState,useContext} from 'react'
 import {Box,FormControl,MenuItem,Typography,TextField,InputLabel,Select,Grid,Button} from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import { DataGrid } from '@mui/x-data-grid';
+import {OpenBox} from '../App';
+
 
 
 export default function Category() {
 
     const [category, setCategory] = useState('');
+
+    const open = useContext(OpenBox);
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 90 },
@@ -67,6 +71,8 @@ export default function Category() {
         );
       }
 
+    
+
     const handleChangeCat = (event) => {
         setCategory(event.target.value);
     };
@@ -83,6 +89,8 @@ export default function Category() {
 
         <Grid container p = {3} sx = {{boxShadow : 1, borderRadius : 2,justifyContent: 'center !important', alignItems : 'center !important'
     ,gap : '15px'}}>  
+
+              
 
                <Grid xs  = {12} md = {4.2} >
                     <TextField  fullWidth autoComplete = {false}  id="demo-helper-text-aligned-no-helper" label="Search by category type" type = 'text'  />
@@ -109,7 +117,7 @@ export default function Category() {
                
 
                 <Grid xs  = {12} md = {3} >
-                   <Button  sx = {{width : '100%'}} color = 'primary'  startIcon={<AddIcon />} variant = 'contained' >Add Product</Button>
+                   <Button onClick = {()=>{open.setOpen(true)}} sx = {{width : '100%'}} color = 'primary'  startIcon={<AddIcon />} variant = 'contained' >Add Product</Button>
                 </Grid>
          </Grid>
 

@@ -2,8 +2,9 @@ import './App.css';
 import {useState} from 'react'
 import EntryPoints from './components/EntryPoints';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import {Auth} from './context/context'
+import {Auth,OpenBox} from './context/context'
 import Home from './components/Home';
+import SideForm from './components/SideForm';
 import { createTheme,ThemeProvider } from '@mui/material/styles';
 
 
@@ -28,6 +29,9 @@ function App() {
 
   // states for the authentication
   const [auth, setAuth] = useState(null);
+
+  // states for the open the side form 
+  const [open, setOpen] = useState(false);
   
 
   return (
@@ -35,11 +39,14 @@ function App() {
           <ThemeProvider theme= {theme}>
             <BrowserRouter>
               <Auth.Provider value={{auth,setAuth}}>
+                <OpenBox.Provider value = {{open,setOpen}}>
                   <Routes>
                       <Route path="/" element={<Home/>} />
                       <Route path="/login" element={<EntryPoints/>} />
                       <Route path="/register" element={<EntryPoints/>} />
                   </Routes>
+                  <SideForm/>
+                </OpenBox.Provider>
               </Auth.Provider>
             </BrowserRouter>
           </ThemeProvider>
@@ -49,3 +56,5 @@ function App() {
 }
 
 export default App;
+
+export {Auth,OpenBox};
