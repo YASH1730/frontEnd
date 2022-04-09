@@ -1,12 +1,14 @@
-import React,{useState} from 'react'
+import React,{useState,useContext} from 'react'
 import {Box,FormControl,MenuItem,Typography,TextField,InputLabel,Select,Grid,Button} from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import { DataGrid } from '@mui/x-data-grid';
 
-
+// importing the context 
+import {OpenBox} from '../App';
 
 export default function OurStaff() {
 
+    const SideBox = useContext(OpenBox);
     const [order, setOrder] = useState('');
     const [status, setStatus] = useState('');
 
@@ -115,7 +117,7 @@ export default function OurStaff() {
                
               
                 <Grid xs  = {12} md = {2} >
-                   <Button  sx = {{width : '100%'}} color = 'primary'  startIcon={<AddIcon />} variant = 'contained' >Add Staff</Button>
+                   <Button onClick = {()=>{SideBox.setOpen({state : true,formType : 'staff'})}}  sx = {{width : '100%'}} color = 'primary'  startIcon={<AddIcon />} variant = 'contained' >Add Staff</Button>
                 </Grid>
          </Grid>
 
