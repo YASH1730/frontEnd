@@ -15,39 +15,42 @@ import { useDropzone } from "react-dropzone";
 import CancelIcon from "@mui/icons-material/Cancel";
 import { OpenBox, Mode } from "../App";
 
+// service 
+import { addCategory } from '../services/service.js'
+
 const Sideform = () => {
 
 
-    const post = [
-        {
-          value: "Admin",
-          label: "Admin",
-        },
-        {
-          value: "Accountant",
-          label: "Accountant",
-        },
-        {
-          value: "CEO",
-          label: "CEO",
-        },
-        {
-          value: "Driver",
-          label: "Driver",
-        },
-        {
-          value: "Delivery Person",
-          label: "Delivery Person",
-        },
-        {
-          value: "Manager",
-          label: "Manager",
-        },
-        {
-          value: "Security Gaurd",
-          label: "Security Gaurd",
-        },
-      ];
+  const post = [
+    {
+      value: "Admin",
+      label: "Admin",
+    },
+    {
+      value: "Accountant",
+      label: "Accountant",
+    },
+    {
+      value: "CEO",
+      label: "CEO",
+    },
+    {
+      value: "Driver",
+      label: "Driver",
+    },
+    {
+      value: "Delivery Person",
+      label: "Delivery Person",
+    },
+    {
+      value: "Manager",
+      label: "Manager",
+    },
+    {
+      value: "Security Gaurd",
+      label: "Security Gaurd",
+    },
+  ];
 
   const category = [
     {
@@ -96,13 +99,71 @@ const Sideform = () => {
     },
   ];
 
+  const subCategory = [
+    {
+      value: "Grocery",
+      label: "Grocery",
+    },
+    {
+      value: "Foods",
+      label: "Foods",
+    },
+    {
+      value: "Cloths",
+      label: "Cloths",
+    },
+    {
+      value: "Health Care",
+      label: "Health Care",
+    },
+    {
+      value: "Medicine",
+      label: "Medicine",
+    },
+    {
+      value: "Books",
+      label: "Books",
+    },
+    {
+      value: "Bags",
+      label: "Bags",
+    },
+    {
+      value: "Sports & Fitness",
+      label: "Sports & Fitness",
+    },
+    {
+      value: "Home Accessories",
+      label: "Home Accessories",
+    },
+    {
+      value: "Electronics",
+      label: "Electronics",
+    },
+    {
+      value: "Furniture",
+      label: "Furniture",
+    },
+  ];
+
+
+  // context
   const SideBox = useContext(OpenBox);
   const viewMode = useContext(Mode);
 
+  // states
   const [cat, setCat] = useState("catagory");
+  const [subCat, setSubCat] = useState("subCatagory");
+
+  // file holder 
+
+  const [fileHolder, setFileHolder] = useState(null)
 
   const handleChange = (event) => {
     setCat(event.target.value);
+  };
+  const handleChangeSubCat = (event) => {
+    setSubCat(event.target.value);
   };
 
   const handelClose = () => {
@@ -111,7 +172,6 @@ const Sideform = () => {
 
   const {
     acceptedFiles,
-
     getRootProps,
     getInputProps,
   } = useDropzone({
@@ -124,6 +184,25 @@ const Sideform = () => {
     </li>
   ));
 
+
+
+  // function for handling category
+  const handelCategory = (e) => {
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append('category_image', acceptedFiles[0], acceptedFiles[0].name);
+    FD.append('category_name', e.target.category_name.value)
+    FD.append('category_sub_name', e.target.category_sub_name.value)
+
+
+    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+
+    addCategory(FD)
+
+  }
+
   return (
     <>
       <Slide
@@ -135,9 +214,9 @@ const Sideform = () => {
         <Backdrop
           sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={SideBox.open.state}
-          //   onClick={handelClose}
+        //   onClick={handelClose}
         >
-          <Box className={viewMode.mode === true ? "mainDarkContainer" :"mainContainer"}>
+          <Box className={viewMode.mode === true ? "mainDarkContainer" : "mainContainer"}>
             <IconButton
               onClick={handelClose}
               color="primary"
@@ -164,10 +243,10 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" action="" method="post">
+                  <form className="form" onSubmit={handelCategory} enctype='multipart/form-data' method="post">
                     <section className="dorpContainer">
                       <div {...getRootProps({ className: "dropzone" })}>
-                        <input {...getInputProps()} />
+                        <input type='file' {...getInputProps()} name='category_image' />
                         <p>
                           Drag & drop some product images here, or click to
                           select image
@@ -182,13 +261,15 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
+                      required
                       id="outlined-select"
                       select
-                      label="Product Type"
+                      name='category_name'
+                      label="Category"
                       value={cat}
                       multiple
                       onChange={handleChange}
-                      helperText="Please select your product type"
+                      helperText="Please select your category"
                     >
                       {category.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
@@ -200,16 +281,25 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Category Title"
-                      type="text"
-                      variant="outlined"
-                    />
-
+                      required
+                      id="outlined-select"
+                      select
+                      name='category_sub_name'
+                      label="Sub Category"
+                      value={subCat}
+                      multiple
+                      onChange={handleChangeSubCat}
+                      helperText="Please select your sub category"
+                    >
+                      {subCategory.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                     <br></br>
 
-                    <Button color="primary" fullWidth variant="contained">
+                    <Button color="primary" type='submit' fullWidth variant="contained">
                       Add Category
                     </Button>
                   </form>
@@ -324,8 +414,8 @@ const Sideform = () => {
 
             {/* Coupone  */}
             {SideBox.open.formType === 'coupone' &&
-            
-            (<Grid container p={5}>
+
+              (<Grid container p={5}>
                 <Grid item xs={12}>
                   <Typography variant="h5">
                     Add Coupone
@@ -422,7 +512,7 @@ const Sideform = () => {
                   </form>
                 </Grid>
               </Grid>)
-            
+
             }
             {/* Coupone Ends */}
           </Box>
