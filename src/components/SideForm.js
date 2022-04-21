@@ -13,10 +13,10 @@ import Backdrop from "@mui/material/Backdrop";
 import "../assets/custom/css/sideForm.css";
 import { useDropzone } from "react-dropzone";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { OpenBox, Mode } from "../App";
+import { OpenBox, Mode, Notify } from "../App";
 
 // service 
-import { addCategory } from '../services/service.js'
+import { addCategory, editCategory } from '../services/service.js'
 
 const Sideform = () => {
 
@@ -150,14 +150,12 @@ const Sideform = () => {
   // context
   const SideBox = useContext(OpenBox);
   const viewMode = useContext(Mode);
+  const dispatchAlert = useContext(Notify);
 
   // states
   const [cat, setCat] = useState("catagory");
   const [subCat, setSubCat] = useState("subCatagory");
 
-  // file holder 
-
-  const [fileHolder, setFileHolder] = useState(null)
 
   const handleChange = (event) => {
     setCat(event.target.value);
@@ -199,7 +197,70 @@ const Sideform = () => {
 
     // console.log(acceptedFiles[0].name, e.target.category_name.value)
 
-    addCategory(FD)
+    
+
+    const res = addCategory(FD)
+
+    res.then((data)=>{
+      console.log(data)
+      dispatchAlert.setNote({
+        open : true,
+        variant : 'success',
+        message : data.data.message
+  
+      })
+    })
+    .catch((err)=>{
+      console.log(err)
+      dispatchAlert.setNote({
+        open : true,
+        variant : 'error',
+        message : "May be duplicate Category found !!!"
+  
+      })
+    })
+ 
+
+
+  }
+
+  // function for handling update category
+  const handelUpdateCategory = (e) => {
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    console.log(acceptedFiles,e.target.category_name.value)
+    
+    FD.append('_id', SideBox.open.payload)
+    acceptedFiles.length !== 0 ? FD.append('category_image', acceptedFiles[0], acceptedFiles[0].name) : console.log() ;
+    e.target.category_name.value !== 'category' ? FD.append('category_name', e.target.category_name.value) : console.log() ;
+    e.target.sub_category_name.value !== undefined ? FD.append('sub_category_name', e.target.sub_category_name.value) : console.log() ;
+
+
+
+    const res = editCategory(FD)
+
+    res.then((data)=>{
+      console.log(data)
+      dispatchAlert.setNote({
+        open : true,
+        variant : 'success',
+        message : data.data.message
+  
+      })
+    })
+    .catch((err)=>{
+      console.log(err)
+      dispatchAlert.setNote({
+        open : true,
+        variant : 'error',
+        message : "May be duplicate Category found !!!"
+  
+      })
+    })
+ 
+
 
   }
 
@@ -225,7 +286,7 @@ const Sideform = () => {
               <CancelIcon />
             </IconButton>
 
-            {/* Catagory */}
+            {/*  add Catagory */}
 
             {SideBox.open.formType === "category" && (
               <Grid container p={5}>
@@ -306,7 +367,90 @@ const Sideform = () => {
                 </Grid>
               </Grid>
             )}
-            {/* Catagory Ends */}
+            {/* add Catagory Ends */}
+
+            {/*  update Catagory */}
+
+            {SideBox.open.formType === "update_category" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Category
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update your product category and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelUpdateCategory} enctype='multipart/form-data' method="post">
+                    <section className="dorpContainer">
+                      <div {...getRootProps({ className: "dropzone" })}>
+                        <input type='file' {...getInputProps()} name='category_image' />
+                        <p>
+                          Drag & drop some product images here, or click to
+                          select image
+                        </p>
+                        <em>(Only *.jpeg and *.png images will be accepted)</em>
+                      </div>
+                      <aside>
+                        <h5>File Name</h5>
+                        <ul>{acceptedFileItems}</ul>
+                      </aside>
+                    </section>
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      select
+                      name='category_name'
+                      label="Category"
+                      value={cat}
+                      multiple
+                      onChange={handleChange}
+                      helperText="Please select your category"
+                    >
+                      {category.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                    <br></br>
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      select
+                      name='sub_category_name'
+                      label="Sub Category"
+                      value={subCat}
+                      multiple
+                      onChange={handleChangeSubCat}
+                      helperText="Please select your sub category"
+                    >
+                      {subCategory.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Update Category
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* update Catagory Ends */}
 
             {/* Ore Staff */}
 

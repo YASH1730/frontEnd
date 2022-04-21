@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Box,
   FormControl,
@@ -9,65 +9,116 @@ import {
   Select,
   Grid,
   Button,
+  IconButton
 } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
-import { OpenBox } from "../App";
-
+import { OpenBox, Notify } from "../App";
+import { categoryList, deleteCategory } from '../services/service'
+import '../assets/custom/css/category.css'
 export default function Category() {
+
   const [category, setCategory] = useState("");
+  const [search, setSearch] = useState("");
 
   const SideBox = useContext(OpenBox);
+  const despatchAlert = useContext(Notify);
+
+
+  const [Row, setRows] = useState()
+  // function for get cetegory list
+
+  useEffect(() => {
+    categoryList()
+      .then((data) => {
+        console.log(data)
+
+        setRows(data.data.map((row) => {
+
+          return ({
+            id: row._id,
+            category_image: row.category_image,
+            category_name: row.category_name,
+            sub_category_name: row.sub_category_name,
+            action: row._id
+          })
+        }))
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, []);
+
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
     {
-      field: "firstName",
-      headerName: "First name",
-      width: 150,
-      editable: true,
+      field: "id",
+      headerName: "ID",
+      width: 100
     },
     {
-      field: "lastName",
-      headerName: "Last name",
-      width: 150,
-      editable: true,
+      field: 'category_image',
+      align: 'center',
+      headerName: 'Image',
+      width: 200,
+      renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='category' /></div>,
     },
     {
-      field: "age",
-      headerName: "Age",
-      type: "number",
-      width: 110,
-      editable: true,
+      field: "category_name",
+      headerName: "Category Name",
+      width: 200,
     },
     {
-      field: "fullName",
-      headerName: "Full name",
-      description: "This column has a value getter and is not sortable.",
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.row.firstName || ""} ${params.row.lastName || ""}`,
+      field: "sub_category_name",
+      headerName: "Sub Category Name",
+      width: 200,
     },
+    {
+      field: "action",
+      headerName: "Actions",
+      width: 200,
+      renderCell: (params) => 
+      <div className="categoryImage" >
+        <IconButton onClick={() => { 
+          SideBox.setOpen({
+            state : true,
+            formType : 'update_category',
+            payload : params.formattedValue
+          }) 
+        }} aria-label="delete"  >
+          <CreateIcon />
+        </IconButton>
+        <IconButton onClick={() => { deleteCategory(params.formattedValue).then((res)=>{
+          despatchAlert.setNote({
+            open : true,
+            variant : 'success',
+            message : 'Category Deleted !!!'
+          })
+        }) }} aria-label="delete"  >
+          <DeleteIcon />
+        </IconButton>
+        
+      </div>,
+    }
+
   ];
 
-  const rows = [
-    { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-    { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-    { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-    { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-    { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: null },
-    { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
-    { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-    { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-    { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-  ];
+  const handelSearch = (e)=>{
+    console.log(e.target.value)
+    setSearch(e.target.value)
+  }
+
 
   function DataGridView() {
     return (
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
-          rows={rows}
+          filterModel={{
+            items: [{ columnField: 'category_name', operatorValue: 'contains', value: `${search}` }],
+          }}
+          rows={Row}
           columns={columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
@@ -109,6 +160,7 @@ export default function Category() {
             id="demo-helper-text-aligned-no-helper"
             label="Search by category type"
             type="text"
+            onChange={handelSearch}
           />
         </Grid>
 

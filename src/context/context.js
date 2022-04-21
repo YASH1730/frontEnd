@@ -6,5 +6,8 @@ export const Auth = createContext();
 export const OpenBox = createContext(); 
 
 // for dark mode chage
-
 export const Mode = createContext();
+
+// for scakbar / alert
+
+export const Notify = createContext();
