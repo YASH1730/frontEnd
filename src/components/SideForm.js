@@ -155,6 +155,8 @@ const Sideform = () => {
   const viewMode = useContext(Mode);
   const dispatchAlert = useContext(Notify);
 
+
+
   // states
   const [cat, setCat] = useState("catagory");
   const [subCat, setSubCat] = useState("subCatagory");
@@ -169,6 +171,7 @@ const Sideform = () => {
 
   const handelClose = () => {
     SideBox.setOpen({ state: false, formType: null });
+    resetAll();
   };
 
   const {
@@ -264,6 +267,12 @@ const Sideform = () => {
     })
   }
 
+  // function fo reseting the values
+
+  const resetAll = ()=>{
+    document.getElementById('myForm').reset();
+  }
+
   // function for handling Products category
   const handelProduct = (e) => {
     e.preventDefault();
@@ -326,6 +335,7 @@ const Sideform = () => {
     
         })
       }
+
     })
     .catch((err)=>{
       console.log(err)
@@ -378,7 +388,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelProduct} enctype='multipart/form-data' method="post">
+                  <form className="form" id = 'myForm' onSubmit={handelProduct} enctype='multipart/form-data' method="post">
                     <section className="dorpContainer">
                       <div {...getRootProps({ className: "dropzone" })}>
                         <input type='file' {...getInputProps()} name='product_image' />
@@ -394,18 +404,7 @@ const Sideform = () => {
                       </aside>
                     </section>
 
-                    {/* // a. SKU 
-                    // b. Title
-                    // c. Product Specification (Differentiating factor between each category/ sub-category)
-                    // d. Product description
-                    // e. Seo title
-                    // f. Seo Description
-                    // g. Blogs Embed (like in bed category bed blogs can be shown)
-                    // h. Images / size photos / video (if any)
-                    // i. MRP
-                    // j. Selling Price
-                    // k. Discount Limit
-                    // l. Dispatch time */}
+                   
 
                     <TextField
                       fullWidth
@@ -599,7 +598,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelCategory} enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handelCategory} id = 'myForm' enctype='multipart/form-data' method="post">
                     <section className="dorpContainer">
                       <div {...getRootProps({ className: "dropzone" })}>
                         <input type='file' {...getInputProps()} name='category_image' />
@@ -682,7 +681,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelUpdateCategory} enctype='multipart/form-data' method="post">
+                  <form className="form" id = 'myForm' onSubmit={handelUpdateCategory} enctype='multipart/form-data' method="post">
                     <section className="dorpContainer">
                       <div {...getRootProps({ className: "dropzone" })}>
                         <input type='file' {...getInputProps()} name='category_image' />
@@ -764,7 +763,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" action="" method="post">
+                  <form className="form" id = 'myForm' action="" method="post">
                     <section className="dorpContainer">
                       <div {...getRootProps({ className: "dropzone" })}>
                         <input {...getInputProps()} />
@@ -868,7 +867,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" action="" method="post">
+                  <form className="form" action="" id = 'myForm' method="post">
                     <section className="dorpContainer">
                       <div {...getRootProps({ className: "dropzone" })}>
                         <input {...getInputProps()} />
