@@ -7,6 +7,9 @@ import {
   Box,
   Typography,
   TextField,
+  
+  InputAdornment,
+  
 } from "@mui/material";
 import Slide from "@mui/material/Slide";
 import Backdrop from "@mui/material/Backdrop";
@@ -16,7 +19,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { OpenBox, Mode, Notify } from "../App";
 
 // service 
-import { addCategory, editCategory } from '../services/service.js'
+import { addCategory, editCategory, addProduct } from '../services/service.js'
 
 const Sideform = () => {
 
@@ -259,9 +262,80 @@ const Sideform = () => {
   
       })
     })
- 
+  }
+
+  // function for handling Products category
+  const handelProduct = (e) => {
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    // console.log(acceptedFiles,
+    //   e.target.category_name.value,
+    //   e.target.sub_category_name.value,
+    //   e.target.dispatch_time.value,
+    //   e.target.product_title.value,
+    //   e.target.SKU.value,
+    //   e.target.MRP.value,
+    //   e.target.seo_title.value,
+    //   e.target.seo_description.value,
+    //   e.target.discount_limit.value,
+    //   e.target.blog_url.value,
+    //   e.target.selling_price.value)
+      
+      
+    // FD.append('_id', SideBox.open.payload)
+     FD.append('product_image', acceptedFiles[0], acceptedFiles[0].name) ;
+     FD.append('category_name', e.target.category_name.value) ;
+     FD.append('sub_category_name', e.target.sub_category_name.value);
+     FD.append('dispatch_time', e.target.dispatch_time.value) ;
+     FD.append('product_title', e.target.product_title.value) ;
+     FD.append('product_description', e.target.product_description.value) ;
+     FD.append('SKU', e.target.SKU.value) ;
+     FD.append('MRP', e.target.MRP.value) ;
+     FD.append('seo_title', e.target.seo_title.value) ;
+     FD.append('seo_description', e.target.seo_description.value) ;
+     FD.append('discount_limit', e.target.discount_limit.value) ;
+     FD.append('blog_url', e.target.blog_url.value) ;
+     FD.append('selling_price', e.target.selling_price.value) ;
+
+    
 
 
+
+    const res = addProduct(FD)
+
+    res.then((data)=>{
+      console.log(data)
+
+      if(data.status !== 203)
+      {
+        dispatchAlert.setNote({
+          open : true,
+          variant : 'success',
+          message : data.data.message
+    
+        })
+      }
+      else {
+
+        dispatchAlert.setNote({
+          open : true,
+          variant : 'error',
+          message : data.data.message
+    
+        })
+      }
+    })
+    .catch((err)=>{
+      console.log(err)
+      dispatchAlert.setNote({
+        open : true,
+        variant : 'error',
+        message : "May be duplicate Category found !!!"
+  
+      })
+    })
   }
 
   return (
@@ -285,6 +359,227 @@ const Sideform = () => {
             >
               <CancelIcon />
             </IconButton>
+
+            {/* add Products */}
+
+            {SideBox.open.formType === "product" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Product
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add your product product and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelProduct} enctype='multipart/form-data' method="post">
+                    <section className="dorpContainer">
+                      <div {...getRootProps({ className: "dropzone" })}>
+                        <input type='file' {...getInputProps()} name='product_image' />
+                        <p>
+                          Drag & drop some product images here, or click to
+                          select image
+                        </p>
+                        <em>(Only *.jpeg and *.png images will be accepted)</em>
+                      </div>
+                      <aside>
+                        <h5>File Name</h5>
+                        <ul>{acceptedFileItems}</ul>
+                      </aside>
+                    </section>
+
+                    {/* // a. SKU 
+                    // b. Title
+                    // c. Product Specification (Differentiating factor between each category/ sub-category)
+                    // d. Product description
+                    // e. Seo title
+                    // f. Seo Description
+                    // g. Blogs Embed (like in bed category bed blogs can be shown)
+                    // h. Images / size photos / video (if any)
+                    // i. MRP
+                    // j. Selling Price
+                    // k. Discount Limit
+                    // l. Dispatch time */}
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      select
+                      name='category_name'
+                      label="Category"
+                      value={cat}
+                      multiple
+                      onChange={handleChange}
+                      helperText="Please select your category"
+                    >
+                      {category.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                    <br></br>
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      select
+                      name='sub_category_name'
+                      label="Sub Category"
+                      value={subCat}
+                      multiple
+                      onChange={handleChangeSubCat}
+                      helperText="Please select your sub category"
+                    >
+                      {subCategory.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="SKU"
+                      type="number"
+                      variant="outlined"
+                      name = 'SKU'
+                    />
+
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="Product Title"
+                      type="text"
+                      variant="outlined"
+                      name = "product_title"
+                    />
+
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="SEO Title"
+                      type="text"
+                      variant="outlined"
+                      name = 'seo_title'
+                    />
+
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="SEO Description"
+                      type="text"
+                      variant="outlined"
+                      name = 'seo_description'
+                    />
+
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="Product description"
+                      type="text"
+                      variant="outlined"
+                      name = 'product_description'
+
+                    />
+
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="Blog URL"
+                      type="url"
+                      variant="outlined"
+                      name = 'blog_url'
+
+                    />
+
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="MRP"
+                      type="number"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                      }}
+                      variant="outlined"
+                      name = "MRP"
+                    />
+
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="Selling Price"
+                      type="number"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                      }}
+                      variant="outlined"
+                      name  = "selling_price"
+                    />
+
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="Discount Limit"
+                      type="number"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                      }}
+                      variant="outlined"
+                      name = 'discount_limit'
+                    />
+
+
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      name  = 'dispatch_time'
+                      // label="Dispatch Date"
+                      type="date"
+                      variant="outlined"
+                    />
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Add Product
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+
+            {/* add Products Ends */}
 
             {/*  add Catagory */}
 

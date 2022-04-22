@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Box,
   FormControl,
@@ -12,10 +12,15 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
+import {OpenBox} from "../App";
 
 export default function Products() {
   const [age, setAge] = useState("");
   const [price, setPrice] = useState("");
+
+  // useContext 
+
+  const SideBox = useContext(OpenBox);
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
@@ -157,6 +162,7 @@ export default function Products() {
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
+            onClick = {()=>{SideBox.setOpen({state : true, formType : 'product'})}}
           >
             Add Product
           </Button>

@@ -5,6 +5,8 @@ import axios from 'axios';
 const loacalBaseUrl = 'http://localhost:8000'
 
 
+// =========================== CURD FOR Cetagory ===========================
+
 // for  adding category to the list 
 export const addCategory = async(data)=>{
   return await axios.post(`${loacalBaseUrl}/addCategory`,data,{headers: { 
@@ -36,3 +38,13 @@ export const deleteCategory = async(data) =>{
    }})
 }
 
+// =========================== CURD FOR PRODUCTS  ===========================
+
+
+// for  adding category to the list 
+export const addProduct = async(data)=>{
+   return await axios.post(`${loacalBaseUrl}/addProducts`,data,{headers: { 
+         'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+      }})
+ 
+ }
