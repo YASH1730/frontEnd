@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import {
   Button,
   IconButton,
@@ -7,10 +7,9 @@ import {
   Box,
   Typography,
   TextField,
-  
   InputAdornment,
-  
 } from "@mui/material";
+import {Editor} from '@tinymce/tinymce-react'
 import Slide from "@mui/material/Slide";
 import Backdrop from "@mui/material/Backdrop";
 import "../assets/custom/css/sideForm.css";
@@ -19,9 +18,12 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { OpenBox, Mode, Notify } from "../App";
 
 // service 
-import { addCategory, editCategory, addProduct } from '../services/service.js'
+import { addCategory, editCategory, addProduct, getLastProduct } from '../services/service.js'
+
 
 const Sideform = () => {
+
+
 
 
   const post = [
@@ -149,6 +151,85 @@ const Sideform = () => {
     },
   ];
 
+//   ﻿3 to 5 Days
+// ﻿5 to 8 Days
+// 1 to 2 Week
+// ﻿2 to 3 Week
+// ﻿3 to 4 Week
+// ﻿4 to 5 Week
+// ﻿5 to 6 Week
+// ﻿6 to 7 Week
+
+
+  const dispatchTimeCatalog = [
+    {
+      value: "3 to 5 Days",
+      label: "3 to 5 Days",
+    },
+    {
+      value: "5 to 8 Days",
+      label: "5 to 8 Days",
+    },
+    {
+      value: "1 to 2 Week",
+      label: "1 to 2 Week",
+    },
+    {
+      value: "2 to 3 Week",
+      label: "2 to 3 Week",
+    },
+    {
+      value: "3 to 4 Week",
+      label: "3 to 4 Week",
+    },
+    {
+      value: "4 to 5 Week",
+      label: "4 to 5 Week",
+    },
+    {
+      value: "5 to 6 Week",
+      label: "5 to 6 Week",
+    },
+    {
+      value: "6 to 7 Week",
+      label: "6 to 7 Week",
+    }
+  ];
+  
+
+  const taxRateCatalog = [
+    {
+      value: "18",
+      label: "18",
+    },
+    {
+      value: "5",
+      label: "5",
+    },
+    {
+      value: "2",
+      label: "2",
+    }
+  
+  ];
+  
+  const fittingCatalog = [
+    {
+      value: "Brass",
+      label: "Brass",
+    },
+    {
+      value: "Metallic",
+      label: "Metallic",
+    },
+    {
+      value: "Silver",
+      label: "Silver",
+    }
+  
+  ];
+  
+
 
   // context
   const SideBox = useContext(OpenBox);
@@ -160,13 +241,32 @@ const Sideform = () => {
   // states
   const [cat, setCat] = useState("catagory");
   const [subCat, setSubCat] = useState("subCatagory");
+  const [dispatchTime, setDispatch] = useState("Dispatch Time");
+  const [taxRate, setTaxRate] = useState("Dispatch Time");
+  const [fitting, setFitting] = useState("Fitting");
+  const [SKU,setSKU] = useState('');
 
+
+  // ref
+  const editorRef = useRef()
 
   const handleChange = (event) => {
     setCat(event.target.value);
   };
   const handleChangeSubCat = (event) => {
     setSubCat(event.target.value);
+  };
+ 
+  const handleChangeDispatchTime = (event) => {
+    setDispatch(event.target.value);
+  };
+ 
+  const handleChangeTaxRate = (event) => {
+    setTaxRate(event.target.value);
+  };
+
+  const handleChangeFitting = (event) => {
+    setFitting(event.target.value);
   };
 
   const handelClose = () => {
@@ -187,6 +287,30 @@ const Sideform = () => {
       {file.path} - {file.size} bytes
     </li>
   ));
+
+  // function for genrating product SKU ID
+
+const getSKU = () => {
+
+  getLastProduct()
+  .then((res)=>{
+    if(res.data.length > 0)
+    {
+      // console.log(res.data[0].SKU)
+      
+      let index = parseInt(res.data[0].SKU.split('-')[1]) + 1;
+
+      setSKU(`WS-0${index}`);
+    }
+    else {
+      setSKU('WS-01001')
+    }
+  })
+  .catch((err)=>{
+    console.log(err)
+  })
+
+}
 
 
 
@@ -299,53 +423,51 @@ const Sideform = () => {
      FD.append('sub_category_name', e.target.sub_category_name.value);
      FD.append('dispatch_time', e.target.dispatch_time.value) ;
      FD.append('product_title', e.target.product_title.value) ;
-     FD.append('product_description', e.target.product_description.value) ;
+     FD.append('product_description', editorRef.current.getContent()) ;
      FD.append('SKU', e.target.SKU.value) ;
      FD.append('MRP', e.target.MRP.value) ;
      FD.append('seo_title', e.target.seo_title.value) ;
      FD.append('seo_description', e.target.seo_description.value) ;
      FD.append('discount_limit', e.target.discount_limit.value) ;
-     FD.append('blog_url', e.target.blog_url.value) ;
      FD.append('selling_price', e.target.selling_price.value) ;
 
     
 
 
+    // const res = addProduct(FD)
 
-    const res = addProduct(FD)
+    // res.then((data)=>{
+    //   console.log(data)
 
-    res.then((data)=>{
-      console.log(data)
-
-      if(data.status !== 203)
-      {
-        dispatchAlert.setNote({
-          open : true,
-          variant : 'success',
-          message : data.data.message
+    //   if(data.status !== 203)
+    //   {
+    //     dispatchAlert.setNote({
+    //       open : true,
+    //       variant : 'success',
+    //       message : data.data.message
     
-        })
-      }
-      else {
+    //     })
+    //   }
+    //   else {
 
-        dispatchAlert.setNote({
-          open : true,
-          variant : 'error',
-          message : data.data.message
+    //     dispatchAlert.setNote({
+    //       open : true,
+    //       variant : 'error',
+    //       message : data.data.message
     
-        })
-      }
+    //     })
+    //   }
 
-    })
-    .catch((err)=>{
-      console.log(err)
-      dispatchAlert.setNote({
-        open : true,
-        variant : 'error',
-        message : "May be duplicate Category found !!!"
+    // })
+    // .catch((err)=>{
+    //   console.log(err)
+    //   dispatchAlert.setNote({
+    //     open : true,
+    //     variant : 'error',
+    //     message : "May be duplicate Category found !!!"
   
-      })
-    })
+    //   })
+    // })
   }
 
   return (
@@ -373,7 +495,9 @@ const Sideform = () => {
             {/* add Products */}
 
             {SideBox.open.formType === "product" && (
+              
               <Grid container p={5}>
+                {getSKU()}
                 <Grid item xs={12}>
                   <Typography variant="h5">
                     Add Product
@@ -451,7 +575,9 @@ const Sideform = () => {
                       autoComplete={false}
                       id="fullWidth"
                       label="SKU"
-                      type="number"
+                      type="text"
+                      value = {SKU}
+                      disabled
                       variant="outlined"
                       name = 'SKU'
                     />
@@ -489,15 +615,17 @@ const Sideform = () => {
                       name = 'seo_description'
                     />
 
+          
+
                     <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Product description"
-                      type="text"
-                      variant="outlined"
-                      name = 'product_description'
+          {/* product description  */}
+                    <Editor
+                    apiKey= "nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                    initialValue="<p>Wirte some product disceription !!!</p>"
+                    onInit = {(event,editor) => editorRef.current = editor}
+                    init={{
+                      height: 300,
+                      menubar: false,}}
 
                     />
 
@@ -506,12 +634,84 @@ const Sideform = () => {
                       fullWidth
                       autoComplete={false}
                       id="fullWidth"
-                      label="Blog URL"
-                      type="url"
+                      label="Length"
+                      type="number"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start">Inch</InputAdornment>,
+                      }}
                       variant="outlined"
-                      name = 'blog_url'
+                      name = "length"
+                      helperText="From left to right"
+                    />
+                    
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="Breadth"
+                      type="number"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start">Inch</InputAdornment>,
+                      }}
+                      variant="outlined"
+                      name = "breadth"
+                      helperText="From front to back"
 
                     />
+                    
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="Height"
+                      type="number"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start">Inch</InputAdornment>,
+                      }}
+                      variant="outlined"
+                      name = "height"
+                      helperText = "From bottom to top"
+                    />
+                    
+                    <br></br>
+                    <TextField
+                      fullWidth
+                      autoComplete={false}
+                      id="fullWidth"
+                      label="Weight"
+                      type="number"
+                      InputProps={{
+                        startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
+                      }}
+                      variant="outlined"
+                      name = "weight"
+                    />
+                    
+                    
+                    <br></br>
+
+                  <TextField
+                    fullWidth
+                    required
+                    id="outlined-select"
+                    select
+                    name  = 'fitting'
+                    label="Fitting"
+                    value={fitting}
+                    multiple
+                    onChange={handleChangeFitting}
+                    helperText="Please select your fitting."
+
+                  >
+                    {fittingCatalog.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
 
                     <br></br>
                     <TextField
@@ -556,16 +756,52 @@ const Sideform = () => {
                     />
 
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      name  = 'dispatch_time'
-                      // label="Dispatch Date"
-                      type="date"
-                      variant="outlined"
-                    />
+                  <br></br>
+
+                  <TextField
+                    fullWidth
+                    required
+                    id="outlined-select"
+                    select
+                    name  = 'tax_rate'
+                    label="Tax Rate"
+                    value={taxRate}
+                    multiple
+                    onChange={handleChangeTaxRate}
+                    helperText="Please select your tax rate."
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                    }}
+                  >
+                    {taxRateCatalog.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
+
+                  <br></br>
+
+                  <TextField
+                    fullWidth
+                    required
+                    id="outlined-select"
+                    select
+                    name  = 'dispatch_time'
+                    label="Dispatch Time"
+                    value={dispatchTime}
+                    multiple
+                    onChange={handleChangeDispatchTime}
+                    helperText="Please select your dispatch time"
+                  >
+                    {dispatchTimeCatalog.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+
 
                     <br></br>
 
