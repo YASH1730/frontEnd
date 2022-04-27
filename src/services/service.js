@@ -84,3 +84,22 @@ export const updateProduct = async (data) => {
       'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
    }})
  }
+
+
+//  =========================== CURD For Bannner ========================
+
+// add banner
+
+export const addBanner = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addBanner`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// list banner
+
+export const listBanner = async ()=>{
+   return await axios.get(`${loacalBaseUrl}/listBanner`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}

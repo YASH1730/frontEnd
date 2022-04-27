@@ -22,6 +22,7 @@ import Orders from "./Orders";
 import Coupons from "./Coupons";
 import OurStaff from "./OurStaff";
 import Setting from "./Setting";
+import Banner from "./Banner";
 
 // icons
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -39,6 +40,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
+import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 
 const Home = () => {
   const [ShowTabs, setShowTabs] = useState(false);
@@ -167,6 +169,12 @@ const Home = () => {
                   label="Settings"
                   {...a11yProps(7)}
                 />
+                <Tab
+                  wrapped
+                  icon={<ViewCarouselIcon />}
+                  label="Banner"
+                  {...a11yProps(8)}
+                />
                 <Button
                   color="primary"
                   sx={{ margin: "auto" }}
@@ -182,6 +190,8 @@ const Home = () => {
         <Tabs
           orientation="vertical"
           value={value}
+          variant="scrollable"
+
           onChange={handleChange}
           indicatorColor="primary"
           textColor="primary"
@@ -220,6 +230,7 @@ const Home = () => {
             label="Customers"
             {...a11yProps(3)}
           />
+       
           <Tab
             wrapped
             icon={<ExploreOutlinedIcon />}
@@ -244,6 +255,12 @@ const Home = () => {
             label="Settings"
             {...a11yProps(7)}
           />
+           <Tab
+                  wrapped
+                  icon={<ViewCarouselIcon />}
+                  label="Banner"
+                  {...a11yProps(8)}
+                />
         </Tabs>
 
         <TabPanel value={value} index={0}>
@@ -276,6 +293,10 @@ const Home = () => {
 
         <TabPanel value={value} index={7}>
           <Setting />
+        </TabPanel>
+        
+        <TabPanel value={value} index={8}>
+          <Banner />
         </TabPanel>
       </Box>
     );
