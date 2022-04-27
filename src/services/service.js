@@ -44,11 +44,38 @@ export const deleteCategory = async(data) =>{
 // for  adding category to the list 
 
 export const addProduct = async(data)=>{
+   
    return await axios.post(`${loacalBaseUrl}/addProducts`,data,{headers: { 
          'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
       }})
  
  }
+
+// for listing the products
+
+export const getListProduct = async()=>{
+   return await axios.get(`${loacalBaseUrl}/getListProduct`,{headers: { 
+         'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+      }})
+ 
+ }
+
+// for deleting the product 
+
+export const deleteProduct = async (ID) => {
+   return await axios.delete(`${loacalBaseUrl}/deleteProduct/?ID=${ID}`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// for update the product 
+
+export const updateProduct = async (data) => { 
+   return await axios.patch(`${loacalBaseUrl}/updateProduct`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
 
  // for getting the last product 
 
