@@ -1,7 +1,7 @@
 import React, { useEffect,useState,useContext } from "react";
 import {Notify} from '../App'
 import { useDropzone } from "react-dropzone";
-import {listBanner,addBanner} from '../services/service'
+import {listBanner,addBanner, chaneStatus} from '../services/service'
 import { DataGrid } from "@mui/x-data-grid";
 
 import {
@@ -9,7 +9,7 @@ import {
   Typography,
   TextField,
   Grid,
-  Button,
+  Button,Switch,FormGroup,FormControlLabel,Checkbox
 } from "@mui/material";
 
 export default function Banner() {
@@ -40,6 +40,7 @@ export default function Banner() {
 
     FD.append('banner_image', acceptedFiles[0], acceptedFiles[0].name);
     FD.append('banner_title',e.target.banner_title.value);
+    FD.append('banner_Status',e.target.banner_Status.checked);
 
     const  res = addBanner(FD)
 
@@ -67,19 +68,22 @@ export default function Banner() {
 
   const [Row, setRows] = useState()
 
+  const [search,setSearch] = useState([]);
+
+
+
   useEffect(() => {
     listBanner()
       .then((data) => {
         console.log(data)
 
         setRows(data.data.map((row) => {
-
+          // setActive(row.banner_Status)
           return ({
             id: row._id,
             banner_title: row.banner_title,
             banner_URL: row.banner_URL,
-            banner_status: row.banner_Status,
-            action: row._id
+            banner_Status: row.banner_Status
           })
         }))
       })
@@ -107,21 +111,57 @@ export default function Banner() {
       renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='category' /></div>,
     },
     {
-      field: "banner_status",
+      field: "banner_Status",
       headerName: "Banner Status",
+      align : 'center',
       width: 200,
+      renderCell: (params) => <Switch onChange ={handleSwitch} name = {params.id}   checked = {params.formattedValue}></Switch> ,
     },
    
 
   ];
 
+  const handleSwitch = (e)=>{
+    console.log(e.target.name)
+
+    const FD = new FormData()
+
+    FD.append('_id',e.target.name)
+    FD.append('banner_Status',e.target.checked)
+
+    const res = chaneStatus(FD);
+
+    res.then((data)=>{
+      console.log(data)
+      dispatchAlert.setNote({
+        open : true,
+        variant : 'success',
+        message : "Banner Status Updated Successfully !!!"
+  
+      })
+    })
+    .catch((err)=>{
+      console.log(err)
+      dispatchAlert.setNote({
+        open : true,
+        variant : 'error',
+        message : "May be duplicate found !!!"
+  
+      })
+    })
+
+    
+  
+
+  } 
+
     function DataGridView() {
     return (
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
-        //   filterModel={{
-        //     items: [{ columnField: 'category_name', operatorValue: 'contains', value: `${search}` }],
-        //   }}
+          filterModel={{
+            items: [{ columnField: 'banner_title', operatorValue: 'contains', value: `${search}` }],
+          }}
           rows={Row}
           columns={columns}
           pageSize={5}
@@ -132,6 +172,11 @@ export default function Banner() {
     );
   }
 
+  const handelSearch =  (e)=>{
+
+    setSearch(e.target.value)
+
+  }
 
 
 
@@ -186,6 +231,14 @@ export default function Banner() {
                 variant="outlined"
               />
 
+          
+          <FormGroup  >
+          <br></br>
+            <FormControlLabel control={<Checkbox name = 'banner_Status' />} label="Active (checked it if you want to make it active)" />
+          </FormGroup>
+
+
+
               <Button
                 variant="contained"
                 color="primary"
@@ -198,12 +251,24 @@ export default function Banner() {
           </form>
         </Grid>
       </Grid>
-        <br></br>
       {/* data grid  */}
 
       <Grid container scaping={2} className="overviewContainer">
+     
+     
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
           <Typography variant="h6"> Banner List </Typography>
+     
+          <br></br>
+          <TextField
+            fullWidth
+            autoComplete={false}
+            id="demo-helper-text-aligned-no-helper"
+            label="Search by banner title"
+            type="text"
+            onChange={handelSearch}
+          />
+          <br></br>
           <br></br>
           {DataGridView()}
         </Grid>

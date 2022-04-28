@@ -103,3 +103,12 @@ export const listBanner = async ()=>{
       'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
    }})
 }
+
+// change status banner
+
+export const chaneStatus = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/chaneStatusBanner`,data,{headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
