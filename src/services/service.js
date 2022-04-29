@@ -38,6 +38,14 @@ export const deleteCategory = async(data) =>{
    }})
 }
 
+// for status the category
+export const statusCategory = async(data) =>{
+   
+   return await axios.post(`${loacalBaseUrl}/changeStatusCategory`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
 // =========================== CURD FOR PRODUCTS  ===========================
 
 
@@ -109,6 +117,40 @@ export const listBanner = async ()=>{
 export const chaneStatus = async (data)=>{
    return await axios.post(`${loacalBaseUrl}/chaneStatusBanner`,data,{headers: { 
       'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+
+//  =========================== CURD For Bannner ========================
+
+export const addSubCategories = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addSubCategories`,data,{headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+
+
+// list subcategories
+
+export const getSubCatagories = async ()=>{
+   return await axios.get(`${loacalBaseUrl}/getSubCatagories`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// change status  subcategories
+
+export const changeSubSatatus = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/changeSubStatus`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// change status  subcategories
+
+export const editSubCatagories = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/editSubCatagories`,data,{headers: { 
       'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
    }})
 }

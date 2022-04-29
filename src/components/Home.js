@@ -23,6 +23,7 @@ import Coupons from "./Coupons";
 import OurStaff from "./OurStaff";
 import Setting from "./Setting";
 import Banner from "./Banner";
+import SubCategory from "./SubCategory";
 
 // icons
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -41,6 +42,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
+import ListIcon from '@mui/icons-material/List';
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
 const Home = () => {
   const [ShowTabs, setShowTabs] = useState(false);
@@ -141,39 +144,69 @@ const Home = () => {
                 />
                 <Tab
                   wrapped
-                  icon={<PeopleAltOutlinedIcon />}
-                  label="Customers"
+                  icon={<ViewCarouselIcon />}
+                  label="Sub Category"
                   {...a11yProps(3)}
                 />
                 <Tab
                   wrapped
-                  icon={<ExploreOutlinedIcon />}
-                  label="Orders"
+                  icon={<ViewCarouselIcon />}
+                  label="Primary Mattirial"
                   {...a11yProps(4)}
                 />
                 <Tab
                   wrapped
-                  icon={<CardGiftcardOutlinedIcon />}
-                  label="Coupons"
+                  icon={<ViewCarouselIcon />}
+                  label="Secondary Mattirial"
                   {...a11yProps(5)}
                 />
                 <Tab
                   wrapped
-                  icon={<PersonOutlineOutlinedIcon />}
-                  label="Our Staff"
+                  icon={<ViewCarouselIcon />}
+                  label="Polish"
                   {...a11yProps(6)}
                 />
                 <Tab
                   wrapped
-                  icon={<SettingsOutlinedIcon />}
-                  label="Settings"
+                  icon={<ViewCarouselIcon />}
+                  label="Fitting"
                   {...a11yProps(7)}
                 />
                 <Tab
                   wrapped
                   icon={<ViewCarouselIcon />}
-                  label="Banner"
+                  label="Hinge"
                   {...a11yProps(8)}
+                />
+                <Tab
+                  wrapped
+                  icon={<PeopleAltOutlinedIcon />}
+                  label="Knob"
+                  {...a11yProps(9)}
+                />
+                <Tab
+                  wrapped
+                  icon={<ExploreOutlinedIcon />}
+                  label="Door"
+                  {...a11yProps(10)}
+                />
+                <Tab
+                  wrapped
+                  icon={<CardGiftcardOutlinedIcon />}
+                  label="Coupons"
+                  {...a11yProps(11)}
+                />
+                <Tab
+                  wrapped
+                  icon={<PersonOutlineOutlinedIcon />}
+                  label="Our Staff"
+                  {...a11yProps(12)}
+                />
+                <Tab
+                  wrapped
+                  icon={<SettingsOutlinedIcon />}
+                  label="Settings"
+                  {...a11yProps(13)}
                 />
                 <Button
                   color="primary"
@@ -218,48 +251,89 @@ const Home = () => {
             label="Product"
             {...a11yProps(1)}
           />
-          <Tab
-            wrapped
-            icon={<FormatListBulletedOutlinedIcon />}
-            label="Category"
-            {...a11yProps(2)}
-          />
-          <Tab
-            wrapped
-            icon={<PeopleAltOutlinedIcon />}
-            label="Customers"
-            {...a11yProps(3)}
-          />
-       
-          <Tab
-            wrapped
-            icon={<ExploreOutlinedIcon />}
-            label="Orders"
-            {...a11yProps(4)}
-          />
-          <Tab
-            wrapped
-            icon={<CardGiftcardOutlinedIcon />}
-            label="Coupons"
-            {...a11yProps(5)}
-          />
-          <Tab
-            wrapped
-            icon={<PersonOutlineOutlinedIcon />}
-            label="Our Staff"
-            {...a11yProps(6)}
-          />
-          <Tab
-            wrapped
-            icon={<SettingsOutlinedIcon />}
-            label="Settings"
-            {...a11yProps(7)}
-          />
-           <Tab
+         <Tab
+                  wrapped
+                  icon={<FormatListBulletedOutlinedIcon />}
+                  label="Category"
+                  {...a11yProps(2)}
+                />
+                <Tab
+                  wrapped
+                  icon={<MenuOpenIcon />}
+                  label="Sub Category"
+                  {...a11yProps(3)}
+                />
+                <Tab
                   wrapped
                   icon={<ViewCarouselIcon />}
-                  label="Banner"
+                  label="Primary Material"
+                  {...a11yProps(4)}
+                />
+                <Tab
+                  wrapped
+                  icon={<ViewCarouselIcon />}
+                  label="Secondary Material"
+                  {...a11yProps(5)}
+                />
+                <Tab
+                  wrapped
+                  icon={<ViewCarouselIcon />}
+                  label="Polish"
+                  {...a11yProps(6)}
+                />
+                <Tab
+                  wrapped
+                  icon={<ViewCarouselIcon />}
+                  label="Fitting"
+                  {...a11yProps(7)}
+                />
+                <Tab
+                  wrapped
+                  icon={<ViewCarouselIcon />}
+                  label="Hinge"
                   {...a11yProps(8)}
+                />
+                <Tab
+                  wrapped
+                  icon={<ViewCarouselIcon />}
+                  label="Knob"
+                  {...a11yProps(9)}
+                />
+                <Tab
+                  wrapped
+                  icon={<ViewCarouselIcon />}
+                  label="Door"
+                  {...a11yProps(10)}
+                />
+                <Tab
+                  wrapped
+                  icon={<PeopleAltOutlinedIcon />}
+                  label="Customer"
+                  {...a11yProps(11)}
+                />
+                <Tab
+                  wrapped
+                  icon={<ExploreOutlinedIcon />}
+                  label="Order"
+                  {...a11yProps(12)}
+                />
+                <Tab
+                  wrapped
+                  icon={<CardGiftcardOutlinedIcon />}
+                  label="Coupons"
+                  {...a11yProps(13)}
+                />
+                <Tab
+                  wrapped
+                  icon={<PersonOutlineOutlinedIcon />}
+                  label="Our Staff"
+                  {...a11yProps(14)}
+                />
+                <Tab
+                  wrapped
+                  icon={<SettingsOutlinedIcon />}
+                  label="Settings"
+                  {...a11yProps(15)}
                 />
         </Tabs>
 
@@ -274,30 +348,59 @@ const Home = () => {
         <TabPanel value={value} index={2}>
           <Category />
         </TabPanel>
-
+        
         <TabPanel value={value} index={3}>
-          <Customers />
+          <SubCategory />
         </TabPanel>
-
+        
         <TabPanel value={value} index={4}>
-          <Orders />
+          <Banner />
         </TabPanel>
-
+        
         <TabPanel value={value} index={5}>
-          <Coupons />
+          <Banner />
         </TabPanel>
-
+        
         <TabPanel value={value} index={6}>
-          <OurStaff />
+          <Banner />
         </TabPanel>
-
+        
         <TabPanel value={value} index={7}>
-          <Setting />
+          <Banner />
         </TabPanel>
         
         <TabPanel value={value} index={8}>
           <Banner />
         </TabPanel>
+        
+        <TabPanel value={value} index={9}>
+          <Banner />
+        </TabPanel>
+        
+        <TabPanel value={value} index={10}>
+          <Banner />
+        </TabPanel>
+        
+        <TabPanel value={value} index={11}>
+          <Customers />
+        </TabPanel>
+
+        <TabPanel value={value} index={12}>
+          <Orders />
+        </TabPanel>
+
+        <TabPanel value={value} index={13}>
+          <Coupons />
+        </TabPanel>
+
+        <TabPanel value={value} index={14}>
+          <OurStaff />
+        </TabPanel>
+
+        <TabPanel value={value} index={15}>
+          <Setting />
+        </TabPanel>
+        
       </Box>
     );
   }

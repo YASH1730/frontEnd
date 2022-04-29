@@ -27,6 +27,7 @@
 
 .dorpContainer {
     display: grid;
+    margin-top: 2%;
     margin-bottom: 20px ;
     color: rgb(138, 138, 138);
     text-align: center;

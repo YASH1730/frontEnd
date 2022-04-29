@@ -11,14 +11,17 @@ import {
   Button,
   IconButton,Switch
 } from "@mui/material";
-// import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
 import { OpenBox, Notify } from "../App";
-import { categoryList, deleteCategory, statusCategory } from '../services/service'
+import { getSubCatagories, deleteCategory, changeSubSatatus } from '../services/service'
 import '../assets/custom/css/category.css'
-export default function Category() {
+
+
+
+export default function SubCategory() {
 
   const [category, setCategory] = useState("");
   const [search, setSearch] = useState("");
@@ -31,7 +34,7 @@ export default function Category() {
   // function for get cetegory list
 
   useEffect(() => {
-    categoryList()
+    getSubCatagories()
       .then((data) => {
         console.log(data)
 
@@ -39,9 +42,9 @@ export default function Category() {
 
           return ({
             id: row._id,
-            category_image: row.category_image,
-            category_name: row.category_name,
-            category_status: row.category_status,
+            category_id : row.category_id,
+            sub_category_name: row.sub_category_name,
+            sub_category_status: row.sub_category_status,
             action: row._id
           })
         }))
@@ -59,20 +62,19 @@ export default function Category() {
       width: 100
     },
     {
-      field: 'category_image',
+      field: 'category_id',
       align: 'center',
-      headerName: 'Image',
-      width: 200,
-      renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='category' /></div>,
+      headerName: 'Category Id',
+      width: 200
     },
     {
-      field: "category_name",
-      headerName: "Category Name",
+      field: "sub_category_name",
+      headerName: "Sub Category Name",
       width: 200,
     },
     {
-      field: "category_status",
-      headerName: "Category Status",
+      field: "sub_category_status",
+      headerName: "Sub Category Status",
       width: 200,
       renderCell: (params) => <Switch onChange ={handleSwitch} name = {params.id}   checked = {params.formattedValue}></Switch> ,
 
@@ -86,7 +88,7 @@ export default function Category() {
         <IconButton onClick={() => { 
           SideBox.setOpen({
             state : true,
-            formType : 'update_category',
+            formType : 'update_Subcategory',
             payload : params.formattedValue
           }) 
         }} aria-label="delete"  >
@@ -100,8 +102,8 @@ export default function Category() {
           })
         }) }} aria-label="delete"  >
           <DeleteIcon />
-        </IconButton> */}
-        
+        </IconButton>
+         */}
       </div>,
     }
 
@@ -114,16 +116,16 @@ export default function Category() {
     const FD = new FormData()
 
     FD.append('_id',e.target.name)
-    FD.append('category_status',e.target.checked)
+    FD.append('sub_category_status',e.target.checked)
 
-    const res = statusCategory(FD);
+    const res = changeSubSatatus(FD);
 
     res.then((data)=>{
       console.log(data)
       despatchAlert.setNote({
         open : true,
         variant : 'success',
-        message : "Category Status Updated Successfully !!!"
+        message : " Sub Category Status Updated Successfully !!!"
   
       })
     })
@@ -172,7 +174,7 @@ export default function Category() {
   return (
     <>
       <Typography sx={{ display: "block" }} variant="h5">
-        Category
+        Sub Category
       </Typography>
 
       <br></br>
@@ -205,14 +207,14 @@ export default function Category() {
         <Grid xs={12} md={3}>
           <Button
             onClick={() => {
-              SideBox.setOpen({ state: true, formType: "category" });
+              SideBox.setOpen({ state: true, formType: "subcategory" });
             }}
             sx={{ width: "100%" }}
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
           >
-            Add Category
+            Sub Category
           </Button>
         </Grid>
       </Grid>
