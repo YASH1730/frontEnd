@@ -26,6 +26,7 @@ import Banner from "./Banner";
 import SubCategory from "./SubCategory";
 import PrimaryMaterial from "./PrimaryMaterial";
 import SecondaryMaterial from "./SecondaryMaterial";
+import Polish from "./Polish";
 
 // icons
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -47,6 +48,7 @@ import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ForestIcon from '@mui/icons-material/Forest';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const Home = () => {
   const [ShowTabs, setShowTabs] = useState(false);
@@ -165,7 +167,7 @@ const Home = () => {
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<AutoAwesomeIcon />}
                   label="Polish"
                   {...a11yProps(6)}
                 />
@@ -280,7 +282,7 @@ const Home = () => {
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<AutoAwesomeIcon />}
                   label="Polish"
                   {...a11yProps(6)}
                 />
@@ -365,7 +367,7 @@ const Home = () => {
         </TabPanel>
         
         <TabPanel value={value} index={6}>
-          <Banner />
+          <Polish />
         </TabPanel>
         
         <TabPanel value={value} index={7}>

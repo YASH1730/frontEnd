@@ -216,3 +216,35 @@ export const editSecondaryMaterial = async (data)=>{
       'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
    }})
 }
+
+//  =========================== CURD For  Polish ========================
+
+export const addPolish = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addPolish`,data,{headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// list getSecondaryMaterial
+
+export const getPolish = async ()=>{
+   return await axios.get(`${loacalBaseUrl}/getPolish`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// change status  changePrimaryMaterialStatus
+
+export const changePolishStatus = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/changePolishStatus`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// change editPolish
+
+export const editPolish = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/editPolish`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}

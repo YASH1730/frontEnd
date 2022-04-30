@@ -20,7 +20,7 @@ import { OpenBox, Mode, Notify } from "../App";
 // service 
 import {
   addCategory, editCategory, addProduct, getLastProduct, updateProduct, categoryList, addSubCategories, getSubCatagories, editSubCatagories, addPrimaryMaterial, editPrimaryMaterial,
-  addSecondaryMaterial, editSecondaryMaterial, getPrimaryMaterial, getSecondaryMaterial
+  addSecondaryMaterial, editSecondaryMaterial, getPrimaryMaterial, getSecondaryMaterial, addPolish, editPolish, getPolish
 } from '../services/service.js'
 
 
@@ -291,21 +291,7 @@ const Sideform = () => {
 
   ];
 
-  const polishCatalog = [
-    {
-      value: "Polish",
-      label: "Polish1",
-    },
-    {
-      value: "Mate",
-      label: "Mate",
-    },
-    {
-      value: "Glossy",
-      label: "Glossy",
-    }
 
-  ];
 
   const hingeCatalog = [
     {
@@ -528,11 +514,11 @@ const Sideform = () => {
       return setSecMaterialCatalog(data.data)
     })
 
+    getPolish().then((data) => {
+      if (data.data === null) return setPolishCatalog([])
 
-
-
-
-
+      return setPolishCatalog(data.data)
+    })
 
   }, [SideBox.open.formType])
 
@@ -567,6 +553,7 @@ const Sideform = () => {
   const [subCategory, setSubCategory] = useState([]);
   const [materialCatalog, setMaterialCatalog] = useState([]);
   const [secMaterialCatalog, setSecMaterialCatalog] = useState([]);
+  const [polishCatalog, setPolishCatalog] = useState([]);
 
 
   // ref
@@ -1211,6 +1198,73 @@ const Sideform = () => {
   }
 
 
+  const handelPolish = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append('polish_name', e.target.polish_name.value)
+    FD.append('polish_status', e.target.polish_status.checked)
+
+    const res = addPolish(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+  const handelUpdatePolish = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+    FD.append('_id', SideBox.open.payload)
+
+
+    e.target.polish_name.value !== '' && FD.append('polish_name', e.target.polish_name.value)
+
+    const res = editPolish(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
+
   const handelSubCategories = (e) => {
 
     e.preventDefault();
@@ -1290,7 +1344,7 @@ const Sideform = () => {
         })
       })
 
-    
+
 
   }
 
@@ -1352,22 +1406,7 @@ const Sideform = () => {
 
                     <FeaturesPreviews text={'Please Drag and Drop featured images'} ></FeaturesPreviews>
 
-                    {/* <input type = 'file' name = 'product_image' multiple></input> */}
 
-                    {/* <section className="dorpContainer">
-                      <div {...getRootProps({ className: "dropzone" })}>
-                        <input type='file' {...getInputProps()} name='product_image' />
-                        <p>
-                          Drag & drop some product images here, or click to
-                          select image
-                        </p>
-                        <em>(Only *.jpeg and *.png images will be accepted)</em>
-                      </div>
-                      <aside>
-                        <h5>File Name</h5>
-                        <ul>{acceptedFileItems}</ul>
-                      </aside>
-                    </section> */}
 
                     <TextField
                       fullWidth
@@ -1555,7 +1594,7 @@ const Sideform = () => {
                     >
                       {materialCatalog.map((option) => (
 
-option.primaryMaterial_status &&
+                        option.primaryMaterial_status &&
                         <MenuItem key={option._id} value={option._id}>
                           {option.primaryMaterial_name}
                         </MenuItem>
@@ -1705,8 +1744,9 @@ option.primaryMaterial_status &&
 
                     >
                       {polishCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                        option.polish_status &&
+                        <MenuItem key={option.value} value={option._id}>
+                          {option.polish_name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -3193,6 +3233,111 @@ option.primaryMaterial_status &&
               </Grid>
             )}
             {/* update primaryMeterial Ends */}
+
+
+            {/*  add Polish Meterial */}
+
+            {SideBox.open.formType === "addPolish" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Polish
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add your Polish and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelPolish} id='myForm' enctype='multipart/form-data' method="post">
+
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+
+
+
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='polish_name'
+                      label="Polish Name"
+                      type='text'
+                      helperText="Please enter your primary material"
+                    />
+
+                    <br></br>
+                    <FormGroup>
+                      <FormControlLabel control={<Checkbox name='polish_status' />} label="Status (On/Off)" />
+                    </FormGroup>
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Add Polish
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add addPolish  Ends */}
+
+            {/*  update Polish  */}
+
+            {SideBox.open.formType === "update_polish" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Polish
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update Polish and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelUpdatePolish} id='myForm' enctype='multipart/form-data' method="post">
+
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+
+
+
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='polish_name'
+                      label="Polish Name"
+                      type='text'
+                      helperText="Please enter your primary material"
+                    />
+
+                    {/* <br></br>
+                    <FormGroup>
+                      <FormControlLabel control={<Checkbox name='polish_status' />} label="Status (On/Off)" />
+                    </FormGroup> */}
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Update Polish
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add addPolish  Ends */}
 
 
             {/*  add secondary Meterial */}
