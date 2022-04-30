@@ -67,7 +67,7 @@ export default function Products() {
           fitting: row.fitting,
           selling_points: row.selling_points,
           top_size: row.top_size,
-          dual_size: row.dual_size,
+          dial_size: row.dial_size,
           seating_size_width: row.seating_size_width,
           seating_size_depth: row.seating_size_depth,
           seating_size_height: row.seating_size_height,
@@ -222,8 +222,8 @@ export default function Products() {
       width: 160,
     },
     {
-      field: "dual_size",
-      headerName: "Dual Size",
+      field: "dial_size",
+      headerName: "Dial Size",
       width: 160,
     },
     {

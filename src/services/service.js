@@ -342,3 +342,66 @@ export const editKnob = async (data)=>{
       'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
    }})
 }
+//  =========================== CURD For  Door ========================
+
+export const addDoor = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addDoor`,data,{headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// list getHinge
+
+export const getDoor = async ()=>{
+   return await axios.get(`${loacalBaseUrl}/getDoor`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// change status  changeHingeStatus
+
+export const changeDoorStatus = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/changeDoorStatus`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// change editPolish
+
+export const editDoor = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/editDoor`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+//  =========================== CURD For Handle ========================
+
+export const addHandle = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addHandle`,data,{headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// list getHinge
+
+export const getHandle = async ()=>{
+   return await axios.get(`${loacalBaseUrl}/getHandle`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// change status  changeHingeStatus
+
+export const changeHandleStatus = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/changeHandleStatus`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// change editPolish
+
+export const editHandle = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/editHandle`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}

@@ -21,7 +21,7 @@ import { OpenBox, Mode, Notify } from "../App";
 import {
   addCategory, editCategory, addProduct, getLastProduct, updateProduct, categoryList, addSubCategories, getSubCatagories, editSubCatagories, addPrimaryMaterial, editPrimaryMaterial,
   addSecondaryMaterial, editSecondaryMaterial, getPrimaryMaterial, getSecondaryMaterial, addPolish, editPolish, getPolish, addHinge, editHinge, getHinge,
-  addFitting, editFitting, getFitting, addKnob, getKnob, editKnob
+  addFitting, editFitting, getFitting, addKnob, getKnob, editKnob, addDoor, getDoor, editDoor, addHandle, getHandle, editHandle
 } from '../services/service.js'
 
 
@@ -293,23 +293,6 @@ const Sideform = () => {
   ];
 
 
-
-  const handleCatalog = [
-    {
-      value: "Brass",
-      label: "Brass",
-    },
-    {
-      value: "Metallic",
-      label: "Metallic",
-    },
-    {
-      value: "Silver",
-      label: "Silver",
-    }
-
-  ];
-
   const legCatalog = [
     {
       value: "Folding Legs",
@@ -318,21 +301,6 @@ const Sideform = () => {
     {
       value: "Knockdown Legs",
       label: "Knockdown Legs",
-    }
-
-  ];
-  const doorCatalog = [
-    {
-      value: "Brass",
-      label: "Brass",
-    },
-    {
-      value: "Metallic",
-      label: "Metallic",
-    },
-    {
-      value: "Silver",
-      label: "Silver",
     }
 
   ];
@@ -491,6 +459,18 @@ const Sideform = () => {
       return setKnobCatalog(data.data)
     })
 
+    getDoor().then((data) => {
+      if (data.data === null) return setDoorCatalog([])
+
+      return setDoorCatalog(data.data)
+    })
+
+    getHandle().then((data) => {
+      if (data.data === null) return setHandleCatalog([])
+
+      return setHandleCatalog(data.data)
+    })
+
 
   }, [SideBox.open.formType])
 
@@ -529,6 +509,8 @@ const Sideform = () => {
   const [hingeCatalog, setHingeCatalog] = useState([]);
   const [fittingCatalog, setFittingCatalog] = useState([]);
   const [knobCatalog, setKnobCatalog] = useState([]);
+  const [doorCatalog, setDoorCatalog] = useState([]);
+  const [handleCatalog, setHandleCatalog] = useState([]);
 
 
   // ref
@@ -915,7 +897,6 @@ const Sideform = () => {
     FD.append('selling_price', e.target.selling_price.value);
     FD.append('primary_material', e.target.primary_material.value);
     FD.append('secondary_marterial', e.target.secondary_marterial.value);
-    FD.append('legs', e.target.legs.value);
 
     if (secMaterial !== undefined)
       FD.append('secondary_marterial_weight', e.target.secondary_marterial_weight.value);
@@ -1173,6 +1154,73 @@ const Sideform = () => {
   }
 
 
+  const handelHandle = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append('handle_name', e.target.handle_name.value)
+    FD.append('handle_status', e.target.handle_status.checked)
+
+    const res = addHandle(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
+  const handelUpdateHandle = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+    FD.append('_id', SideBox.open.payload)
+
+
+    e.target.handle_name.value !== '' && FD.append('handle_name', e.target.handle_name.value)
+
+    const res = editHandle(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
   const handelHinge = (e) => {
 
     e.preventDefault();
@@ -1206,6 +1254,8 @@ const Sideform = () => {
 
   }
 
+
+
   const handelUpdateHinge = (e) => {
 
     e.preventDefault();
@@ -1216,6 +1266,72 @@ const Sideform = () => {
     e.target.hinge_name.value !== '' && FD.append('hinge_name', e.target.hinge_name.value)
 
     const res = editHinge(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+  const handelDoor = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append('door_name', e.target.door_name.value)
+    FD.append('door_status', e.target.door_status.checked)
+
+    const res = addDoor(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
+  const handelUpdateDoor = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+    FD.append('_id', SideBox.open.payload)
+
+
+    e.target.door_name.value !== '' && FD.append('door_name', e.target.door_name.value)
+
+    const res = editDoor(FD)
 
     res.then((data) => {
       console.log(data)
@@ -1270,9 +1386,6 @@ const Sideform = () => {
 
 
   }
-
-
-
   const handelUpdateKnob = (e) => {
 
     e.preventDefault();
@@ -1989,8 +2102,9 @@ const Sideform = () => {
 
                     >
                       {doorCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                        option.door_status &&
+                        <MenuItem key={option.value} value={option._id}>
+                          {option.door_name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -2011,8 +2125,9 @@ const Sideform = () => {
 
                     >
                       {handleCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                        option.handle_status &&
+                        <MenuItem key={option.value} value={option._id}>
+                          {option.handle_name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -2890,13 +3005,13 @@ const Sideform = () => {
                       fullWidth
                       autoComplete={false}
                       id="fullWidth"
-                      label="Dual Size"
+                      label="Dail Size"
                       type="number"
                       InputProps={{
                         startAdornment: <InputAdornment position="start">Inch</InputAdornment>,
                       }}
                       variant="outlined"
-                      name="dial_size"
+                      name="dail_size"
                     />
 
                     <br></br>
@@ -3505,6 +3620,189 @@ const Sideform = () => {
               </Grid>
             )}
             {/* update knob   Ends */}
+
+            {/*  add Handle */}
+
+            {SideBox.open.formType === "addHandle" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Handle Material
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add your handle and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelHandle} id='myForm' enctype='multipart/form-data' method="post">
+
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='handle_name'
+                      label="Handle Material Name"
+                      type='text'
+                      helperText="Please enter your knob material"
+                    />
+
+                    <br></br>
+                    <FormGroup>
+                      <FormControlLabel control={<Checkbox name='handle_status' />} label="Status (On/Off)" />
+                    </FormGroup>
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Add Handle Material
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add Handle  Ends */}
+
+            {/*  update Handle  */}
+
+            {SideBox.open.formType === "update_handle" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Handle Material
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update Door and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelUpdateHandle} id='myForm' enctype='multipart/form-data' method="post">
+
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='handle_name'
+                      label="Handle Material Name"
+                      type='text'
+                      helperText="Please enter your Door "
+                    />
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Update Handle Material
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* update Handle   Ends */}
+
+
+            {/*  add Door */}
+
+            {SideBox.open.formType === "addDoor" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Door
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add your door and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelDoor} id='myForm' enctype='multipart/form-data' method="post">
+
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='door_name'
+                      label="Door Name"
+                      type='text'
+                      helperText="Please enter your knob material"
+                    />
+
+                    <br></br>
+                    <FormGroup>
+                      <FormControlLabel control={<Checkbox name='door_status' />} label="Status (On/Off)" />
+                    </FormGroup>
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Add Door
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add Door  Ends */}
+
+            {/*  update Door  */}
+
+            {SideBox.open.formType === "update_door" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Door
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update Door and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelUpdateDoor} id='myForm' enctype='multipart/form-data' method="post">
+
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='door_name'
+                      label="Door Name"
+                      type='text'
+                      helperText="Please enter your Door "
+                    />
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Update Door
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* update door   Ends */}
 
 
 

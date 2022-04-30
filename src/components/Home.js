@@ -30,6 +30,8 @@ import Polish from "./Polish";
 import Hinge from "./Hinge";
 import Fitting  from "./Fitting";
 import Knob  from "./Knob";
+import Door  from "./Door";
+import Handle  from "./Handle";
 
 // icons
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -55,6 +57,8 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import AdjustIcon from '@mui/icons-material/Adjust';
+import DoorSlidingIcon from '@mui/icons-material/DoorSliding';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
 
 const Home = () => {
   const [ShowTabs, setShowTabs] = useState(false);
@@ -195,29 +199,53 @@ const Home = () => {
                   label="Knob"
                   {...a11yProps(9)}
                 />
+                  <Tab
+                  wrapped
+                  icon={<DoorSlidingIcon />}
+                  label="Door"
+                  {...a11yProps(10)}
+                />
+                  <Tab
+                  wrapped
+                  icon={<DragHandleIcon />}
+                  label="Handle Material"
+                  {...a11yProps(11)}
+                />
+                <Tab
+                  wrapped
+                  icon={<ViewCarouselIcon />}
+                  label="Banner"
+                  {...a11yProps(12)}
+                />
+                <Tab
+                  wrapped
+                  icon={<PeopleAltOutlinedIcon />}
+                  label="Customer"
+                  {...a11yProps(13)}
+                />
                 <Tab
                   wrapped
                   icon={<ExploreOutlinedIcon />}
-                  label="Door"
-                  {...a11yProps(10)}
+                  label="Order"
+                  {...a11yProps(14)}
                 />
                 <Tab
                   wrapped
                   icon={<CardGiftcardOutlinedIcon />}
                   label="Coupons"
-                  {...a11yProps(11)}
+                  {...a11yProps(15)}
                 />
                 <Tab
                   wrapped
                   icon={<PersonOutlineOutlinedIcon />}
                   label="Our Staff"
-                  {...a11yProps(12)}
+                  {...a11yProps(16)}
                 />
                 <Tab
                   wrapped
                   icon={<SettingsOutlinedIcon />}
                   label="Settings"
-                  {...a11yProps(13)}
+                  {...a11yProps(17)}
                 />
                 <Button
                   color="primary"
@@ -312,39 +340,51 @@ const Home = () => {
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<DoorSlidingIcon />}
                   label="Door"
                   {...a11yProps(10)}
                 />
                 <Tab
                   wrapped
+                  icon={<DragHandleIcon />}
+                  label="Handle Material"
+                  {...a11yProps(11)}
+                />
+                <Tab
+                  wrapped
+                  icon={<ViewCarouselIcon />}
+                  label="Banner"
+                  {...a11yProps(12)}
+                />
+                <Tab
+                  wrapped
                   icon={<PeopleAltOutlinedIcon />}
                   label="Customer"
-                  {...a11yProps(11)}
+                  {...a11yProps(13)}
                 />
                 <Tab
                   wrapped
                   icon={<ExploreOutlinedIcon />}
                   label="Order"
-                  {...a11yProps(12)}
+                  {...a11yProps(14)}
                 />
                 <Tab
                   wrapped
                   icon={<CardGiftcardOutlinedIcon />}
                   label="Coupons"
-                  {...a11yProps(13)}
+                  {...a11yProps(15)}
                 />
                 <Tab
                   wrapped
                   icon={<PersonOutlineOutlinedIcon />}
                   label="Our Staff"
-                  {...a11yProps(14)}
+                  {...a11yProps(16)}
                 />
                 <Tab
                   wrapped
                   icon={<SettingsOutlinedIcon />}
                   label="Settings"
-                  {...a11yProps(15)}
+                  {...a11yProps(17)}
                 />
         </Tabs>
 
@@ -389,26 +429,34 @@ const Home = () => {
         </TabPanel>
         
         <TabPanel value={value} index={10}>
-          <Banner />
+          <Door />
         </TabPanel>
         
         <TabPanel value={value} index={11}>
+          <Handle />
+        </TabPanel>
+        
+        <TabPanel value={value} index={12}>
+          <Banner />
+        </TabPanel>
+        
+        <TabPanel value={value} index={13}>
           <Customers />
         </TabPanel>
 
-        <TabPanel value={value} index={12}>
+        <TabPanel value={value} index={14}>
           <Orders />
         </TabPanel>
 
-        <TabPanel value={value} index={13}>
+        <TabPanel value={value} index={15}>
           <Coupons />
         </TabPanel>
 
-        <TabPanel value={value} index={14}>
+        <TabPanel value={value} index={16}>
           <OurStaff />
         </TabPanel>
 
-        <TabPanel value={value} index={15}>
+        <TabPanel value={value} index={17}>
           <Setting />
         </TabPanel>
         
