@@ -15,8 +15,17 @@ import { GoogleLogin } from "react-google-login";
 import FacebookLogin from "react-facebook-login";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import { Link } from "react-router-dom";
+import {login} from '../services/service'
+import {Notify,Auth} from '../App'
+
 
 export default function EntryPoints() {
+
+
+  // context 
+  const Alert = useContext(Notify)
+  const userauth = useContext(Auth)
+
   const handelButton = () => {
     console.log("Button Clicked");
   };
@@ -58,10 +67,54 @@ export default function EntryPoints() {
     setCurrency(event.target.value);
   };
 
+  const handleLogin = (e)=>{
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append('email',e.target.email.value);
+    FD.append('password',e.target.password.value);
+
+    let res = login(FD)
+
+    res.then((data)=>{
+      console.log(data)
+
+      if(data.status === 200)
+      {
+        userauth.setAuth({
+          isLogin : true,
+          token : data.data.token
+        })
+
+        Alert.setNote({
+          open : true,
+          variant : 'success',
+          message : data.data.message
+        })
+
+        localStorage.setItem('isLogin',true);
+        localStorage.setItem('WDToken',data.data.token);
+        {window.location.href = '/adminpanel'}
+
+      }
+      else {
+        Alert.setNote({
+          open : true,
+          variant : 'error',
+          message : data.data.message
+        })
+      }
+      
+    })
+
+
+  }
+
   return (
     <>
       {/* // login module */}
-      {window.location.pathname === "/login" && (
+      {window.location.pathname === "/" && (
         <Container fixed sx={{ height: "content-fit" }}>
           <Box p={15} pt={3} pb={3}>
             <Grid
@@ -80,19 +133,20 @@ export default function EntryPoints() {
               {/* Form Side */}
               <Grid item p={6} sm={12} md={6} lg={6}>
                 <Typography variant="h4">Login</Typography>
-                <form method="post" className="formStyle">
                   <Box
                     sx={{
                       "& .MuiTextField-root": { mt: 2 },
                       margin: "auto",
                     }}
                   >
+                    <form method="post" onSubmit= {handleLogin} className="formStyle">
                     <TextField
                       fullWidth
                       autoComplete={false}
                       id="fullWidth"
                       label="Email"
                       type="email"
+                      name = 'email'
                       variant="outlined"
                     />
 
@@ -100,6 +154,7 @@ export default function EntryPoints() {
                       fullWidth
                       id="fullWidth"
                       type="password"
+                      name = 'password'
                       label="Password"
                       variant="outlined"
                     />
@@ -107,6 +162,7 @@ export default function EntryPoints() {
                     <Button
                       variant="contained"
                       color="primary"
+                      type = 'submit'
                       sx={{
                         width: "100%",
                         marginTop: "5%",
@@ -116,8 +172,8 @@ export default function EntryPoints() {
                       {" "}
                       Log In
                     </Button>
-                  </Box>
                 </form>
+                  </Box>
 
                 <hr />
 

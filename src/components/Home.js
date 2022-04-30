@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Tabs,
   Tab,
@@ -11,7 +11,7 @@ import {
 import "../assets/custom/css/home.css";
 import Slide from "@mui/material/Slide";
 import Backdrop from "@mui/material/Backdrop";
-import { Mode } from "../App";
+import { Mode, Auth } from "../App";
 
 // inner components
 import Dashboard from "./Dashboard";
@@ -64,6 +64,15 @@ const Home = () => {
   const [ShowTabs, setShowTabs] = useState(false);
 
   const viewMode = useContext(Mode);
+  const userAuth = useContext(Auth);
+
+
+  useEffect(() => {
+    if(localStorage.getItem('isLogin') !== 'true')
+    {
+      window.location.href = '/'
+    }
+  }, []);
 
   const handleClose = () => {
     setShowTabs(false);

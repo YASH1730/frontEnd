@@ -12,7 +12,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 function App() {
   // const initialval = localStorage.getItem('mode') || false;
   // states for the authentication
-  const [auth, setAuth] = useState(null);
+  const [auth, setAuth] = useState({
+    isLogin : false,
+    token : null
+  });
 
   //state for the mode pot dark
   const [mode, setMode] = useState(false);
@@ -62,9 +65,9 @@ function App() {
               <OpenBox.Provider value={{ open, setOpen }}>
                 <Mode.Provider value={{ mode, setMode }}>
                   <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<EntryPoints />} />
-                    <Route path="/register" element={<EntryPoints />} />
+                    <Route path="/adminpanel" element={<Home />} />
+                    <Route path="/" element={<EntryPoints />} />
+                    {/* <Route path="/register" element={<EntryPoints />} /> */}
                   </Routes>
                   <SideForm />
                   <SnackBar />
