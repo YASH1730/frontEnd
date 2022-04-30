@@ -20,7 +20,8 @@ import { OpenBox, Mode, Notify } from "../App";
 // service 
 import {
   addCategory, editCategory, addProduct, getLastProduct, updateProduct, categoryList, addSubCategories, getSubCatagories, editSubCatagories, addPrimaryMaterial, editPrimaryMaterial,
-  addSecondaryMaterial, editSecondaryMaterial, getPrimaryMaterial, getSecondaryMaterial, addPolish, editPolish, getPolish
+  addSecondaryMaterial, editSecondaryMaterial, getPrimaryMaterial, getSecondaryMaterial, addPolish, editPolish, getPolish, addHinge, editHinge, getHinge,
+  addFitting, editFitting, getFitting, addKnob, getKnob, editKnob
 } from '../services/service.js'
 
 
@@ -293,38 +294,6 @@ const Sideform = () => {
 
 
 
-  const hingeCatalog = [
-    {
-      value: "Brass",
-      label: "Brass",
-    },
-    {
-      value: "Metallic",
-      label: "Metallic",
-    },
-    {
-      value: "Silver",
-      label: "Silver",
-    }
-
-  ];
-
-  const knobCatalog = [
-    {
-      value: "Brass",
-      label: "Brass",
-    },
-    {
-      value: "Metallic",
-      label: "Metallic",
-    },
-    {
-      value: "Silver",
-      label: "Silver",
-    }
-
-  ];
-
   const handleCatalog = [
     {
       value: "Brass",
@@ -463,22 +432,6 @@ const Sideform = () => {
 
 
 
-  const fittingCatalog = [
-    {
-      value: "Brass",
-      label: "Brass",
-    },
-    {
-      value: "Metallic",
-      label: "Metallic",
-    },
-    {
-      value: "Silver",
-      label: "Silver",
-    }
-
-  ];
-
 
 
   // context
@@ -520,6 +473,25 @@ const Sideform = () => {
       return setPolishCatalog(data.data)
     })
 
+    getHinge().then((data) => {
+      if (data.data === null) return setHingeCatalog([])
+
+      return setHingeCatalog(data.data)
+    })
+
+    getFitting().then((data) => {
+      if (data.data === null) return setFittingCatalog([])
+
+      return setFittingCatalog(data.data)
+    })
+
+    getKnob().then((data) => {
+      if (data.data === null) return setKnobCatalog([])
+
+      return setKnobCatalog(data.data)
+    })
+
+
   }, [SideBox.open.formType])
 
 
@@ -554,6 +526,9 @@ const Sideform = () => {
   const [materialCatalog, setMaterialCatalog] = useState([]);
   const [secMaterialCatalog, setSecMaterialCatalog] = useState([]);
   const [polishCatalog, setPolishCatalog] = useState([]);
+  const [hingeCatalog, setHingeCatalog] = useState([]);
+  const [fittingCatalog, setFittingCatalog] = useState([]);
+  const [knobCatalog, setKnobCatalog] = useState([]);
 
 
   // ref
@@ -1198,6 +1173,207 @@ const Sideform = () => {
   }
 
 
+  const handelHinge = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append('hinge_name', e.target.hinge_name.value)
+    FD.append('hinge_status', e.target.hinge_status.checked)
+
+    const res = addHinge(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
+  const handelUpdateHinge = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+    FD.append('_id', SideBox.open.payload)
+
+    e.target.hinge_name.value !== '' && FD.append('hinge_name', e.target.hinge_name.value)
+
+    const res = editHinge(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+  const handelKnob = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append('knob_name', e.target.knob_name.value)
+    FD.append('knob_status', e.target.knob_status.checked)
+
+    const res = addKnob(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
+
+
+  const handelUpdateKnob = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+    FD.append('_id', SideBox.open.payload)
+
+
+    e.target.knob_name.value !== '' && FD.append('knob_name', e.target.knob_name.value)
+
+    const res = editKnob(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
+  const handelFitting = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append('fitting_name', e.target.fitting_name.value)
+    FD.append('fitting_status', e.target.fitting_status.checked)
+
+    const res = addFitting(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
+  const handelUpdateFitting = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+    FD.append('_id', SideBox.open.payload)
+
+
+    e.target.fitting_name.value !== '' && FD.append('fitting_name', e.target.fitting_name.value)
+
+    const res = editFitting(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
   const handelPolish = (e) => {
 
     e.preventDefault();
@@ -1767,8 +1943,9 @@ const Sideform = () => {
 
                     >
                       {hingeCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                        option.hinge_status &&
+                        <MenuItem key={option.value} value={option._id}>
+                          {option.hinge_name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -1789,8 +1966,9 @@ const Sideform = () => {
 
                     >
                       {knobCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                        option.knob_status &&
+                        <MenuItem key={option.value} value={option._id}>
+                          {option.knob_name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -1952,8 +2130,10 @@ const Sideform = () => {
 
                     >
                       {fittingCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+
+                        option.fitting_status &&
+                        <MenuItem key={option.value} value={option._id}>
+                          {option.fitting_name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -3235,6 +3415,287 @@ const Sideform = () => {
             {/* update primaryMeterial Ends */}
 
 
+            {/*  add knob */}
+
+            {SideBox.open.formType === "addKnob" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Knob
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add your knob and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelKnob} id='myForm' enctype='multipart/form-data' method="post">
+
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='knob_name'
+                      label="Knob Name"
+                      type='text'
+                      helperText="Please enter your knob material"
+                    />
+
+                    <br></br>
+                    <FormGroup>
+                      <FormControlLabel control={<Checkbox name='knob_status' />} label="Status (On/Off)" />
+                    </FormGroup>
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Add Knob
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add knob  Ends */}
+
+            {/*  update knob  */}
+
+            {SideBox.open.formType === "update_knob" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Knob
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update Knob and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelUpdateKnob} id='myForm' enctype='multipart/form-data' method="post">
+
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='knob_name'
+                      label="Knob Name"
+                      type='text'
+                      helperText="Please enter your knob "
+                    />
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Update Knob
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* update knob   Ends */}
+
+
+
+            {/*  add Fitting */}
+
+            {SideBox.open.formType === "addFitting" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Fitting
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add your fitting and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelFitting} id='myForm' enctype='multipart/form-data' method="post">
+
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='fitting_name'
+                      label="Fitting Name"
+                      type='text'
+                      helperText="Please enter your primary material"
+                    />
+
+                    <br></br>
+                    <FormGroup>
+                      <FormControlLabel control={<Checkbox name='fitting_status' />} label="Status (On/Off)" />
+                    </FormGroup>
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Add Fitting
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add Fitting  Ends */}
+
+            {/*  update fitting  */}
+
+            {SideBox.open.formType === "update_fitting" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Fitting
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update Fitting and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelUpdateFitting} id='myForm' enctype='multipart/form-data' method="post">
+
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='fitting_name'
+                      label="Fitting Name"
+                      type='text'
+                      helperText="Please enter your fitting "
+                    />
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Update Fitting
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add fitting   Ends */}
+
+
+
+            {/*  add Hinge */}
+
+            {SideBox.open.formType === "addHinge" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Hinge
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add your Hinge and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelHinge} id='myForm' enctype='multipart/form-data' method="post">
+
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='hinge_name'
+                      label="Hinge Name"
+                      type='text'
+                      helperText="Please enter your primary material"
+                    />
+
+                    <br></br>
+                    <FormGroup>
+                      <FormControlLabel control={<Checkbox name='hinge_status' />} label="Status (On/Off)" />
+                    </FormGroup>
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Add Hinge
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add addHinge  Ends */}
+
+
+            {/*  update hinge  */}
+
+            {SideBox.open.formType === "update_hinge" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Hinge
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update Hinge and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelUpdateHinge} id='myForm' enctype='multipart/form-data' method="post">
+
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='hinge_name'
+                      label="Hinge Name"
+                      type='text'
+                      helperText="Please enter your hinge "
+                    />
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Update Hinge
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add hinge   Ends */}
+
+
+
+
             {/*  add Polish Meterial */}
 
             {SideBox.open.formType === "addPolish" && (
@@ -3337,7 +3798,7 @@ const Sideform = () => {
                 </Grid>
               </Grid>
             )}
-            {/* add addPolish  Ends */}
+            {/* add update polish  Ends */}
 
 
             {/*  add secondary Meterial */}

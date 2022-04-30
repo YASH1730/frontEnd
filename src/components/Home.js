@@ -27,6 +27,9 @@ import SubCategory from "./SubCategory";
 import PrimaryMaterial from "./PrimaryMaterial";
 import SecondaryMaterial from "./SecondaryMaterial";
 import Polish from "./Polish";
+import Hinge from "./Hinge";
+import Fitting  from "./Fitting";
+import Knob  from "./Knob";
 
 // icons
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -49,6 +52,9 @@ import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import ForestIcon from '@mui/icons-material/Forest';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
+import ConstructionIcon from '@mui/icons-material/Construction';
+import AdjustIcon from '@mui/icons-material/Adjust';
 
 const Home = () => {
   const [ShowTabs, setShowTabs] = useState(false);
@@ -173,19 +179,19 @@ const Home = () => {
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<ConstructionIcon />}
                   label="Fitting"
                   {...a11yProps(7)}
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<InsertLinkIcon />}
                   label="Hinge"
                   {...a11yProps(8)}
                 />
                 <Tab
                   wrapped
-                  icon={<PeopleAltOutlinedIcon />}
+                  icon={<AdjustIcon />}
                   label="Knob"
                   {...a11yProps(9)}
                 />
@@ -288,19 +294,19 @@ const Home = () => {
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<ConstructionIcon />}
                   label="Fitting"
                   {...a11yProps(7)}
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<InsertLinkIcon />}
                   label="Hinge"
                   {...a11yProps(8)}
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<AdjustIcon />}
                   label="Knob"
                   {...a11yProps(9)}
                 />
@@ -371,15 +377,15 @@ const Home = () => {
         </TabPanel>
         
         <TabPanel value={value} index={7}>
-          <Banner />
+          <Fitting />
         </TabPanel>
         
         <TabPanel value={value} index={8}>
-          <Banner />
+        <Hinge />
         </TabPanel>
         
         <TabPanel value={value} index={9}>
-          <Banner />
+          <Knob />
         </TabPanel>
         
         <TabPanel value={value} index={10}>

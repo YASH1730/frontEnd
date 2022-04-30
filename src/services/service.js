@@ -248,3 +248,97 @@ export const editPolish = async (data)=>{
       'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
    }})
 }
+
+//  =========================== CURD For  Hinge ========================
+
+export const addHinge = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addHinge`,data,{headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// list getHinge
+
+export const getHinge = async ()=>{
+   return await axios.get(`${loacalBaseUrl}/getHinge`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// change status  changeHingeStatus
+
+export const changeHingeStatus = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/changeHingeStatus`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// change editPolish
+
+export const editHinge = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/editHinge`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+//  =========================== CURD For  Hinge ========================
+
+export const addFitting = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addFitting`,data,{headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// list getHinge
+
+export const getFitting = async ()=>{
+   return await axios.get(`${loacalBaseUrl}/getFitting`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// change status  changeHingeStatus
+
+export const changeFittingStatus = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/changeFittingStatus`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// change editPolish
+
+export const editFitting = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/editFitting`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+//  =========================== CURD For  Knob ========================
+
+export const addKnob = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addKnob`,data,{headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// list getHinge
+
+export const getKnob = async ()=>{
+   return await axios.get(`${loacalBaseUrl}/getKnob`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// change status  changeHingeStatus
+
+export const changeKnobStatus = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/changeKnobStatus`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// change editPolish
+
+export const editKnob = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/editKnob`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
