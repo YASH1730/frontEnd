@@ -18,7 +18,10 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import { OpenBox, Mode, Notify } from "../App";
 
 // service 
-import { addCategory, editCategory, addProduct, getLastProduct, updateProduct, categoryList, addSubCategories, getSubCatagories, editSubCatagories } from '../services/service.js'
+import {
+  addCategory, editCategory, addProduct, getLastProduct, updateProduct, categoryList, addSubCategories, getSubCatagories, editSubCatagories, addPrimaryMaterial, editPrimaryMaterial,
+  addSecondaryMaterial, editSecondaryMaterial, getPrimaryMaterial, getSecondaryMaterial
+} from '../services/service.js'
 
 
 const thumbsContainer = {
@@ -394,82 +397,7 @@ const Sideform = () => {
     }
 
   ];
-  const secMaterialCatalog = [
-    {
-      value: "Teak Wood",
-      label: "Teak Wood",
-    },
-    {
-      value: "Natural Solid Wood",
-      label: "Natural Solid Wood",
-    }
-    ,
-    {
-      value: "Stone",
-      label: "Stone",
-    }
-    ,
-    {
-      value: "Metal",
-      label: "Metal",
-    }
-    ,
-    {
-      value: "Brass",
-      label: "Brass",
-    }
-    ,
-    {
-      value: "Copper",
-      label: "Copper",
-    }
-    ,
-    {
-      value: "Glass",
-      label: "Glass",
-    }
-    ,
-    {
-      value: "Mango Wood",
-      label: "Mango Wood",
-    }
-    ,
-    {
-      value: "Pine wood",
-      label: "Pine wood",
-    }
-    ,
-    {
-      value: "Acacia wood",
-      label: "Acacia wood",
-    }
-    ,
-    {
-      value: "Sheesham wood",
-      label: "Sheesham wood",
-    }
-    ,
-    {
-      value: "Ceramic",
-      label: "Ceramic",
-    }
-    ,
-    {
-      value: "Brass Coated SS",
-      label: "Brass Coated SS",
-    }
-    ,
-    {
-      value: "Iron Jali",
-      label: "Iron Jali",
-    }
-    ,
-    {
-      value: "Glass Jali",
-      label: "Glass Jali",
-    }
 
-  ];
   const trollyMaterial = [
     {
       value: "Teak Wood",
@@ -546,82 +474,7 @@ const Sideform = () => {
     }
 
   ];
-  const materialCatalog = [
-    {
-      value: "Teak Wood",
-      label: "Teak Wood",
-    },
-    {
-      value: "Natural Solid Wood",
-      label: "Natural Solid Wood",
-    }
-    ,
-    {
-      value: "Stone",
-      label: "Stone",
-    }
-    ,
-    {
-      value: "Metal",
-      label: "Metal",
-    }
-    ,
-    {
-      value: "Brass",
-      label: "Brass",
-    }
-    ,
-    {
-      value: "Copper",
-      label: "Copper",
-    }
-    ,
-    {
-      value: "Glass",
-      label: "Glass",
-    }
-    ,
-    {
-      value: "Mango Wood",
-      label: "Mango Wood",
-    }
-    ,
-    {
-      value: "Pine wood",
-      label: "Pine wood",
-    }
-    ,
-    {
-      value: "Acacia wood",
-      label: "Acacia wood",
-    }
-    ,
-    {
-      value: "Sheesham wood",
-      label: "Sheesham wood",
-    }
-    ,
-    {
-      value: "Ceramic",
-      label: "Ceramic",
-    }
-    ,
-    {
-      value: "Brass Coated SS",
-      label: "Brass Coated SS",
-    }
-    ,
-    {
-      value: "Iron Jali",
-      label: "Iron Jali",
-    }
-    ,
-    {
-      value: "Glass Jali",
-      label: "Glass Jali",
-    }
 
-  ];
 
 
   const fittingCatalog = [
@@ -650,7 +503,7 @@ const Sideform = () => {
 
 
   useEffect(() => {
-    
+
     categoryList().then((data) => {
       if (data.data === null) return setCategory([])
 
@@ -662,6 +515,22 @@ const Sideform = () => {
 
       return setSubCategory(data.data)
     })
+
+    getPrimaryMaterial().then((data) => {
+      if (data.data === null) return setMaterialCatalog([])
+
+      return setMaterialCatalog(data.data)
+    })
+
+    getSecondaryMaterial().then((data) => {
+      if (data.data === null) return setSecMaterialCatalog([])
+
+      return setSecMaterialCatalog(data.data)
+    })
+
+
+
+
 
 
 
@@ -696,6 +565,8 @@ const Sideform = () => {
   const [SKU, setSKU] = useState('');
   const [category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
+  const [materialCatalog, setMaterialCatalog] = useState([]);
+  const [secMaterialCatalog, setSecMaterialCatalog] = useState([]);
 
 
   // ref
@@ -1185,6 +1056,161 @@ const Sideform = () => {
       })
   }
 
+  const handelSecondaryMaterial = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append('secondaryMaterial_name', e.target.secondaryMaterial_name.value)
+    FD.append('secondaryMaterial_status', e.target.secondaryMaterial_status.checked)
+
+
+    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+
+
+
+    const res = addSecondaryMaterial(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+  const handelPrimaryMaterial = (e) => {
+
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append('primaryMaterial_name', e.target.primaryMaterial_name.value)
+    FD.append('primaryMaterial_status', e.target.primaryMaterial_status.checked)
+
+
+    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+
+
+
+    const res = addPrimaryMaterial(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
+  const handelUpdatePrimaryMaterial = (e) => {
+
+    e.preventDefault();
+
+
+    const FD = new FormData();
+
+    FD.append('_id', SideBox.open.payload)
+
+
+    e.target.primaryMaterial_name.value !== '' && FD.append('primaryMaterial_name', e.target.primaryMaterial_name.value)
+
+
+
+
+
+    const res = editPrimaryMaterial(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+  const handelUpdateSecondaryMaterial = (e) => {
+
+    e.preventDefault();
+
+
+    const FD = new FormData();
+
+    FD.append('_id', SideBox.open.payload)
+
+
+    e.target.secondaryMaterial_name.value !== '' && FD.append('secondaryMaterial_name', e.target.secondaryMaterial_name.value)
+
+
+
+
+
+    const res = editSecondaryMaterial(FD)
+
+    res.then((data) => {
+      console.log(data)
+      dispatchAlert.setNote({
+        open: true,
+        variant: 'success',
+        message: data.data.message
+
+      })
+    })
+      .catch((err) => {
+        console.log(err)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "May be duplicate Category found !!!"
+
+        })
+      })
+
+
+  }
+
+
   const handelSubCategories = (e) => {
 
     e.preventDefault();
@@ -1229,13 +1255,13 @@ const Sideform = () => {
 
 
     const FD = new FormData();
- 
+
     FD.append('_id', SideBox.open.payload)
 
 
     e.target.category_id.value !== '' && FD.append('category_id', e.target.category_id.value)
     e.target.sub_category_name.value !== '' && FD.append('sub_category_name', e.target.sub_category_name.value)
-    
+
 
 
 
@@ -1264,6 +1290,7 @@ const Sideform = () => {
         })
       })
 
+    
 
   }
 
@@ -1455,7 +1482,7 @@ const Sideform = () => {
                       onChange={handleChangeSubCat}
                       helperText="Please select your sub category"
                     >
-                       {subCategory.map((option) => (
+                      {subCategory.map((option) => (
                         cat === option.category_id &&
                         <MenuItem key={option.value} value={option._id}>
                           {option.sub_category_name}
@@ -1527,8 +1554,10 @@ const Sideform = () => {
 
                     >
                       {materialCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+
+option.primaryMaterial_status &&
+                        <MenuItem key={option._id} value={option._id}>
+                          {option.primaryMaterial_name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -1563,8 +1592,9 @@ const Sideform = () => {
 
                     >
                       {secMaterialCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
+                        option.secondaryMaterial_status &&
+                        <MenuItem key={option.value} value={option._id}>
+                          {option.secondaryMaterial_name}
                         </MenuItem>
                       ))}
                     </TextField>
@@ -3071,6 +3101,195 @@ const Sideform = () => {
             )}
             {/* add Catagory Ends */}
 
+            {/*  add primaryMeterial */}
+
+            {SideBox.open.formType === "primaryMeterial" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Primary Material
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add your Primary Material and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelPrimaryMaterial} id='myForm' enctype='multipart/form-data' method="post">
+
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+
+
+
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='primaryMaterial_name'
+                      label="Primary Material"
+                      type='text'
+                      helperText="Please enter your primary material"
+                    />
+
+                    <br></br>
+                    <FormGroup>
+                      <FormControlLabel control={<Checkbox name='primaryMaterial_status' />} label="Status (On/Off)" />
+                    </FormGroup>
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Add Primary Material
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add primaryMeterial Ends */}
+
+            {/*  update primaryMeterial */}
+
+            {SideBox.open.formType === "update_PrimaryMaterial" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Primary Material
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update your Primary Material and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" id='myForm' onSubmit={handelUpdatePrimaryMaterial} enctype='multipart/form-data' method="post">
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+
+
+                    <TextField
+                      fullWidth
+                      id="outlined-select"
+                      name='primaryMaterial_name'
+                      label="Primary Material"
+                      helperText="Please enter the update"
+                    />
+
+
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Update Category
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* update primaryMeterial Ends */}
+
+
+            {/*  add secondary Meterial */}
+
+            {SideBox.open.formType === "secondaryMaterial" && (
+
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Primary Material
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add your Primary Material and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" onSubmit={handelSecondaryMaterial} id='myForm' enctype='multipart/form-data' method="post">
+
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+
+
+
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='secondaryMaterial_name'
+                      label="Secondary Material"
+                      type='text'
+                      helperText="Please enter your primary material"
+                    />
+
+                    <br></br>
+                    <FormGroup>
+                      <FormControlLabel control={<Checkbox name='secondaryMaterial_status' />} label="Status (On/Off)" />
+                    </FormGroup>
+
+                    <br></br>
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Add Primary Material
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add secondary Meterial Ends */}
+
+            {/*  update secondaryMaterial */}
+
+            {SideBox.open.formType === "update_secondaryMaterial" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Secondary Material
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update your Secondary Material and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" id='myForm' onSubmit={handelUpdateSecondaryMaterial} enctype='multipart/form-data' method="post">
+                    {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
+
+
+                    <TextField
+                      fullWidth
+                      id="outlined-select"
+                      name='secondaryMaterial_name'
+                      label="Secondary Material"
+                      helperText="Please enter the update"
+                    />
+
+
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Update SecondaryMaterial
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* update secondaryMaterial Ends */}
+
+
+
             {/*  add subCatagory */}
 
             {SideBox.open.formType === "subcategory" && (
@@ -3173,7 +3392,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      
+
                       id="outlined-select"
                       select
                       name='category_id'
@@ -3197,7 +3416,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      
+
                       id="outlined-select"
                       name='sub_category_name'
                       label="Sub Category"
@@ -3206,7 +3425,7 @@ const Sideform = () => {
                     />
 
                     <br></br>
-                    
+
 
                     <Button color="primary" type='submit' fullWidth variant="contained">
                       Add Sub Category

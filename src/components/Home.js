@@ -24,6 +24,8 @@ import OurStaff from "./OurStaff";
 import Setting from "./Setting";
 import Banner from "./Banner";
 import SubCategory from "./SubCategory";
+import PrimaryMaterial from "./PrimaryMaterial";
+import SecondaryMaterial from "./SecondaryMaterial";
 
 // icons
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -42,8 +44,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ViewCarouselIcon from '@mui/icons-material/ViewCarousel';
-import ListIcon from '@mui/icons-material/List';
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
+import ForestIcon from '@mui/icons-material/Forest';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 const Home = () => {
   const [ShowTabs, setShowTabs] = useState(false);
@@ -150,13 +153,13 @@ const Home = () => {
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
-                  label="Primary Mattirial"
+                  icon={<ForestIcon />}
+                  label="Primary Material"
                   {...a11yProps(4)}
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<FilterListIcon />}
                   label="Secondary Mattirial"
                   {...a11yProps(5)}
                 />
@@ -265,13 +268,13 @@ const Home = () => {
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<ForestIcon />}
                   label="Primary Material"
                   {...a11yProps(4)}
                 />
                 <Tab
                   wrapped
-                  icon={<ViewCarouselIcon />}
+                  icon={<FilterListIcon />}
                   label="Secondary Material"
                   {...a11yProps(5)}
                 />
@@ -354,11 +357,11 @@ const Home = () => {
         </TabPanel>
         
         <TabPanel value={value} index={4}>
-          <Banner />
+          <PrimaryMaterial />
         </TabPanel>
         
         <TabPanel value={value} index={5}>
-          <Banner />
+          <SecondaryMaterial />
         </TabPanel>
         
         <TabPanel value={value} index={6}>

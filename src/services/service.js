@@ -115,14 +115,14 @@ export const listBanner = async ()=>{
 // change status banner
 
 export const chaneStatus = async (data)=>{
-   return await axios.post(`${loacalBaseUrl}/chaneStatusBanner`,data,{headers: { 
+   return await axios.patch(`${loacalBaseUrl}/chaneStatusBanner`,data,{headers: { 
       'Content-Type': 'application/json',
       'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
    }})
 }
 
 
-//  =========================== CURD For Bannner ========================
+//  =========================== CURD For Sub Categories ========================
 
 export const addSubCategories = async (data)=>{
    return await axios.post(`${loacalBaseUrl}/addSubCategories`,data,{headers: { 
@@ -143,14 +143,76 @@ export const getSubCatagories = async ()=>{
 // change status  subcategories
 
 export const changeSubSatatus = async (data)=>{
-   return await axios.post(`${loacalBaseUrl}/changeSubStatus`,data,{headers: { 
+   return await axios.patch(`${loacalBaseUrl}/changeSubStatus`,data,{headers: { 
       'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
    }})
 }
 // change status  subcategories
 
 export const editSubCatagories = async (data)=>{
-   return await axios.post(`${loacalBaseUrl}/editSubCatagories`,data,{headers: { 
+   return await axios.patch(`${loacalBaseUrl}/editSubCatagories`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+//  =========================== CURD For  Primary Material ========================
+
+export const addPrimaryMaterial = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addPrimaryMaterial`,data,{headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// // list getPrimaryMaterial
+
+export const getPrimaryMaterial = async ()=>{
+   return await axios.get(`${loacalBaseUrl}/getPrimaryMaterial`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// change status  changePrimaryMaterialStatus
+
+export const changePrimaryMaterialStatus = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/changePrimaryMaterialStatus`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// // change status  subcategories
+
+export const editPrimaryMaterial = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/editPrimaryMaterial`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+//  =========================== CURD For  Secondary Material ========================
+
+export const addSecondaryMaterial = async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addSecondaryMaterial`,data,{headers: { 
+      'Content-Type': 'application/json',
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+
+// // list getSecondaryMaterial
+
+export const getSecondaryMaterial = async ()=>{
+   return await axios.get(`${loacalBaseUrl}/getSecondaryMaterial`,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// change status  changePrimaryMaterialStatus
+
+export const changeSecondaryMaterialStatus = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/changeSecondaryMaterialStatus`,data,{headers: { 
+      'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
+   }})
+}
+// // change editSecondaryMaterial
+
+export const editSecondaryMaterial = async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/editSecondaryMaterial`,data,{headers: { 
       'Authorization' : `Bearer ${process.env.REACT_APP_API_Token}`
    }})
 }
