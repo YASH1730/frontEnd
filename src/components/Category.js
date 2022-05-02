@@ -87,7 +87,7 @@ export default function Category() {
           SideBox.setOpen({
             state : true,
             formType : 'update_category',
-            payload : params.formattedValue
+            payload : params
           }) 
         }} aria-label="delete"  >
           <CreateIcon />

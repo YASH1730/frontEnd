@@ -409,10 +409,79 @@ const Sideform = () => {
   const SideBox = useContext(OpenBox);
   const viewMode = useContext(Mode);
   const dispatchAlert = useContext(Notify);
-
+  
+  // pres data
+  const [preData,setPreData] = useState({
+    category : '',
+    priMater : '',
+    polish : '',
+    fitting : '',
+    hinge : '',
+    knob : '',
+    door : '',
+    handle : '',
+  })
 
 
   useEffect(() => {
+
+
+    switch (SideBox.open.formType)
+    {
+      case 'update_category' : 
+        setPreData({
+          ...preData,
+          category : SideBox.open.payload.row.category_name
+        })
+        break;
+      case 'update_PrimaryMaterial' : 
+        setPreData({
+          ...preData,
+          priMater : SideBox.open.payload.row.primaryMaterial_name
+        })
+        break;
+      case 'update_polish' : 
+        setPreData({
+          ...preData,
+          polish : SideBox.open.payload.row.polish_name
+        })
+        break;
+      case 'update_knob' : 
+        setPreData({
+          ...preData,
+          knob : SideBox.open.payload.row.knob_name
+        })
+        break;
+      case 'update_fitting' : 
+        setPreData({
+          ...preData,
+          fitting : SideBox.open.payload.row.fitting_name
+        })
+        break;
+      case 'update_hinge' : 
+        setPreData({
+          ...preData,
+          hinge : SideBox.open.payload.row.hinge_name
+        })
+        break;
+      case 'update_door' : 
+        setPreData({
+          ...preData,
+          door : SideBox.open.payload.row.door_name
+        })
+        break;
+      case 'update_handle' : 
+        setPreData({
+          ...preData,
+          handle : SideBox.open.payload.row.handle_name
+        })
+        break;
+        
+
+      default :
+      console.log('');
+
+    }
 
     categoryList().then((data) => {
       if (data.data === null) return setCategory([])
@@ -503,31 +572,6 @@ const Sideform = () => {
   const [trolly, settrolly] = useState();
 
 
-  const setPreDifinedVals = ()=>{
-
-    setCat(SideBox.open.category_name)
-    setSubCat(SideBox.open.sub_category_name)
-    setDispatch(SideBox.open.dispatch_time)
-    setTaxRate(SideBox.open.tax_rate)
-    setFitting(SideBox.open.fitting)
-    setPolish(SideBox.open.polish)
-    setHinge(SideBox.open.hinge)
-    setKnob(SideBox.open.knob)
-    setHandle(SideBox.open.handle)
-    setDoor(SideBox.open.door)
-    setWeightCap(SideBox.open.weight_capacity)
-    setMaterial(SideBox.open.primaryMaterial_name)
-    setSecMaterial(SideBox.open.secondoryMaterial_name)
-    setMirrorVal(SideBox.open.mirrorVal)
-    setAssemblyVal(SideBox.open.assembly_required)
-    setLeg(SideBox.open.legs)
-    setSilver(SideBox.open.sliver)
-    setTrollyVal(SideBox.open.trollyVal)
-    settrolly(SideBox.open.trolly)
-
-  }
-
-
   // states for the dynamic rendering 
   const [SKU, setSKU] = useState('');
   const [category, setCategory] = useState([]);
@@ -541,6 +585,66 @@ const Sideform = () => {
   const [doorCatalog, setDoorCatalog] = useState([]);
   const [handleCatalog, setHandleCatalog] = useState([]);
 
+
+  const handleChangeData = (e) =>{
+
+    switch (SideBox.open.formType)
+    {
+      case 'update_category' : 
+        setPreData({
+          ...preData,
+          category : e.target.value
+        })
+        break;
+      case 'update_PrimaryMaterial' : 
+        setPreData({
+          ...preData,
+          priMater : e.target.value
+        })
+        break;
+      case 'update_polish' : 
+        setPreData({
+          ...preData,
+          polish : e.target.value
+        })
+        break;
+      case 'update_knob' : 
+        setPreData({
+          ...preData,
+          knob : e.target.value
+        })
+        break;
+      case 'update_fitting' : 
+        setPreData({
+          ...preData,
+          fitting : e.target.value
+        })
+        break;
+      case 'update_hinge' : 
+        setPreData({
+          ...preData,
+          hinge : e.target.value
+        })
+        break;
+      case 'update_door' : 
+        setPreData({
+          ...preData,
+          door : e.target.value
+        })
+        break;
+      case 'update_handle' : 
+        setPreData({
+          ...preData,
+          handle : e.target.value
+        })
+        break;
+
+      default :
+      console.log('');
+
+    }
+
+  }
 
   // ref
   const editorRef = useRef();
@@ -732,7 +836,7 @@ const Sideform = () => {
 
     const FD = new FormData();
 
-    FD.append('_id', SideBox.open.payload)
+    FD.append('_id', SideBox.open.payload.row.id)
 
 
     Image[0] !== undefined && FD.append('category_image', Image[0]);
@@ -1172,7 +1276,7 @@ const Sideform = () => {
 
     const FD = new FormData();
 
-    FD.append('_id', SideBox.open.payload)
+    FD.append('_id', SideBox.open.payload.row.id)
 
 
     e.target.primaryMaterial_name.value !== '' && FD.append('primaryMaterial_name', e.target.primaryMaterial_name.value)
@@ -1211,7 +1315,7 @@ const Sideform = () => {
 
     const FD = new FormData();
 
-    FD.append('_id', SideBox.open.payload)
+    FD.append('_id', SideBox.open.payload.id)
 
 
     e.target.secondaryMaterial_name.value !== '' && FD.append('secondaryMaterial_name', e.target.secondaryMaterial_name.value)
@@ -1283,7 +1387,7 @@ const Sideform = () => {
     e.preventDefault();
 
     const FD = new FormData();
-    FD.append('_id', SideBox.open.payload)
+    FD.append('_id', SideBox.open.payload.row.id)
 
 
     e.target.handle_name.value !== '' && FD.append('handle_name', e.target.handle_name.value)
@@ -1352,7 +1456,7 @@ const Sideform = () => {
     e.preventDefault();
 
     const FD = new FormData();
-    FD.append('_id', SideBox.open.payload)
+    FD.append('_id', SideBox.open.payload.row.id)
 
     e.target.hinge_name.value !== '' && FD.append('hinge_name', e.target.hinge_name.value)
 
@@ -1417,7 +1521,7 @@ const Sideform = () => {
     e.preventDefault();
 
     const FD = new FormData();
-    FD.append('_id', SideBox.open.payload)
+    FD.append('_id', SideBox.open.payload.row.id)
 
 
     e.target.door_name.value !== '' && FD.append('door_name', e.target.door_name.value)
@@ -1482,7 +1586,7 @@ const Sideform = () => {
     e.preventDefault();
 
     const FD = new FormData();
-    FD.append('_id', SideBox.open.payload)
+    FD.append('_id', SideBox.open.payload.row.id)
 
 
     e.target.knob_name.value !== '' && FD.append('knob_name', e.target.knob_name.value)
@@ -1549,7 +1653,7 @@ const Sideform = () => {
     e.preventDefault();
 
     const FD = new FormData();
-    FD.append('_id', SideBox.open.payload)
+    FD.append('_id', SideBox.open.payload.row.id)
 
 
     e.target.fitting_name.value !== '' && FD.append('fitting_name', e.target.fitting_name.value)
@@ -1615,7 +1719,7 @@ const Sideform = () => {
     e.preventDefault();
 
     const FD = new FormData();
-    FD.append('_id', SideBox.open.payload)
+    FD.append('_id', SideBox.open.payload.row.id)
 
 
     e.target.polish_name.value !== '' && FD.append('polish_name', e.target.polish_name.value)
@@ -3599,6 +3703,52 @@ const Sideform = () => {
             )}
             {/* add Catagory Ends */}
 
+             {/*  update Catagory */}
+
+             {SideBox.open.formType === "update_category" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Category
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update your product category and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" id='myForm' onSubmit={handelUpdateCategory} enctype='multipart/form-data' method="post">
+                    <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews>
+
+
+                    <TextField
+                      fullWidth
+
+                      id="outlined-select"
+                      onChange = {handleChangeData}
+                      value= {preData.category}
+                      name='category_name'
+                      label="Category"
+                      helperText="Please enter the update"
+                    />
+
+
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                      Update Category
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* update Catagory Ends */}
+
+
             {/*  add primaryMeterial */}
 
             {SideBox.open.formType === "primaryMeterial" && (
@@ -3675,9 +3825,12 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
+                      onChange = {handleChangeData}
                       id="outlined-select"
                       name='primaryMaterial_name'
                       label="Primary Material"
+                      value = {preData.priMater}
+
                       helperText="Please enter the update"
                     />
 
@@ -3767,9 +3920,12 @@ const Sideform = () => {
                       fullWidth
                       required
                       id="outlined-select"
+                      onChange = {handleChangeData}
                       name='knob_name'
                       label="Knob Name"
                       type='text'
+                      value = {preData.knob}
+
                       helperText="Please enter your knob "
                     />
 
@@ -3855,10 +4011,13 @@ const Sideform = () => {
 
 
                     <TextField
+                      onChange = {handleChangeData}
                       fullWidth
                       required
                       id="outlined-select"
                       name='handle_name'
+                      value = {preData.handle}
+
                       label="Handle Material Name"
                       type='text'
                       helperText="Please enter your Door "
@@ -3948,10 +4107,12 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
+                      onChange = {handleChangeData}
                       required
                       id="outlined-select"
                       name='door_name'
                       label="Door Name"
+                      value = {preData.door}
                       type='text'
                       helperText="Please enter your Door "
                     />
@@ -4045,6 +4206,8 @@ const Sideform = () => {
                       id="outlined-select"
                       name='fitting_name'
                       label="Fitting Name"
+                      value = {preData.fitting}
+                      onChange = {handleChangeData}
                       type='text'
                       helperText="Please enter your fitting "
                     />
@@ -4135,10 +4298,13 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
+                      onChange = {handleChangeData}
                       required
                       id="outlined-select"
                       name='hinge_name'
                       label="Hinge Name"
+                      value = {preData.hinge}
+
                       type='text'
                       helperText="Please enter your hinge "
                     />
@@ -4237,11 +4403,13 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
+                      onChange = {handleChangeData}
                       required
                       id="outlined-select"
                       name='polish_name'
                       label="Polish Name"
                       type='text'
+                      value = {preData.polish}
                       helperText="Please enter your primary material"
                     />
 
@@ -4503,49 +4671,7 @@ const Sideform = () => {
             )}
             {/* update sebCatagory Ends */}
 
-            {/*  update Catagory */}
-
-            {SideBox.open.formType === "update_category" && (
-              <Grid container p={5}>
-                <Grid item xs={12}>
-                  <Typography variant="h5">
-                    Update Category
-                    <Typography
-                      sx={{ display: "block !important" }}
-                      variant="caption"
-                    >
-                      Update your product category and necessary information from
-                      here
-                    </Typography>
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12} mt={5}>
-                  <form className="form" id='myForm' onSubmit={handelUpdateCategory} enctype='multipart/form-data' method="post">
-                    <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews>
-
-
-                    <TextField
-                      fullWidth
-
-                      id="outlined-select"
-
-                      name='category_name'
-                      label="Category"
-                      helperText="Please enter the update"
-                    />
-
-
-
-                    <Button color="primary" type='submit' fullWidth variant="contained">
-                      Update Category
-                    </Button>
-                  </form>
-                </Grid>
-              </Grid>
-            )}
-            {/* update Catagory Ends */}
-
+           
             {/* Ore Staff */}
 
             {SideBox.open.formType === "staff" && (

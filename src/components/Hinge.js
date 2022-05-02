@@ -76,7 +76,7 @@ export default function Hinge() {
           SideBox.setOpen({
             state : true,
             formType : 'update_hinge',
-            payload : params.formattedValue
+            payload : params
           }) 
         }} aria-label="delete"  >
           <CreateIcon />

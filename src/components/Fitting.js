@@ -76,7 +76,7 @@ export default function Fitting() {
           SideBox.setOpen({
             state : true,
             formType : 'update_fitting',
-            payload : params.formattedValue
+            payload : params
           }) 
         }} aria-label="delete"  >
           <CreateIcon />

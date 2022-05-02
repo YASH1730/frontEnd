@@ -76,7 +76,7 @@ export default function Knob() {
           SideBox.setOpen({
             state : true,
             formType : 'update_knob',
-            payload : params.formattedValue
+            payload : params
           }) 
         }} aria-label="delete"  >
           <CreateIcon />

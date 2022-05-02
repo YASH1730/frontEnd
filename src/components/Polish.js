@@ -76,7 +76,7 @@ export default function Polish() {
           SideBox.setOpen({
             state : true,
             formType : 'update_polish',
-            payload : params.formattedValue
+            payload : params
           }) 
         }} aria-label="delete"  >
           <CreateIcon />
