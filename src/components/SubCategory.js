@@ -43,6 +43,7 @@ export default function SubCategory() {
           return ({
             id: row._id,
             category_id : row.category_id,
+            category_name : row.category_name,
             sub_category_name: row.sub_category_name,
             sub_category_status: row.sub_category_status,
             action: row._id
@@ -68,6 +69,12 @@ export default function SubCategory() {
       width: 200
     },
     {
+      field: 'category_name',
+      align: 'center',
+      headerName: 'Category Name',
+      width: 200
+    },
+    {
       field: "sub_category_name",
       headerName: "Sub Category Name",
       width: 200,
@@ -89,7 +96,7 @@ export default function SubCategory() {
           SideBox.setOpen({
             state : true,
             formType : 'update_Subcategory',
-            payload : params.formattedValue
+            payload : params
           }) 
         }} aria-label="delete"  >
           <CreateIcon />

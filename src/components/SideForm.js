@@ -414,6 +414,7 @@ const Sideform = () => {
   const [preData,setPreData] = useState({
     category : '',
     priMater : '',
+    secMater : '',
     polish : '',
     fitting : '',
     hinge : '',
@@ -475,6 +476,20 @@ const Sideform = () => {
           ...preData,
           handle : SideBox.open.payload.row.handle_name
         })
+        break;
+        
+      case 'update_Subcategory' : 
+      setCat(
+           SideBox.open.payload.row.category_id
+        )
+        break;
+        
+        
+      case 'update_secondaryMaterial' : 
+      setPreData({
+        ...preData,
+        secMater : SideBox.open.payload.row.secondaryMaterial_name
+      })
         break;
         
 
@@ -636,6 +651,12 @@ const Sideform = () => {
         setPreData({
           ...preData,
           handle : e.target.value
+        })
+        break;
+      case 'update_secondaryMaterial' : 
+        setPreData({
+          ...preData,
+          secMater : e.target.value
         })
         break;
 
@@ -845,8 +866,7 @@ const Sideform = () => {
 
 
 
-    const res = editCategory(FD)
-
+    const res = editCategory(FD);
     res.then((data) => {
       console.log(data.status)
 
@@ -881,7 +901,9 @@ const Sideform = () => {
         })
       })
 
-
+    
+   
+    
   }
 
   // function fo reseting the values
@@ -1028,9 +1050,19 @@ const Sideform = () => {
     const res = addProduct(FD)
 
     res.then((data) => {
-      console.log(data)
+      console.log(data.status)
 
-      if (data.status !== 203) {
+      if (data.status === 203) {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'success',
@@ -1038,26 +1070,19 @@ const Sideform = () => {
 
         })
       }
-      else {
-        resetAll();
-
-        dispatchAlert.setNote({
-          open: true,
-          variant: 'error',
-          message: data.data.message
-
-        })
-      }
 
     })
       .catch((err) => {
+        console.log(err)
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: "Somthing Went Worang !!!"
 
         })
       })
+
   }
 
 
@@ -1162,9 +1187,19 @@ const Sideform = () => {
     const res = addProduct(FD)
 
     res.then((data) => {
-      console.log(data)
+      console.log(data.status)
 
-      if (data.status !== 203) {
+      if (data.status === 203) {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'success',
@@ -1172,26 +1207,19 @@ const Sideform = () => {
 
         })
       }
-      else {
-        resetAll();
-
-        dispatchAlert.setNote({
-          open: true,
-          variant: 'error',
-          message: data.data.message
-
-        })
-      }
 
     })
       .catch((err) => {
+        console.log(err)
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: "Somthing Went Worang !!!"
 
         })
       })
+
   }
 
   const handelSecondaryMaterial = (e) => {
@@ -1211,23 +1239,39 @@ const Sideform = () => {
     const res = addSecondaryMaterial(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
+
 
 
   }
@@ -1248,20 +1292,35 @@ const Sideform = () => {
     const res = addPrimaryMaterial(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1288,23 +1347,39 @@ const Sideform = () => {
     const res = editPrimaryMaterial(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
+
 
 
   }
@@ -1327,20 +1402,35 @@ const Sideform = () => {
     const res = editSecondaryMaterial(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1361,23 +1451,39 @@ const Sideform = () => {
     const res = addHandle(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
+
 
 
   }
@@ -1395,23 +1501,39 @@ const Sideform = () => {
     const res = editHandle(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
+
 
 
   }
@@ -1426,26 +1548,39 @@ const Sideform = () => {
     FD.append('hinge_status', e.target.hinge_status.checked)
 
     const res = addHinge(FD)
-
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
-
 
   }
 
@@ -1463,23 +1598,39 @@ const Sideform = () => {
     const res = editHinge(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
+
 
 
   }
@@ -1495,20 +1646,35 @@ const Sideform = () => {
     const res = addDoor(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1529,20 +1695,35 @@ const Sideform = () => {
     const res = editDoor(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1561,20 +1742,35 @@ const Sideform = () => {
     const res = addKnob(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1594,20 +1790,35 @@ const Sideform = () => {
     const res = editKnob(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1627,20 +1838,35 @@ const Sideform = () => {
     const res = addFitting(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1661,20 +1887,35 @@ const Sideform = () => {
     const res = editFitting(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1694,20 +1935,35 @@ const Sideform = () => {
     const res = addPolish(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1727,20 +1983,35 @@ const Sideform = () => {
     const res = editPolish(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1755,6 +2026,13 @@ const Sideform = () => {
 
     const FD = new FormData();
 
+    category.map((item)=>{
+
+      item._id === e.target.category_id.value && FD.append('category_name', item.category_name)
+
+    })
+
+
     FD.append('category_id', e.target.category_id.value)
     FD.append('sub_category_name', e.target.sub_category_name.value)
     FD.append('sub_category_status', e.target.sub_category_status.checked)
@@ -1767,20 +2045,35 @@ const Sideform = () => {
     const res = addSubCategories(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -1794,7 +2087,13 @@ const Sideform = () => {
 
     const FD = new FormData();
 
-    FD.append('_id', SideBox.open.payload)
+    FD.append('_id', SideBox.open.payload.row.id)
+
+    category.map((item)=>{
+
+      return item._id === e.target.category_id.value && FD.append('category_name', item.category_name)
+
+    })
 
 
     e.target.category_id.value !== '' && FD.append('category_id', e.target.category_id.value)
@@ -1810,20 +2109,35 @@ const Sideform = () => {
     const res = editSubCatagories(FD)
 
     res.then((data) => {
-      console.log(data)
-      dispatchAlert.setNote({
-        open: true,
-        variant: 'success',
-        message: data.data.message
+      console.log(data.status)
 
-      })
-    })
-      .catch((err) => {
-        console.log(err)
+      if (data.status === 203) {
+        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
-          message: "May be duplicate Category found !!!"
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
 
         })
       })
@@ -4437,12 +4751,12 @@ const Sideform = () => {
               <Grid container p={5}>
                 <Grid item xs={12}>
                   <Typography variant="h5">
-                    Add Primary Material
+                    Add Secondary Material
                     <Typography
                       sx={{ display: "block !important" }}
                       variant="caption"
                     >
-                      Add your Primary Material and necessary information from
+                      Add your Secondary Material and necessary information from
                       here
                     </Typography>
                   </Typography>
@@ -4453,11 +4767,9 @@ const Sideform = () => {
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
 
-
-
-
                     <TextField
                       fullWidth
+                      
                       required
                       id="outlined-select"
                       name='secondaryMaterial_name'
@@ -4474,7 +4786,7 @@ const Sideform = () => {
                     <br></br>
 
                     <Button color="primary" type='submit' fullWidth variant="contained">
-                      Add Primary Material
+                      Add Secondary Material
                     </Button>
                   </form>
                 </Grid>
@@ -4510,6 +4822,8 @@ const Sideform = () => {
                       name='secondaryMaterial_name'
                       label="Secondary Material"
                       helperText="Please enter the update"
+                      onChange = {handleChangeData}
+                      value = {preData.secMater}
                     />
 
 
@@ -4624,6 +4938,7 @@ const Sideform = () => {
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
 
+                    <FormLabel id="demo-radio-buttons-group-label">Category</FormLabel>
 
                     <TextField
                       fullWidth
@@ -4631,7 +4946,7 @@ const Sideform = () => {
                       id="outlined-select"
                       select
                       name='category_id'
-                      label="Category"
+                      displayEmpty
                       value={cat}
                       multiple
                       onChange={handleChange}

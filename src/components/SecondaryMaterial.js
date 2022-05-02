@@ -76,7 +76,7 @@ export default function SecondaryMaterial() {
           SideBox.setOpen({
             state : true,
             formType : 'update_secondaryMaterial',
-            payload : params.formattedValue
+            payload : params
           }) 
         }} aria-label="delete"  >
           <CreateIcon />
