@@ -19,6 +19,8 @@ import { OpenBox, Notify } from "../App";
 import {getListProduct, deleteProduct} from '../services/service'
 
 export default function Products() {
+  
+  
   const [age, setAge] = useState("");
   const [price, setPrice] = useState("");
 
@@ -51,20 +53,21 @@ export default function Products() {
           product_description: row.product_description,
           seo_title: row.seo_title,
           seo_description: row.seo_description,
-          product_image: row.product_image,
-          primary_material: row.primary_material,
-          secondary_marterial: row.secondary_marterial,
-          secondary_marterial_weight: row.secondary_marterial_weight,
+          seo_keyword: row.seo_keyword,
+          featured_image: row.featured_image,
+          primary_material: row.primary_material_name,
+          secondary_material: row.secondary_material_name ,
+          secondary_material_weight: row.secondary_material_weight,
           length: row.length_main,
           breadth: row.breadth,
           height: row.height,
           weight: row.weight,
-          polish: row.polish,
-          hinge: row.hinge,
-          knob: row.knob,
-          handle: row.handle,
-          door: row.door,
-          fitting: row.fitting,
+          polish: row.polish_name,
+          hinge: row.hinge_name,
+          knob: row.knob_name,
+          handle: row.handle_name,
+          door: row.door_name,
+          fitting: row.fitting_name,
           selling_points: row.selling_points,
           top_size: row.top_size,
           dial_size: row.dial_size,
@@ -75,19 +78,25 @@ export default function Products() {
           wall_hanging: row.wall_hanging,
           assembly_required: row.assembly_required,
           assembly_part: row.assembly_part,
+          leg : row.legs,
           mirror: row.mirror,
+          mirror_width: row.mirror_width,
+          mirror_length: row.mirror_length,
           silver: row.silver,
+          silver_weight: row.silver_weight,
           joints: row.joints,
           wheel: row.wheel,
           trolley: row.trolley,
+          trolley_material: row.trolley_material,
           rotating_seats: row.rotating_seats,
           eatable_oil_polish: row.eatable_oil_polish,
           no_chemical: row.no_chemical,
+          straight_back : row.straight_back,
           lean_back: row.lean_back,
           weaving: row.weaving,
           not_suitable_for_Micro_Dish: row.not_suitable_for_Micro_Dish,
           tilt_top: row.tilt_top,
-          indise_compartments: row.indise_compartments,
+          inside_compartments: row.inside_compartments,
           stackable: row.stackable,
           MRP: row.MRP,
           tax_rate: row.tax_rate,
@@ -145,10 +154,15 @@ export default function Products() {
       width: 160,
     },
     {
-      field: "product_image",
-      headerName: "Product Image",
+      field: "seo_keyword",
+      headerName: "SEO Keyword",
       width: 160,
-      renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='category' /></div>,
+    },
+    {
+      field: "featured_image",
+      headerName: "Featured Image",
+      width: 160,
+      renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='featured' /></div>,
 
     },
     {
@@ -157,13 +171,13 @@ export default function Products() {
       width: 160,
     },
     {
-      field: "secondary_marterial",
-      headerName: "Secondary Marterial",
+      field: "secondary_material",
+      headerName: "Secondary material",
       width: 160,
     },
     {
-      field: "secondary_marterial_weight",
-      headerName: "Secondary Marterial Weight",
+      field: "secondary_material_weight",
+      headerName: "Secondary material Weight",
       width: 160,
     },
     {
@@ -262,13 +276,33 @@ export default function Products() {
       width: 160,
     },
     {
+      field: "legs",
+      headerName: "Legs",
+      width: 160,
+    },
+    {
       field: "mirror",
       headerName: "Mirror",
       width: 160,
     },
     {
+      field: "mirror_width",
+      headerName: "Mirror Width",
+      width: 160,
+    },
+    {
+      field: "mirror_length",
+      headerName: "Mirror Height",
+      width: 160,
+    },
+    {
       field: "silver",
       headerName: "Silver",
+      width: 160,
+    },
+    {
+      field: "silver_weight",
+      headerName: "Silver weight",
       width: 160,
     },
     
@@ -287,6 +321,12 @@ export default function Products() {
     {
       field: "trolley",
       headerName: "Trolley",
+      width: 160,
+    },
+    
+    {
+      field: "trolley_material",
+      headerName: "Trolley Material",
       width: 160,
     },
     
@@ -315,6 +355,11 @@ export default function Products() {
     },
     
     {
+      field: "straight_back",
+      headerName: "Straight Back",
+      width: 160,
+    },
+    {
       field: "lean_back",
       headerName: "Lean Back",
       width: 160,
@@ -339,8 +384,8 @@ export default function Products() {
     },
     
     {
-      field: "indise_compartments",
-      headerName: "Indise Compartments",
+      field: "inside_compartments",
+      headerName: "Inside Compartments",
       width: 160,
     },
     
@@ -388,13 +433,13 @@ export default function Products() {
         
         <IconButton onClick={() => {
           
-          console.log(params.formattedValue)
+          console.log(params)
               SideBox.setOpen({
                 state : true,
                 formType : 'update_product',
-                payload : params.formattedValue
+                payload : params
               }) 
-            }} aria-label="delete"  >
+            }} aria-label="update"  >
               <CreateIcon />
         </IconButton>
         
@@ -533,7 +578,7 @@ export default function Products() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Recent Order </Typography>
+          <Typography variant="h6"> Product List </Typography>
           <br></br>
           {DataGridView()}
         </Grid>

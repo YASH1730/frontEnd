@@ -127,7 +127,7 @@ export default function OurStaff() {
 
          <Grid container scaping = {2} className = 'overviewContainer' >
             <Grid item  p = {2} xs = {12}  sx = {{boxShadow : 2,borderRadius : 5}} >
-            <Typography variant = 'h6'> Order List </Typography>
+            <Typography variant = 'h6'> Staff List </Typography>
         <br></br>
             {DataGridView()}
             </Grid>

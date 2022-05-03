@@ -210,7 +210,7 @@ export default function Hinge() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Recent Order </Typography>
+          <Typography variant="h6"> Hinge List </Typography>
           <br></br>
           {DataGridView()}
         </Grid>

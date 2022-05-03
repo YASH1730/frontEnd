@@ -410,19 +410,97 @@ const Sideform = () => {
   const viewMode = useContext(Mode);
   const dispatchAlert = useContext(Notify);
   
+    // states
+    const [cat, setCat] = useState();
+    const [subCat, setSubCat] = useState();
+    const [dispatchTime, setDispatch] = useState();
+    const [taxRate, setTaxRate] = useState();
+    const [fitting, setFitting] = useState();
+    const [Polish, setPolish] = useState();
+    const [Hinge, setHinge] = useState();
+    const [Knob, setKnob] = useState();
+    const [handle, setHandle] = useState();
+    const [door, setDoor] = useState();
+    const [weightCap, setWeightCap] = useState();
+    const [material, setMaterial] = useState();
+    const [secMaterial, setSecMaterial] = useState();
+    const [mirrorVal, setMirrorVal] = useState('no');
+    const [assemblyVal, setAssemblyVal] = useState();
+    const [leg, setLeg] = useState();
+    const [silver, setSilver] = useState();
+    const [trollyVal, setTrollyVal] = useState();
+    const [trolly, settrolly] = useState();
+  
+  
+    // states for the dynamic rendering 
+    const [SKU, setSKU] = useState('');
+    const [category, setCategory] = useState([]);
+    const [subCategory, setSubCategory] = useState([]);
+    const [materialCatalog, setMaterialCatalog] = useState([]);
+    const [secMaterialCatalog, setSecMaterialCatalog] = useState([]);
+    const [polishCatalog, setPolishCatalog] = useState([]);
+    const [hingeCatalog, setHingeCatalog] = useState([]);
+    const [fittingCatalog, setFittingCatalog] = useState([]);
+    const [knobCatalog, setKnobCatalog] = useState([]);
+    const [doorCatalog, setDoorCatalog] = useState([]);
+    const [handleCatalog, setHandleCatalog] = useState([]);
+  
+
   // pres data
   const [preData,setPreData] = useState({
+    product_title : '',
+    seo_title : '',
+    seo_des : '',
+    seo_keyword : '',
+    product_des : '',
     category : '',
+    sub_category : '',
+    lenght : '',
+    breadth : '',
+    height : '',
     priMater : '',
+    priMater_weight : '',
     secMater : '',
+    secMater_weight : '',
+    selling_price : '',
+    mrp : '',
+    discount_cap : '',
+    dispatch_time : '',
     polish : '',
-    fitting : '',
     hinge : '',
     knob : '',
-    door : '',
     handle : '',
+    door : '',
+    wwight_cap : '',
+    wall_hanging : '',
+    assembly_required : '',
+    assembly_leg : '',
+    assembly_parts : '',
+    fitting : '',
+    rotating : '',
+    eatable : '',
+    no_chemical : '',
+    straight_back : '',
+    lean_back : '',
+    weaving : '',
+    not_micro_dish : '',
+    tilt_top : '',
+    inside_comp : '',
+    stackable : '',
+    silver : '',
+    selling_point : '',
+    mirror : '',
+    joints : '',
+    tax_rate : '',
+    seat_width : '',
+    seat_depth : '',
+    seat_height : '',
+    wheel : '',
+    trolly : '',
+    trolly_mater : '',
+    top_size : '',
+    dial_size : '',
   })
-
 
   useEffect(() => {
 
@@ -490,6 +568,81 @@ const Sideform = () => {
         ...preData,
         secMater : SideBox.open.payload.row.secondaryMaterial_name
       })
+        break;
+          
+      case 'update_product' : 
+      setPreData({
+          SKU : SideBox.open.payload.row.SKU,
+          product_title: SideBox.open.payload.row.product_title,
+          product_description: SideBox.open.payload.row.product_description,
+          seo_title: SideBox.open.payload.row.seo_title,
+          seo_description: SideBox.open.payload.row.seo_description,
+          seo_keyword: SideBox.open.payload.row.seo_keyword,
+          featured_image: SideBox.open.payload.row.featured_image,
+          secondary_material_weight: SideBox.open.payload.row.secondary_material_weight,
+          length: SideBox.open.payload.row.length,
+          breadth: SideBox.open.payload.row.breadth,
+          height: SideBox.open.payload.row.height,
+          weight: SideBox.open.payload.row.weight,
+          selling_points: SideBox.open.payload.row.selling_points,
+          top_size: SideBox.open.payload.row.top_size,
+          dial_size: SideBox.open.payload.row.dial_size,
+          seating_size_width: SideBox.open.payload.row.seating_size_width,
+          seating_size_depth: SideBox.open.payload.row.seating_size_depth,
+          seating_size_height: SideBox.open.payload.row.seating_size_height,
+          weight_capacity: SideBox.open.payload.row.weight_capacity,
+          wall_hanging: SideBox.open.payload.row.wall_hanging,
+          assembly_required: SideBox.open.payload.row.assembly_required,
+          assembly_part: SideBox.open.payload.row.assembly_part,
+          mirror: SideBox.open.payload.row.mirror,
+          mirror_width: SideBox.open.payload.row.mirror_width,
+          mirror_length: SideBox.open.payload.row.mirror_length,
+          silver: SideBox.open.payload.row.silver,
+          silver_weight: SideBox.open.payload.row.silver_weight,
+          joints: SideBox.open.payload.row.joints,
+          wheel: SideBox.open.payload.row.wheel,
+          trolley: SideBox.open.payload.row.trolley,
+          trolley_material: SideBox.open.payload.row.trolley_material,
+          rotating_seats: SideBox.open.payload.row.rotating_seats,
+          eatable_oil_polish: SideBox.open.payload.row.eatable_oil_polish,
+          no_chemical: SideBox.open.payload.row.no_chemical,
+          straight_back : SideBox.open.payload.row.straight_back,
+          lean_back: SideBox.open.payload.row.lean_back,
+          weaving: SideBox.open.payload.row.weaving,
+          not_suitable_for_Micro_Dish: SideBox.open.payload.row.not_suitable_for_Micro_Dish,
+          tilt_top: SideBox.open.payload.row.tilt_top,
+          inside_compartments: SideBox.open.payload.row.inside_compartments,
+          stackable: SideBox.open.payload.row.stackable,
+          MRP: SideBox.open.payload.row.MRP,
+          selling_price: SideBox.open.payload.row.selling_price,
+          discount_limit: SideBox.open.payload.row.discount_limit,
+        
+      })
+
+      setCat(SideBox.open.payload.value.category_id)
+      setSubCat(SideBox.open.payload.value.sub_category_id)
+      setMaterial(SideBox.open.payload.value.primary_material)
+      setSecMaterial(SideBox.open.payload.value.secondary_material)
+      setPolish(SideBox.open.payload.value.polish)
+      setHinge(SideBox.open.payload.value.hinge)
+      setKnob(SideBox.open.payload.value.knob)
+      setHandle(SideBox.open.payload.value.handle)
+      setDoor(SideBox.open.payload.value.door)
+      setFitting(SideBox.open.payload.value.fitting)
+      setLeg(SideBox.open.payload.value.legs)
+      setTaxRate(SideBox.open.payload.value.tax_rate)
+      setDispatch(SideBox.open.payload.value.dispatch_time)
+
+      
+      setWeightCap(SideBox.open.payload.row.weight_capacity)
+      setMirrorVal(SideBox.open.payload.row.mirror)
+      setAssemblyVal(SideBox.open.payload.row.assembly_required)
+      setSilver(SideBox.open.payload.row.silver)
+      setTrollyVal(SideBox.open.payload.trolley)
+      settrolly(SideBox.open.payload.trolley_material)
+
+     
+
         break;
         
 
@@ -562,45 +715,6 @@ const Sideform = () => {
 
   }, [SideBox.open.formType, SideBox.open.state])
 
-
-
-
-  // states
-  const [cat, setCat] = useState();
-  const [subCat, setSubCat] = useState();
-  const [dispatchTime, setDispatch] = useState();
-  const [taxRate, setTaxRate] = useState();
-  const [fitting, setFitting] = useState();
-  const [Polish, setPolish] = useState();
-  const [Hinge, setHinge] = useState();
-  const [Knob, setKnob] = useState();
-  const [handle, setHandle] = useState();
-  const [door, setDoor] = useState();
-  const [weightCap, setWeightCap] = useState();
-  const [material, setMaterial] = useState();
-  const [secMaterial, setSecMaterial] = useState(undefined);
-  const [mirrorVal, setMirrorVal] = useState('no');
-  const [assemblyVal, setAssemblyVal] = useState();
-  const [leg, setLeg] = useState();
-  const [silver, setSilver] = useState();
-  const [trollyVal, setTrollyVal] = useState();
-  const [trolly, settrolly] = useState();
-
-
-  // states for the dynamic rendering 
-  const [SKU, setSKU] = useState('');
-  const [category, setCategory] = useState([]);
-  const [subCategory, setSubCategory] = useState([]);
-  const [materialCatalog, setMaterialCatalog] = useState([]);
-  const [secMaterialCatalog, setSecMaterialCatalog] = useState([]);
-  const [polishCatalog, setPolishCatalog] = useState([]);
-  const [hingeCatalog, setHingeCatalog] = useState([]);
-  const [fittingCatalog, setFittingCatalog] = useState([]);
-  const [knobCatalog, setKnobCatalog] = useState([]);
-  const [doorCatalog, setDoorCatalog] = useState([]);
-  const [handleCatalog, setHandleCatalog] = useState([]);
-
-
   const handleChangeData = (e) =>{
 
     switch (SideBox.open.formType)
@@ -659,6 +773,14 @@ const Sideform = () => {
           secMater : e.target.value
         })
         break;
+      case 'update_product':
+      
+        setPreData({
+          ...preData,
+          [e.target.name] : e.target.value
+        })
+      
+      break;
 
       default :
       console.log('');
@@ -666,6 +788,11 @@ const Sideform = () => {
     }
 
   }
+
+
+
+
+  
 
   // ref
   const editorRef = useRef();
@@ -745,7 +872,7 @@ const Sideform = () => {
 
 
 
-  const handelClose = () => {
+  const handleClose = () => {
     resetAll();
     SideBox.setOpen({ state: false, formType: null });
   };
@@ -795,7 +922,7 @@ const Sideform = () => {
 
 
   // function for handling category
-  const handelCategory = (e) => {
+  const handleCategory = (e) => {
     e.preventDefault();
 
     const FD = new FormData();
@@ -852,7 +979,7 @@ const Sideform = () => {
   }
 
   // function for handling update category
-  const handelUpdateCategory = (e) => {
+  const handleUpdateCategory = (e) => {
     e.preventDefault();
 
     const FD = new FormData();
@@ -936,7 +1063,7 @@ const Sideform = () => {
   }
 
   // function for handling Update Products category
-  const handelUpdateProduct = (e) => {
+  const handleUpdateProduct = (e) => {
     e.preventDefault();
 
     const FD = new FormData();
@@ -944,14 +1071,12 @@ const Sideform = () => {
       e.preventDefault();
 
 
-    FD.append('_id', SideBox.open.payload._id)
+    FD.append('_id', SideBox.open.payload.row.id)
+
+    console.log(SideBox.open.payload.row.id)
+
     FD.append('SKU', e.target.SKU.value);
 
-
-
-    files.map((element) => {
-      return FD.append('product_image', element);
-    })
 
     featured.map((element) => {
       return FD.append('featured_image', element);
@@ -959,12 +1084,12 @@ const Sideform = () => {
     })
 
 // DROPDOWNs
-    e.trget.category_name.value !== null && FD.append('category_name', e.target.category_name.value);
-    e.trget.sub_category_name.value !== null && FD.append('sub_category_name', e.target.sub_category_name.value);
-    e.trget.dispatch_time.value !== null && FD.append('dispatch_time', e.target.dispatch_time.value);
+    e.target.category_name.value !== null && FD.append('category_name', e.target.category_name.value);
+    e.target.sub_category_name.value !== null && FD.append('sub_category_name', e.target.sub_category_name.value);
+    e.target.dispatch_time.value !== null && FD.append('dispatch_time', e.target.dispatch_time.value);
     e.target.selling_price.value !== null && FD.append('selling_price', e.target.selling_price.value);
     e.target.primary_material.value !== null && FD.append('primary_material', e.target.primary_material.value);
-    e.target.secondary_marterial.value !== null && FD.append('secondary_marterial', e.target.secondary_marterial.value);
+    e.target.secondary_material.value !== null && FD.append('secondary_material', e.target.secondary_material.value);
     e.target.weight.value !== null && FD.append('weight', e.target.weight.value);
     e.target.polish.value !== null && FD.append('polish', e.target.polish.value);
     e.target.hinge.value !== null && FD.append('hinge', e.target.hinge.value);
@@ -978,7 +1103,7 @@ const Sideform = () => {
     
 
     if (secMaterial !== undefined)
-      FD.append('secondary_marterial_weight', e.target.secondary_marterial_weight.value);
+      FD.append('secondary_material_weight', e.target.secondary_material_weight.value);
     
       editorRef.current.getContent()  && FD.append('product_description', editorRef.current.getContent());
       sellingPoints.current.getContent() && FD.append('selling_points', sellingPoints.current.getContent());
@@ -1032,10 +1157,11 @@ const Sideform = () => {
     e.target.eatable_oil_polish.checked && FD.append('eatable_oil_polish', e.target.eatable_oil_polish.checked);
     e.target.no_chemical.checked && FD.append('no_chemical', e.target.no_chemical.checked);
     e.target.lean_back.checked && FD.append('lean_back', e.target.lean_back.checked);
+    e.target.straight_back.checked && FD.append('straight_back', e.target.straight_back.checked);
     e.target.weaving.checked && FD.append('weaving', e.target.weaving.checked);
     e.target.not_suitable_for_Micro_Dish.checked && FD.append('not_suitable_for_Micro_Dish', e.target.not_suitable_for_Micro_Dish.checked);
     e.target.tilt_top.checked && FD.append('tilt_top', e.target.tilt_top.checked);
-    e.target.indise_compartments.checked && FD.append('indise_compartments', e.target.indise_compartments.checked);
+    e.target.inside_compartments.checked && FD.append('inside_compartments', e.target.inside_compartments.checked);
     e.target.stackable.checked && FD.append('stackable', e.target.stackable.checked);    
 
     // FD.get('product_image')
@@ -1047,7 +1173,7 @@ const Sideform = () => {
 
 
 
-    const res = addProduct(FD)
+    const res = updateProduct(FD)
 
     res.then((data) => {
       console.log(data.status)
@@ -1086,25 +1212,94 @@ const Sideform = () => {
   }
 
 
-  const handelProduct = (e) => {
+  const handleProduct = (e) => {
     e.preventDefault();
 
     const FD = new FormData();
 
-    console.log(files)
+
 
     files.map((element) => {
       return FD.append('product_image', element);
+    })
+
+    
+
+
+    materialCatalog.map((item)=>{
+
+      return item._id === e.target.primary_material.value && FD.append('primary_material_name', item.primaryMaterial_name)
+
+    })
+    secMaterialCatalog.map((item)=>{
+
+      return item._id === e.target.secondary_material.value && FD.append('secondary_material_name', item.secondaryMaterial_name)
 
     })
 
+
+    
     featured.map((element) => {
       return FD.append('featured_image', element);
 
     })
 
-    FD.append('category_name', e.target.category_name.value);
-    FD.append('sub_category_name', e.target.sub_category_name.value);
+    category.map((item)=>{
+
+      return item._id === e.target.category_name.value && FD.append('category_name', item.category_name)
+
+    })
+    
+    subCategory.map((item)=>{
+
+      return item._id === e.target.sub_category_name.value && FD.append('sub_category_name', item.sub_category_name)
+
+    })
+    
+    polishCatalog.map((item)=>{
+
+      return item._id === e.target.polish.value && FD.append('polish_name', item.polish_name)
+
+    })
+    hingeCatalog.map((item)=>{
+
+      return item._id === e.target.hinge.value && FD.append('hinge_name', item.hinge_name)
+
+    })
+    fittingCatalog.map((item)=>{
+
+      return item._id === e.target.fitting.value && FD.append('fitting_name', item.fitting_name)
+
+    })
+    knobCatalog.map((item)=>{
+
+      return item._id === e.target.knob.value && FD.append('knob_name', item.knob_name)
+
+    })
+    doorCatalog.map((item)=>{
+
+      return item._id === e.target.door.value && FD.append('door_name', item.door_name)
+
+    })
+    handleCatalog.map((item)=>{
+
+      return item._id === e.target.handle.value && FD.append('handle_name', item.handle_name)
+
+    })
+    
+    
+
+    FD.append('polish', e.target.polish.value);
+    FD.append('hinge', e.target.hinge.value);
+    FD.append('knob', e.target.knob.value);
+    FD.append('handle', e.target.handle.value);
+    FD.append('door', e.target.door.value);
+    FD.append('fitting', e.target.fitting.value);
+
+
+
+    FD.append('category_id', e.target.category_name.value);
+    FD.append('sub_category_id', e.target.sub_category_name.value);
     FD.append('dispatch_time', e.target.dispatch_time.value);
     FD.append('product_title', e.target.product_title.value);
     FD.append('product_description', editorRef.current.getContent());
@@ -1113,23 +1308,19 @@ const Sideform = () => {
     FD.append('MRP', e.target.MRP.value);
     FD.append('seo_title', e.target.seo_title.value);
     FD.append('seo_description', e.target.seo_description.value);
+    FD.append('seo_keyword', e.target.seo_keyword.value);
     FD.append('discount_limit', e.target.discount_limit.value);
     FD.append('selling_price', e.target.selling_price.value);
     FD.append('primary_material', e.target.primary_material.value);
-    FD.append('secondary_marterial', e.target.secondary_marterial.value);
+    FD.append('secondary_material', e.target.secondary_material.value);
 
     if (secMaterial !== undefined)
-      FD.append('secondary_marterial_weight', e.target.secondary_marterial_weight.value);
+      FD.append('secondary_material_weight', e.target.secondary_material_weight.value);
     FD.append('length_main', e.target.length_main.value);
     FD.append('breadth', e.target.breadth.value);
     FD.append('height', e.target.height.value);
     FD.append('weight', e.target.weight.value);
-    FD.append('polish', e.target.polish.value);
-    FD.append('hinge', e.target.hinge.value);
-    FD.append('knob', e.target.knob.value);
-    FD.append('handle', e.target.handle.value);
-    FD.append('door', e.target.door.value);
-    FD.append('fitting', e.target.fitting.value);
+    
     FD.append('top_size', e.target.top_size.value);
     FD.append('dial_size', e.target.dial_size.value);
     FD.append('seating_size_width', e.target.seating_size_width.value);
@@ -1149,7 +1340,7 @@ const Sideform = () => {
 
 
     if (trolly === 'yes')
-      FD.append('trolly_matterial', e.target.trollyMat.value);
+      FD.append('trolley_material', e.target.trolley_material.value);
 
 
 
@@ -1170,8 +1361,9 @@ const Sideform = () => {
     FD.append('lean_back', e.target.lean_back.checked);
     FD.append('weaving', e.target.weaving.checked);
     FD.append('not_suitable_for_Micro_Dish', e.target.not_suitable_for_Micro_Dish.checked);
+    FD.append('straight_back', e.target.straight_back.checked);
     FD.append('tilt_top', e.target.tilt_top.checked);
-    FD.append('indise_compartments', e.target.indise_compartments.checked);
+    FD.append('inside_compartments', e.target.inside_compartments.checked);
     FD.append('stackable', e.target.stackable.checked);
     FD.append('tax_rate', e.target.tax_rate.value);
 
@@ -1222,7 +1414,7 @@ const Sideform = () => {
 
   }
 
-  const handelSecondaryMaterial = (e) => {
+  const handleSecondaryMaterial = (e) => {
 
     e.preventDefault();
 
@@ -1275,7 +1467,7 @@ const Sideform = () => {
 
 
   }
-  const handelPrimaryMaterial = (e) => {
+  const handlePrimaryMaterial = (e) => {
 
     e.preventDefault();
 
@@ -1328,7 +1520,7 @@ const Sideform = () => {
 
   }
 
-  const handelUpdatePrimaryMaterial = (e) => {
+  const handleUpdatePrimaryMaterial = (e) => {
 
     e.preventDefault();
 
@@ -1383,7 +1575,7 @@ const Sideform = () => {
 
 
   }
-  const handelUpdateSecondaryMaterial = (e) => {
+  const handleUpdateSecondaryMaterial = (e) => {
 
     e.preventDefault();
 
@@ -1439,7 +1631,7 @@ const Sideform = () => {
   }
 
 
-  const handelHandle = (e) => {
+  const handleHandle = (e) => {
 
     e.preventDefault();
 
@@ -1488,7 +1680,7 @@ const Sideform = () => {
 
   }
 
-  const handelUpdateHandle = (e) => {
+  const handleUpdateHandle = (e) => {
 
     e.preventDefault();
 
@@ -1538,7 +1730,7 @@ const Sideform = () => {
 
   }
 
-  const handelHinge = (e) => {
+  const handleHinge = (e) => {
 
     e.preventDefault();
 
@@ -1586,7 +1778,7 @@ const Sideform = () => {
 
 
 
-  const handelUpdateHinge = (e) => {
+  const handleUpdateHinge = (e) => {
 
     e.preventDefault();
 
@@ -1634,7 +1826,7 @@ const Sideform = () => {
 
 
   }
-  const handelDoor = (e) => {
+  const handleDoor = (e) => {
 
     e.preventDefault();
 
@@ -1682,7 +1874,7 @@ const Sideform = () => {
 
   }
 
-  const handelUpdateDoor = (e) => {
+  const handleUpdateDoor = (e) => {
 
     e.preventDefault();
 
@@ -1730,7 +1922,7 @@ const Sideform = () => {
 
 
   }
-  const handelKnob = (e) => {
+  const handleKnob = (e) => {
 
     e.preventDefault();
 
@@ -1777,7 +1969,7 @@ const Sideform = () => {
 
 
   }
-  const handelUpdateKnob = (e) => {
+  const handleUpdateKnob = (e) => {
 
     e.preventDefault();
 
@@ -1826,7 +2018,7 @@ const Sideform = () => {
 
   }
 
-  const handelFitting = (e) => {
+  const handleFitting = (e) => {
 
     e.preventDefault();
 
@@ -1874,7 +2066,7 @@ const Sideform = () => {
 
   }
 
-  const handelUpdateFitting = (e) => {
+  const handleUpdateFitting = (e) => {
 
     e.preventDefault();
 
@@ -1923,7 +2115,7 @@ const Sideform = () => {
 
   }
 
-  const handelPolish = (e) => {
+  const handlePolish = (e) => {
 
     e.preventDefault();
 
@@ -1970,7 +2162,7 @@ const Sideform = () => {
 
 
   }
-  const handelUpdatePolish = (e) => {
+  const handleUpdatePolish = (e) => {
 
     e.preventDefault();
 
@@ -2020,7 +2212,7 @@ const Sideform = () => {
   }
 
 
-  const handelSubCategories = (e) => {
+  const handleSubCategories = (e) => {
 
     e.preventDefault();
 
@@ -2080,7 +2272,7 @@ const Sideform = () => {
 
 
   }
-  const handelUpdateSubCategories = (e) => {
+  const handleUpdateSubCategories = (e) => {
 
     e.preventDefault();
 
@@ -2158,11 +2350,11 @@ const Sideform = () => {
         <Backdrop
           sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={SideBox.open.state}
-        //   onClick={handelClose}
+        //   onClick={handleClose}
         >
           <Box className={viewMode.mode === true ? "mainDarkContainer" : "mainContainer"}>
             <IconButton
-              onClick={handelClose}
+              onClick={handleClose}
               color="primary"
               className="crossButton"
             >
@@ -2193,7 +2385,7 @@ const Sideform = () => {
                 <Grid item xs={12} mt={5}>
 
 
-                  <form className="form" id='myForm' onSubmit={handelProduct} enctype='multipart/form-data' method="post">
+                  <form className="form" id='myForm' onSubmit={handleProduct} enctype='multipart/form-data' method="post">
 
                     {/* <AcceptMaxFiles className="dorpContainer"/> */}
 
@@ -2304,6 +2496,9 @@ const Sideform = () => {
                         </MenuItem>
 
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
                     <br></br>
 
@@ -2325,6 +2520,9 @@ const Sideform = () => {
                           {option.sub_category_name}
                         </MenuItem>
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -2396,7 +2594,11 @@ const Sideform = () => {
                         <MenuItem key={option._id} value={option._id}>
                           {option.primaryMaterial_name}
                         </MenuItem>
+                        
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -2420,7 +2622,7 @@ const Sideform = () => {
                       fullWidth
                       id="outlined-select"
                       select
-                      name='secondary_marterial'
+                      name='secondary_material'
                       label="Secondary Material"
                       value={secMaterial}
                       multiple
@@ -2434,9 +2636,12 @@ const Sideform = () => {
                           {option.secondaryMaterial_name}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
-                    {secMaterial !== undefined &&
+                    {secMaterial  &&
 
                       <>
                         <br></br>
@@ -2451,7 +2656,7 @@ const Sideform = () => {
                             startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
                           }}
                           variant="outlined"
-                          name="secondary_marterial_weight"
+                          name="secondary_material_weight"
                         />
                       </>
                     }
@@ -2523,6 +2728,9 @@ const Sideform = () => {
                           {option.label}
                         </MenuItem>
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
 
@@ -2547,6 +2755,9 @@ const Sideform = () => {
                           {option.polish_name}
                         </MenuItem>
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -2570,6 +2781,9 @@ const Sideform = () => {
                           {option.hinge_name}
                         </MenuItem>
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -2593,6 +2807,9 @@ const Sideform = () => {
                           {option.knob_name}
                         </MenuItem>
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -2616,6 +2833,9 @@ const Sideform = () => {
                           {option.door_name}
                         </MenuItem>
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -2639,6 +2859,9 @@ const Sideform = () => {
                           {option.handle_name}
                         </MenuItem>
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -2661,6 +2884,9 @@ const Sideform = () => {
                           {option.label}
                         </MenuItem>
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -2698,6 +2924,7 @@ const Sideform = () => {
                       <br></br>
                       <TextField
                         fullWidth
+                        required
                         autoComplete={false}
                         id="fullWidth"
                         label="Assemble Part"
@@ -2716,7 +2943,7 @@ const Sideform = () => {
                       <br></br>
                       <TextField
                         fullWidth
-
+                        required
                         id="outlined-select"
                         select
                         name='legs'
@@ -2732,6 +2959,9 @@ const Sideform = () => {
                             {option.label}
                           </MenuItem>
                         ))}
+                         <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                       </TextField>
 
 
@@ -2742,7 +2972,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-
+                      
                       id="outlined-select"
                       select
                       name='fitting'
@@ -2760,6 +2990,9 @@ const Sideform = () => {
                           {option.fitting_name}
                         </MenuItem>
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -2772,10 +3005,11 @@ const Sideform = () => {
                       <FormControlLabel control={<Checkbox name='eatable_oil_polish' />} label="Eatable Oil Polished" />
                       <FormControlLabel control={<Checkbox name='no_chemical' />} label="No Chemical Used" />
                       <FormControlLabel control={<Checkbox name='lean_back' />} label="Lean Back" />
+                      <FormControlLabel control={<Checkbox name='straight_back' />} label="Strainght Back" />
                       <FormControlLabel control={<Checkbox name='weaving' />} label="Weaving" />
                       <FormControlLabel control={<Checkbox name='not_suitable_for_Micro_Dish' />} label="Not Suitable For Microwave/Dishwasher" />
                       <FormControlLabel control={<Checkbox name='tilt_top' />} label="Tilt Top" />
-                      <FormControlLabel control={<Checkbox name='indise_compartments' />} label="Inside Compartments" />
+                      <FormControlLabel control={<Checkbox name='inside_compartments' />} label="Inside Compartments" />
                       <FormControlLabel control={<Checkbox name='stackable' />} label="Stackable" />
                     </FormGroup>
 
@@ -2914,6 +3148,9 @@ const Sideform = () => {
                           {option.label}
                         </MenuItem>
                       ))}
+                       <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -2998,7 +3235,7 @@ const Sideform = () => {
 
                         id="outlined-select"
                         select
-                        name='trollyMat'
+                        name='trolley_material'
                         label="Trolly Material"
                         value={trollyVal}
                         multiple
@@ -3064,7 +3301,7 @@ const Sideform = () => {
             {SideBox.open.formType === "update_product" && (
 
               <Grid container p={5}>
-              
+              {console.log(preData)}
                 <Grid item xs={12}>
                   <Typography variant="h5">
                     Update Product
@@ -3079,13 +3316,9 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" id='myForm' onSubmit={handelUpdateProduct} enctype='multipart/form-data' method="post">
+                  <form className="form" id='myForm' onSubmit={handleUpdateProduct} enctype='multipart/form-data' method="post">
 
-                    {/* <AcceptMaxFiles className="dorpContainer"/> */}
-
-                    <FormLabel id="demo-radio-buttons-group-label">Product Images</FormLabel>
-                    <ProductsPreviews text={'Plese Drag and Drop the product images'}></ProductsPreviews>
-
+                 
                     <FormLabel id="demo-radio-buttons-group-label">Featured Images</FormLabel>
 
                     <FeaturesPreviews text={'Please Drag and Drop featured images'} ></FeaturesPreviews>
@@ -3097,7 +3330,7 @@ const Sideform = () => {
                       required
                       label="SKU"
                       type="text"
-                      value={SideBox.open.payload.SKU}
+                      value={preData.SKU}
                       disabled
                       variant="outlined"
                       name='SKU'
@@ -3109,6 +3342,8 @@ const Sideform = () => {
                       autoComplete={false}
                       id="fullWidth"
                       required
+                      value = {preData.product_title}
+                      onChange = {handleChangeData}
                       label="Product Title"
                       type="text"
                       variant="outlined"
@@ -3122,6 +3357,8 @@ const Sideform = () => {
                       autoComplete={false}
                       id="fullWidth"
                       label="SEO Title"
+                      value = {preData.seo_title}
+                      onChange = {handleChangeData}
                       type="text"
                       variant="outlined"
                       name='seo_title'
@@ -3133,6 +3370,8 @@ const Sideform = () => {
                       required
                       autoComplete={false}
                       id="fullWidth"
+                      value = {preData.seo_description}
+                      onChange = {handleChangeData}
                       label="SEO Description"
                       type="text"
                       variant="outlined"
@@ -3144,6 +3383,8 @@ const Sideform = () => {
                       required
                       autoComplete={false}
                       id="fullWidth"
+                      value = {preData.seo_keyword}
+                      onChange = {handleChangeData}
                       label="SEO Keyword"
                       type="text"
                       variant="outlined"
@@ -3158,7 +3399,7 @@ const Sideform = () => {
                     {/* product description  */}
                     <Editor
                       apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
-                      initialValue="<p>Product Disceription !!!</p>"
+                      initialValue={preData.product_description}
                       onInit={(event, editor) => editorRef.current = editor}
                       init={{
                         height: 300,
@@ -3169,6 +3410,7 @@ const Sideform = () => {
 
                     <br></br>
 
+
                     <TextField
                       fullWidth
                       required
@@ -3176,7 +3418,7 @@ const Sideform = () => {
                       select
                       name='category_name'
                       label="Category"
-                      value={cat}
+                      value={cat || ''}
                       multiple
                       onChange={handleChange}
                       helperText="Please select your category"
@@ -3188,6 +3430,9 @@ const Sideform = () => {
                         </MenuItem>
 
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
                     <br></br>
 
@@ -3198,7 +3443,7 @@ const Sideform = () => {
                       select
                       name='sub_category_name'
                       label="Sub Category"
-                      value={subCat}
+                      value={subCat || ''}
                       multiple
                       onChange={handleChangeSubCat}
                       helperText="Please select your sub category"
@@ -3209,6 +3454,9 @@ const Sideform = () => {
                           {option.sub_category_name}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -3218,6 +3466,8 @@ const Sideform = () => {
                       id="fullWidth"
                       label="Length"
                       type="number"
+                      value = {preData.lenght}
+                      onChange = {handleChangeData}
                       InputProps={{
                         startAdornment: <InputAdornment position="start">Inch</InputAdornment>,
                       }}
@@ -3233,6 +3483,8 @@ const Sideform = () => {
                       id="fullWidth"
                       label="Breadth"
                       type="number"
+                      value = {preData.breadth}
+                      onChange = {handleChangeData}
                       InputProps={{
                         startAdornment: <InputAdornment position="start">Inch</InputAdornment>,
                       }}
@@ -3248,6 +3500,8 @@ const Sideform = () => {
                       autoComplete={false}
                       id="fullWidth"
                       label="Height"
+                      value = {preData.height}
+                      onChange = {handleChangeData}
                       type="number"
                       InputProps={{
                         startAdornment: <InputAdornment position="start">Inch</InputAdornment>,
@@ -3268,8 +3522,8 @@ const Sideform = () => {
                       select
                       name='primary_material'
                       label="Primary Material"
-                      value={material}
-                      multiple
+                      value={material || ''}
+                      
                       onChange={handleChangeMaterial}
                       helperText="Please select your Material ."
 
@@ -3280,7 +3534,9 @@ const Sideform = () => {
                         <MenuItem key={option._id} value={option._id}>
                           {option.primaryMaterial_name}
                         </MenuItem>
-                      ))}
+                      ))}<MenuItem key={'none'} value={undefined}>
+                      {'None'}
+                    </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -3290,6 +3546,8 @@ const Sideform = () => {
                       id="fullWidth"
                       label="Weight"
                       type="number"
+                      value = {preData.weight}
+                      onChange = {handleChangeData}
                       InputProps={{
                         startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
                       }}
@@ -3304,9 +3562,9 @@ const Sideform = () => {
                       fullWidth
                       id="outlined-select"
                       select
-                      name='secondary_marterial'
+                      name='secondary_material'
                       label="Secondary Material"
-                      value={secMaterial}
+                      value={secMaterial || ''}
                       multiple
                       onChange={handleChangeSecMaterial}
                       helperText="Please select your Material ."
@@ -3318,6 +3576,9 @@ const Sideform = () => {
                           {option.secondaryMaterial_name}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     {secMaterial !== undefined &&
@@ -3329,13 +3590,15 @@ const Sideform = () => {
                           autoComplete={false}
                           id="fullWidth"
                           required
+                          value = {preData.secondary_material_weight}
+                      onChange = {handleChangeData}
                           label="Secondary Material Weight"
                           type="number"
                           InputProps={{
                             startAdornment: <InputAdornment position="start">Kg</InputAdornment>,
                           }}
                           variant="outlined"
-                          name="secondary_marterial_weight"
+                          name="secondary_material_weight"
                         />
                       </>
                     }
@@ -3347,6 +3610,8 @@ const Sideform = () => {
                       autoComplete={false}
                       id="fullWidth"
                       label="Selling Price"
+                      value = {preData.selling_price}
+                      onChange = {handleChangeData}
                       type="number"
                       InputProps={{
                         startAdornment: <InputAdornment position="start">₹</InputAdornment>,
@@ -3361,6 +3626,8 @@ const Sideform = () => {
                       autoComplete={false}
                       id="fullWidth"
                       required
+                      value = {preData.MRP}
+                      onChange = {handleChangeData}
                       label="MRP"
                       type="number"
                       InputProps={{
@@ -3379,6 +3646,8 @@ const Sideform = () => {
                       autoComplete={false}
                       id="fullWidth"
                       label="Discount Limit"
+                      value = {preData.discount_limit}
+                      onChange = {handleChangeData}
                       type="number"
                       InputProps={{
                         startAdornment: <InputAdornment position="start">%</InputAdornment>,
@@ -3397,7 +3666,7 @@ const Sideform = () => {
                       select
                       name='dispatch_time'
                       label="Dispatch Time"
-                      value={dispatchTime}
+                      value={dispatchTime || ''}
                       multiple
                       onChange={handleChangeDispatchTime}
                       helperText="Please select your dispatch time"
@@ -3406,7 +3675,11 @@ const Sideform = () => {
                         <MenuItem key={option.value} value={option.value}>
                           {option.label}
                         </MenuItem>
+
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
 
@@ -3419,7 +3692,7 @@ const Sideform = () => {
                       select
                       name='polish'
                       label="Polish"
-                      value={Polish}
+                      value={Polish || ''}
                       multiple
                       onChange={handleChangePolish}
                       helperText="Please select your Polish."
@@ -3431,6 +3704,9 @@ const Sideform = () => {
                           {option.polish_name}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -3442,7 +3718,7 @@ const Sideform = () => {
                       select
                       name='hinge'
                       label="Hinge"
-                      value={Hinge}
+                      value={Hinge || ''}
                       multiple
                       onChange={handleChangeHinge}
                       helperText="Please select your hinge."
@@ -3454,6 +3730,9 @@ const Sideform = () => {
                           {option.hinge_name}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -3465,7 +3744,7 @@ const Sideform = () => {
                       select
                       name='knob'
                       label="Knob"
-                      value={Knob}
+                      value={Knob || ''}
                       multiple
                       onChange={handleChangeKnob}
                       helperText="Please select your fitting."
@@ -3477,6 +3756,9 @@ const Sideform = () => {
                           {option.knob_name}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -3488,7 +3770,7 @@ const Sideform = () => {
                       select
                       name='door'
                       label="Door"
-                      value={door}
+                      value={door || ''}
                       multiple
                       onChange={handleChangeDoor}
                       helperText="Please select your fitting."
@@ -3500,6 +3782,9 @@ const Sideform = () => {
                           {option.door_name}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -3511,7 +3796,7 @@ const Sideform = () => {
                       select
                       name='handle'
                       label="Handle"
-                      value={handle}
+                      value={handle || ''}
                       multiple
                       onChange={handleChangeHandle}
                       helperText="Please select your fitting."
@@ -3523,6 +3808,9 @@ const Sideform = () => {
                           {option.handle_name}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -3534,7 +3822,7 @@ const Sideform = () => {
                       select
                       name='weight_capacity'
                       label="Weight Capacity"
-                      value={weightCap}
+                      value={weightCap  || ''}
                       multiple
                       onChange={handleChangeWeightCap}
                       helperText="Please select your fitting."
@@ -3545,6 +3833,9 @@ const Sideform = () => {
                           {option.label}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -3552,7 +3843,9 @@ const Sideform = () => {
                       <FormLabel id="demo-radio-buttons-group-label">Wall Hanging</FormLabel>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="no"
+                        value={preData.wall_hanging || ''}
+                        
+                      onChange = {handleChangeData}
                         name="wall_hanging"
                       >
                         <FormControlLabel value="yes" control={<Radio />} label="Yes" />
@@ -3566,9 +3859,9 @@ const Sideform = () => {
                       <FormLabel id="demo-radio-buttons-group-label">Assembly Required</FormLabel>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="no"
+                        value= {preData.assembly_required || ''}
                         name="assembly_required"
-                        onChange={hanleChangeAssembly}
+                        onChange = {handleChangeData}
                       >
                         <FormControlLabel value="shipping" control={<Radio />} label="Shipping In Part" />
                         <FormControlLabel value="yes" control={<Radio />} label="Yes" />
@@ -3577,7 +3870,7 @@ const Sideform = () => {
                     </FormControl>
 
 
-                    {assemblyVal === 'shipping' && <>
+                    {preData.assembly_required === 'shipping' && <>
 
                       <br></br>
                       <TextField
@@ -3586,6 +3879,8 @@ const Sideform = () => {
                         id="fullWidth"
                         label="Assemble Part"
                         type="number"
+                        value = {preData.assembly_part}
+                        onChange = {handleChangeData}
                         InputProps={{
                           startAdornment: <InputAdornment position="start">No. of parts</InputAdornment>,
                         }}
@@ -3595,7 +3890,7 @@ const Sideform = () => {
 
 
                     </>}
-                    {assemblyVal === 'yes' && <>
+                    {preData.assembly_required === 'yes' && <>
 
                       <br></br>
                       <TextField
@@ -3605,7 +3900,7 @@ const Sideform = () => {
                         select
                         name='legs'
                         label="Table Legs"
-                        value={leg}
+                        value={leg  || ''}
                         multiple
                         onChange={handleChangeLeg}
                         helperText="Please select your leg "
@@ -3616,6 +3911,9 @@ const Sideform = () => {
                             {option.label}
                           </MenuItem>
                         ))}
+                        <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                       </TextField>
 
 
@@ -3631,9 +3929,9 @@ const Sideform = () => {
                       select
                       name='fitting'
                       label="Fitting"
-                      value={fitting}
+                      value={fitting  || ''}
                       multiple
-                      onChange={handleChangeFitting}
+                      onChange={handleChangeFitting  || ''}
                       helperText="Please select your fitting."
 
                     >
@@ -3644,6 +3942,9 @@ const Sideform = () => {
                           {option.fitting_name}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -3652,15 +3953,16 @@ const Sideform = () => {
 
                     <FormGroup>
                       <FormLabel id="demo-radio-buttons-group-label">Features</FormLabel>
-                      <FormControlLabel control={<Checkbox name='rotating_seats' />} label="Rotating Seats" />
-                      <FormControlLabel control={<Checkbox name='eatable_oil_polish' />} label="Eatable Oil Polished" />
-                      <FormControlLabel control={<Checkbox name='no_chemical' />} label="No Chemical Used" />
-                      <FormControlLabel control={<Checkbox name='lean_back' />} label="Lean Back" />
-                      <FormControlLabel control={<Checkbox name='weaving' />} label="Weaving" />
-                      <FormControlLabel control={<Checkbox name='not_suitable_for_Micro_Dish' />} label="Not Suitable For Microwave/Dishwasher" />
-                      <FormControlLabel control={<Checkbox name='tilt_top' />} label="Tilt Top" />
-                      <FormControlLabel control={<Checkbox name='indise_compartments' />} label="Inside Compartments" />
-                      <FormControlLabel control={<Checkbox name='stackable' />} label="Stackable" />
+                      <FormControlLabel onChange = {handleChangeData} checked = {preData.rotating_seats} control={<Checkbox name='rotating_seats' />} label="Rotating Seats" />
+                      <FormControlLabel onChange = {handleChangeData} checked = {preData.eatable_oil_polish} control={<Checkbox name='eatable_oil_polish' />} label="Eatable Oil Polished" />
+                      <FormControlLabel onChange = {handleChangeData} checked = {preData.no_chemical} control={<Checkbox name='no_chemical' />} label="No Chemical Used" />
+                      <FormControlLabel onChange = {handleChangeData} checked = {preData.straight_back} control={<Checkbox name='straight_back' />} label="Straight Back" />
+                      <FormControlLabel onChange = {handleChangeData} checked = {preData.lean_back} control={<Checkbox name='lean_back' />} label="Lean Back" />
+                      <FormControlLabel onChange = {handleChangeData} checked = {preData.weaving} control={<Checkbox name='weaving' />} label="Weaving" />
+                      <FormControlLabel onChange = {handleChangeData} checked = {preData.not_suitable_for_Micro_Dish} control={<Checkbox name='not_suitable_for_Micro_Dish' />} label="Not Suitable For Microwave/Dishwasher" />
+                      <FormControlLabel onChange = {handleChangeData} checked = {preData.tilt_top} control={<Checkbox name='tilt_top' />} label="Tilt Top" />
+                      <FormControlLabel onChange = {handleChangeData} checked = {preData.inside_compartments} control={<Checkbox name='inside_compartments' />} label="Inside Compartments" />
+                      <FormControlLabel onChange = {handleChangeData} checked = {preData.stackable} control={<Checkbox name='stackable' />} label="Stackable" />
                     </FormGroup>
 
                     <br></br>
@@ -3669,7 +3971,8 @@ const Sideform = () => {
                       <FormLabel id="demo-radio-buttons-group-label">Silver</FormLabel>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-                        onChange={handleChangeSilver}
+                        value = {preData.silver || ''}
+                        onChange = {handleChangeData}
                         name="silver"
                       >
                         <FormControlLabel value="yes" control={<Radio />} label="Yes" />
@@ -3685,6 +3988,8 @@ const Sideform = () => {
                         id="fullWidth"
                         label="Sliver Weight"
                         type="text"
+                        onChange = {handleChangeData}
+                        value = {preData.silver_weight}
                         InputProps={{
                           startAdornment: <InputAdornment position="start">Gram</InputAdornment>,
                         }}
@@ -3702,7 +4007,8 @@ const Sideform = () => {
 
                     <Editor
                       apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
-                      initialValue="<p>Selling Points !!!</p>"
+                      initialValue= {preData.selling_points}
+                      
                       onInit={(event, editor) => sellingPoints.current = editor}
                       init={{
                         height: 300,
@@ -3718,9 +4024,10 @@ const Sideform = () => {
                       <FormLabel id="demo-radio-buttons-group-label">Mirror</FormLabel>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="no"
+                        value={preData.mirror || ''}
                         name="mirror"
-                        onChange={handleChangeMirror}
+                        // onChange={handleChangeMirror}
+                        onChange = {handleChangeData}
 
                       >
                         <FormControlLabel value="yes" control={<Radio />} label="Yes" />
@@ -3737,6 +4044,8 @@ const Sideform = () => {
                         id="fullWidth"
                         label="Mirror Lenth"
                         type="text"
+                        value = {preData.mirror_length}
+                        onChange = {handleChangeData}
                         InputProps={{
                           startAdornment: <InputAdornment position="start">Inch</InputAdornment>,
                         }}
@@ -3749,6 +4058,8 @@ const Sideform = () => {
                         fullWidth
                         autoComplete={false}
                         id="fullWidth"
+                        value = {preData.mirror_width}
+                        onChange = {handleChangeData}
                         label="Mirror Width"
                         type="text"
                         InputProps={{
@@ -3762,13 +4073,16 @@ const Sideform = () => {
 
                     </>}
 
+                
+
                     <br></br>
 
                     <FormControl>
                       <FormLabel id="demo-radio-buttons-group-label">Joints</FormLabel>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-
+                        value = {preData.joints || ''}
+                        onChange = {handleChangeData}
                         name="joints"
                       >
                         <FormControlLabel value="single" control={<Radio />} label="Single" />
@@ -3783,9 +4097,10 @@ const Sideform = () => {
                       required
                       id="outlined-select"
                       select
+
                       name='tax_rate'
                       label="Tax Rate"
-                      value={taxRate}
+                      value={taxRate || ''}
                       multiple
                       onChange={handleChangeTaxRate}
                       helperText="Please select your tax rate."
@@ -3798,6 +4113,9 @@ const Sideform = () => {
                           {option.label}
                         </MenuItem>
                       ))}
+                      <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                     </TextField>
 
                     <br></br>
@@ -3805,6 +4123,8 @@ const Sideform = () => {
                       fullWidth
                       autoComplete={false}
                       id="fullWidth"
+                      value = {preData.seating_size_width}
+                        onChange = {handleChangeData}
                       label="Seating Size Width"
                       type="number"
                       InputProps={{
@@ -3819,6 +4139,8 @@ const Sideform = () => {
                       fullWidth
                       autoComplete={false}
                       id="fullWidth"
+                      value = {preData.seating_size_depth}
+                        onChange = {handleChangeData}
                       label="Seating Size Width Depth"
                       type="number"
                       InputProps={{
@@ -3834,6 +4156,8 @@ const Sideform = () => {
                       fullWidth
                       autoComplete={false}
                       id="fullWidth"
+                      value = {preData.seating_size_height}
+                        onChange = {handleChangeData}
                       label="Seating Size Height"
                       type="number"
                       InputProps={{
@@ -3849,7 +4173,8 @@ const Sideform = () => {
                       <FormLabel id="demo-radio-buttons-group-label">Wheel</FormLabel>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-
+                        value = {preData.wheel || ''}
+                        onChange = {handleChangeData}
                         name="wheel"
                       >
                         <FormControlLabel value="yes" control={<Radio />} label="Yes" />
@@ -3865,7 +4190,9 @@ const Sideform = () => {
                       <FormLabel id="demo-radio-buttons-group-label">Trolley</FormLabel>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-                        onChange={handleChangeTrolly}
+                        // onChange={handleChangeTrolly}
+                        value = {preData.trolley || ''}
+                        onChange = {handleChangeData}
                         name="trolley"
                       >
                         <FormControlLabel value="yes" control={<Radio />} label="Yes" />
@@ -3883,7 +4210,7 @@ const Sideform = () => {
                         select
                         name='trollyMat'
                         label="Trolly Material"
-                        value={trollyVal}
+                        value={trollyVal || ''}
                         multiple
                         onChange={handleChangeTrollyVal}
                         helperText="Please select your Trolly Matterial "
@@ -3895,6 +4222,9 @@ const Sideform = () => {
                             {option.label}
                           </MenuItem>
                         ))}
+                        <MenuItem key={'none'} value={undefined}>
+                          {'None'}
+                        </MenuItem>
                       </TextField>
 
 
@@ -3908,6 +4238,8 @@ const Sideform = () => {
                       id="fullWidth"
                       label="Top Size"
                       type="number"
+                      value = {preData.top_size}
+                        onChange = {handleChangeData}
                       InputProps={{
                         startAdornment: <InputAdornment position="start">Inch</InputAdornment>,
                       }}
@@ -3918,8 +4250,12 @@ const Sideform = () => {
                     <br></br>
                     <TextField
                       fullWidth
+
+              
                       autoComplete={false}
                       id="fullWidth"
+                      value = {preData.dial_size}
+                        onChange = {handleChangeData}
                       label="Dial Size"
                       type="number"
                       InputProps={{
@@ -3960,7 +4296,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelCategory} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleCategory} id='myForm' enctype='multipart/form-data' method="post">
 
                     <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews>
 
@@ -4035,7 +4371,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" id='myForm' onSubmit={handelUpdateCategory} enctype='multipart/form-data' method="post">
+                  <form className="form" id='myForm' onSubmit={handleUpdateCategory} enctype='multipart/form-data' method="post">
                     <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews>
 
 
@@ -4082,7 +4418,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelPrimaryMaterial} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handlePrimaryMaterial} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
 
@@ -4133,7 +4469,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" id='myForm' onSubmit={handelUpdatePrimaryMaterial} enctype='multipart/form-data' method="post">
+                  <form className="form" id='myForm' onSubmit={handleUpdatePrimaryMaterial} enctype='multipart/form-data' method="post">
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
 
 
@@ -4179,7 +4515,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelKnob} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleKnob} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
                     <TextField
@@ -4227,7 +4563,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelUpdateKnob} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleUpdateKnob} id='myForm' enctype='multipart/form-data' method="post">
 
 
                     <TextField
@@ -4273,7 +4609,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelHandle} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleHandle} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
                     <TextField
@@ -4321,7 +4657,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelUpdateHandle} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleUpdateHandle} id='myForm' enctype='multipart/form-data' method="post">
 
 
                     <TextField
@@ -4368,7 +4704,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelDoor} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleDoor} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
                     <TextField
@@ -4416,7 +4752,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelUpdateDoor} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleUpdateDoor} id='myForm' enctype='multipart/form-data' method="post">
 
 
                     <TextField
@@ -4463,7 +4799,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelFitting} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleFitting} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
                     <TextField
@@ -4511,7 +4847,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelUpdateFitting} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleUpdateFitting} id='myForm' enctype='multipart/form-data' method="post">
 
 
                     <TextField
@@ -4558,7 +4894,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelHinge} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleHinge} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
                     <TextField
@@ -4607,7 +4943,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelUpdateHinge} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleUpdateHinge} id='myForm' enctype='multipart/form-data' method="post">
 
 
                     <TextField
@@ -4656,7 +4992,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelPolish} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handlePolish} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
 
@@ -4708,7 +5044,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelUpdatePolish} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleUpdatePolish} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
 
@@ -4763,7 +5099,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelSecondaryMaterial} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleSecondaryMaterial} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
 
@@ -4812,7 +5148,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" id='myForm' onSubmit={handelUpdateSecondaryMaterial} enctype='multipart/form-data' method="post">
+                  <form className="form" id='myForm' onSubmit={handleUpdateSecondaryMaterial} enctype='multipart/form-data' method="post">
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
 
 
@@ -4858,7 +5194,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelSubCategories} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleSubCategories} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
 
@@ -4934,7 +5270,7 @@ const Sideform = () => {
                 </Grid>
 
                 <Grid item xs={12} mt={5}>
-                  <form className="form" onSubmit={handelUpdateSubCategories} id='myForm' enctype='multipart/form-data' method="post">
+                  <form className="form" onSubmit={handleUpdateSubCategories} id='myForm' enctype='multipart/form-data' method="post">
 
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
 
@@ -4942,7 +5278,6 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-
                       id="outlined-select"
                       select
                       name='category_id'
