@@ -412,3 +412,14 @@ export const editHandle = async (data)=>{
       'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`
    }})
 }
+
+
+// =============== CURD of Gallaery ======================
+
+// change status  changeHingeStatus
+
+export const getGallery = async (data)=>{
+   return await axios.get(`${loacalBaseUrl}/getGallery/?SKU=${data}`,{headers: { 
+      'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
+      
+   }
