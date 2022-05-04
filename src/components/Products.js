@@ -120,23 +120,30 @@ export default function Products() {
     { field: "id", headerName: "ID", width: 100 },
     { field: "SKU", headerName: "SKU", width: 100 },
     {
+      field: "featured_image",
+      headerName: "Featured Image",
+      width: 160,
+      align : 'center',
+      renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='featured' /></div>,
+
+    },
+    {
       field: "product_title",
       headerName: "Product Title",
       width: 150,
-      editable: true,
+       
     },
     {
       field: "category_name",
       headerName: "Categoey Name",
       width: 150,
-      editable: true,
+       
     },
     {
       field: "sub_category_name",
       headerName: "Sub Category Name",
       type: "number",
       width: 110,
-      editable: true,
     },
     {
       field: "product_description",
@@ -158,13 +165,7 @@ export default function Products() {
       headerName: "SEO Keyword",
       width: 160,
     },
-    {
-      field: "featured_image",
-      headerName: "Featured Image",
-      width: 160,
-      renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='featured' /></div>,
-
-    },
+    
     {
       field: "primary_material",
       headerName: "Primary Material",

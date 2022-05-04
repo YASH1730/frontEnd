@@ -176,7 +176,7 @@ export default function EntryPoints() {
                   </Box>
 
                 <hr />
-
+{/* 
                 <FacebookLogin
                   appId="1088597931155576"
                   autoLoad={true}
@@ -201,7 +201,7 @@ export default function EntryPoints() {
                   // onFailure={responseGoogle}
                   cookiePolicy={"single_host_origin"}
                   className="goggleButton"
-                />
+                /> */}
 
                 <Typography
                   variant="caption"
@@ -210,12 +210,12 @@ export default function EntryPoints() {
                 >
                   Forgot Password?
                 </Typography>
-
+{/* 
                 <Typography variant="caption" color="primary">
                   <Link className="links" to="/register">
                     I do not have an account. Create Account
                   </Link>
-                </Typography>
+                </Typography> */}
               </Grid>
             </Grid>
           </Box>

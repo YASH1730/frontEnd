@@ -1083,20 +1083,73 @@ const Sideform = () => {
 
     })
 
+
+    materialCatalog.map((item)=>{
+
+      return item._id === e.target.primary_material.value && FD.append('primary_material_name', item.primaryMaterial_name)
+
+    })
+    secMaterialCatalog.map((item)=>{
+
+      return item._id === e.target.secondary_material.value && FD.append('secondary_material_name', item.secondaryMaterial_name)
+
+    })
+
+
+    
+    featured.map((element) => {
+      return FD.append('featured_image', element);
+
+    })
+
+    category.map((item)=>{
+
+      return item._id === e.target.category_name.value && FD.append('category_name', item.category_name)
+
+    })
+    
+    subCategory.map((item)=>{
+
+      return item._id === e.target.sub_category_name.value && FD.append('sub_category_name', item.sub_category_name)
+
+    })
+    
+    polishCatalog.map((item)=>{
+
+      return item._id === e.target.polish.value && FD.append('polish_name', item.polish_name)
+
+    })
+    hingeCatalog.map((item)=>{
+
+      return item._id === e.target.hinge.value && FD.append('hinge_name', item.hinge_name)
+
+    })
+    fittingCatalog.map((item)=>{
+
+      return item._id === e.target.fitting.value && FD.append('fitting_name', item.fitting_name)
+
+    })
+    knobCatalog.map((item)=>{
+
+      return item._id === e.target.knob.value && FD.append('knob_name', item.knob_name)
+
+    })
+    doorCatalog.map((item)=>{
+
+      return item._id === e.target.door.value && FD.append('door_name', item.door_name)
+
+    })
+    handleCatalog.map((item)=>{
+
+      return item._id === e.target.handle.value && FD.append('handle_name', item.handle_name)
+
+    })
+    
+
 // DROPDOWNs
-    e.target.category_name.value !== null && FD.append('category_name', e.target.category_name.value);
-    e.target.sub_category_name.value !== null && FD.append('sub_category_name', e.target.sub_category_name.value);
     e.target.dispatch_time.value !== null && FD.append('dispatch_time', e.target.dispatch_time.value);
     e.target.selling_price.value !== null && FD.append('selling_price', e.target.selling_price.value);
-    e.target.primary_material.value !== null && FD.append('primary_material', e.target.primary_material.value);
-    e.target.secondary_material.value !== null && FD.append('secondary_material', e.target.secondary_material.value);
     e.target.weight.value !== null && FD.append('weight', e.target.weight.value);
-    e.target.polish.value !== null && FD.append('polish', e.target.polish.value);
-    e.target.hinge.value !== null && FD.append('hinge', e.target.hinge.value);
-    e.target.knob.value !== null && FD.append('knob', e.target.knob.value);
-    e.target.handle.value !== null && FD.append('handle', e.target.handle.value);
-    e.target.door.value !== null && FD.append('door', e.target.door.value);
-    e.target.fitting.value !== null && FD.append('fitting', e.target.fitting.value);
     e.target.weight_capacity.value !== null && FD.append('weight_capacity', e.target.weight_capacity.value);
     e.target.tax_rate.value !== null && FD.append('tax_rate', e.target.tax_rate.value);
 
