@@ -135,7 +135,7 @@ export default function Products() {
     },
     {
       field: "category_name",
-      headerName: "Categoey Name",
+      headerName: "Category Name",
       width: 150,
        
     },

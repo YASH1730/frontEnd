@@ -4,41 +4,112 @@ import {
     ImageList,
     Grid,
     TextField,
-    ImageListItem,
+    ImageListItem, Zoom, InputAdornment, Button
 } from "@mui/material";
+import { getGallery, deleteImage } from '../services/service';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import AddIcon from '@mui/icons-material/Add';
+import '../assets/custom/css/gallery.css'
+import { Notify, OpenBox } from '../App';
 
-import { getGallery } from '../services/service';
-import '../assets/custom/css/category.css'
-import { Notify } from '../App';
 
 
 
 
 export default function Knob() {
 
-    const dispatchAlert = useContext(Notify)
 
     const [images, setImages] = useState([]);
+    const [buttonState, setButtonState] = useState({
+        open: false,
+        index: null
+    });
+
+    const Alert = useContext(Notify)
+    const SideBox = useContext(OpenBox)
+
+    const [SKU, setSKU] = useState();
+
+    useEffect(() => {
+
+        const res = getGallery(`WS-${localStorage.getItem('SKU')}`)
+
+
+        res.then((res) => {
+            // console.log(res)
+            if (res.status !== 203) {
+
+                setImages(res.data)
+                setSKU(`${localStorage.getItem('SKU')}`)
+            }
+
+        })
+
+    },[SKU] )
+
 
 
     const handleSKU = (e) => {
 
-        const res = getGallery(e.target.value)
-            
+        setSKU(e.target.value)
+        const res = getGallery(`WS-${SKU}`)
+        localStorage.setItem('SKU', e.target.value)
         res.then((res) => {
-                console.log(res)
-                if (res.status !== 203) {
-                    
-                    setImages(res.data)
-                }
+            console.log(res)
+            if (res.status !== 203) {
+
+                setImages(res.data)
+            }
+            // else {
+            //     Alert.setNote({
+            //         open: true,
+            //         variant: 'error',
+            //         message: "No Images Found"
+            //     })
+            // }
+        })
+
+    }
+
+    const handleDelete = (e) => {
+
+        const data = {
+            SKU,
+            imageIndex: parseInt(e.target.parentElement.getAttribute('alt'))
+        }
+
+        deleteImage(data)
+            .then((res) => {
+                setSKU(localStorage.getItem('SKU'))
+                Alert.setNote({
+                    open: true,
+                    variant: 'warning',
+                    message: "Image has been deleted !!"
+                })
             })
+    }
+
+    const handleHover = (e) => {
+        console.log(typeof (e.target.alt));
+        setButtonState({
+            open: true,
+            index: e.target.alt
+        })
+    }
+
+    const handleLeave = () => {
+        setButtonState(false)
 
     }
 
-    const handleClick = (e) =>{
-console.log(e.target);
+    const handleUpdate = (e) => {
+        SideBox.setOpen({
+            state: true,
+            formType: 'update_gallery',
+            payload: { SKU: localStorage.getItem('SKU'), imageIndex: e.target.parentElement.getAttribute('alt') }
+        })
     }
-
 
 
     return (
@@ -50,7 +121,7 @@ console.log(e.target);
             <Grid
                 container
                 p={3}
-                mt = {5}
+                mt={5}
                 sx={{
                     boxShadow: 1,
                     borderRadius: 2,
@@ -60,16 +131,33 @@ console.log(e.target);
                 }}
             >
 
-                <Grid xs={12} >
+                <Grid xs={12} md={8.5} >
                     <TextField
                         fullWidth
                         autoComplete={false}
                         id="demo-helper-text-aligned-no-helper"
                         label="Search by SKU"
                         name='seachQuery'
+                        value={SKU}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">WS</InputAdornment>,
+                        }}
                         type="search"
                         onChange={handleSKU}
                     />
+                </Grid>
+                <Grid xs={12} md={3}>
+                    <Button
+                        onClick={() => {
+                            SideBox.setOpen({ state: true, formType: "addGallery" });
+                        }}
+                        sx={{ width: "100%" }}
+                        color="primary"
+                        startIcon={<AddIcon />}
+                        variant="contained"
+                    >
+                        Add Category
+                    </Button>
                 </Grid>
 
 
@@ -82,18 +170,37 @@ console.log(e.target);
             </Typography>
             <br></br>
 
-           <ImageList sx={{ width: 700, height: 450, margin : 'auto' }} cols={4} rowHeight={164}>
-                {images.map((item, index) => (
-                    <ImageListItem key={index}>
-                        <img
-                            src={`${item}?w=164&h=164&fit=crop&auto=format`}
-                            srcSet={`${item}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                            alt={'images'}
-                            loading="lazy"
-                            onClick = {handleClick}
-                        />
-                    </ImageListItem>
-                ))}
+            <ImageList sx={{ minWidth: 400, height: 'content-fit', margin: 'auto' }} cols={3} gap={20}   >
+                {images !== [] && images.map((item, index) => (
+                    <Zoom in={true} style={{ transitionDelay: '1000ms' }}>
+                        <ImageListItem onMouseLeave={handleLeave} key={index} sx={{ minHeight: 'inherit' }} >
+                            <img
+                                className='imageCard'
+                                src={`${item}`}
+                                srcSet={`${item}`}
+                                alt={index}
+
+                                loading="lazy"
+                                onMouseOver={handleHover}
+
+                                sx={{ maxWidth: '100%' }}
+                            />
+
+                            {index === parseInt(buttonState.index) &&
+
+
+                                <Zoom in={buttonState.open} className='containerDiv' style={{ transitionDelay: '300ms' }}>
+                                    <div className='buttonDiv' alt={index} >
+                                        {/* <Button  startIcon={<AddIcon />} color = 'success'  variant='contained'>Add</Button> */}
+                                        <Button startIcon={<ModeEditIcon />} onClick={handleUpdate} variant='contained'>Edit</Button>
+                                        <Button startIcon={<DeleteIcon />} onClick={handleDelete} color={'secondary'} variant='contained'>Delete</Button>
+                                    </div>
+                                </Zoom>}
+
+                        </ImageListItem>
+                    </Zoom>
+                ))
+                }
             </ImageList>
 
 

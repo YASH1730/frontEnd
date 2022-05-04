@@ -32,6 +32,9 @@ function App() {
       primary: {
         main: "#91441f",
       },
+      secondary : {
+        main: '#ef3c3c'
+      }
     },
     typography: {
       fontFamily: "Work+Sans",

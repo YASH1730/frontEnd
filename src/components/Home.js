@@ -97,6 +97,9 @@ const Home = () => {
             <Typography>{children}</Typography>
           </Box>
         )}
+        {
+          index !== 12 && localStorage.removeItem('SKU')
+        }
       </div>
     );
   }

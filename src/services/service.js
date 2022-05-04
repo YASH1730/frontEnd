@@ -416,10 +416,34 @@ export const editHandle = async (data)=>{
 
 // =============== CURD of Gallaery ======================
 
-// change status  changeHingeStatus
+// get gallery
 
 export const getGallery = async (data)=>{
    return await axios.get(`${loacalBaseUrl}/getGallery/?SKU=${data}`,{headers: { 
+      'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
+      
+   }
+
+// delete image
+
+export const deleteImage = async (data)=>{
+   return await axios.delete(`${loacalBaseUrl}/deleteImage/?SKU=${data.SKU}&imageIndex=${data.imageIndex}`,{headers: { 
+      'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
+      
+   }
+
+// updateImage
+
+export const updateImage =async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/updateImage`,data,{headers: { 
+      'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
+      
+   }
+
+// addImage
+
+export const addImage =async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/addImage`,data,{headers: { 
       'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
       
    }
