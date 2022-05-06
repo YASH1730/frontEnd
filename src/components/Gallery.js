@@ -170,10 +170,10 @@ export default function Knob() {
             </Typography>
             <br></br>
 
-            <ImageList sx={{ minWidth: 400, height: 'content-fit', margin: 'auto' }} cols={3} gap={20}   >
+            <ImageList sx={{ minWidth: 400, height: 'content-fit', margin: 'auto' }} cols={ window.innerWidth <= 800 ? 1 : 3 } gap={20}   >
                 {images !== [] && images.map((item, index) => (
                     <Zoom in={true} style={{ transitionDelay: '1000ms' }}>
-                        <ImageListItem onMouseLeave={handleLeave} key={index} sx={{ minHeight: 'inherit' }} >
+                        <ImageListItem onMouseLeave={handleLeave} key={index} sx={{ minWidth: 'inherit',minHeight: 'inherit' }} >
                             <img
                                 className='imageCard'
                                 src={`${item}`}
@@ -192,8 +192,8 @@ export default function Knob() {
                                 <Zoom in={buttonState.open} className='containerDiv' style={{ transitionDelay: '300ms' }}>
                                     <div className='buttonDiv' alt={index} >
                                         {/* <Button  startIcon={<AddIcon />} color = 'success'  variant='contained'>Add</Button> */}
-                                        <Button startIcon={<ModeEditIcon />} onClick={handleUpdate} variant='contained'>Edit</Button>
-                                        <Button startIcon={<DeleteIcon />} onClick={handleDelete} color={'secondary'} variant='contained'>Delete</Button>
+                                        <Button small startIcon={<ModeEditIcon />} onClick={handleUpdate} variant='contained'>Edit</Button>
+                                        <Button small startIcon={<DeleteIcon />} onClick={handleDelete} color={'secondary'} variant='contained'>Delete</Button>
                                     </div>
                                 </Zoom>}
 

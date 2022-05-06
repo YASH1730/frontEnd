@@ -4,9 +4,11 @@ import {
   Tab,
   Typography,
   IconButton,
+  Menu,
+  MenuItem,
   Box,
   Grid,
-  Button,
+  Button,ListItemIcon
 } from "@mui/material";
 import "../assets/custom/css/home.css";
 import Slide from "@mui/material/Slide";
@@ -61,12 +63,15 @@ import AdjustIcon from '@mui/icons-material/Adjust';
 import DoorSlidingIcon from '@mui/icons-material/DoorSliding';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import CollectionsIcon from '@mui/icons-material/Collections';
-
 const Home = () => {
   const [ShowTabs, setShowTabs] = useState(false);
 
+  // context
   const viewMode = useContext(Mode);
   const userAuth = useContext(Auth);
+
+  // states
+  const [anchor, setAnchor] = useState(null);
 
 
   useEffect(() => {
@@ -75,6 +80,14 @@ const Home = () => {
       window.location.href = '/'
     }
   }, []);
+
+  const handleMenuClose = () => {
+      setAnchor(null)
+  }
+
+  const handleMenu = (e) =>{
+      setAnchor(e.currentTarget)
+  }
 
   const handleClose = () => {
     setShowTabs(false);
@@ -494,6 +507,37 @@ const Home = () => {
     );
   }
 
+  function MenuBox () {
+
+    return (
+
+        <Menu
+        id = {'menu'}
+        anchorEl={anchor}
+        keepMounted
+        open = {Boolean(anchor)}
+        onClose = {handleMenuClose}
+        >
+            <MenuItem onClick = {handleLogout}>
+                <ListItemIcon>
+                <LogoutIcon fontSize="small" />
+                 </ListItemIcon>
+                <ListItemIcon>
+                Logout
+                 </ListItemIcon>
+            </MenuItem>
+        </Menu>
+
+    )
+
+  }
+
+  const handleLogout = () =>{
+      localStorage.clear();
+      window.location.href = '/';
+  }
+  
+
   return (
     <>
       {/* Top Bar  */}
@@ -566,7 +610,9 @@ const Home = () => {
             <NotificationsIcon />
           </IconButton>
 
-          <IconButton size="small" color="primary">
+          {MenuBox()}
+
+          <IconButton onClick = {handleMenu} size="small" color="primary">
             <PersonIcon />
           </IconButton>
         </Grid>
