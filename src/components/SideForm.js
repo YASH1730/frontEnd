@@ -457,6 +457,7 @@ const Sideform = () => {
     sub_category: '',
     lenght: '',
     breadth: '',
+    selling_points : '',
     height: '',
     priMater: '',
     priMater_weight: '',
@@ -786,11 +787,6 @@ const Sideform = () => {
     }
 
   }
-
-
-
-
-
 
   // ref
   const editorRef = useRef();
@@ -1148,6 +1144,10 @@ const Sideform = () => {
       return FD.append('featured_image', element);
 
     })
+    Image.map((element) => {
+      return FD.append('specification_image', element);
+
+    })
 
 
     materialCatalog.map((item) => {
@@ -1225,7 +1225,7 @@ const Sideform = () => {
       FD.append('secondary_material_weight', e.target.secondary_material_weight.value);
 
     editorRef.current.getContent() && FD.append('product_description', editorRef.current.getContent());
-    sellingPoints.current.getContent() && FD.append('selling_points', sellingPoints.current.getContent());
+    e.target.selling_points.value && FD.append('selling_points', e.target.selling_points.value);
 
 
     e.target.product_title.value !== '' && FD.append('product_title', e.target.product_title.value);
@@ -1340,6 +1340,13 @@ const Sideform = () => {
       return FD.append('product_image', element);
     })
 
+    console.log(Image)
+
+    Image.map((element) => {
+      return FD.append('specification_image', element);
+
+    })
+
 
 
 
@@ -1420,7 +1427,7 @@ const Sideform = () => {
     FD.append('dispatch_time', e.target.dispatch_time.value);
     FD.append('product_title', e.target.product_title.value);
     FD.append('product_description', editorRef.current.getContent());
-    FD.append('selling_points', sellingPoints.current.getContent());
+    FD.append('selling_points', e.target.selling_points.value);
     FD.append('SKU', e.target.SKU.value);
     FD.append('MRP', e.target.MRP.value);
     FD.append('seo_title', e.target.seo_title.value);
@@ -1431,7 +1438,7 @@ const Sideform = () => {
     FD.append('primary_material', e.target.primary_material.value);
     FD.append('secondary_material', e.target.secondary_material.value);
     //  console.log(secMaterial) 
-    if (secMaterial !== null)
+    if (secMaterial !== undefined)
       FD.append('secondary_material_weight', e.target.secondary_material_weight.value);
     FD.append('length_main', e.target.length_main.value);
     FD.append('breadth', e.target.breadth.value);
@@ -1499,7 +1506,6 @@ const Sideform = () => {
       console.log(data.status)
 
       if (data.status === 203) {
-        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
@@ -1508,7 +1514,6 @@ const Sideform = () => {
         })
       }
       else {
-        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'success',
@@ -1520,7 +1525,6 @@ const Sideform = () => {
     })
       .catch((err) => {
         console.log(err)
-        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: 'error',
@@ -1545,7 +1549,7 @@ const Sideform = () => {
 
 
 
-    const res = addSecondaryMaterial(FD)
+const res = addSecondaryMaterial(FD)
 
     res.then((data) => {
       console.log(data.status)
@@ -2513,6 +2517,10 @@ const Sideform = () => {
 
                     <FeaturesPreviews text={'Please Drag and Drop featured images'} ></FeaturesPreviews>
 
+                    <FormLabel id="demo-radio-buttons-group-label">Specification Images</FormLabel>
+
+                    <ImagePreviews text={'Please Drag and Drop specification images'} ></ImagePreviews>
+
 
 
                     <TextField
@@ -3162,9 +3170,21 @@ const Sideform = () => {
                     }
 
 
+                    {/* selling points  */}
 
                     <br></br>
-                    {/* selling points  */}
+                      <TextField
+                        fullWidth
+                        required
+                        autoComplete={false}
+                        id="fullWidth"
+                        label="Selling Points"
+                        type="text"
+                        variant="outlined"
+                        name="selling_points"
+                      />
+{/* 
+                    <br></br>
                     <FormLabel id="demo-radio-buttons-group-label">Selling Points </FormLabel>
 
                     <Editor
@@ -3177,7 +3197,7 @@ const Sideform = () => {
                         menubar: false,
                       }}
 
-                    />
+                    /> */}
 
                     <br></br>
 
@@ -3439,6 +3459,13 @@ const Sideform = () => {
                     <FormLabel id="demo-radio-buttons-group-label">Featured Images</FormLabel>
 
                     <FeaturesPreviews text={'Please Drag and Drop featured images'} ></FeaturesPreviews>
+
+
+                    <FormLabel id="demo-radio-buttons-group-label">Specification Images</FormLabel>
+
+                    <ImagePreviews text={'Please Drag and Drop specification images'} ></ImagePreviews>
+
+
 
                     <TextField
                       fullWidth
@@ -4119,8 +4146,20 @@ const Sideform = () => {
 
 
                     <br></br>
+
+                    <TextField
+                        fullWidth
+                        autoComplete={false}
+                        id="fullWidth"
+                        label="Selling Points"
+                        type="text"
+                        onChange={handleChangeData}
+                        value={preData.selling_points}
+                        variant="outlined"
+                        name="selling_points"
+                      />
                     {/* selling points  */}
-                    <FormLabel id="demo-radio-buttons-group-label">Selling Points </FormLabel>
+                    {/* <FormLabel id="demo-radio-buttons-group-label">Selling Points </FormLabel>
 
                     <Editor
                       apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
@@ -4133,7 +4172,7 @@ const Sideform = () => {
                         menubar: false,
                       }}
 
-                    />
+                    /> */}
 
                     <br></br>
 

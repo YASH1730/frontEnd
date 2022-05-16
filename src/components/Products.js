@@ -51,6 +51,7 @@ export default function Products() {
           category_name: row.category_name,
           sub_category_name: row.sub_category_name,
           product_description: row.product_description,
+          specification_image : row.specification_image,
           seo_title: row.seo_title,
           seo_description: row.seo_description,
           seo_keyword: row.seo_keyword,
@@ -122,6 +123,14 @@ export default function Products() {
     {
       field: "featured_image",
       headerName: "Featured Image",
+      width: 160,
+      align : 'center',
+      renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='featured' /></div>,
+
+    },
+    {
+      field: "specification_image",
+      headerName: "Specification Image",
       width: 160,
       align : 'center',
       renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='featured' /></div>,
