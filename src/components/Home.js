@@ -541,6 +541,7 @@ const Home = () => {
   return (
     <>
       {/* Top Bar  */}
+      <title>Dashboard</title>
 
       <Grid
         container

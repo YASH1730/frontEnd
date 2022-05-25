@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-const loacalBaseUrl = 'http://localhost:8000';
+const loacalBaseUrl = 'http://localhost:8000/api';
 
 
 //  login 

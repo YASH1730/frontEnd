@@ -4,6 +4,7 @@ import EntryPoints from "./components/EntryPoints";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth, OpenBox, Mode, Notify } from "./context/context";
 import Home from "./components/Home";
+import Blog from "./components/Blog";
 import SideForm from "./components/SideForm";
 import SnackBar from "./components/SnackBar";
 import { CssBaseline } from "@mui/material";
@@ -69,6 +70,7 @@ function App() {
                 <Mode.Provider value={{ mode, setMode }}>
                   <Routes>
                     <Route path="/adminpanel" element={<Home />} />
+                    <Route path="/blog" element={<Blog />} />
                     <Route path="/" element={<EntryPoints />} />
                     {/* <Route path="/register" element={<EntryPoints />} /> */}
                   </Routes>
