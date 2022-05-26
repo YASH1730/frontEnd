@@ -5,7 +5,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Auth, OpenBox, Mode, Notify } from "./context/context";
 import Home from "./components/Home";
 import Blog from "./components/Blog";
-import SideForm from "./components/SideForm";
+import BlogContent from "./components/BlogContent";
+import SideForm from "./components/dashboard/SideForm";
 import SnackBar from "./components/SnackBar";
 import { CssBaseline } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -71,6 +72,7 @@ function App() {
                   <Routes>
                     <Route path="/adminpanel" element={<Home />} />
                     <Route path="/blog" element={<Blog />} />
+                    <Route path="/blogcontent" element={<BlogContent />} />
                     <Route path="/" element={<EntryPoints />} />
                     {/* <Route path="/register" element={<EntryPoints />} /> */}
                   </Routes>

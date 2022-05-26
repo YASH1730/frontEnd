@@ -447,3 +447,29 @@ export const addImage =async (data)=>{
       'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
       
    }
+
+// =============== CURD of Blog ======================
+
+// addImage
+
+export const uploadImage =async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/uploadImage`,data,{headers: { 
+      'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
+      
+   }
+
+// createBlog
+
+export const createBlog =async (data)=>{
+   return await axios.post(`${loacalBaseUrl}/createBlog`,data,{headers: { 
+      'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
+      
+   }
+
+// getBlogHome
+
+export const getBlogHome =async ()=>{
+   return await axios.get(`${loacalBaseUrl}/getBlogHome`,{headers: { 
+      'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
+      
+   }

@@ -10,13 +10,13 @@ import {
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
-import { OpenBox, Notify } from "../App";
-import { getPolish,changePolishStatus } from '../services/service'
-import '../assets/custom/css/category.css'
+import { OpenBox, Notify } from "../../App";
+import { getDoor,changeDoorStatus } from '../../services/service'
+import '../../assets/custom/css/category.css'
 
 
 
-export default function Polish() {
+export default function Knob() {
 
   const [search, setSearch] = useState("");
 
@@ -28,7 +28,7 @@ export default function Polish() {
   // function for get cetegory list
 
   useEffect(() => {
-    getPolish()
+    getDoor()
       .then((data) => {
         console.log(data)
 
@@ -36,8 +36,8 @@ export default function Polish() {
 
           return ({
             id: row._id,
-            polish_name: row.polish_name,
-            polish_status: row.polish_status,
+            door_name: row.door_name,
+            door_status: row.door_status,
             action: row._id
           })
         }))
@@ -55,13 +55,13 @@ export default function Polish() {
       width: 100
     },
     {
-      field: "polish_name",
-      headerName: "Polish Name",
+      field: "door_name",
+      headerName: "Door Name",
       width: 200,
     },
     {
-      field: "polish_status",
-      headerName: "Polish Status",
+      field: "door_status",
+      headerName: "Door Status",
       width: 200,
       renderCell: (params) => <Switch onChange ={handleSwitch} name = {params.id}   checked = {params.formattedValue}></Switch> ,
 
@@ -75,7 +75,7 @@ export default function Polish() {
         <IconButton onClick={() => { 
           SideBox.setOpen({
             state : true,
-            formType : 'update_polish',
+            formType : 'update_door',
             payload : params
           }) 
         }} aria-label="delete"  >
@@ -103,16 +103,16 @@ export default function Polish() {
     const FD = new FormData()
 
     FD.append('_id',e.target.name)
-    FD.append('polish_status',e.target.checked)
+    FD.append('door_status',e.target.checked)
 
-    const res = changePolishStatus(FD);
+    const res = changeDoorStatus(FD);
 
     res.then((data)=>{
       console.log(data)
       despatchAlert.setNote({
         open : true,
         variant : 'success',
-        message : " Polish Status Updated Successfully !!!"
+        message : " Door Status Updated Successfully !!!"
   
       })
     })
@@ -158,7 +158,7 @@ export default function Polish() {
   return (
     <>
       <Typography sx={{ display: "block" }} variant="h5">
-      Polish
+      Door
       </Typography>
 
       <br></br>
@@ -191,14 +191,14 @@ export default function Polish() {
         <Grid xs={12} md={3}>
           <Button
             onClick={() => {
-              SideBox.setOpen({ state: true, formType: "addPolish" });
+              SideBox.setOpen({ state: true, formType: "addDoor" });
             }}
             sx={{ width: "100%" }}
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
           >
-            Add Polish
+            Add Door
           </Button>
         </Grid>
       </Grid>
@@ -210,7 +210,7 @@ export default function Polish() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Polish List </Typography>
+          <Typography variant="h6"> Door List</Typography>
           <br></br>
           {DataGridView()}
         </Grid>

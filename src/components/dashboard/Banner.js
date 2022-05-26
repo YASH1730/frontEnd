@@ -1,7 +1,7 @@
 import React, { useEffect,useState,useContext } from "react";
-import {Notify} from '../App'
+import {Notify} from '../../App'
 import { useDropzone } from "react-dropzone";
-import {listBanner,addBanner, chaneStatus} from '../services/service'
+import {listBanner,addBanner, chaneStatus} from '../../services/service'
 import { DataGrid } from "@mui/x-data-grid";
 
 import {

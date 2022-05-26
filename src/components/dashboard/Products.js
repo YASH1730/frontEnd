@@ -15,8 +15,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
-import { OpenBox, Notify } from "../App";
-import {getListProduct, deleteProduct} from '../services/service'
+import { OpenBox, Notify } from "../../App";
+import {getListProduct, deleteProduct} from '../../services/service'
 
 export default function Products() {
   

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect,useState} from "react";
 import {
   Grid,
   Typography,
@@ -12,6 +12,8 @@ import {
 
 import Aos from 'aos';
 import 'aos/dist/aos.css'
+import Footer from './Fotter'
+import {getBlogHome} from '../services/service'
 
 //css
 import "../assets/custom/css/blog.css";
@@ -26,122 +28,32 @@ import door from "../assets/img/Blog/door.jpg";
 
 export default function Blog() {
 
+  const [cardData,setCardData] = useState([]);
+
     useEffect(()=>{
-Aos.init({duration : 2000})
+      Aos.init({duration : 1000})
+
+      getBlogHome().then((data) =>{
+        setCardData(data.data)
+
+      })
+
+
     },[])
 
   // function for rendring the cards
 
-  const cardData = [
-      {
-          image : table,
-          title : 'Table'
-      },
-      {
-          image : chair,
-          title : 'Chair'
-      },
-      {
-          image : bed,
-          title : 'King Bed'
-      },
-      {
-          image : door,
-          title : 'Door'
-      },
-      {
-          image : table,
-          title : 'Table'
-      },
-      {
-          image : chair,
-          title : 'Chair'
-      },
-      {
-          image : bed,
-          title : 'King Bed'
-      },
-      {
-          image : door,
-          title : 'Door'
-      },
-      {
-          image : table,
-          title : 'Table'
-      },
-      {
-          image : chair,
-          title : 'Chair'
-      },
-      {
-          image : bed,
-          title : 'King Bed'
-      },
-      {
-          image : door,
-          title : 'Door'
-      },
-      {
-          image : table,
-          title : 'Table'
-      },
-      {
-          image : chair,
-          title : 'Chair'
-      },
-      {
-          image : bed,
-          title : 'King Bed'
-      },
-      {
-          image : door,
-          title : 'Door'
-      },
-      {
-          image : table,
-          title : 'Table'
-      },
-      {
-          image : chair,
-          title : 'Chair'
-      },
-      {
-          image : bed,
-          title : 'King Bed'
-      },
-      {
-          image : door,
-          title : 'Door'
-      },
-      {
-          image : table,
-          title : 'Table'
-      },
-      {
-          image : chair,
-          title : 'Chair'
-      },
-      {
-          image : bed,
-          title : 'King Bed'
-      },
-      {
-          image : door,
-          title : 'Door'
-      },
-      
-  ]
 
   function cardGenrator(card) {
     return (
     <Grid item data-aos = 'fade-up' sx = {12} md = {3} >
-      <Card sx={{ maxWidth: 345 }}>
+      <Card sx={{ maxWidth: 345 }} onClick = {()=> {window.location = '/blogContent'}}>
         <CardActionArea>
           <CardMedia
             component="img"
             height = '200'
             className = 'cardMedia'
-            image= {card.image}
+            image= {card.card_image}
             alt={card.title}
           />
           <CardContent>
@@ -149,9 +61,8 @@ Aos.init({duration : 2000})
               {card.title}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
+              {card.card_description}
+              </Typography>
           </CardContent>
         </CardActionArea>
         <CardActions>
@@ -192,6 +103,9 @@ Aos.init({duration : 2000})
       </Grid>
       {/* Ends Top container  */}
 
+      <br></br>
+      <br></br>
+
       {/* Card Section */}
 
       <Grid container className = 'cardContainer' spacing = {8}>
@@ -205,11 +119,14 @@ Aos.init({duration : 2000})
 
       {/* Ends Card Section */}
 
-      {/* Footer  */}
-      <Grid container className = 'footter'>
-          
-      </Grid>
-      {/* End Footer  */}
+      
+      {/* Footer */}
+
+      <Footer/>
+
+      {/* Footer Ends*/}
+
+      
     </>
   );
 }

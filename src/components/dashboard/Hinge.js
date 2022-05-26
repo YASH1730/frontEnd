@@ -6,17 +6,17 @@ import {
   Button,
   IconButton,Switch
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+// import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
-import { OpenBox, Notify } from "../App";
-import { getSecondaryMaterial,changeSecondaryMaterialStatus } from '../services/service'
-import '../assets/custom/css/category.css'
+import { OpenBox, Notify } from "../../App";
+import { getHinge,editHinge } from '../../services/service'
+import '../../assets/custom/css/category.css'
 
 
 
-export default function SecondaryMaterial() {
+export default function Hinge() {
 
   const [search, setSearch] = useState("");
 
@@ -28,7 +28,7 @@ export default function SecondaryMaterial() {
   // function for get cetegory list
 
   useEffect(() => {
-    getSecondaryMaterial()
+    getHinge()
       .then((data) => {
         console.log(data)
 
@@ -36,8 +36,8 @@ export default function SecondaryMaterial() {
 
           return ({
             id: row._id,
-            secondaryMaterial_name: row.secondaryMaterial_name,
-            secondaryMaterial_status: row.secondaryMaterial_status,
+            hinge_name: row.hinge_name,
+            hinge_status: row.hinge_status,
             action: row._id
           })
         }))
@@ -55,13 +55,13 @@ export default function SecondaryMaterial() {
       width: 100
     },
     {
-      field: "secondaryMaterial_name",
-      headerName: "Secondary Material Name",
+      field: "hinge_name",
+      headerName: "Hinge Name",
       width: 200,
     },
     {
-      field: "secondaryMaterial_status",
-      headerName: "Secondary Material Status",
+      field: "hinge_status",
+      headerName: "Hinge Status",
       width: 200,
       renderCell: (params) => <Switch onChange ={handleSwitch} name = {params.id}   checked = {params.formattedValue}></Switch> ,
 
@@ -75,7 +75,7 @@ export default function SecondaryMaterial() {
         <IconButton onClick={() => { 
           SideBox.setOpen({
             state : true,
-            formType : 'update_secondaryMaterial',
+            formType : 'update_hinge',
             payload : params
           }) 
         }} aria-label="delete"  >
@@ -103,16 +103,16 @@ export default function SecondaryMaterial() {
     const FD = new FormData()
 
     FD.append('_id',e.target.name)
-    FD.append('secondaryMaterial_status',e.target.checked)
+    FD.append('hinge_status',e.target.checked)
 
-    const res = changeSecondaryMaterialStatus(FD);
+    const res = editHinge(FD);
 
     res.then((data)=>{
       console.log(data)
       despatchAlert.setNote({
         open : true,
         variant : 'success',
-        message : " Secndary Material Status Updated Successfully !!!"
+        message : " Polish Status Updated Successfully !!!"
   
       })
     })
@@ -158,7 +158,7 @@ export default function SecondaryMaterial() {
   return (
     <>
       <Typography sx={{ display: "block" }} variant="h5">
-      Secondary Material
+      Hinge
       </Typography>
 
       <br></br>
@@ -191,14 +191,14 @@ export default function SecondaryMaterial() {
         <Grid xs={12} md={3}>
           <Button
             onClick={() => {
-              SideBox.setOpen({ state: true, formType: "secondaryMaterial" });
+              SideBox.setOpen({ state: true, formType: "addHinge" });
             }}
             sx={{ width: "100%" }}
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
           >
-            Add Secondary Material
+            Add Hinge
           </Button>
         </Grid>
       </Grid>
@@ -210,7 +210,7 @@ export default function SecondaryMaterial() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Secondary List </Typography>
+          <Typography variant="h6"> Hinge List </Typography>
           <br></br>
           {DataGridView()}
         </Grid>

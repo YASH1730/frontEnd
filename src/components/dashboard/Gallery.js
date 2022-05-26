@@ -9,12 +9,12 @@ import {
   InputAdornment,
   Button,
 } from "@mui/material";
-import { getGallery, deleteImage } from "../services/service";
+import { getGallery, deleteImage } from "../../services/service";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import AddIcon from "@mui/icons-material/Add";
-import "../assets/custom/css/gallery.css";
-import { Notify, OpenBox } from "../App";
+import "../../assets/custom/css/gallery.css";
+import { Notify, OpenBox } from "../../App";
 
 export default function Knob() {
   const [images, setImages] = useState([]);

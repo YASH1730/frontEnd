@@ -5,7 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 
 // importing the context
 
-import { OpenBox } from "../App";
+import { OpenBox } from "../../App";
 
 export default function Coupons() {
   const SideBox = useContext(OpenBox);

@@ -4,84 +4,89 @@ import {
   TextField,
   Grid,
   Button,
-  IconButton,Switch
+  IconButton,
+  Switch,
 } from "@mui/material";
 // import DeleteIcon from '@mui/icons-material/Delete';
-import CreateIcon from '@mui/icons-material/Create';
+import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
-import { OpenBox, Notify } from "../App";
-import { getFitting,changeFittingStatus } from '../services/service'
-import '../assets/custom/css/category.css'
+import { OpenBox, Notify } from "../../App";
+import { getDoor, changeDoorStatus } from "../../services/service";
+import "../../assets/custom/css/category.css";
 
-
-
-export default function Fitting() {
-
+export default function Knob() {
   const [search, setSearch] = useState("");
 
   const SideBox = useContext(OpenBox);
   const despatchAlert = useContext(Notify);
 
-
-  const [Row, setRows] = useState()
+  const [Row, setRows] = useState();
   // function for get cetegory list
 
   useEffect(() => {
-    getFitting()
+    getDoor()
       .then((data) => {
-        console.log(data)
+        console.log(data);
 
-        setRows(data.data.map((row) => {
-
-          return ({
-            id: row._id,
-            fitting_name: row.fitting_name,
-            fitting_status: row.fitting_status,
-            action: row._id
+        setRows(
+          data.data.map((row) => {
+            return {
+              id: row._id,
+              door_name: row.door_name,
+              door_status: row.door_status,
+              action: row._id,
+            };
           })
-        }))
+        );
       })
       .catch((err) => {
-        console.log(err)
-      })
+        console.log(err);
+      });
   }, []);
-
 
   const columns = [
     {
       field: "id",
       headerName: "ID",
-      width: 100
+      width: 100,
     },
     {
-      field: "fitting_name",
-      headerName: "Fitting Name",
+      field: "door_name",
+      headerName: "Door Name",
       width: 200,
     },
     {
-      field: "fitting_status",
-      headerName: "Fitting Status",
+      field: "door_status",
+      headerName: "Door Status",
       width: 200,
-      renderCell: (params) => <Switch onChange ={handleSwitch} name = {params.id}   checked = {params.formattedValue}></Switch> ,
-
+      renderCell: (params) => (
+        <Switch
+          onChange={handleSwitch}
+          name={params.id}
+          checked={params.formattedValue}
+        ></Switch>
+      ),
     },
     {
       field: "action",
       headerName: "Actions",
       width: 200,
-      renderCell: (params) => 
-      <div className="categoryImage" >
-        <IconButton onClick={() => { 
-          SideBox.setOpen({
-            state : true,
-            formType : 'update_fitting',
-            payload : params
-          }) 
-        }} aria-label="delete"  >
-          <CreateIcon />
-        </IconButton>
-        {/* <IconButton onClick={() => { deleteCategory(params.formattedValue).then((res)=>{
+      renderCell: (params) => (
+        <div className="categoryImage">
+          <IconButton
+            onClick={() => {
+              SideBox.setOpen({
+                state: true,
+                formType: "update_door",
+                payload: params,
+              });
+            }}
+            aria-label="delete"
+          >
+            <CreateIcon />
+          </IconButton>
+          {/* <IconButton onClick={() => { deleteCategory(params.formattedValue).then((res)=>{
           despatchAlert.setNote({
             open : true,
             variant : 'success',
@@ -91,58 +96,57 @@ export default function Fitting() {
           <DeleteIcon />
         </IconButton>
          */}
-      </div>,
-    }
-
+        </div>
+      ),
+    },
   ];
 
+  const handleSwitch = (e) => {
+    console.log(e.target.name);
 
-  const handleSwitch = (e)=>{
-    console.log(e.target.name)
+    const FD = new FormData();
 
-    const FD = new FormData()
+    FD.append("_id", e.target.name);
+    FD.append("door_status", e.target.checked);
 
-    FD.append('_id',e.target.name)
-    FD.append('fitting_status',e.target.checked)
+    const res = changeDoorStatus(FD);
 
-    const res = changeFittingStatus(FD);
-
-    res.then((data)=>{
-      console.log(data)
-      despatchAlert.setNote({
-        open : true,
-        variant : 'success',
-        message : " Fitting Status Updated Successfully !!!"
-  
+    res
+      .then((data) => {
+        console.log(data);
+        despatchAlert.setNote({
+          open: true,
+          variant: "success",
+          message: " Door Status Updated Successfully !!!",
+        });
       })
-    })
-    .catch((err)=>{
-      console.log(err)
-      despatchAlert.setNote({
-        open : true,
-        variant : 'error',
-        message : "Somthing Went Worang !!!"
-  
-      })
-    })
+      .catch((err) => {
+        console.log(err);
+        despatchAlert.setNote({
+          open: true,
+          variant: "error",
+          message: "Somthing Went Worang !!!",
+        });
+      });
+  };
 
-    
-  
-
-  } 
-
-  const handelSearch = (e)=>{
-    console.log(e.target.value)
-    setSearch(e.target.value)
-  }
-
+  const handelSearch = (e) => {
+    console.log(e.target.value);
+    setSearch(e.target.value);
+  };
 
   function DataGridView() {
     return (
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           filterModel={{
-            items: [{ columnField: 'category_name', operatorValue: 'contains', value: `${search}` }],
+            items: [
+              {
+                columnField: "category_name",
+                operatorValue: "contains",
+                value: `${search}`,
+              },
+            ],
           }}
           rows={Row}
           columns={columns}
@@ -154,11 +158,10 @@ export default function Fitting() {
     );
   }
 
-
   return (
     <>
       <Typography sx={{ display: "block" }} variant="h5">
-      Fitting
+        Blog
       </Typography>
 
       <br></br>
@@ -168,7 +171,7 @@ export default function Fitting() {
       <Grid
         container
         p={3}
-        sx={{
+        sx={{ 
           boxShadow: 1,
           borderRadius: 2,
           justifyContent: "center !important",
@@ -187,18 +190,17 @@ export default function Fitting() {
           />
         </Grid>
 
-
         <Grid xs={12} md={3}>
           <Button
             onClick={() => {
-              SideBox.setOpen({ state: true, formType: "addFitting" });
+              SideBox.setOpen({ state: true, formType: "addBlog" });
             }}
             sx={{ width: "100%" }}
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
           >
-            Add Fitting
+            Add Blog
           </Button>
         </Grid>
       </Grid>
@@ -210,7 +212,7 @@ export default function Fitting() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Fitting List  </Typography>
+          <Typography variant="h6"> Door List</Typography>
           <br></br>
           {DataGridView()}
         </Grid>

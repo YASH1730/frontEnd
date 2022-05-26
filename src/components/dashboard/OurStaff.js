@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { DataGrid } from '@mui/x-data-grid';
 
 // importing the context 
-import {OpenBox} from '../App';
+import {OpenBox} from '../../App';
 
 export default function OurStaff() {
 

@@ -12,7 +12,7 @@ import {
   Pie,
 } from "recharts";
 import { Typography, Grid } from "@mui/material";
-import "../assets/custom/css/dashboard.css";
+import "../../assets/custom/css/dashboard.css";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import AutorenewOutlinedIcon from "@mui/icons-material/AutorenewOutlined";

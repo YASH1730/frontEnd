@@ -6,17 +6,17 @@ import {
   Button,
   IconButton,Switch
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+// import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
-import { OpenBox, Notify } from "../App";
-import { getPrimaryMaterial,changePrimaryMaterialStatus } from '../services/service'
-import '../assets/custom/css/category.css'
+import { OpenBox, Notify } from "../../App";
+import { getHandle,changeHandleStatus } from '../../services/service'
+import '../../assets/custom/css/category.css'
 
 
 
-export default function PrimaryMaterial() {
+export default function Knob() {
 
   const [search, setSearch] = useState("");
 
@@ -28,7 +28,7 @@ export default function PrimaryMaterial() {
   // function for get cetegory list
 
   useEffect(() => {
-    getPrimaryMaterial()
+    getHandle()
       .then((data) => {
         console.log(data)
 
@@ -36,8 +36,8 @@ export default function PrimaryMaterial() {
 
           return ({
             id: row._id,
-            primaryMaterial_name: row.primaryMaterial_name,
-            primaryMaterial_status: row.primaryMaterial_status,
+            handle_name: row.handle_name,
+            handle_status: row.handle_status,
             action: row._id
           })
         }))
@@ -55,13 +55,13 @@ export default function PrimaryMaterial() {
       width: 100
     },
     {
-      field: "primaryMaterial_name",
-      headerName: "Primary Material Name",
+      field: "handle_name",
+      headerName: "Handle Material Name",
       width: 200,
     },
     {
-      field: "primaryMaterial_status",
-      headerName: "Primary Material Status",
+      field: "handle_status",
+      headerName: "Handle Status",
       width: 200,
       renderCell: (params) => <Switch onChange ={handleSwitch} name = {params.id}   checked = {params.formattedValue}></Switch> ,
 
@@ -75,7 +75,7 @@ export default function PrimaryMaterial() {
         <IconButton onClick={() => { 
           SideBox.setOpen({
             state : true,
-            formType : 'update_PrimaryMaterial',
+            formType : 'update_handle',
             payload : params
           }) 
         }} aria-label="delete"  >
@@ -103,16 +103,16 @@ export default function PrimaryMaterial() {
     const FD = new FormData()
 
     FD.append('_id',e.target.name)
-    FD.append('primaryMaterial_status',e.target.checked)
+    FD.append('handle_status',e.target.checked)
 
-    const res = changePrimaryMaterialStatus(FD);
+    const res = changeHandleStatus(FD);
 
     res.then((data)=>{
       console.log(data)
       despatchAlert.setNote({
         open : true,
         variant : 'success',
-        message : " Primary Material Status Updated Successfully !!!"
+        message : " Handle Material Status Updated Successfully !!!"
   
       })
     })
@@ -158,7 +158,7 @@ export default function PrimaryMaterial() {
   return (
     <>
       <Typography sx={{ display: "block" }} variant="h5">
-        Primary Material
+      Handle Material
       </Typography>
 
       <br></br>
@@ -191,14 +191,14 @@ export default function PrimaryMaterial() {
         <Grid xs={12} md={3}>
           <Button
             onClick={() => {
-              SideBox.setOpen({ state: true, formType: "primaryMeterial" });
+              SideBox.setOpen({ state: true, formType: "addHandle" });
             }}
             sx={{ width: "100%" }}
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
           >
-            Add Primary Material
+            Add Handle Material
           </Button>
         </Grid>
       </Grid>
@@ -210,7 +210,7 @@ export default function PrimaryMaterial() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Primary Material List </Typography>
+          <Typography variant="h6"> Handle List</Typography>
           <br></br>
           {DataGridView()}
         </Grid>

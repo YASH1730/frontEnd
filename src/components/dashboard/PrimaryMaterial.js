@@ -6,17 +6,17 @@ import {
   Button,
   IconButton,Switch
 } from "@mui/material";
-// import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
-import { OpenBox, Notify } from "../App";
-import { getHandle,changeHandleStatus } from '../services/service'
-import '../assets/custom/css/category.css'
+import { OpenBox, Notify } from "../../App";
+import { getPrimaryMaterial,changePrimaryMaterialStatus } from '../../services/service'
+import '../../assets/custom/css/category.css'
 
 
 
-export default function Knob() {
+export default function PrimaryMaterial() {
 
   const [search, setSearch] = useState("");
 
@@ -28,7 +28,7 @@ export default function Knob() {
   // function for get cetegory list
 
   useEffect(() => {
-    getHandle()
+    getPrimaryMaterial()
       .then((data) => {
         console.log(data)
 
@@ -36,8 +36,8 @@ export default function Knob() {
 
           return ({
             id: row._id,
-            handle_name: row.handle_name,
-            handle_status: row.handle_status,
+            primaryMaterial_name: row.primaryMaterial_name,
+            primaryMaterial_status: row.primaryMaterial_status,
             action: row._id
           })
         }))
@@ -55,13 +55,13 @@ export default function Knob() {
       width: 100
     },
     {
-      field: "handle_name",
-      headerName: "Handle Material Name",
+      field: "primaryMaterial_name",
+      headerName: "Primary Material Name",
       width: 200,
     },
     {
-      field: "handle_status",
-      headerName: "Handle Status",
+      field: "primaryMaterial_status",
+      headerName: "Primary Material Status",
       width: 200,
       renderCell: (params) => <Switch onChange ={handleSwitch} name = {params.id}   checked = {params.formattedValue}></Switch> ,
 
@@ -75,7 +75,7 @@ export default function Knob() {
         <IconButton onClick={() => { 
           SideBox.setOpen({
             state : true,
-            formType : 'update_handle',
+            formType : 'update_PrimaryMaterial',
             payload : params
           }) 
         }} aria-label="delete"  >
@@ -103,16 +103,16 @@ export default function Knob() {
     const FD = new FormData()
 
     FD.append('_id',e.target.name)
-    FD.append('handle_status',e.target.checked)
+    FD.append('primaryMaterial_status',e.target.checked)
 
-    const res = changeHandleStatus(FD);
+    const res = changePrimaryMaterialStatus(FD);
 
     res.then((data)=>{
       console.log(data)
       despatchAlert.setNote({
         open : true,
         variant : 'success',
-        message : " Handle Material Status Updated Successfully !!!"
+        message : " Primary Material Status Updated Successfully !!!"
   
       })
     })
@@ -158,7 +158,7 @@ export default function Knob() {
   return (
     <>
       <Typography sx={{ display: "block" }} variant="h5">
-      Handle Material
+        Primary Material
       </Typography>
 
       <br></br>
@@ -191,14 +191,14 @@ export default function Knob() {
         <Grid xs={12} md={3}>
           <Button
             onClick={() => {
-              SideBox.setOpen({ state: true, formType: "addHandle" });
+              SideBox.setOpen({ state: true, formType: "primaryMeterial" });
             }}
             sx={{ width: "100%" }}
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
           >
-            Add Handle Material
+            Add Primary Material
           </Button>
         </Grid>
       </Grid>
@@ -210,7 +210,7 @@ export default function Knob() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Handle List</Typography>
+          <Typography variant="h6"> Primary Material List </Typography>
           <br></br>
           {DataGridView()}
         </Grid>

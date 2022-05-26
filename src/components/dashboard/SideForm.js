@@ -12,17 +12,17 @@ import {
 import { Editor } from '@tinymce/tinymce-react'
 import Slide from "@mui/material/Slide";
 import Backdrop from "@mui/material/Backdrop";
-import "../assets/custom/css/sideForm.css";
+import "../../assets/custom/css/sideForm.css";
 import { useDropzone } from "react-dropzone";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { OpenBox, Mode, Notify } from "../App";
+import { OpenBox, Mode, Notify } from "../../App";
 
 // service 
 import {
   addCategory, editCategory, addProduct, getLastProduct, updateProduct, categoryList, addSubCategories, getSubCatagories, editSubCatagories, addPrimaryMaterial, editPrimaryMaterial,
   addSecondaryMaterial, editSecondaryMaterial, getPrimaryMaterial, getSecondaryMaterial, addPolish, editPolish, getPolish, addHinge, editHinge, getHinge,
-  addFitting, editFitting, getFitting, addKnob, getKnob, editKnob, addDoor, getDoor, updateImage, editDoor, addHandle, getHandle, editHandle,addImage
-} from '../services/service.js'
+  addFitting, editFitting, getFitting, addKnob, getKnob, editKnob, addDoor, getDoor, updateImage, editDoor, addHandle, getHandle, editHandle,addImage, uploadImage,createBlog
+} from '../../services/service.js'
 
 
 const thumbsContainer = {
@@ -967,8 +967,6 @@ const Sideform = () => {
 
         })
       })
-
-
 
   }
 
@@ -2459,6 +2457,114 @@ const res = addSecondaryMaterial(FD)
 
   }
 
+const [url,setUrl] = useState('set')
+
+const handleUpload = (e) =>{
+  e.preventDefault()
+
+  const FD = new FormData();
+
+  Image.map((element) => {
+    return FD.append('banner_image', element);
+
+  })
+
+
+
+  const res = uploadImage(FD)
+
+  
+
+    res.then((data) => {
+      console.log(data.status)
+
+      if (data.status === 203) {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        setUrl(data.data.url)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
+
+        })
+      })
+}
+
+const handleAddBlog = (e) =>{
+  e.preventDefault()
+
+  const FD = new FormData();
+
+  featured.map((element) => {
+    return FD.append('banner_image', element);
+
+  })
+
+  FD.append('description', editorRef.current.getContent())
+  FD.append('title', e.target.title.value)
+  FD.append('card_description', e.target.card_description.value)
+
+
+
+  const res = createBlog(FD)
+
+    res.then((data) => {
+      console.log(data.status)
+
+      if (data.status === 203) {
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: data.data.message
+
+        })
+      }
+      else {
+        setImages([]);
+        setUrl(data.data.url)
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'success',
+          message: data.data.message
+
+        })
+      }
+
+    })
+      .catch((err) => {
+        console.log(err)
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: 'error',
+          message: "Somthing Went Worang !!!"
+
+        })
+      })
+}
+  
 
   return (
     <>
@@ -5235,7 +5341,93 @@ const res = addSecondaryMaterial(FD)
             )}
             {/* add update polish  Ends */}
 
-            {/*  update Catagory */}
+            {/*   Add BLog */}
+
+            {SideBox.open.formType === "addBlog" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Blog
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add your blog and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form className="form" id='myForm' onSubmit={handleUpload} enctype='multipart/form-data' method="post">
+                   
+                    <FormLabel id="demo-radio-buttons-group-label">Get Image Url</FormLabel>
+
+                    <ImagePreviews text={'Please Drag and Drop the Image '}> </ImagePreviews>
+
+                    <TextField
+                      fullWidth
+                      disabled
+                      id="outlined-select"
+                      label="Image URL"
+                      value = {url}
+                      />
+
+                    <Button color="primary" type='submit'  variant="contained">
+                    Get Url
+                    </Button>
+
+                    </form>
+
+                    <br></br>
+
+                  <form className="form" id='myForm' onSubmit={handleAddBlog} enctype='multipart/form-data' method="post">
+                  <FormLabel id="demo-radio-buttons-group-label">Add Blog Description</FormLabel>
+
+
+                  <FeaturesPreviews text={'Please Drag and Drop the Card Image '}> </FeaturesPreviews>
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='card_description'
+                      label="Card Description"
+                    />
+
+<br></br>
+                   
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name='title'
+                      label="Blog Title"
+                    />
+                    {/* product description  */}
+                    <Editor
+                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                      initialValue="<p>Write Blog Here!!!</p>"
+                      onInit={(event, editor) => editorRef.current = editor}
+                      init={{
+                        height: 400,
+                        menubar: true,
+                        plugins: 'image code',
+                      }}
+
+                    />
+
+                    <Button color="primary" type='submit' fullWidth variant="contained">
+                    Add Images
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* Add Blog Ends */}
+
+            {/*   Add Gallery */}
 
             {SideBox.open.formType === "addGallery" && (
               <Grid container p={5}>

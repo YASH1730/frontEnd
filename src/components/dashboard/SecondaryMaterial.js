@@ -6,17 +6,17 @@ import {
   Button,
   IconButton,Switch
 } from "@mui/material";
-// import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
-import { OpenBox, Notify } from "../App";
-import { getHinge,editHinge } from '../services/service'
-import '../assets/custom/css/category.css'
+import { OpenBox, Notify } from "../../App";
+import { getSecondaryMaterial,changeSecondaryMaterialStatus } from '../../services/service'
+import '../../assets/custom/css/category.css'
 
 
 
-export default function Hinge() {
+export default function SecondaryMaterial() {
 
   const [search, setSearch] = useState("");
 
@@ -28,7 +28,7 @@ export default function Hinge() {
   // function for get cetegory list
 
   useEffect(() => {
-    getHinge()
+    getSecondaryMaterial()
       .then((data) => {
         console.log(data)
 
@@ -36,8 +36,8 @@ export default function Hinge() {
 
           return ({
             id: row._id,
-            hinge_name: row.hinge_name,
-            hinge_status: row.hinge_status,
+            secondaryMaterial_name: row.secondaryMaterial_name,
+            secondaryMaterial_status: row.secondaryMaterial_status,
             action: row._id
           })
         }))
@@ -55,13 +55,13 @@ export default function Hinge() {
       width: 100
     },
     {
-      field: "hinge_name",
-      headerName: "Hinge Name",
+      field: "secondaryMaterial_name",
+      headerName: "Secondary Material Name",
       width: 200,
     },
     {
-      field: "hinge_status",
-      headerName: "Hinge Status",
+      field: "secondaryMaterial_status",
+      headerName: "Secondary Material Status",
       width: 200,
       renderCell: (params) => <Switch onChange ={handleSwitch} name = {params.id}   checked = {params.formattedValue}></Switch> ,
 
@@ -75,7 +75,7 @@ export default function Hinge() {
         <IconButton onClick={() => { 
           SideBox.setOpen({
             state : true,
-            formType : 'update_hinge',
+            formType : 'update_secondaryMaterial',
             payload : params
           }) 
         }} aria-label="delete"  >
@@ -103,16 +103,16 @@ export default function Hinge() {
     const FD = new FormData()
 
     FD.append('_id',e.target.name)
-    FD.append('hinge_status',e.target.checked)
+    FD.append('secondaryMaterial_status',e.target.checked)
 
-    const res = editHinge(FD);
+    const res = changeSecondaryMaterialStatus(FD);
 
     res.then((data)=>{
       console.log(data)
       despatchAlert.setNote({
         open : true,
         variant : 'success',
-        message : " Polish Status Updated Successfully !!!"
+        message : " Secndary Material Status Updated Successfully !!!"
   
       })
     })
@@ -158,7 +158,7 @@ export default function Hinge() {
   return (
     <>
       <Typography sx={{ display: "block" }} variant="h5">
-      Hinge
+      Secondary Material
       </Typography>
 
       <br></br>
@@ -191,14 +191,14 @@ export default function Hinge() {
         <Grid xs={12} md={3}>
           <Button
             onClick={() => {
-              SideBox.setOpen({ state: true, formType: "addHinge" });
+              SideBox.setOpen({ state: true, formType: "secondaryMaterial" });
             }}
             sx={{ width: "100%" }}
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
           >
-            Add Hinge
+            Add Secondary Material
           </Button>
         </Grid>
       </Grid>
@@ -210,7 +210,7 @@ export default function Hinge() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Hinge List </Typography>
+          <Typography variant="h6"> Secondary List </Typography>
           <br></br>
           {DataGridView()}
         </Grid>

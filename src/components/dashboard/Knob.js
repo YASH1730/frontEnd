@@ -1,29 +1,23 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
-  Box,
-  FormControl,
-  MenuItem,
   Typography,
   TextField,
-  InputLabel,
-  Select,
   Grid,
   Button,
   IconButton,Switch
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+// import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
-import { OpenBox, Notify } from "../App";
-import { getSubCatagories, deleteCategory, changeSubSatatus } from '../services/service'
-import '../assets/custom/css/category.css'
+import { OpenBox, Notify } from "../../App";
+import { getKnob,changeKnobStatus } from '../../services/service'
+import '../../assets/custom/css/category.css'
 
 
 
-export default function SubCategory() {
+export default function Knob() {
 
-  const [category, setCategory] = useState("");
   const [search, setSearch] = useState("");
 
   const SideBox = useContext(OpenBox);
@@ -34,7 +28,7 @@ export default function SubCategory() {
   // function for get cetegory list
 
   useEffect(() => {
-    getSubCatagories()
+    getKnob()
       .then((data) => {
         console.log(data)
 
@@ -42,10 +36,8 @@ export default function SubCategory() {
 
           return ({
             id: row._id,
-            category_id : row.category_id,
-            category_name : row.category_name,
-            sub_category_name: row.sub_category_name,
-            sub_category_status: row.sub_category_status,
+            knob_name: row.knob_name,
+            knob_status: row.knob_status,
             action: row._id
           })
         }))
@@ -63,25 +55,13 @@ export default function SubCategory() {
       width: 100
     },
     {
-      field: 'category_id',
-      align: 'center',
-      headerName: 'Category Id',
-      width: 200
-    },
-    {
-      field: 'category_name',
-      align: 'center',
-      headerName: 'Category Name',
-      width: 200
-    },
-    {
-      field: "sub_category_name",
-      headerName: "Sub Category Name",
+      field: "knob_name",
+      headerName: "Knob Name",
       width: 200,
     },
     {
-      field: "sub_category_status",
-      headerName: "Sub Category Status",
+      field: "knob_status",
+      headerName: "Knob Status",
       width: 200,
       renderCell: (params) => <Switch onChange ={handleSwitch} name = {params.id}   checked = {params.formattedValue}></Switch> ,
 
@@ -95,7 +75,7 @@ export default function SubCategory() {
         <IconButton onClick={() => { 
           SideBox.setOpen({
             state : true,
-            formType : 'update_Subcategory',
+            formType : 'update_knob',
             payload : params
           }) 
         }} aria-label="delete"  >
@@ -123,16 +103,16 @@ export default function SubCategory() {
     const FD = new FormData()
 
     FD.append('_id',e.target.name)
-    FD.append('sub_category_status',e.target.checked)
+    FD.append('knob_status',e.target.checked)
 
-    const res = changeSubSatatus(FD);
+    const res = changeKnobStatus(FD);
 
     res.then((data)=>{
       console.log(data)
       despatchAlert.setNote({
         open : true,
         variant : 'success',
-        message : " Sub Category Status Updated Successfully !!!"
+        message : " Knob Status Updated Successfully !!!"
   
       })
     })
@@ -141,7 +121,7 @@ export default function SubCategory() {
       despatchAlert.setNote({
         open : true,
         variant : 'error',
-        message : "May be duplicate found !!!"
+        message : "Somthing Went Worang !!!"
   
       })
     })
@@ -174,14 +154,11 @@ export default function SubCategory() {
     );
   }
 
-  const handleChangeCat = (event) => {
-    setCategory(event.target.value);
-  };
 
   return (
     <>
       <Typography sx={{ display: "block" }} variant="h5">
-        Sub Category
+      Knob
       </Typography>
 
       <br></br>
@@ -214,25 +191,26 @@ export default function SubCategory() {
         <Grid xs={12} md={3}>
           <Button
             onClick={() => {
-              SideBox.setOpen({ state: true, formType: "subcategory" });
+              SideBox.setOpen({ state: true, formType: "addKnob" });
             }}
             sx={{ width: "100%" }}
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
           >
-            Sub Category
+            Add Knob
           </Button>
         </Grid>
       </Grid>
 
       {/* Section 1 ends  */}
       <br></br>
+
       {/* data grid  */}
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Recent Order </Typography>
+          <Typography variant="h6"> Knob List </Typography>
           <br></br>
           {DataGridView()}
         </Grid>
