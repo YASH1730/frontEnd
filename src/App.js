@@ -10,9 +10,10 @@ import SideForm from "./components/dashboard/SideForm";
 import SnackBar from "./components/SnackBar";
 import { CssBaseline } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Buffer } from 'buffer';
+global.Buffer = Buffer;
 
 function App() {
-  // const initialval = localStorage.getItem('mode') || false;
   // states for the authentication
   const [auth, setAuth] = useState({
     isLogin : false,

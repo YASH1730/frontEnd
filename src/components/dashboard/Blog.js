@@ -5,15 +5,14 @@ import {
   Grid,
   Button,
   IconButton,
-  Switch,
 } from "@mui/material";
-// import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
 import { OpenBox, Notify } from "../../App";
-import { getDoor, changeDoorStatus } from "../../services/service";
+import { getBlogHome, deleteBLog } from "../../services/service";
 import "../../assets/custom/css/category.css";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Knob() {
   const [search, setSearch] = useState("");
@@ -25,7 +24,7 @@ export default function Knob() {
   // function for get cetegory list
 
   useEffect(() => {
-    getDoor()
+    getBlogHome()
       .then((data) => {
         console.log(data);
 
@@ -33,9 +32,9 @@ export default function Knob() {
           data.data.map((row) => {
             return {
               id: row._id,
-              door_name: row.door_name,
-              door_status: row.door_status,
-              action: row._id,
+              title: row.title,
+              image: row.card_image,
+              action: row,
             };
           })
         );
@@ -52,21 +51,17 @@ export default function Knob() {
       width: 100,
     },
     {
-      field: "door_name",
-      headerName: "Door Name",
+      field: "title",
+      headerName: "Blog Title",
       width: 200,
     },
     {
-      field: "door_status",
-      headerName: "Door Status",
-      width: 200,
-      renderCell: (params) => (
-        <Switch
-          onChange={handleSwitch}
-          name={params.id}
-          checked={params.formattedValue}
-        ></Switch>
-      ),
+      field: "image",
+      headerName: "Blog Image",
+      width: 160,
+      align : 'center',
+      renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='featured' /></div>,
+
     },
     {
       field: "action",
@@ -78,7 +73,7 @@ export default function Knob() {
             onClick={() => {
               SideBox.setOpen({
                 state: true,
-                formType: "update_door",
+                formType: "update_blog",
                 payload: params,
               });
             }}
@@ -86,49 +81,23 @@ export default function Knob() {
           >
             <CreateIcon />
           </IconButton>
-          {/* <IconButton onClick={() => { deleteCategory(params.formattedValue).then((res)=>{
+          <IconButton onClick={() => { deleteBLog(params.id).then((res)=>{
+            console.log(res)
           despatchAlert.setNote({
             open : true,
             variant : 'success',
-            message : 'Category Deleted !!!'
+            message : 'Blog Deleted !!!'
           })
         }) }} aria-label="delete"  >
           <DeleteIcon />
         </IconButton>
-         */}
+        
         </div>
       ),
     },
   ];
 
-  const handleSwitch = (e) => {
-    console.log(e.target.name);
-
-    const FD = new FormData();
-
-    FD.append("_id", e.target.name);
-    FD.append("door_status", e.target.checked);
-
-    const res = changeDoorStatus(FD);
-
-    res
-      .then((data) => {
-        console.log(data);
-        despatchAlert.setNote({
-          open: true,
-          variant: "success",
-          message: " Door Status Updated Successfully !!!",
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-        despatchAlert.setNote({
-          open: true,
-          variant: "error",
-          message: "Somthing Went Worang !!!",
-        });
-      });
-  };
+  
 
   const handelSearch = (e) => {
     console.log(e.target.value);
@@ -142,7 +111,7 @@ export default function Knob() {
           filterModel={{
             items: [
               {
-                columnField: "category_name",
+                columnField: "title",
                 operatorValue: "contains",
                 value: `${search}`,
               },
@@ -184,7 +153,7 @@ export default function Knob() {
             fullWidth
             autoComplete={false}
             id="demo-helper-text-aligned-no-helper"
-            label="Search by category type"
+            label="Search by blog title"
             type="text"
             onChange={handelSearch}
           />

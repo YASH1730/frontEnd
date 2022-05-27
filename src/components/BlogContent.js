@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
   Grid,
   Typography,
@@ -9,9 +9,10 @@ import {
   ListItemText,
   IconButton,
 } from "@mui/material";
-
+import ReactHtmlParser from "react-html-parser";
 import Fotter from "./Fotter";
 
+import { Image } from 'mui-image'
 //logo
 import logo from "../assets/img/Blog/logo.webp";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
@@ -19,7 +20,20 @@ import KeyboardBackspaceSharpIcon from "@mui/icons-material/KeyboardBackspaceSha
 //css
 import "../assets/custom/css/blogContent.css";
 
+import {getBlog} from '../services/service'
+
 export default function BlogContent() {
+
+  const [data,setData] = useState()
+
+  useEffect(()=>{
+    getBlog(localStorage.getItem('uuid'))
+    .then((data)=>{
+      console.log(data)
+      setData(data.data)
+    })
+  },[])
+
   return (
     <>
       <title>Blog-Content</title>
@@ -65,15 +79,22 @@ export default function BlogContent() {
         {/* Table OF COntent Ends */}
 
         {/* Content Box */}
-        <Grid item xs={8} md={10} className="content">
-            <Typography variant= 'h5'>Chair Price</Typography>
-            <Grid item className = 'banner' ></Grid>
-        </Grid>
+        {data && <Grid item xs={7.5} md={9.5} className="content">
+            <Typography variant= 'h5'>{data.title}</Typography>
+            <br></br>
+            <img
+            src = {data.card_image}
+            className  = 'banner'
+          />
+            <br></br>
+
+            <Grid item className = 'content' >{ReactHtmlParser(data.description)}</Grid>
+            
+        </Grid>}
         {/* Content Box Ends */}
       </Grid>
 
       {/* Ends Read Box */}
-
       <Fotter></Fotter>
     </>
   );

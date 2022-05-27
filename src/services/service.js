@@ -473,3 +473,29 @@ export const getBlogHome =async ()=>{
       'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
       
    }
+
+// getBlog description
+
+export const getBlog =async (data)=>{
+   return await axios.get(`${loacalBaseUrl}/getBlog?uuid=${data}`,{headers: { 
+      'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
+      
+   }
+
+// deleteBLog
+
+export const deleteBLog =async (data)=>{
+   return await axios.delete(`${loacalBaseUrl}/deleteBLog?_id=${data}`,{headers: { 
+      'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
+      
+   }
+
+// updateBlog
+
+export const updateBlog =async (data)=>{
+   return await axios.patch(`${loacalBaseUrl}/updateBlog`,data,{headers: { 
+      'Authorization' : `Bearer ${localStorage.getItem('WDToken')}`}})
+      
+   }
+
+   

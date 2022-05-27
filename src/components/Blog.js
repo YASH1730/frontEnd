@@ -20,10 +20,6 @@ import "../assets/custom/css/blog.css";
 
 // images
 import banner from "../assets/img/Blog/blog_banner.jpg";
-import table from "../assets/img/Blog/table.jpg";
-import chair from "../assets/img/Blog/chair.jpg";
-import bed from "../assets/img/Blog/bed.jpg";
-import door from "../assets/img/Blog/door.jpg";
 
 
 export default function Blog() {
@@ -47,7 +43,7 @@ export default function Blog() {
   function cardGenrator(card) {
     return (
     <Grid item data-aos = 'fade-up' sx = {12} md = {3} >
-      <Card sx={{ maxWidth: 345 }} onClick = {()=> {window.location = '/blogContent'}}>
+      <Card sx={{ maxWidth: 345 }} onClick = {()=> { localStorage.setItem('uuid',card.uuid); window.location = '/blogContent'}}>
         <CardActionArea>
           <CardMedia
             component="img"
