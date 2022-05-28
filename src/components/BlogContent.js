@@ -22,6 +22,14 @@ import "../assets/custom/css/blogContent.css";
 
 import {getBlog} from '../services/service'
 
+// imports for TOC
+
+import { unified } from 'unified';
+import rehypeParse from 'rehype-parse';
+import rehypeStringify from 'rehype-stringify';
+import { visit } from 'unist-util-visit';
+import parameterize from 'parameterize';
+
 export default function BlogContent() {
 
   const [data,setData] = useState()
@@ -33,6 +41,30 @@ export default function BlogContent() {
       setData(data.data)
     })
   },[])
+
+  const toc = [];
+
+  const content = data && unified()
+  .use(rehypeParse, {
+    fragment: true,
+  })
+  .use(() => {
+    return (tree) => {
+      visit(tree, 'element', function (node) {
+        if (node.tagName[0] === 'h' && parseInt(node.tagName[1]) <= 6 )
+        {
+          const id = parameterize(node.children[0].value);
+          node.properties.id = id;
+          toc.push({id : `#${id}`,value : node.children[0].value})
+          console.log(toc)
+        }
+      });
+      return;
+    };
+  })
+  .use(rehypeStringify)
+  .processSync(data.description)
+  .toString();
 
   return (
     <>
@@ -61,25 +93,30 @@ export default function BlogContent() {
       <Grid container className="readBox">
         {/* Table OF COntent */}
         <Grid item xs={4} md={2} className="TOC">
+          
           <Typography variant="h6" color="primary">
             Table Of Content
           </Typography>
 
+
+
           <List color="black">
-            <ListItem>
-              <ListItemIcon>
-                <ArrowRightOutlinedIcon />
-              </ListItemIcon>
-              <Link underline="hover">
-                <ListItemText className="listText" primary="How to use?" />
-              </Link>
-            </ListItem>
+
+              {toc && toc.map((jump,index)=>{
+                return <> <ListItem key = {index} component = {Link} href = {jump.id}> 
+                  <ListItemIcon>
+                    <ArrowRightOutlinedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={jump.value}/>
+                </ListItem>
+                </>
+              })}
           </List>
         </Grid>
         {/* Table OF COntent Ends */}
 
         {/* Content Box */}
-        {data && <Grid item xs={7.5} md={9.5} className="content">
+        {data && <Grid item xs={11.5} md={9.5} className="content">
             <Typography variant= 'h5'>{data.title}</Typography>
             <br></br>
             <img
@@ -89,14 +126,18 @@ export default function BlogContent() {
           />
             <br></br>
 
-            <Grid item className = 'content' >{ReactHtmlParser(data.description)}</Grid>
+            <Grid item className = 'content' >{ReactHtmlParser(content)}</Grid>
             
         </Grid>}
+
+        <Grid item xs = {12}>
+        <Fotter></Fotter>
+        </Grid>
         {/* Content Box Ends */}
       </Grid>
 
       {/* Ends Read Box */}
-      <Fotter></Fotter>
+      
     </>
   );
 }

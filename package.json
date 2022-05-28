@@ -18,6 +18,7 @@
         "buffer": "^6.0.3",
         "dotenv": "^16.0.0",
         "mui-image": "^1.0.4",
+        "parameterize": "^1.0.0",
         "react": "^17.0.2",
         "react-burger-menu": "^3.0.6",
         "react-chartjs-2": "^4.0.1",
@@ -30,6 +31,10 @@
         "react-router-dom": "^6.2.2",
         "react-scripts": "5.0.0",
         "recharts": "^2.1.9",
+        "rehype-parse": "^8.0.4",
+        "rehype-stringify": "^9.0.3",
+        "unified": "^10.1.2",
+        "unist-util-visit": "^4.1.0",
         "web-vitals": "^2.1.4"
     },
     "scripts": {

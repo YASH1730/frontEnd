@@ -93,14 +93,13 @@ export default function Blog() {
               backgroundSize: "100% 100%",
               backgroundRepeat: "no-repeat",
             }}
-            className="banner"
+            className="Blog-banner"
           />
         </Grid>
       </Grid>
       {/* Ends Top container  */}
 
-      <br></br>
-      <br></br>
+  
 
       {/* Card Section */}
 

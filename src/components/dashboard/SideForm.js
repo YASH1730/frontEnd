@@ -594,6 +594,8 @@ const Sideform = () => {
           ...preData,
           title :SideBox.open.payload.value.title,
           card_image :SideBox.open.payload.value.card_image,
+          seo_title :SideBox.open.payload.value.seo_title,
+          seo_description :SideBox.open.payload.value.seo_description,
           card_description :SideBox.open.payload.value.card_description,
           description :SideBox.open.payload.value.description,
         });
@@ -2353,7 +2355,8 @@ const Sideform = () => {
     FD.append("description", editorRef.current.getContent());
     FD.append("title", e.target.title.value);
     FD.append("card_description", e.target.card_description.value);
-
+    FD.append("seo_title", e.target.seo_title.value);
+    FD.append("seo_description", e.target.seo_description.value);
     const res = createBlog(FD);
 
     res
@@ -2401,6 +2404,8 @@ const Sideform = () => {
 
     FD.append("description", editorRef.current.getContent());
     FD.append("title", e.target.title.value);
+    FD.append("seo_title", e.target.seo_title.value);
+    FD.append("seo_description", e.target.seo_description.value);
     FD.append("card_description", e.target.card_description.value);
 
     const res = updateBlog(FD);
@@ -5712,13 +5717,32 @@ const Sideform = () => {
                   </FeaturesPreviews>
 
                   <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="seo_title"
+                      label="SEO Title"
+                      value = {preData.seo_title}
+                    onChange = {handleChangeData}
+                    />
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="seo_description"
+                      label="SEO Description"
+                      value = {preData.seo_description}
+                    onChange = {handleChangeData}
+                    />
+
+                  <TextField
                     fullWidth
                     required
                     id="outlined-select"
                     value = {preData.card_description}
+                    onChange = {handleChangeData}
                     name="card_description"
                     label="Card Description"
-                    onChange = {handleChangeData}
 
                   />
 
@@ -5863,6 +5887,20 @@ const Sideform = () => {
                       {" "}
                     </FeaturesPreviews>
 
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="seo_title"
+                      label="SEO Title"
+                    />
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="seo_description"
+                      label="SEO Description"
+                    />
                     <TextField
                       fullWidth
                       required

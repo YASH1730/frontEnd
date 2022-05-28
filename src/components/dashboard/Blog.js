@@ -33,6 +33,8 @@ export default function Knob() {
             return {
               id: row._id,
               title: row.title,
+              seo_title : row.seo_title,
+              seo_description : row.seo_description,
               image: row.card_image,
               action: row,
             };
@@ -53,6 +55,16 @@ export default function Knob() {
     {
       field: "title",
       headerName: "Blog Title",
+      width: 200,
+    },
+    {
+      field: "seo_title",
+      headerName: "SEO Title",
+      width: 200,
+    },
+    {
+      field: "seo_description",
+      headerName: "SEO Description",
       width: 200,
     },
     {
