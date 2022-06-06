@@ -116,7 +116,7 @@ export default function Knob() {
           gap: "15px",
         }}
       >
-        <Grid xs={12} md={8.5}>
+        <Grid xs={12} md={9}>
           <TextField
             fullWidth
             autoComplete={false}
@@ -133,7 +133,7 @@ export default function Knob() {
             onChange={handleSKU}
           />
         </Grid>
-        <Grid xs={12} md={3}>
+        <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
               SideBox.setOpen({ state: true, formType: "addGallery" });
@@ -143,7 +143,7 @@ export default function Knob() {
             startIcon={<AddIcon />}
             variant="contained"
           >
-            Add Category
+            Add Image
           </Button>
         </Grid>
       </Grid>

@@ -6,7 +6,6 @@ import {
   Button,
   IconButton,Switch
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
@@ -112,7 +111,7 @@ export default function SecondaryMaterial() {
       despatchAlert.setNote({
         open : true,
         variant : 'success',
-        message : " Secndary Material Status Updated Successfully !!!"
+        message : " Secondary Material Status Updated Successfully !!!"
   
       })
     })
@@ -121,7 +120,7 @@ export default function SecondaryMaterial() {
       despatchAlert.setNote({
         open : true,
         variant : 'error',
-        message : "Somthing Went Worang !!!"
+        message : "Something Went Wrong !!!"
   
       })
     })
@@ -142,7 +141,7 @@ export default function SecondaryMaterial() {
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           filterModel={{
-            items: [{ columnField: 'category_name', operatorValue: 'contains', value: `${search}` }],
+            items: [{ columnField: 'secondaryMaterial_name', operatorValue: 'contains', value: `${search}` }],
           }}
           rows={Row}
           columns={columns}
@@ -176,19 +175,19 @@ export default function SecondaryMaterial() {
           gap: "15px",
         }}
       >
-        <Grid xs={12} md={8}>
+        <Grid xs={12} md={8.5}>
           <TextField
             fullWidth
             autoComplete={false}
             id="demo-helper-text-aligned-no-helper"
-            label="Search by category type"
+            label="Search by material name"
             type="text"
             onChange={handelSearch}
           />
         </Grid>
 
 
-        <Grid xs={12} md={3}>
+        <Grid xs={12} md={3.2}>
           <Button
             onClick={() => {
               SideBox.setOpen({ state: true, formType: "secondaryMaterial" });

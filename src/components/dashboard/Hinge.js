@@ -121,7 +121,7 @@ export default function Hinge() {
       despatchAlert.setNote({
         open : true,
         variant : 'error',
-        message : "Somthing Went Worang !!!"
+        message : "Something Went Wrong !!!"
   
       })
     })
@@ -142,7 +142,7 @@ export default function Hinge() {
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           filterModel={{
-            items: [{ columnField: 'category_name', operatorValue: 'contains', value: `${search}` }],
+            items: [{ columnField: 'hinge_name', operatorValue: 'contains', value: `${search}` }],
           }}
           rows={Row}
           columns={columns}
@@ -176,19 +176,19 @@ export default function Hinge() {
           gap: "15px",
         }}
       >
-        <Grid xs={12} md={8}>
+        <Grid xs={12} md={9}>
           <TextField
             fullWidth
             autoComplete={false}
             id="demo-helper-text-aligned-no-helper"
-            label="Search by category type"
+            label="Search by hinge name"
             type="text"
             onChange={handelSearch}
           />
         </Grid>
 
 
-        <Grid xs={12} md={3}>
+        <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
               SideBox.setOpen({ state: true, formType: "addHinge" });

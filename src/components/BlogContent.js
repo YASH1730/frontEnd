@@ -10,7 +10,7 @@ import {
   IconButton,
 } from "@mui/material";
 import ReactHtmlParser from "react-html-parser";
-import Fotter from "./Fotter";
+import Footer from "./Footer";
 
 import { Image } from 'mui-image'
 //logo
@@ -131,7 +131,7 @@ export default function BlogContent() {
         </Grid>}
 
         <Grid item xs = {12}>
-        <Fotter></Fotter>
+        <Footer></Footer>
         </Grid>
         {/* Content Box Ends */}
       </Grid>

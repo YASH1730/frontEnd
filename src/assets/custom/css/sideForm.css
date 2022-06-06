@@ -3,6 +3,7 @@
     z-index: 10 !important;
     height: 100vh;
     width: 50vw;
+    /* padding: 0 10%; */
     background-color: rgb(250, 250, 250);
     position: absolute;
     right: 0%;

@@ -160,7 +160,7 @@ export default function Knob() {
           gap: "15px",
         }}
       >
-        <Grid xs={12} md={8}>
+        <Grid xs={12} md={9}>
           <TextField
             fullWidth
             autoComplete={false}
@@ -171,7 +171,7 @@ export default function Knob() {
           />
         </Grid>
 
-        <Grid xs={12} md={3}>
+        <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
               SideBox.setOpen({ state: true, formType: "addBlog" });

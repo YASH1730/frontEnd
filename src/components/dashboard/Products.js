@@ -520,7 +520,7 @@ export default function Products() {
           gap: "15px",
         }}
       >
-        <Grid xs={12} md={2.8}>
+        <Grid xs={12} md = {9}>
           <TextField
             fullWidth
             autoComplete={false}
@@ -532,42 +532,7 @@ export default function Products() {
           />
         </Grid>
 
-        <Grid xs={12} md={2.8}>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Age</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={age}
-                label="Age"
-                onChange={handleChange}
-              >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-        </Grid>
-
-        <Grid xs={12} md={2.8}>
-          <Box sx={{ minWidth: 120 }}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Price</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={price}
-                label="Price"
-                onChange={handleChangePrice}
-              >
-                <MenuItem value={20}>Low to High</MenuItem>
-                <MenuItem value={30}>High To Low</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-        </Grid>
+ 
 
         <Grid xs={12} md={2.8}>
           <Button

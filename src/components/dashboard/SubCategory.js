@@ -1,24 +1,16 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
-  Box,
-  FormControl,
-  MenuItem,
   Typography,
   TextField,
-  InputLabel,
-  Select,
   Grid,
   Button,
   IconButton,Switch
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid } from "@mui/x-data-grid";
 import { OpenBox, Notify } from "../../App";
-import { getSubCatagories, deleteCategory, changeSubSatatus } from '../../services/service'
-import '../../assets/custom/css/category.css'
-
+import { getSubCatagories, changeSubSatatus } from '../../services/service'
 
 
 export default function SubCategory() {
@@ -199,7 +191,7 @@ export default function SubCategory() {
           gap: "15px",
         }}
       >
-        <Grid xs={12} md={8}>
+        <Grid xs={12} md={9}>
           <TextField
             fullWidth
             autoComplete={false}
@@ -211,7 +203,7 @@ export default function SubCategory() {
         </Grid>
 
 
-        <Grid xs={12} md={3}>
+        <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
               SideBox.setOpen({ state: true, formType: "subcategory" });

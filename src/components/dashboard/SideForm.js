@@ -65,7 +65,7 @@ import {
   addImage,
   uploadImage,
   createBlog,
-  updateBlog
+  updateBlog,
 } from "../../services/service.js";
 
 const thumbsContainer = {
@@ -479,7 +479,7 @@ const Sideform = () => {
     product_des: "",
     category: "",
     sub_category: "",
-    lenght: "",
+    length: "",
     breadth: "",
     selling_points: "",
     height: "",
@@ -588,16 +588,16 @@ const Sideform = () => {
           secMater: SideBox.open.payload.row.secondaryMaterial_name,
         });
         break;
-      
-        case "update_blog":
+
+      case "update_blog":
         setPreData({
           ...preData,
-          title :SideBox.open.payload.value.title,
-          card_image :SideBox.open.payload.value.card_image,
-          seo_title :SideBox.open.payload.value.seo_title,
-          seo_description :SideBox.open.payload.value.seo_description,
-          card_description :SideBox.open.payload.value.card_description,
-          description :SideBox.open.payload.value.description,
+          title: SideBox.open.payload.value.title,
+          card_image: SideBox.open.payload.value.card_image,
+          seo_title: SideBox.open.payload.value.seo_title,
+          seo_description: SideBox.open.payload.value.seo_description,
+          card_description: SideBox.open.payload.value.card_description,
+          description: SideBox.open.payload.value.description,
         });
         break;
 
@@ -800,12 +800,12 @@ const Sideform = () => {
           ...preData,
           [e.target.name]: e.target.value,
         });
+        break;
       case "update_blog":
         setPreData({
           ...preData,
           [e.target.name]: e.target.value,
         });
-
         break;
 
       default:
@@ -815,7 +815,6 @@ const Sideform = () => {
 
   // ref
   const editorRef = useRef();
-  const sellingPoints = useRef();
 
   const handleChange = (event) => {
     setCat(event.target.value);
@@ -878,7 +877,7 @@ const Sideform = () => {
     setMirrorVal(event.target.value);
   };
 
-  const hanleChangeAssembly = (event) => {
+  const handleChangeAssembly = (event) => {
     // console.log(event.target.value);
     setAssemblyVal(event.target.value);
   };
@@ -955,6 +954,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -968,7 +968,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1001,6 +1001,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1014,7 +1015,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1310,6 +1311,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1323,7 +1325,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1507,6 +1509,7 @@ const Sideform = () => {
             message: data.data.message,
           });
         } else {
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1519,7 +1522,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1552,6 +1555,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1565,7 +1569,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1597,6 +1601,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1610,7 +1615,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1640,6 +1645,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1653,7 +1659,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1685,6 +1691,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1698,7 +1705,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1726,6 +1733,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1739,7 +1747,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1768,6 +1776,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1781,7 +1790,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1808,6 +1817,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1821,7 +1831,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1850,6 +1860,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1863,7 +1874,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1890,6 +1901,8 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1903,7 +1916,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1932,6 +1945,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1945,7 +1959,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -1972,6 +1986,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -1985,7 +2000,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2013,6 +2028,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -2026,7 +2042,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2054,6 +2070,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -2067,7 +2084,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2096,6 +2113,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -2109,7 +2127,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2137,6 +2155,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -2150,7 +2169,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2178,6 +2197,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -2191,7 +2211,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2227,6 +2247,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -2240,7 +2261,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2280,6 +2301,7 @@ const Sideform = () => {
           });
         } else {
           setImages([]);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -2293,7 +2315,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2325,6 +2347,7 @@ const Sideform = () => {
         } else {
           setImages([]);
           setUrl(data.data.url);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -2338,7 +2361,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2373,6 +2396,7 @@ const Sideform = () => {
         } else {
           setImages([]);
           setUrl(data.data.url);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -2386,7 +2410,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2400,7 +2424,7 @@ const Sideform = () => {
       return FD.append("banner_image", element);
     });
 
-    FD.append("_id",SideBox.open.payload.value._id)
+    FD.append("_id", SideBox.open.payload.value._id);
 
     FD.append("description", editorRef.current.getContent());
     FD.append("title", e.target.title.value);
@@ -2424,6 +2448,7 @@ const Sideform = () => {
         } else {
           setImages([]);
           setUrl(data.data.url);
+          handleClose();
           dispatchAlert.setNote({
             open: true,
             variant: "success",
@@ -2437,7 +2462,7 @@ const Sideform = () => {
         dispatchAlert.setNote({
           open: true,
           variant: "error",
-          message: "Somthing Went Worang !!!",
+          message: "Something Went Wrong !!!",
         });
       });
   };
@@ -2453,11 +2478,16 @@ const Sideform = () => {
         <Backdrop
           sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={SideBox.open.state}
-          //   onClick={handleClose}
+          // onClick={handleClose}
         >
           <Box
             className={
               viewMode.mode === true ? "mainDarkContainer" : "mainContainer"
+            }
+            sx={
+              SideBox.open.formType === "product" || SideBox.open.formType === "update_product"
+                ? { width: "100vw !important", padding: "0 5% !important" }
+                : {}
             }
           >
             <IconButton
@@ -2501,7 +2531,7 @@ const Sideform = () => {
                       Product Images
                     </FormLabel>
                     <ProductsPreviews
-                      text={"Plese Drag and Drop the product images"}
+                      text={"Please Drag and Drop the product images"}
                     ></ProductsPreviews>
 
                     <FormLabel id="demo-radio-buttons-group-label">
@@ -3053,7 +3083,7 @@ const Sideform = () => {
                         aria-labelledby="demo-radio-buttons-group-label"
                         defaultValue="no"
                         name="assembly_required"
-                        onChange={hanleChangeAssembly}
+                        onChange={handleChangeAssembly}
                       >
                         <FormControlLabel
                           value="shipping"
@@ -3174,7 +3204,7 @@ const Sideform = () => {
                       />
                       <FormControlLabel
                         control={<Checkbox name="straight_back" />}
-                        label="Strainght Back"
+                        label="Straight Back"
                       />
                       <FormControlLabel
                         control={<Checkbox name="weaving" />}
@@ -3743,7 +3773,7 @@ const Sideform = () => {
                       id="fullWidth"
                       label="Length"
                       type="number"
-                      value={preData.lenght}
+                      value={preData.length}
                       onChange={handleChangeData}
                       InputProps={{
                         startAdornment: (
@@ -4817,7 +4847,7 @@ const Sideform = () => {
                     method="post"
                   >
                     <ImagePreviews
-                      text={"Plese Drag and Drop the Category image"}
+                      text={"Please Drag and Drop the Category image"}
                     >
                       {" "}
                     </ImagePreviews>
@@ -5637,93 +5667,92 @@ const Sideform = () => {
 
             {SideBox.open.formType === "update_blog" && (
               <Grid container p={5}>
-              <Grid item xs={12}>
-                <Typography variant="h5">
-                  Update Blog
-                  <Typography
-                    sx={{ display: "block !important" }}
-                    variant="caption"
-                  >
-                    Update your blog and necessary information from here
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Blog
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update your blog and necessary information from here
+                    </Typography>
                   </Typography>
-                </Typography>
-              </Grid>
+                </Grid>
 
-              <Grid item xs={12} mt={5}>
-                <Modal
-                  aria-labelledby="transition-modal-title"
-                  aria-describedby="transition-modal-description"
-                  open={open}
-                  onClose={() => {
-                    setOpen(false);
-                  }}
-                  closeAfterTransition
-                  BackdropComponent={Backdrop}
-                  BackdropProps={{
-                    timeout: 500,
-                  }}
-                >
-                  <Fade in={open}>
-                    <Box sx={style}>
-                      <form
-                        className="form"
-                        id="myForm"
-                        onSubmit={handleUpload}
-                        enctype="multipart/form-data"
-                        method="post"
-                      >
-                        <FormLabel id="demo-radio-buttons-group-label">
-                          Get Image Url
-                        </FormLabel>
-
-                        <ImagePreviews
-                          text={"Please Drag and Drop the Image "}
-                        >
-                          {" "}
-                        </ImagePreviews>
-
-                        <TextField
-                          fullWidth
-                          disabled
-                          id="outlined-select"
-                          label="Image URL"
-                          value={url}
-                        />
-
-                        <Button
-                          color="primary"
-                          type="submit"
-                          variant="contained"
-                        >
-                          Get Url
-                        </Button>
-                      </form>
-                    </Box>
-                  </Fade>
-                </Modal>
-
-                <form
-                  className="form"
-                  id="myForm"
-                  onSubmit={handleUpdateBlog}
-                  enctype="multipart/form-data"
-                  method="post"
-                >
-
-                  <FeaturesPreviews
-                    text={"Please Drag and Drop the Card Image "}
+                <Grid item xs={12} mt={5}>
+                  <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open}
+                    onClose={() => {
+                      setOpen(false);
+                    }}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                      timeout: 500,
+                    }}
                   >
-                    {" "}
-                  </FeaturesPreviews>
+                    <Fade in={open}>
+                      <Box sx={style}>
+                        <form
+                          className="form"
+                          id="myForm"
+                          onSubmit={handleUpload}
+                          enctype="multipart/form-data"
+                          method="post"
+                        >
+                          <FormLabel id="demo-radio-buttons-group-label">
+                            Get Image Url
+                          </FormLabel>
 
-                  <TextField
+                          <ImagePreviews
+                            text={"Please Drag and Drop the Image "}
+                          >
+                            {" "}
+                          </ImagePreviews>
+
+                          <TextField
+                            fullWidth
+                            disabled
+                            id="outlined-select"
+                            label="Image URL"
+                            value={url}
+                          />
+
+                          <Button
+                            color="primary"
+                            type="submit"
+                            variant="contained"
+                          >
+                            Get Url
+                          </Button>
+                        </form>
+                      </Box>
+                    </Fade>
+                  </Modal>
+
+                  <form
+                    className="form"
+                    id="myForm"
+                    onSubmit={handleUpdateBlog}
+                    enctype="multipart/form-data"
+                    method="post"
+                  >
+                    <FeaturesPreviews
+                      text={"Please Drag and Drop the Card Image "}
+                    >
+                      {" "}
+                    </FeaturesPreviews>
+
+                    <TextField
                       fullWidth
                       required
                       id="outlined-select"
                       name="seo_title"
                       label="SEO Title"
-                      value = {preData.seo_title}
-                    onChange = {handleChangeData}
+                      value={preData.seo_title}
+                      onChange={handleChangeData}
                     />
                     <TextField
                       fullWidth
@@ -5731,73 +5760,72 @@ const Sideform = () => {
                       id="outlined-select"
                       name="seo_description"
                       label="SEO Description"
-                      value = {preData.seo_description}
-                    onChange = {handleChangeData}
+                      value={preData.seo_description}
+                      onChange={handleChangeData}
                     />
 
-                  <TextField
-                    fullWidth
-                    required
-                    id="outlined-select"
-                    value = {preData.card_description}
-                    onChange = {handleChangeData}
-                    name="card_description"
-                    label="Card Description"
-
-                  />
-
-                  <TextField
-                    fullWidth
-                    required
-                    id="outlined-select"
-                    value = {preData.title}
-                    onChange = {handleChangeData}
-                    name="title"
-                    label="Blog Title"
-                  />
-                  {/* product description  */}
-                  {console.log(SideBox.open.payload)}
-                  <Editor
-                    apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
-                    initialValue = {`${preData.description}`}
-                    onInit={(event, editor) => (editorRef.current = editor)}
-                    init={{
-                      height: 400,
-                      menubar: true,
-                      plugins: "image code",
-                    }}
-                  />
-
-                  <div className="getLinkButton">
                     <TextField
-                      disabled
                       fullWidth
+                      required
                       id="outlined-select"
-                      label="Image URL"
-                      value={url}
+                      value={preData.card_description}
+                      onChange={handleChangeData}
+                      name="card_description"
+                      label="Card Description"
                     />
+
+                    <TextField
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      value={preData.title}
+                      onChange={handleChangeData}
+                      name="title"
+                      label="Blog Title"
+                    />
+                    {/* product description  */}
+                    {console.log(SideBox.open.payload)}
+                    <Editor
+                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                      initialValue={`${preData.description}`}
+                      onInit={(event, editor) => (editorRef.current = editor)}
+                      init={{
+                        height: 400,
+                        menubar: true,
+                        plugins: "image code",
+                      }}
+                    />
+
+                    <div className="getLinkButton">
+                      <TextField
+                        disabled
+                        fullWidth
+                        id="outlined-select"
+                        label="Image URL"
+                        value={url}
+                      />
+                      <Button
+                        color="primary"
+                        onClick={() => {
+                          setOpen(true);
+                        }}
+                        variant="contained"
+                      >
+                        Upload
+                      </Button>
+                    </div>
+                    <br></br>
                     <Button
                       color="primary"
-                      onClick={() => {
-                        setOpen(true);
-                      }}
+                      type="submit"
+                      fullWidth
                       variant="contained"
                     >
-                      Upload
+                      Update Blog
                     </Button>
-                  </div>
-                  <br></br>
-                  <Button
-                    color="primary"
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                  >
-                    Update Blog
-                  </Button>
-                </form>
+                  </form>
+                </Grid>
               </Grid>
-            </Grid>
             )}
             {/* add update blog  Ends */}
 
@@ -6456,7 +6484,7 @@ const Sideform = () => {
                       sx={{ display: "block !important" }}
                       variant="caption"
                     >
-                      Add your coupone and necessary information from here
+                      Add your coupon and necessary information from here
                     </Typography>
                   </Typography>
                 </Grid>
@@ -6540,7 +6568,7 @@ const Sideform = () => {
                     <br></br>
 
                     <Button color="primary" fullWidth variant="contained">
-                      Add Coupone
+                      Add Coupon
                     </Button>
                   </form>
                 </Grid>

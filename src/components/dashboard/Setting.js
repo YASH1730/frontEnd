@@ -53,8 +53,8 @@ export default function Setting() {
       label: "Manager",
     },
     {
-      value: "Security Gaurd",
-      label: "Security Gaurd",
+      value: "Security Guard",
+      label: "Security Guard",
     },
   ];
 

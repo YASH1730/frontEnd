@@ -72,7 +72,6 @@ const Home = () => {
 
   // context
   const viewMode = useContext(Mode);
-  const userAuth = useContext(Auth);
 
   // states
   const [anchor, setAnchor] = useState(null);
@@ -199,7 +198,7 @@ const Home = () => {
                 <Tab
                   wrapped
                   icon={<FilterListIcon />}
-                  label="Secondary Mattirial"
+                  label="Secondary Material"
                   {...a11yProps(5)}
                 />
                 <Tab

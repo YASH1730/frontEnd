@@ -12,7 +12,7 @@ import {
 
 import Aos from 'aos';
 import 'aos/dist/aos.css'
-import Footer from './Fotter'
+import Footer from './Footer'
 import {getBlogHome} from '../services/service'
 
 //css
