@@ -20,13 +20,22 @@ import logo from "../assets/img/Blog/logo.webp";
 // inner components
 import Dashboard from "./dashboard/Dashboard";
 import Products from "./dashboard/Products";
+import Category from "./dashboard/Category";
 import Customers from "./dashboard/Customers";
 import Orders from "./dashboard/Orders";
 import Coupons from "./dashboard/Coupons";
 import OurStaff from "./dashboard/OurStaff";
 import Setting from "./dashboard/Setting";
 import Banner from "./dashboard/Banner";
-
+import SubCategory from "./dashboard/SubCategory";
+import PrimaryMaterial from "./dashboard/PrimaryMaterial";
+import SecondaryMaterial from "./dashboard/SecondaryMaterial";
+import Polish from "./dashboard/Polish";
+import Hinge from "./dashboard/Hinge";
+import Fitting from "./dashboard/Fitting";
+import Knob from "./dashboard/Knob";
+import Door from "./dashboard/Door";
+import Handle from "./dashboard/Handle";
 import Admin from "./Admin";
 import Gallery from "./dashboard/Gallery";
 import Blog from "./dashboard/Blog";
@@ -37,7 +46,9 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import PersonIcon from "@mui/icons-material/Person";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import GridViewIcon from "@mui/icons-material/GridView";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import CardGiftcardOutlinedIcon from "@mui/icons-material/CardGiftcardOutlined";
@@ -47,11 +58,55 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
-
+import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+import ForestIcon from "@mui/icons-material/Forest";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
+import ConstructionIcon from "@mui/icons-material/Construction";
+import AdjustIcon from "@mui/icons-material/Adjust";
+import DoorSlidingIcon from "@mui/icons-material/DoorSliding";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import CollectionsIcon from "@mui/icons-material/Collections";
-const Home = () => {
+
+
+
+const Home = (props) => {
+  
+  const ModuleName = {
+    0 : 'dashboard',
+    1 : 'products',
+    2 : 'gallery',
+    3 : 'banner',
+    4 : 'customer',
+    5 : 'order',
+    6 : 'coupons',
+    7 : 'users',
+    8 : 'blog',
+    9 : 'admin',
+    10 : 'profile',
+  }
+  const ModuleNumber = {
+     'dashboard': 0,
+     'products': 1,
+     'gallery': 2,
+     'banner': 3,
+     'customer': 4,
+     'order': 5,
+     'coupons': 6,
+     'users': 7,
+     'blog': 8,
+     'admin': 9,
+     'profile': 10,
+  }
+  
   const [ShowTabs, setShowTabs] = useState(false);
+  
+  
+  const [value, setValue] = useState(window.location.search !== '' ? ModuleNumber[window.location.search.split('=')[1]]: 0);
+
+  const history = props.history
 
   // context
   const viewMode = useContext(Mode);
@@ -106,10 +161,15 @@ const Home = () => {
     };
   }
 
-  function VerticalTabs() {
-    const [value, setValue] = React.useState(0);
 
-    const handleChange = (event, newValue) => {
+  function VerticalTabs() {
+  
+    const handleChange = (event, newValue) => 
+  {
+    console.log(window.location.pathname)
+      history(`/adminpanel?module=${ModuleName[newValue]}`)
+      // console.log(history)
+console.log(window.location.search)
       setValue(newValue);
     };
 
@@ -281,12 +341,10 @@ const Home = () => {
                   label="Profile"
                   {...a11yProps(10)}
                 />
-                <br></br>
                 <Button
                   color="primary"
                   sx={{ margin: "auto" }}
                   startIcon={<LogoutIcon />}
-                  onClick={handleLogout}
                   variant="contained"
                 >
                   Log Out

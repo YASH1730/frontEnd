@@ -222,7 +222,7 @@ export default function Knob() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Door List</Typography>
+          <Typography variant="h6"> Blog List</Typography>
           <br></br>
           {DataGridView()}
         </Grid>

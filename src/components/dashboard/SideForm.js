@@ -815,6 +815,7 @@ const Sideform = () => {
 
   // ref
   const editorRef = useRef();
+  const sellingRef = useRef();
 
   const handleChange = (event) => {
     setCat(event.target.value);
@@ -1214,8 +1215,8 @@ const Sideform = () => {
 
     editorRef.current.getContent() &&
       FD.append("product_description", editorRef.current.getContent());
-    e.target.selling_points.value &&
-      FD.append("selling_points", e.target.selling_points.value);
+    sellingRef.current.getContent()  &&
+      FD.append("selling_points", sellingRef.current.getContent());
 
     e.target.product_title.value !== "" &&
       FD.append("product_title", e.target.product_title.value);
@@ -1425,7 +1426,7 @@ const Sideform = () => {
     FD.append("dispatch_time", e.target.dispatch_time.value);
     FD.append("product_title", e.target.product_title.value);
     FD.append("product_description", editorRef.current.getContent());
-    FD.append("selling_points", e.target.selling_points.value);
+    FD.append("selling_points", sellingRef.current.getContent());
     FD.append("SKU", e.target.SKU.value);
     FD.append("MRP", e.target.MRP.value);
     FD.append("seo_title", e.target.seo_title.value);
@@ -2500,7 +2501,7 @@ const Sideform = () => {
             {/* add Products */}
 
             {SideBox.open.formType === "product" && (
-              <Grid container p={5}>
+              <Grid container p={5} className = 'productPadding' >
                 {getSKU()}
 
                 <Grid item xs={12}>
@@ -2617,11 +2618,11 @@ const Sideform = () => {
                     {/* product description  */}
                     <Editor
                       apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
-                      initialValue="<p>Product Disceription !!!</p>"
+                     
                       onInit={(event, editor) => (editorRef.current = editor)}
                       init={{
                         height: 300,
-                        menubar: false,
+                        menubar: true,
                       }}
                     />
 
@@ -2780,7 +2781,7 @@ const Sideform = () => {
                       select
                       name="secondary_material"
                       label="Secondary Material"
-                      value={secMaterial}
+                      value={secMaterial || ''}
                       multiple
                       onChange={handleChangeSecMaterial}
                       helperText="Please select your Material ."
@@ -3275,15 +3276,15 @@ const Sideform = () => {
                     {/* selling points  */}
 
                     <br></br>
-                    <TextField
-                      fullWidth
-                      required
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Selling Points"
-                      type="text"
-                      variant="outlined"
-                      name="selling_points"
+                    <FormLabel id="demo-radio-buttons-group-label">Selling Points </FormLabel>
+                  
+                    <Editor
+                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                      onInit={(event, editor) => (sellingRef.current = editor)}
+                      init={{
+                        height: 400,
+                        menubar: true,
+                      }}
                     />
                     {/* 
                     <br></br>
@@ -4398,7 +4399,7 @@ const Sideform = () => {
                       />
                     )}
 
-                    <br></br>
+                    {/* <br></br>
 
                     <TextField
                       fullWidth
@@ -4410,8 +4411,19 @@ const Sideform = () => {
                       value={preData.selling_points}
                       variant="outlined"
                       name="selling_points"
-                    />
+                    /> */}
                     {/* selling points  */}
+                    <br></br>
+                    <FormLabel id="demo-radio-buttons-group-label">Selling Points </FormLabel>
+                  
+                    <Editor
+                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                      onInit={(event, editor) => (sellingRef.current = editor)}
+                      init={{
+                        height: 400,
+                        menubar: true,
+                      }}
+                    />
                     {/* <FormLabel id="demo-radio-buttons-group-label">Selling Points </FormLabel>
 
                     <Editor

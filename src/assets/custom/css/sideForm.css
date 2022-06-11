@@ -57,4 +57,16 @@
     .mainDarkContainer {
         width: 100vw;
     }
+
+    .productPadding{
+        padding-left : 0px ;
+        padding-right : 0px;
+        
+    }
+}
+
+.productPadding{
+    padding-left : 50px ;
+    padding-right : 50px;
+    
 }
