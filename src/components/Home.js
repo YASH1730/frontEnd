@@ -20,22 +20,13 @@ import logo from "../assets/img/Blog/logo.webp";
 // inner components
 import Dashboard from "./dashboard/Dashboard";
 import Products from "./dashboard/Products";
-import Category from "./dashboard/Category";
 import Customers from "./dashboard/Customers";
 import Orders from "./dashboard/Orders";
 import Coupons from "./dashboard/Coupons";
 import OurStaff from "./dashboard/OurStaff";
 import Setting from "./dashboard/Setting";
 import Banner from "./dashboard/Banner";
-import SubCategory from "./dashboard/SubCategory";
-import PrimaryMaterial from "./dashboard/PrimaryMaterial";
-import SecondaryMaterial from "./dashboard/SecondaryMaterial";
-import Polish from "./dashboard/Polish";
-import Hinge from "./dashboard/Hinge";
-import Fitting from "./dashboard/Fitting";
-import Knob from "./dashboard/Knob";
-import Door from "./dashboard/Door";
-import Handle from "./dashboard/Handle";
+import Draft from "./dashboard/Draft";
 import Admin from "./Admin";
 import Gallery from "./dashboard/Gallery";
 import Blog from "./dashboard/Blog";
@@ -46,9 +37,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import PersonIcon from "@mui/icons-material/Person";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
-import GridViewIcon from "@mui/icons-material/GridView";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
-import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import CardGiftcardOutlinedIcon from "@mui/icons-material/CardGiftcardOutlined";
@@ -58,17 +47,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
-import MenuOpenIcon from "@mui/icons-material/MenuOpen";
-import ForestIcon from "@mui/icons-material/Forest";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
-import InsertLinkIcon from "@mui/icons-material/InsertLink";
-import ConstructionIcon from "@mui/icons-material/Construction";
-import AdjustIcon from "@mui/icons-material/Adjust";
-import DoorSlidingIcon from "@mui/icons-material/DoorSliding";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import CollectionsIcon from "@mui/icons-material/Collections";
+import DraftsIcon from '@mui/icons-material/Drafts';
 
 
 
@@ -85,7 +66,8 @@ const Home = (props) => {
     7 : 'users',
     8 : 'blog',
     9 : 'admin',
-    10 : 'profile',
+    10 : 'draft' ,
+    11 : 'profile' ,
   }
   const ModuleNumber = {
      'dashboard': 0,
@@ -98,7 +80,8 @@ const Home = (props) => {
      'users': 7,
      'blog': 8,
      'admin': 9,
-     'profile': 10,
+     'draft': 10,
+     'profile': 11,
   }
   
   const [ShowTabs, setShowTabs] = useState(false);
@@ -335,11 +318,17 @@ console.log(window.location.search)
                   label="Admin Tab"
                   {...a11yProps(9)}
                 />
+                {localStorage.getItem('role') === 'Super Admin' && <Tab
+                  wrapped
+                  icon={<DraftsIcon />}
+                  label="Draft"
+                  {...a11yProps(10)}
+                />}
                 <Tab
                   wrapped
                   icon={<SettingsOutlinedIcon />}
                   label="Profile"
-                  {...a11yProps(10)}
+                  {...a11yProps(11)}
                 />
                 <Button
                   color="primary"
@@ -570,6 +559,10 @@ console.log(window.location.search)
         </TabPanel>
         
         <TabPanel value={value} index={10}>
+          <Draft />
+        </TabPanel>
+        
+        <TabPanel value={value} index={11}>
           <Setting />
         </TabPanel>
       </Box>

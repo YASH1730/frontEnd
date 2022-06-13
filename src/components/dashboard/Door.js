@@ -150,9 +150,7 @@ export default function Knob() {
       })
     })
 
-    
   
-
   } 
 
   const handelSearch = (e)=>{
