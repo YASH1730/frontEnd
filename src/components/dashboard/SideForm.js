@@ -17,6 +17,10 @@ import {
   Checkbox,
   FormGroup,
   Fade,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
 } from "@mui/material";
 import { Editor } from "@tinymce/tinymce-react";
 import Slide from "@mui/material/Slide";
@@ -463,6 +467,9 @@ const Sideform = () => {
   const [discount, setDiscount] = useState({ discount_limit: 0, MRP: 0 });
   const [showFabric, setShowFabric] = useState("No");
 
+  //  State for stepper
+  const [activeStep, setActiveStep] = useState(0);
+
   // states for the dynamic rendering
   const [SKU, setSKU] = useState("");
   const [category, setCategory] = useState([]);
@@ -761,11 +768,17 @@ const Sideform = () => {
     });
   }, [SideBox.open.formType, SideBox.open.state]);
 
+  const handleNextStep = () => {
+    setActiveStep(activeStep + 1);
+  };
+
+  const handleBackStep = () => {
+    setActiveStep(activeStep - 1);
+  };
+
   const handleDiscount = (e) => {
-    if(e.target.name === "discount_limit")
-    {
-      if(e.target.value > 25)
-        e.target.value = 25;
+    if (e.target.name === "discount_limit") {
+      if (e.target.value > 25) e.target.value = 25;
     }
     setDiscount({
       ...discount,
@@ -1183,7 +1196,7 @@ const Sideform = () => {
     setSilver(null);
     setTrollyVal(null);
     settrolly(null);
-    setShowFabric("No")
+    setShowFabric("No");
     document.getElementById("myForm").reset();
   };
 
@@ -1570,15 +1583,14 @@ const Sideform = () => {
       );
     });
 
-    if(showFabric === "Yes")
-{
-    fabricCatalog.map((item) => {
-      return (
-        item._id === e.target.fabric.value &&
-        FD.append("fabric_name", item.fabric_name)
-      );
-    });
-}
+    if (showFabric === "Yes") {
+      fabricCatalog.map((item) => {
+        return (
+          item._id === e.target.fabric.value &&
+          FD.append("fabric_name", item.fabric_name)
+        );
+      });
+    }
     FD.append("polish", e.target.polish.value);
     FD.append("hinge", e.target.hinge.value);
     FD.append("knob", e.target.knob.value);
@@ -2701,801 +2713,956 @@ const Sideform = () => {
                     enctype="multipart/form-data"
                     method="post"
                   >
-                    {/* <AcceptMaxFiles className="dorpContainer"/> */}
-
-                    <FormLabel id="demo-radio-buttons-group-label">
-                      Product Images
-                    </FormLabel>
-                    <ProductsPreviews
-                      text={"Please Drag and Drop the product images"}
-                    ></ProductsPreviews>
-
-                    <FormLabel id="demo-radio-buttons-group-label">
-                      Featured Images
-                    </FormLabel>
-
-                    <FeaturesPreviews
-                      text={"Please Drag and Drop featured images"}
-                    ></FeaturesPreviews>
-
-                    <FormLabel id="demo-radio-buttons-group-label">
-                      Specification Images
-                    </FormLabel>
-
-                    <ImagePreviews
-                      text={"Please Drag and Drop specification images"}
-                    ></ImagePreviews>
-
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      required
-                      label="SKU"
-                      type="text"
-                      value={SKU}
-                      disabled
-                      variant="outlined"
-                      name="SKU"
-                    />
-
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      required
-                      label="Product Title"
-                      type="text"
-                      variant="outlined"
-                      name="product_title"
-                    />
-
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      required
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="SEO Title"
-                      type="text"
-                      variant="outlined"
-                      name="seo_title"
-                    />
-
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      required
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="SEO Description"
-                      type="text"
-                      variant="outlined"
-                      name="seo_description"
-                    />
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      required
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="SEO Keyword"
-                      type="text"
-                      variant="outlined"
-                      name="seo_keyword"
-                    />
-
-                    <br></br>
-                    <FormLabel id="demo-radio-buttons-group-label">
-                      Product Description
-                    </FormLabel>
-
-                    {/* product description  */}
-                    <Editor
-                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
-                      onInit={(event, editor) => (editorRef.current = editor)}
-                      init={{
-                        height: 300,
-                        menubar: true,
-                      }}
-                    />
-
-                    <br></br>
-
-                    <TextField
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      select
-                      name="category_name"
-                      label="Category"
-                      value={cat}
-                      multiple
-                      onChange={handleChange}
-                      helperText="Please select your category"
+                    <Stepper
+                      className="stepper"
+                      activeStep={activeStep}
+                      orientation="vertical"
                     >
-                      {category.map(
-                        (option) =>
-                          option.category_status && (
-                            <MenuItem key={option._id} value={option._id}>
-                              {option.category_name}
-                            </MenuItem>
-                          )
-                      )}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
-                    <br></br>
+                      {/* // Specification */}
+                      <Step>
+                        <StepLabel>Specifications</StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              required
+                              label="SKU"
+                              type="text"
+                              value={SKU}
+                              disabled
+                              variant="outlined"
+                              name="SKU"
+                            />
 
-                    <TextField
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      select
-                      name="sub_category_name"
-                      label="Sub Category"
-                      value={subCat}
-                      multiple
-                      onChange={handleChangeSubCat}
-                      helperText="Please select your sub category"
-                    >
-                      {subCategory.map(
-                        (option) =>
-                          cat === option.category_id && (
-                            <MenuItem key={option.value} value={option._id}>
-                              {option.sub_category_name}
-                            </MenuItem>
-                          )
-                      )}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <br></br>
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Length"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Inch</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="length_main"
-                      helperText="From left to right"
-                    />
+                            <TextField
+                              fullWidth
+                              required
+                              id="outlined-select"
+                              select
+                              name="category_name"
+                              label="Category"
+                              value={cat}
+                              multiple
+                              onChange={handleChange}
+                              helperText="Please select your category"
+                            >
+                              {category.map(
+                                (option) =>
+                                  option.category_status && (
+                                    <MenuItem
+                                      key={option._id}
+                                      value={option._id}
+                                    >
+                                      {option.category_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            <br></br>
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Breadth"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Inch</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="breadth"
-                      helperText="From front to back"
-                    />
+                            <TextField
+                              fullWidth
+                              required
+                              id="outlined-select"
+                              select
+                              name="sub_category_name"
+                              label="Sub Category"
+                              value={subCat}
+                              multiple
+                              onChange={handleChangeSubCat}
+                              helperText="Please select your sub category"
+                            >
+                              {subCategory.map(
+                                (option) =>
+                                  cat === option.category_id && (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option._id}
+                                    >
+                                      {option.sub_category_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Height"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Inch</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="height"
-                      helperText="From bottom to top"
-                    />
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Length"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Inch
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="length_main"
+                              helperText="From left to right"
+                            />
 
-                    <br></br>
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Breadth"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Inch
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="breadth"
+                              helperText="From front to back"
+                            />
 
-                    <TextField
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      select
-                      name="primary_material"
-                      label="Primary Material"
-                      value={material}
-                      multiple
-                      onChange={handleChangeMaterial}
-                      helperText="Please select your Material ."
-                    >
-                      {materialCatalog.map(
-                        (option) =>
-                          option.primaryMaterial_status && (
-                            <MenuItem key={option._id} value={option._id}>
-                              {option.primaryMaterial_name}
-                            </MenuItem>
-                          )
-                      )}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Height"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Inch
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="height"
+                              helperText="From bottom to top"
+                            />
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Weight"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Kg</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="weight"
-                    />
+                            <br></br>
 
-                    <br></br>
+                            <TextField
+                              fullWidth
+                              required
+                              id="outlined-select"
+                              select
+                              name="primary_material"
+                              label="Primary Material"
+                              value={material}
+                              multiple
+                              onChange={handleChangeMaterial}
+                              helperText="Please select your Material ."
+                            >
+                              {materialCatalog.map(
+                                (option) =>
+                                  option.primaryMaterial_status && (
+                                    <MenuItem
+                                      key={option._id}
+                                      value={option._id}
+                                    >
+                                      {option.primaryMaterial_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    <TextField
-                      fullWidth
-                      id="outlined-select"
-                      select
-                      name="secondary_material"
-                      label="Secondary Material"
-                      value={secMaterial || ""}
-                      multiple
-                      onChange={handleChangeSecMaterial}
-                      helperText="Please select your Material ."
-                    >
-                      {secMaterialCatalog.map(
-                        (option) =>
-                          option.secondaryMaterial_status && (
-                            <MenuItem key={option.value} value={option._id}>
-                              {option.secondaryMaterial_name}
-                            </MenuItem>
-                          )
-                      )}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Weight"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Kg
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="weight"
+                            />
 
-                    {secMaterial && (
-                      <>
-                        <br></br>
-                        <TextField
-                          fullWidth
-                          autoComplete={false}
-                          id="fullWidth"
-                          label="Secondary Material Weight"
-                          type="number"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                Kg
-                              </InputAdornment>
-                            ),
-                          }}
-                          variant="outlined"
-                          name="secondary_material_weight"
-                        />
-                      </>
-                    )}
+                            <br></br>
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      required
-                      label="Showroom Price"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">₹</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="showroom_price"
-                    />
+                            <TextField
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="secondary_material"
+                              label="Secondary Material"
+                              value={secMaterial || ""}
+                              multiple
+                              onChange={handleChangeSecMaterial}
+                              helperText="Please select your Material ."
+                            >
+                              {secMaterialCatalog.map(
+                                (option) =>
+                                  option.secondaryMaterial_status && (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option._id}
+                                    >
+                                      {option.secondaryMaterial_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      required
-                      label="MRP"
-                      onChange={handleDiscount}
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">₹</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="MRP"
-                    />
+                            {secMaterial && (
+                              <>
+                                <br></br>
+                                <TextField
+                                  fullWidth
+                                  autoComplete={false}
+                                  id="fullWidth"
+                                  label="Secondary Material Weight"
+                                  type="number"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        Kg
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  variant="outlined"
+                                  name="secondary_material_weight"
+                                />
+                              </>
+                            )}
+                          </Box>{" "}
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 4}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* // Specification Ends*/}
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      required
-                      autoComplete={false}
-                      id="fullWidth"
-                      onChange={handleDiscount}
-                      label="Discount Limit"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">%</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="discount_limit"
-                    />
+                      {/* Images */}
+                      <Step>
+                        <StepLabel>Images</StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            {/* <AcceptMaxFiles className="dorpContainer"/> */}
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      disabled
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Selling Price"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">₹</InputAdornment>
-                        ),
-                      }}
-                      value={
-                        discount.MRP > 0 && discount.discount_limit > 0
-                          ? discount.MRP -
-                            (discount.MRP / 100) * discount.discount_limit
-                          : 0
-                      }
-                      variant="outlined"
-                      name="selling_price"
-                    />
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Product Images
+                            </FormLabel>
+                            <ProductsPreviews
+                              text={"Please Drag and Drop the product images"}
+                            ></ProductsPreviews>
 
-                    <br></br>
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Featured Images
+                            </FormLabel>
 
-                    <TextField
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      select
-                      name="dispatch_time"
-                      label="Dispatch Time"
-                      value={dispatchTime}
-                      multiple
-                      onChange={handleChangeDispatchTime}
-                      helperText="Please select your dispatch time"
-                    >
-                      {dispatchTimeCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <FeaturesPreviews
+                              text={"Please Drag and Drop featured images"}
+                            ></FeaturesPreviews>
 
-                    <br></br>
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Specification Images
+                            </FormLabel>
 
-                    <TextField
-                      fullWidth
-                      id="outlined-select"
-                      select
-                      name="polish"
-                      label="Polish"
-                      value={Polish}
-                      multiple
-                      onChange={handleChangePolish}
-                      helperText="Please select your Polish."
-                    >
-                      {polishCatalog.map(
-                        (option) =>
-                          option.polish_status && (
-                            <MenuItem key={option.value} value={option._id}>
-                              {option.polish_name}
-                            </MenuItem>
-                          )
-                      )}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <ImagePreviews
+                              text={"Please Drag and Drop specification images"}
+                            ></ImagePreviews>
+                          </Box>{" "}
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 4}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* Images End */}
 
-                    <br></br>
+                      {/* Inventory & Shipping */}
+                      <Step>
+                        <StepLabel>Inventory & Shipping</StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            <br></br>
 
-                    <TextField
-                      fullWidth
-                      id="outlined-select"
-                      select
-                      name="hinge"
-                      label="Hinge"
-                      value={Hinge}
-                      multiple
-                      onChange={handleChangeHinge}
-                      helperText="Please select your hinge."
-                    >
-                      {hingeCatalog.map(
-                        (option) =>
-                          option.hinge_status && (
-                            <MenuItem key={option.value} value={option._id}>
-                              {option.hinge_name}
-                            </MenuItem>
-                          )
-                      )}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <TextField
+                              fullWidth
+                              required
+                              id="outlined-select"
+                              select
+                              name="dispatch_time"
+                              label="Dispatch Time"
+                              value={dispatchTime}
+                              multiple
+                              onChange={handleChangeDispatchTime}
+                              helperText="Please select your dispatch time"
+                            >
+                              {dispatchTimeCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                          </Box>{" "}
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 4}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* Inventory & Shipping End */}
+                      {/* Features */}
+                      <Step>
+                        <StepLabel>Features</StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            <br></br>
 
-                    <br></br>
+                            {/* {Features} */}
 
-                    <TextField
-                      fullWidth
-                      id="outlined-select"
-                      select
-                      name="knob"
-                      label="Knob"
-                      value={Knob}
-                      multiple
-                      onChange={handleChangeKnob}
-                      helperText="Please select your fitting."
-                    >
-                      {knobCatalog.map(
-                        (option) =>
-                          option.knob_status && (
-                            <MenuItem key={option.value} value={option._id}>
-                              {option.knob_name}
-                            </MenuItem>
-                          )
-                      )}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <FormGroup>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Features
+                              </FormLabel>
+                              <FormControlLabel
+                                control={<Checkbox name="rotating_seats" />}
+                                label="Rotating Seats"
+                              />
+                              <FormControlLabel
+                                control={<Checkbox name="eatable_oil_polish" />}
+                                label="Eatable Oil Polished"
+                              />
+                              <FormControlLabel
+                                control={<Checkbox name="no_chemical" />}
+                                label="No Chemical Used"
+                              />
+                              <FormControlLabel
+                                control={<Checkbox name="lean_back" />}
+                                label="Lean Back"
+                              />
+                              <FormControlLabel
+                                control={<Checkbox name="straight_back" />}
+                                label="Straight Back"
+                              />
+                              <FormControlLabel
+                                control={<Checkbox name="weaving" />}
+                                label="Weaving"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox name="not_suitable_for_Micro_Dish" />
+                                }
+                                label="Not Suitable For Microwave/Dishwasher"
+                              />
+                              <FormControlLabel
+                                control={<Checkbox name="tilt_top" />}
+                                label="Tilt Top"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox name="inside_compartments" />
+                                }
+                                label="Inside Compartments"
+                              />
+                              <FormControlLabel
+                                control={<Checkbox name="stackable" />}
+                                label="Stackable"
+                              />
+                              <FormControlLabel
+                                control={<Checkbox name="knife" />}
+                                label="Knife Friendly Surface"
+                              />
+                              <FormControlLabel
+                                control={<Checkbox name="wall_hanging" />}
+                                label="Wall Hanging"
+                              />
+                            </FormGroup>
+                          </Box>{" "}
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 4}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* Features ends */}
+                      {/* Miscellaneous */}
+                      <Step>
+                        <StepLabel>Miscellaneous</StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            <br></br>
 
-                    <br></br>
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Silver
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                onChange={handleChangeSilver}
+                                name="silver"
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
 
-                    <TextField
-                      fullWidth
-                      id="outlined-select"
-                      select
-                      name="door"
-                      label="Door"
-                      value={door}
-                      multiple
-                      onChange={handleChangeDoor}
-                      helperText="Please select your fitting."
-                    >
-                      {doorCatalog.map(
-                        (option) =>
-                          option.door_status && (
-                            <MenuItem key={option.value} value={option._id}>
-                              {option.door_name}
-                            </MenuItem>
-                          )
-                      )}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            {silver === "yes" && (
+                              <TextField
+                                fullWidth
+                                autoComplete={false}
+                                id="fullWidth"
+                                label="Sliver Weight"
+                                type="text"
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      Gram
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                variant="outlined"
+                                name="silver_weight"
+                              />
+                            )}
+                            <br></br>
 
-                    <br></br>
+                            <TextField
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="polish"
+                              label="Polish"
+                              value={Polish}
+                              multiple
+                              onChange={handleChangePolish}
+                              helperText="Please select your Polish."
+                            >
+                              {polishCatalog.map(
+                                (option) =>
+                                  option.polish_status && (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option._id}
+                                    >
+                                      {option.polish_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    <TextField
-                      fullWidth
-                      id="outlined-select"
-                      select
-                      name="handle"
-                      label="Handle"
-                      value={handle}
-                      multiple
-                      onChange={handleChangeHandle}
-                      helperText="Please select your fitting."
-                    >
-                      {handleCatalog.map(
-                        (option) =>
-                          option.handle_status && (
-                            <MenuItem key={option.value} value={option._id}>
-                              {option.handle_name}
-                            </MenuItem>
-                          )
-                      )}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <br></br>
 
-                    <br></br>
+                            <TextField
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="hinge"
+                              label="Hinge"
+                              value={Hinge}
+                              multiple
+                              onChange={handleChangeHinge}
+                              helperText="Please select your hinge."
+                            >
+                              {hingeCatalog.map(
+                                (option) =>
+                                  option.hinge_status && (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option._id}
+                                    >
+                                      {option.hinge_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    <TextField
-                      fullWidth
-                      id="outlined-select"
-                      select
-                      name="weight_capacity"
-                      label="Weight Capacity"
-                      value={weightCap}
-                      multiple
-                      onChange={handleChangeWeightCap}
-                      helperText="Please select your fitting."
-                    >
-                      {weightCapCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <br></br>
 
-                    {/* <br></br>
-                    <FormControl>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        Wall Hanging
-                      </FormLabel>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="no"
-                        name="wall_hanging"
-                      >
-                        <FormControlLabel
-                          value="yes"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="no"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl> */}
+                            <TextField
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="knob"
+                              label="Knob"
+                              value={Knob}
+                              multiple
+                              onChange={handleChangeKnob}
+                              helperText="Please select your fitting."
+                            >
+                              {knobCatalog.map(
+                                (option) =>
+                                  option.knob_status && (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option._id}
+                                    >
+                                      {option.knob_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    <br></br>
+                            <br></br>
 
-                    <FormControl>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        Assembly Required
-                      </FormLabel>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="no"
-                        name="assembly_required"
-                        onChange={handleChangeAssembly}
-                      >
-                        <FormControlLabel
-                          value="shipping"
-                          control={<Radio />}
-                          label="Shipping In Part"
-                        />
-                        <FormControlLabel
-                          value="yes"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="no"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
+                            <TextField
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="door"
+                              label="Door"
+                              value={door}
+                              multiple
+                              onChange={handleChangeDoor}
+                              helperText="Please select your fitting."
+                            >
+                              {doorCatalog.map(
+                                (option) =>
+                                  option.door_status && (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option._id}
+                                    >
+                                      {option.door_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    {assemblyVal === "shipping" && (
-                      <>
-                        <br></br>
-                        <TextField
-                          fullWidth
-                          required
-                          autoComplete={false}
-                          id="fullWidth"
-                          label="Assemble Part"
-                          type="number"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                No. of parts
-                              </InputAdornment>
-                            ),
-                          }}
-                          variant="outlined"
-                          name="assembly_part"
-                        />
-                      </>
-                    )}
-                    {assemblyVal === "yes" && (
-                      <>
-                        <br></br>
-                        <TextField
-                          fullWidth
-                          required
-                          id="outlined-select"
-                          select
-                          name="legs"
-                          label="Table Legs"
-                          value={leg}
-                          multiple
-                          onChange={handleChangeLeg}
-                          helperText="Please select your leg "
-                        >
-                          {legCatalog.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                          <MenuItem key={"none"} value={undefined}>
-                            {"None"}
-                          </MenuItem>
-                        </TextField>
-                      </>
-                    )}
+                            <br></br>
 
-                    <br></br>
+                            <TextField
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="handle"
+                              label="Handle"
+                              value={handle}
+                              multiple
+                              onChange={handleChangeHandle}
+                              helperText="Please select your fitting."
+                            >
+                              {handleCatalog.map(
+                                (option) =>
+                                  option.handle_status && (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option._id}
+                                    >
+                                      {option.handle_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    <TextField
-                      fullWidth
-                      id="outlined-select"
-                      select
-                      name="fitting"
-                      label="Fitting"
-                      value={fitting}
-                      multiple
-                      onChange={handleChangeFitting}
-                      helperText="Please select your fitting."
-                    >
-                      {fittingCatalog.map(
-                        (option) =>
-                          option.fitting_status && (
-                            <MenuItem key={option.value} value={option._id}>
-                              {option.fitting_name}
-                            </MenuItem>
-                          )
-                      )}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <br></br>
 
-                    <br></br>
+                            <TextField
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="weight_capacity"
+                              label="Weight Capacity"
+                              value={weightCap}
+                              multiple
+                              onChange={handleChangeWeightCap}
+                              helperText="Please select your fitting."
+                            >
+                              {weightCapCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    {/* {Features} */}
+                            <br></br>
 
-                    <FormGroup>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        Features
-                      </FormLabel>
-                      <FormControlLabel
-                        control={<Checkbox name="rotating_seats" />}
-                        label="Rotating Seats"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox name="eatable_oil_polish" />}
-                        label="Eatable Oil Polished"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox name="no_chemical" />}
-                        label="No Chemical Used"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox name="lean_back" />}
-                        label="Lean Back"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox name="straight_back" />}
-                        label="Straight Back"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox name="weaving" />}
-                        label="Weaving"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox name="not_suitable_for_Micro_Dish" />
-                        }
-                        label="Not Suitable For Microwave/Dishwasher"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox name="tilt_top" />}
-                        label="Tilt Top"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox name="inside_compartments" />}
-                        label="Inside Compartments"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox name="stackable" />}
-                        label="Stackable"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox name="knife" />}
-                        label="Knife Friendly Surface"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox name="wall_hanging" />}
-                        label="Wall Hanging"
-                      />
-                    </FormGroup>
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Assembly Required
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                defaultValue="no"
+                                name="assembly_required"
+                                onChange={handleChangeAssembly}
+                              >
+                                <FormControlLabel
+                                  value="shipping"
+                                  control={<Radio />}
+                                  label="Shipping In Part"
+                                />
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
 
-                    <br></br>
+                            {assemblyVal === "shipping" && (
+                              <>
+                                <br></br>
+                                <TextField
+                                  fullWidth
+                                  required
+                                  autoComplete={false}
+                                  id="fullWidth"
+                                  label="Assemble Part"
+                                  type="number"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        No. of parts
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  variant="outlined"
+                                  name="assembly_part"
+                                />
+                              </>
+                            )}
+                            {assemblyVal === "yes" && (
+                              <>
+                                <br></br>
+                                <TextField
+                                  fullWidth
+                                  required
+                                  id="outlined-select"
+                                  select
+                                  name="legs"
+                                  label="Table Legs"
+                                  value={leg}
+                                  multiple
+                                  onChange={handleChangeLeg}
+                                  helperText="Please select your leg "
+                                >
+                                  {legCatalog.map((option) => (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </MenuItem>
+                                  ))}
+                                  <MenuItem key={"none"} value={undefined}>
+                                    {"None"}
+                                  </MenuItem>
+                                </TextField>
+                              </>
+                            )}
 
-                    <FormControl>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        Silver
-                      </FormLabel>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        onChange={handleChangeSilver}
-                        name="silver"
-                      >
-                        <FormControlLabel
-                          value="yes"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="no"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
+                            <br></br>
 
-                    {silver === "yes" && (
-                      <TextField
-                        fullWidth
-                        autoComplete={false}
-                        id="fullWidth"
-                        label="Sliver Weight"
-                        type="text"
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              Gram
-                            </InputAdornment>
-                          ),
-                        }}
-                        variant="outlined"
-                        name="silver_weight"
-                      />
-                    )}
+                            <TextField
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="fitting"
+                              label="Fitting"
+                              value={fitting}
+                              multiple
+                              onChange={handleChangeFitting}
+                              helperText="Please select your fitting."
+                            >
+                              {fittingCatalog.map(
+                                (option) =>
+                                  option.fitting_status && (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option._id}
+                                    >
+                                      {option.fitting_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    {/* selling points  */}
+                            {/* selling points  */}
 
-                    <br></br>
-                    <FormLabel id="demo-radio-buttons-group-label">
-                      Selling Points{" "}
-                    </FormLabel>
+                            <br></br>
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Selling Points{" "}
+                            </FormLabel>
 
-                    <Editor
-                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
-                      onInit={(event, editor) => (sellingRef.current = editor)}
-                      init={{
-                        height: 400,
-                        menubar: true,
-                      }}
-                    />
-                    {/* 
+                            <Editor
+                              apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                              onInit={(event, editor) =>
+                                (sellingRef.current = editor)
+                              }
+                              init={{
+                                height: 400,
+                                menubar: true,
+                              }}
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              required
+                              label="Product Title"
+                              type="text"
+                              variant="outlined"
+                              name="product_title"
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              required
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="SEO Title"
+                              type="text"
+                              variant="outlined"
+                              name="seo_title"
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              required
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="SEO Description"
+                              type="text"
+                              variant="outlined"
+                              name="seo_description"
+                            />
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              required
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="SEO Keyword"
+                              type="text"
+                              variant="outlined"
+                              name="seo_keyword"
+                            />
+
+                            <br></br>
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Product Description
+                            </FormLabel>
+
+                            {/* product description  */}
+                            <Editor
+                              apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                              onInit={(event, editor) =>
+                                (editorRef.current = editor)
+                              }
+                              init={{
+                                height: 300,
+                                menubar: true,
+                              }}
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              required
+                              label="Showroom Price"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    ₹
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="showroom_price"
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              required
+                              label="MRP"
+                              onChange={handleDiscount}
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    ₹
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="MRP"
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              required
+                              autoComplete={false}
+                              id="fullWidth"
+                              onChange={handleDiscount}
+                              label="Discount Limit"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    %
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="discount_limit"
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              disabled
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Selling Price"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    ₹
+                                  </InputAdornment>
+                                ),
+                              }}
+                              value={
+                                discount.MRP > 0 && discount.discount_limit > 0
+                                  ? discount.MRP -
+                                    (discount.MRP / 100) *
+                                      discount.discount_limit
+                                  : 0
+                              }
+                              variant="outlined"
+                              name="selling_price"
+                            />
+
+                            {/* 
                     <br></br>
                     <FormLabel id="demo-radio-buttons-group-label">Selling Points </FormLabel>
 
@@ -3511,332 +3678,373 @@ const Sideform = () => {
 
                     /> */}
 
-                    <br></br>
+                            <br></br>
 
-                    <FormControl>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        Mirror
-                      </FormLabel>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue="no"
-                        name="mirror"
-                        onChange={handleChangeMirror}
-                      >
-                        <FormControlLabel
-                          value="yes"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="no"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Mirror
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                defaultValue="no"
+                                name="mirror"
+                                onChange={handleChangeMirror}
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
 
-                    {mirrorVal !== "no" && (
-                      <>
-                        <br></br>
-                        <TextField
-                          fullWidth
-                          autoComplete={false}
-                          id="fullWidth"
-                          label="Mirror Lenth"
-                          type="text"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                Inch
-                              </InputAdornment>
-                            ),
-                          }}
-                          variant="outlined"
-                          name="mirror_length"
-                        />
+                            {mirrorVal !== "no" && (
+                              <>
+                                <br></br>
+                                <TextField
+                                  fullWidth
+                                  autoComplete={false}
+                                  id="fullWidth"
+                                  label="Mirror Lenth"
+                                  type="text"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        Inch
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  variant="outlined"
+                                  name="mirror_length"
+                                />
 
-                        <br></br>
-                        <TextField
-                          fullWidth
-                          autoComplete={false}
-                          id="fullWidth"
-                          label="Mirror Width"
-                          type="text"
-                          InputProps={{
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                Inch
-                              </InputAdornment>
-                            ),
-                          }}
-                          variant="outlined"
-                          name="mirror_width"
-                        />
-                      </>
-                    )}
-
-                    <br></br>
-
-                    <FormControl>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        Joints ((Useful in products where info about joints are
-                        shown))
-                      </FormLabel>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        name="joints"
-                      >
-                        <FormControlLabel
-                          value="single"
-                          control={<Radio />}
-                          label="Single"
-                        />
-                        <FormControlLabel
-                          value="multi"
-                          control={<Radio />}
-                          label="Multiple"
-                        />
-                      </RadioGroup>
-                    </FormControl>
-
-                    <br></br>
-
-                    <FormControl>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        Upholstery
-                      </FormLabel>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        onChange={(e) => {
-                          setShowFabric(e.target.value);
-                        }}
-                        name="upholstery"
-                      >
-                        <FormControlLabel
-                          value="Yes"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="No"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-
-                      {showFabric === "Yes" && (
-                        <>
-                          <br></br>
-                          <TextField
-                            fullWidth
-                            id="outlined-select"
-                            select
-                            name="fabric"
-                            label="Fabric"
-                            value={fabric}
-                            multiple
-                            onChange={handleChangeFabric}
-                            helperText="Please select your fabric."
-                          >
-                            {fabricCatalog.map(
-                              (option) =>
-                                option.fabric_status && (
-                                  <MenuItem
-                                    key={option.value}
-                                    value={option._id}
-                                  >
-                                    {option.fabric_name}
-                                  </MenuItem>
-                                )
+                                <br></br>
+                                <TextField
+                                  fullWidth
+                                  autoComplete={false}
+                                  id="fullWidth"
+                                  label="Mirror Width"
+                                  type="text"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        Inch
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  variant="outlined"
+                                  name="mirror_width"
+                                />
+                              </>
                             )}
-                            <MenuItem key={"none"} value={undefined}>
-                              {"None"}
-                            </MenuItem>
-                          </TextField>{" "}
-                        </>
-                      )}
-                    </FormControl>
 
-                    <br></br>
+                            <br></br>
 
-                    <TextField
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      select
-                      name="tax_rate"
-                      label="Tax Rate"
-                      value={taxRate}
-                      multiple
-                      onChange={handleChangeTaxRate}
-                      helperText="Please select your tax rate."
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">%</InputAdornment>
-                        ),
-                      }}
-                    >
-                      {taxRateCatalog.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                      <MenuItem key={"none"} value={undefined}>
-                        {"None"}
-                      </MenuItem>
-                    </TextField>
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Joints ((Useful in products where info about
+                                joints are shown))
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="joints"
+                              >
+                                <FormControlLabel
+                                  value="single"
+                                  control={<Radio />}
+                                  label="Single"
+                                />
+                                <FormControlLabel
+                                  value="multi"
+                                  control={<Radio />}
+                                  label="Multiple"
+                                />
+                              </RadioGroup>
+                            </FormControl>
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Seating Size Width"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Inch</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="seating_size_width"
-                    />
+                            <br></br>
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Seating Size Width Depth"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Inch</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="seating_size_depth"
-                    />
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Upholstery
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                onChange={(e) => {
+                                  setShowFabric(e.target.value);
+                                }}
+                                name="upholstery"
+                              >
+                                <FormControlLabel
+                                  value="Yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="No"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Seating Size Height"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Inch</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="seating_size_height"
-                    />
+                              {showFabric === "Yes" && (
+                                <>
+                                  <br></br>
+                                  <TextField
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="fabric"
+                                    label="Fabric"
+                                    value={fabric}
+                                    multiple
+                                    onChange={handleChangeFabric}
+                                    helperText="Please select your fabric."
+                                  >
+                                    {fabricCatalog.map(
+                                      (option) =>
+                                        option.fabric_status && (
+                                          <MenuItem
+                                            key={option.value}
+                                            value={option._id}
+                                          >
+                                            {option.fabric_name}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value={undefined}>
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>{" "}
+                                </>
+                              )}
+                            </FormControl>
 
-                    <br></br>
+                            <br></br>
 
-                    <FormControl>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        Wheel
-                      </FormLabel>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        name="wheel"
-                      >
-                        <FormControlLabel
-                          value="yes"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="no"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
+                            <TextField
+                              fullWidth
+                              required
+                              id="outlined-select"
+                              select
+                              name="tax_rate"
+                              label="Tax Rate"
+                              value={taxRate}
+                              multiple
+                              onChange={handleChangeTaxRate}
+                              helperText="Please select your tax rate."
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    %
+                                  </InputAdornment>
+                                ),
+                              }}
+                            >
+                              {taxRateCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
 
-                    <br></br>
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Seating Size Width"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Inch
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="seating_size_width"
+                            />
 
-                    <FormControl>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        Trolley
-                      </FormLabel>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        onChange={handleChangeTrolly}
-                        name="trolley"
-                        // defaultValue={trolley}
-                      >
-                        <FormControlLabel
-                          value="yes"
-                          control={<Radio />}
-                          label="Yes"
-                        />
-                        <FormControlLabel
-                          value="no"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Seating Size Width Depth"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Inch
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="seating_size_depth"
+                            />
 
-                    {trolly === "yes" && (
-                      <>
-                        <br></br>
-                        <TextField
-                          fullWidth
-                          id="outlined-select"
-                          select
-                          name="trolley_material"
-                          label="Trolly Material"
-                          value={trollyVal}
-                          multiple
-                          onChange={handleChangeTrollyVal}
-                          helperText="Please select your Trolly Matterial "
-                        >
-                          {trollyMaterial.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                      </>
-                    )}
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Seating Size Height"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Inch
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="seating_size_height"
+                            />
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Top Size"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Inch</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="top_size"
-                    />
+                            <br></br>
 
-                    <br></br>
-                    <TextField
-                      fullWidth
-                      autoComplete={false}
-                      id="fullWidth"
-                      label="Dial Size (Only Applicable on Clock And Clock Containing Items )"
-                      type="number"
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">Inch</InputAdornment>
-                        ),
-                      }}
-                      variant="outlined"
-                      name="dial_size"
-                    />
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Wheel
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="wheel"
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+
+                            <br></br>
+
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Trolley
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                onChange={handleChangeTrolly}
+                                name="trolley"
+                                // defaultValue={trolley}
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+
+                            {trolly === "yes" && (
+                              <>
+                                <br></br>
+                                <TextField
+                                  fullWidth
+                                  id="outlined-select"
+                                  select
+                                  name="trolley_material"
+                                  label="Trolly Material"
+                                  value={trollyVal}
+                                  multiple
+                                  onChange={handleChangeTrollyVal}
+                                  helperText="Please select your Trolly Matterial "
+                                >
+                                  {trollyMaterial.map((option) => (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                              </>
+                            )}
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Top Size"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Inch
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="top_size"
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Dial Size (Only Applicable on Clock And Clock Containing Items )"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Inch
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="dial_size"
+                            />
+                          </Box>{" "}
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 4}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* Miscellaneous ends */}
+                    </Stepper>
 
                     <br></br>
 
