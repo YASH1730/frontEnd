@@ -484,8 +484,67 @@ const Sideform = () => {
   const [handleCatalog, setHandleCatalog] = useState([]);
   const [fabricCatalog, setFabricCatalog] = useState([]);
 
+  // ref
+  const editorRef = useRef();
+  const sellingRef = useRef();
   // pres data
   const [preData, setPreData] = useState({
+    product_title: "",
+    seo_title: "",
+    seo_des: "",
+    seo_keyword: "",
+    product_des: "",
+    category: "",
+    sub_category: "",
+    length: "",
+    breadth: "",
+    selling_points: "",
+    height: "",
+    priMater: "",
+    priMater_weight: "",
+    secMater: "",
+    secMater_weight: "",
+    selling_price: "",
+    mrp: "",
+    discount_cap: "",
+    dispatch_time: "",
+    polish: "",
+    hinge: "",
+    knob: "",
+    handle: "",
+    door: "",
+    wight_cap: "",
+    wall_hanging: "",
+    assembly_required: "",
+    assembly_leg: "",
+    assembly_parts: "",
+    fitting: "",
+    rotating: "",
+    eatable: "",
+    no_chemical: "",
+    straight_back: "",
+    lean_back: "",
+    weaving: "",
+    not_micro_dish: "",
+    tilt_top: "",
+    inside_comp: "",
+    stackable: "",
+    silver: "",
+    selling_point: "",
+    mirror: "",
+    joints: "",
+    tax_rate: "",
+    seat_width: "",
+    seat_depth: "",
+    seat_height: "",
+    wheel: "",
+    trolly: "",
+    trolly_mater: "",
+    top_size: "",
+    dial_size: "",
+  });
+  // pres data
+  const [changeData, setData] = useState({
     product_title: "",
     seo_title: "",
     seo_des: "",
@@ -786,6 +845,7 @@ const Sideform = () => {
     });
   };
 
+  // for update
   const handleChangeData = (e) => {
     switch (SideBox.open.formType) {
       case "update_category":
@@ -866,11 +926,18 @@ const Sideform = () => {
     }
   };
 
-  // ref
-  const editorRef = useRef();
-  const sellingRef = useRef();
+  //  for product felids
+  const handleProductFelids = (e) => {
+    console.log(e.target.name);
+    setData({
+      ...changeData,
+      [e.target.name]: e.target.value,
+    });
+    console.log(changeData);
+  };
 
   const handleChange = (event) => {
+    console.log(event.target.name);
     setCat(event.target.value);
   };
   const handleChangeSubCat = (event) => {
@@ -2665,7 +2732,6 @@ const Sideform = () => {
         <Backdrop
           sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={SideBox.open.state}
-          // onClick={handleClose}
         >
           <Box
             className={
@@ -2745,9 +2811,9 @@ const Sideform = () => {
                               select
                               name="category_name"
                               label="Category"
-                              value={cat}
+                              value={changeData.category_name}
                               multiple
-                              onChange={handleChange}
+                              onChange={handleProductFelids}
                               helperText="Please select your category"
                             >
                               {category.map(
@@ -2774,9 +2840,9 @@ const Sideform = () => {
                               select
                               name="sub_category_name"
                               label="Sub Category"
-                              value={subCat}
                               multiple
-                              onChange={handleChangeSubCat}
+                              value={changeData.sub_category_name}
+                              onChange={handleProductFelids}
                               helperText="Please select your sub category"
                             >
                               {subCategory.map(
@@ -2802,6 +2868,8 @@ const Sideform = () => {
                               id="fullWidth"
                               label="Length"
                               type="number"
+                              value={changeData.length_main}
+                              onChange={handleProductFelids}
                               InputProps={{
                                 startAdornment: (
                                   <InputAdornment position="start">
@@ -2830,6 +2898,8 @@ const Sideform = () => {
                               }}
                               variant="outlined"
                               name="breadth"
+                              value={changeData.breadth}
+                              onChange={handleProductFelids}
                               helperText="From front to back"
                             />
 
@@ -2849,6 +2919,8 @@ const Sideform = () => {
                               }}
                               variant="outlined"
                               name="height"
+                              value={changeData.height}
+                              onChange={handleProductFelids}
                               helperText="From bottom to top"
                             />
 
@@ -2861,9 +2933,9 @@ const Sideform = () => {
                               select
                               name="primary_material"
                               label="Primary Material"
-                              value={material}
                               multiple
-                              onChange={handleChangeMaterial}
+                              value={changeData.primary_material}
+                              onChange={handleProductFelids}
                               helperText="Please select your Material ."
                             >
                               {materialCatalog.map(
@@ -2898,9 +2970,11 @@ const Sideform = () => {
                               }}
                               variant="outlined"
                               name="weight"
+                              value={changeData.weight}
+                              onChange={handleProductFelids}
                             />
 
-                            <br></br>
+                            {/* <br></br>
 
                             <TextField
                               fullWidth
@@ -2949,7 +3023,7 @@ const Sideform = () => {
                                   name="secondary_material_weight"
                                 />
                               </>
-                            )}
+                            )} */}
                           </Box>{" "}
                           <Box className="stepAction">
                             <Button
@@ -5492,26 +5566,6 @@ const Sideform = () => {
                       />
                     </FormGroup>
 
-                    {/* <br></br>
-
-                    <TextField
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      select
-                      name='category_sub_name'
-                      label="Sub Category"
-                      value={subCat}
-                      multiple
-                      onChange={handleChangeSubCat}
-                      helperText="Please select your sub category"
-                    >
-                      {subCategory.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField> */}
                     <br></br>
 
                     <Button
