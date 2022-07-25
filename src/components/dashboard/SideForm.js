@@ -926,13 +926,34 @@ const Sideform = () => {
     }
   };
 
+  const feature = [
+    "rotating_seats",
+    "eatable_oil_polish",
+    "no_chemical",
+    "lean_back",
+    "straight_back",
+    "weaving",
+    "not_suitable_for_Micro_Dish",
+    "tilt_top",
+    "inside_compartments",
+    "stackable",
+    "knife",
+    "wall_hanging",
+  ];
+
   //  for product felids
   const handleProductFelids = (e) => {
-    console.log(e.target.name);
-    setData({
-      ...changeData,
-      [e.target.name]: e.target.value,
-    });
+    if (feature.includes(e.target.name)) {
+      setData({
+        ...changeData,
+        [e.target.name]: e.target.checked,
+      });
+    } else {
+      setData({
+        ...changeData,
+        [e.target.name]: e.target.value,
+      });
+    }
     console.log(changeData);
   };
 
@@ -945,9 +966,6 @@ const Sideform = () => {
   };
   const handleChangeTrollyVal = (event) => {
     setTrollyVal(event.target.value);
-  };
-  const handleChangeTrolly = (event) => {
-    settrolly(event.target.value);
   };
 
   const handleChangeDispatchTime = (event) => {
@@ -1327,243 +1345,243 @@ const Sideform = () => {
   };
 
   // function for handling Update Products category
-  const handleUpdateProduct = (e) => {
-    const FD = new FormData();
+  // const handleUpdateProduct = (e) => {
+  //   const FD = new FormData();
 
-    e.preventDefault();
+  //   e.preventDefault();
 
-    FD.append("_id", SideBox.open.payload.row.action._id);
+  //   FD.append("_id", SideBox.open.payload.row.action._id);
 
-    // console.log(SideBox.open.payload.row.action);
+  //   // console.log(SideBox.open.payload.row.action);
 
-    FD.append("SKU", e.target.SKU.value);
+  //   FD.append("SKU", e.target.SKU.value);
 
-    featured.map((element) => {
-      return FD.append("featured_image", element);
-    });
-    Image.map((element) => {
-      return FD.append("specification_image", element);
-    });
+  //   featured.map((element) => {
+  //     return FD.append("featured_image", element);
+  //   });
+  //   Image.map((element) => {
+  //     return FD.append("specification_image", element);
+  //   });
 
-    materialCatalog.map((item) => {
-      return (
-        item._id === e.target.primary_material.value &&
-        FD.append("primary_material_name", item.primaryMaterial_name)
-      );
-    });
-    secMaterialCatalog.map((item) => {
-      return (
-        item._id === e.target.secondary_material.value &&
-        FD.append("secondary_material_name", item.secondaryMaterial_name)
-      );
-    });
+  //   materialCatalog.map((item) => {
+  //     return (
+  //       item._id === e.target.primary_material.value &&
+  //       FD.append("primary_material_name", item.primaryMaterial_name)
+  //     );
+  //   });
+  //   secMaterialCatalog.map((item) => {
+  //     return (
+  //       item._id === e.target.secondary_material.value &&
+  //       FD.append("secondary_material_name", item.secondaryMaterial_name)
+  //     );
+  //   });
 
-    featured.map((element) => {
-      return FD.append("featured_image", element);
-    });
+  //   featured.map((element) => {
+  //     return FD.append("featured_image", element);
+  //   });
 
-    category.map((item) => {
-      return (
-        item._id === e.target.category_name.value &&
-        FD.append("category_name", item.category_name)
-      );
-    });
+  //   category.map((item) => {
+  //     return (
+  //       item._id === e.target.category_name.value &&
+  //       FD.append("category_name", item.category_name)
+  //     );
+  //   });
 
-    subCategory.map((item) => {
-      return (
-        item._id === e.target.sub_category_name.value &&
-        FD.append("sub_category_name", item.sub_category_name)
-      );
-    });
+  //   subCategory.map((item) => {
+  //     return (
+  //       item._id === e.target.sub_category_name.value &&
+  //       FD.append("sub_category_name", item.sub_category_name)
+  //     );
+  //   });
 
-    polishCatalog.map((item) => {
-      return (
-        item._id === e.target.polish.value &&
-        FD.append("polish_name", item.polish_name)
-      );
-    });
-    hingeCatalog.map((item) => {
-      return (
-        item._id === e.target.hinge.value &&
-        FD.append("hinge_name", item.hinge_name)
-      );
-    });
-    fittingCatalog.map((item) => {
-      return (
-        item._id === e.target.fitting.value &&
-        FD.append("fitting_name", item.fitting_name)
-      );
-    });
-    knobCatalog.map((item) => {
-      return (
-        item._id === e.target.knob.value &&
-        FD.append("knob_name", item.knob_name)
-      );
-    });
-    doorCatalog.map((item) => {
-      return (
-        item._id === e.target.door.value &&
-        FD.append("door_name", item.door_name)
-      );
-    });
-    handleCatalog.map((item) => {
-      return (
-        item._id === e.target.handle.value &&
-        FD.append("handle_name", item.handle_name)
-      );
-    });
+  //   polishCatalog.map((item) => {
+  //     return (
+  //       item._id === e.target.polish.value &&
+  //       FD.append("polish_name", item.polish_name)
+  //     );
+  //   });
+  //   hingeCatalog.map((item) => {
+  //     return (
+  //       item._id === e.target.hinge.value &&
+  //       FD.append("hinge_name", item.hinge_name)
+  //     );
+  //   });
+  //   fittingCatalog.map((item) => {
+  //     return (
+  //       item._id === e.target.fitting.value &&
+  //       FD.append("fitting_name", item.fitting_name)
+  //     );
+  //   });
+  //   knobCatalog.map((item) => {
+  //     return (
+  //       item._id === e.target.knob.value &&
+  //       FD.append("knob_name", item.knob_name)
+  //     );
+  //   });
+  //   doorCatalog.map((item) => {
+  //     return (
+  //       item._id === e.target.door.value &&
+  //       FD.append("door_name", item.door_name)
+  //     );
+  //   });
+  //   handleCatalog.map((item) => {
+  //     return (
+  //       item._id === e.target.handle.value &&
+  //       FD.append("handle_name", item.handle_name)
+  //     );
+  //   });
 
-    e.target.upholstery.value === "Yes"
-      ? fabricCatalog.map((item) => {
-          return (
-            item._id === e.target.fabric.value &&
-            FD.append("fabric_name", item.fabric_name)
-          );
-        })
-      : FD.append("fabric_name", "");
+  //   e.target.upholstery.value === "Yes"
+  //     ? fabricCatalog.map((item) => {
+  //         return (
+  //           item._id === e.target.fabric.value &&
+  //           FD.append("fabric_name", item.fabric_name)
+  //         );
+  //       })
+  //     : FD.append("fabric_name", "");
 
-    // DROPDOWNs
-    e.target.dispatch_time.value !== null &&
-      FD.append("dispatch_time", e.target.dispatch_time.value);
-    e.target.selling_price.value !== null &&
-      FD.append("selling_price", e.target.selling_price.value);
-    e.target.weight.value !== null &&
-      FD.append("weight", e.target.weight.value);
-    e.target.weight_capacity.value !== null &&
-      FD.append("weight_capacity", e.target.weight_capacity.value);
-    e.target.tax_rate.value !== null &&
-      FD.append("tax_rate", e.target.tax_rate.value);
+  //   // DROPDOWNs
+  //   e.target.dispatch_time.value !== null &&
+  //     FD.append("dispatch_time", e.target.dispatch_time.value);
+  //   e.target.selling_price.value !== null &&
+  //     FD.append("selling_price", e.target.selling_price.value);
+  //   e.target.weight.value !== null &&
+  //     FD.append("weight", e.target.weight.value);
+  //   e.target.weight_capacity.value !== null &&
+  //     FD.append("weight_capacity", e.target.weight_capacity.value);
+  //   e.target.tax_rate.value !== null &&
+  //     FD.append("tax_rate", e.target.tax_rate.value);
 
-    if (secMaterial !== undefined)
-      FD.append(
-        "secondary_material_weight",
-        e.target.secondary_material_weight.value
-      );
+  //   if (secMaterial !== undefined)
+  //     FD.append(
+  //       "secondary_material_weight",
+  //       e.target.secondary_material_weight.value
+  //     );
 
-    editorRef.current.getContent() &&
-      FD.append("product_description", editorRef.current.getContent());
-    sellingRef.current.getContent() &&
-      FD.append("selling_points", sellingRef.current.getContent());
+  //   editorRef.current.getContent() &&
+  //     FD.append("product_description", editorRef.current.getContent());
+  //   sellingRef.current.getContent() &&
+  //     FD.append("selling_points", sellingRef.current.getContent());
 
-    e.target.product_title.value !== "" &&
-      FD.append("product_title", e.target.product_title.value);
-    e.target.MRP.value !== "" && FD.append("MRP", e.target.MRP.value);
-    e.target.showroom_price.value !== "" &&
-      FD.append("showroom_price", e.target.showroom_price.value);
-    e.target.seo_title.value !== "" &&
-      FD.append("seo_title", e.target.seo_title.value);
-    e.target.seo_description.value !== "" &&
-      FD.append("seo_description", e.target.seo_description.value);
-    e.target.discount_limit.value !== "" &&
-      FD.append("discount_limit", e.target.discount_limit.value);
-    e.target.length_main.value !== "" &&
-      FD.append("length_main", e.target.length_main.value);
-    e.target.breadth.value !== "" &&
-      FD.append("breadth", e.target.breadth.value);
-    e.target.height.value !== "" && FD.append("height", e.target.height.value);
-    e.target.top_size.value !== "" &&
-      FD.append("top_size", e.target.top_size.value);
-    e.target.dial_size.value !== "" &&
-      FD.append("dial_size", e.target.dial_size.value);
-    e.target.seating_size_width.value !== "" &&
-      FD.append("seating_size_width", e.target.seating_size_width.value);
-    e.target.seating_size_depth.value !== "" &&
-      FD.append("seating_size_depth", e.target.seating_size_depth.value);
-    e.target.seating_size_height.value !== "" &&
-      FD.append("seating_size_height", e.target.seating_size_height.value);
+  //   e.target.product_title.value !== "" &&
+  //     FD.append("product_title", e.target.product_title.value);
+  //   e.target.MRP.value !== "" && FD.append("MRP", e.target.MRP.value);
+  //   e.target.showroom_price.value !== "" &&
+  //     FD.append("showroom_price", e.target.showroom_price.value);
+  //   e.target.seo_title.value !== "" &&
+  //     FD.append("seo_title", e.target.seo_title.value);
+  //   e.target.seo_description.value !== "" &&
+  //     FD.append("seo_description", e.target.seo_description.value);
+  //   e.target.discount_limit.value !== "" &&
+  //     FD.append("discount_limit", e.target.discount_limit.value);
+  //   e.target.length_main.value !== "" &&
+  //     FD.append("length_main", e.target.length_main.value);
+  //   e.target.breadth.value !== "" &&
+  //     FD.append("breadth", e.target.breadth.value);
+  //   e.target.height.value !== "" && FD.append("height", e.target.height.value);
+  //   e.target.top_size.value !== "" &&
+  //     FD.append("top_size", e.target.top_size.value);
+  //   e.target.dial_size.value !== "" &&
+  //     FD.append("dial_size", e.target.dial_size.value);
+  //   e.target.seating_size_width.value !== "" &&
+  //     FD.append("seating_size_width", e.target.seating_size_width.value);
+  //   e.target.seating_size_depth.value !== "" &&
+  //     FD.append("seating_size_depth", e.target.seating_size_depth.value);
+  //   e.target.seating_size_height.value !== "" &&
+  //     FD.append("seating_size_height", e.target.seating_size_height.value);
 
-    // Radio button
-    FD.append("assembly_required", e.target.assembly_required.value);
-    FD.append("mirror", e.target.mirror.value);
-    FD.append("joints", e.target.joints.value);
-    FD.append("upholstery", e.target.upholstery.value);
-    FD.append("wheel", e.target.wheel.value);
-    FD.append("trolley", e.target.trolley.value);
-    FD.append("silver", e.target.silver.value);
-    if (assemblyVal === "shipping")
-      FD.append("assembly_part", e.target.assembly_part.value);
-    if (assemblyVal === "yes") FD.append("legs", e.target.legs.value);
+  //   // Radio button
+  //   FD.append("assembly_required", e.target.assembly_required.value);
+  //   FD.append("mirror", e.target.mirror.value);
+  //   FD.append("joints", e.target.joints.value);
+  //   FD.append("upholstery", e.target.upholstery.value);
+  //   FD.append("wheel", e.target.wheel.value);
+  //   FD.append("trolley", e.target.trolley.value);
+  //   FD.append("silver", e.target.silver.value);
+  //   if (assemblyVal === "shipping")
+  //     FD.append("assembly_part", e.target.assembly_part.value);
+  //   if (assemblyVal === "yes") FD.append("legs", e.target.legs.value);
 
-    if (silver === "yes")
-      FD.append("silver_weight", e.target.silver_weight.value);
+  //   if (silver === "yes")
+  //     FD.append("silver_weight", e.target.silver_weight.value);
 
-    if (trolly === "yes")
-      FD.append("trolly_matterial", e.target.trollyMat.value);
+  //   if (trolly === "yes")
+  //     FD.append("trolly_matterial", e.target.trollyMat.value);
 
-    if (e.target.upholstery.value === "Yes")
-      FD.append("fabric", e.target.fabric.value);
+  //   if (e.target.upholstery.value === "Yes")
+  //     FD.append("fabric", e.target.fabric.value);
 
-    if (e.target.mirror.value === "yes") {
-      FD.append("mirror_length", e.target.mirror_length.value);
-      FD.append("mirror_width", e.target.mirror_width.value);
-    }
+  //   if (e.target.mirror.value === "yes") {
+  //     FD.append("mirror_length", e.target.mirror_length.value);
+  //     FD.append("mirror_width", e.target.mirror_width.value);
+  //   }
 
-    // check Box
-    e.target.rotating_seats.checked &&
-      FD.append("rotating_seats", e.target.rotating_seats.checked);
-    e.target.eatable_oil_polish.checked &&
-      FD.append("eatable_oil_polish", e.target.eatable_oil_polish.checked);
-    e.target.no_chemical.checked &&
-      FD.append("no_chemical", e.target.no_chemical.checked);
-    e.target.lean_back.checked &&
-      FD.append("lean_back", e.target.lean_back.checked);
-    e.target.straight_back.checked &&
-      FD.append("straight_back", e.target.straight_back.checked);
-    e.target.weaving.checked && FD.append("weaving", e.target.weaving.checked);
-    e.target.knife.checked && FD.append("knife", e.target.knife.checked);
-    e.target.wall_hanging.checked &&
-      FD.append("wall_hanging", e.target.wall_hanging.checked);
-    e.target.not_suitable_for_Micro_Dish.checked &&
-      FD.append(
-        "not_suitable_for_Micro_Dish",
-        e.target.not_suitable_for_Micro_Dish.checked
-      );
-    e.target.tilt_top.checked &&
-      FD.append("tilt_top", e.target.tilt_top.checked);
-    e.target.inside_compartments.checked &&
-      FD.append("inside_compartments", e.target.inside_compartments.checked);
-    e.target.stackable.checked &&
-      FD.append("stackable", e.target.stackable.checked);
+  //   // check Box
+  //   e.target.rotating_seats.checked &&
+  //     FD.append("rotating_seats", e.target.rotating_seats.checked);
+  //   e.target.eatable_oil_polish.checked &&
+  //     FD.append("eatable_oil_polish", e.target.eatable_oil_polish.checked);
+  //   e.target.no_chemical.checked &&
+  //     FD.append("no_chemical", e.target.no_chemical.checked);
+  //   e.target.lean_back.checked &&
+  //     FD.append("lean_back", e.target.lean_back.checked);
+  //   e.target.straight_back.checked &&
+  //     FD.append("straight_back", e.target.straight_back.checked);
+  //   e.target.weaving.checked && FD.append("weaving", e.target.weaving.checked);
+  //   e.target.knife.checked && FD.append("knife", e.target.knife.checked);
+  //   e.target.wall_hanging.checked &&
+  //     FD.append("wall_hanging", e.target.wall_hanging.checked);
+  //   e.target.not_suitable_for_Micro_Dish.checked &&
+  //     FD.append(
+  //       "not_suitable_for_Micro_Dish",
+  //       e.target.not_suitable_for_Micro_Dish.checked
+  //     );
+  //   e.target.tilt_top.checked &&
+  //     FD.append("tilt_top", e.target.tilt_top.checked);
+  //   e.target.inside_compartments.checked &&
+  //     FD.append("inside_compartments", e.target.inside_compartments.checked);
+  //   e.target.stackable.checked &&
+  //     FD.append("stackable", e.target.stackable.checked);
 
-    // FD.get('product_image')
+  //   // FD.get('product_image')
 
-    for (var value of FD.values()) {
-      console.log(">>>>", value);
-    }
+  //   for (var value of FD.values()) {
+  //     console.log(">>>>", value);
+  //   }
 
-    const res = updateProduct(FD);
+  //   const res = updateProduct(FD);
 
-    res
-      .then((data) => {
-        console.log(data.status);
+  //   res
+  //     .then((data) => {
+  //       console.log(data.status);
 
-        if (data.status === 203) {
-          setImages([]);
-          dispatchAlert.setNote({
-            open: true,
-            variant: "error",
-            message: data.data.message,
-          });
-        } else {
-          setImages([]);
-          handleClose();
-          dispatchAlert.setNote({
-            open: true,
-            variant: "success",
-            message: data.data.message,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setImages([]);
-        dispatchAlert.setNote({
-          open: true,
-          variant: "error",
-          message: "Something Went Wrong !!!",
-        });
-      });
-  };
+  //       if (data.status === 203) {
+  //         setImages([]);
+  //         dispatchAlert.setNote({
+  //           open: true,
+  //           variant: "error",
+  //           message: data.data.message,
+  //         });
+  //       } else {
+  //         setImages([]);
+  //         handleClose();
+  //         dispatchAlert.setNote({
+  //           open: true,
+  //           variant: "success",
+  //           message: data.data.message,
+  //         });
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       setImages([]);
+  //       dispatchAlert.setNote({
+  //         open: true,
+  //         variant: "error",
+  //         message: "Something Went Wrong !!!",
+  //       });
+  //     });
+  // };
 
   const handleProduct = (e) => {
     e.preventDefault();
@@ -1576,76 +1594,65 @@ const Sideform = () => {
 
     FD.append("status", false);
 
-    console.log(Image);
-
     Image.map((element) => {
       return FD.append("specification_image", element);
-    });
-
-    materialCatalog.map((item) => {
-      return (
-        item._id === e.target.primary_material.value &&
-        FD.append("primary_material_name", item.primaryMaterial_name)
-      );
-    });
-    secMaterialCatalog.map((item) => {
-      return (
-        item._id === e.target.secondary_material.value &&
-        FD.append("secondary_material_name", item.secondaryMaterial_name)
-      );
     });
 
     featured.map((element) => {
       return FD.append("featured_image", element);
     });
+    materialCatalog.map((item) => {
+      return (
+        item._id === changeData.primary_material &&
+        FD.append("primary_material_name", item.primaryMaterial_name)
+      );
+    });
 
     category.map((item) => {
       return (
-        item._id === e.target.category_name.value &&
+        item._id === changeData.category_name &&
         FD.append("category_name", item.category_name)
       );
     });
 
     subCategory.map((item) => {
       return (
-        item._id === e.target.sub_category_name.value &&
+        item._id === changeData.sub_category_name &&
         FD.append("sub_category_name", item.sub_category_name)
       );
     });
 
     polishCatalog.map((item) => {
       return (
-        item._id === e.target.polish.value &&
+        item._id === changeData.polish &&
         FD.append("polish_name", item.polish_name)
       );
     });
     hingeCatalog.map((item) => {
       return (
-        item._id === e.target.hinge.value &&
+        item._id === changeData.hinge &&
         FD.append("hinge_name", item.hinge_name)
       );
     });
     fittingCatalog.map((item) => {
       return (
-        item._id === e.target.fitting.value &&
+        item._id === changeData.fitting &&
         FD.append("fitting_name", item.fitting_name)
       );
     });
     knobCatalog.map((item) => {
       return (
-        item._id === e.target.knob.value &&
-        FD.append("knob_name", item.knob_name)
+        item._id === changeData.knob && FD.append("knob_name", item.knob_name)
       );
     });
     doorCatalog.map((item) => {
       return (
-        item._id === e.target.door.value &&
-        FD.append("door_name", item.door_name)
+        item._id === changeData.door && FD.append("door_name", item.door_name)
       );
     });
     handleCatalog.map((item) => {
       return (
-        item._id === e.target.handle.value &&
+        item._id === changeData.handle &&
         FD.append("handle_name", item.handle_name)
       );
     });
@@ -1653,101 +1660,130 @@ const Sideform = () => {
     if (showFabric === "Yes") {
       fabricCatalog.map((item) => {
         return (
-          item._id === e.target.fabric.value &&
+          item._id === changeData.fabric &&
           FD.append("fabric_name", item.fabric_name)
         );
       });
     }
-    FD.append("polish", e.target.polish.value);
-    FD.append("hinge", e.target.hinge.value);
-    FD.append("knob", e.target.knob.value);
-    FD.append("handle", e.target.handle.value);
-    FD.append("door", e.target.door.value);
-    FD.append("fitting", e.target.fitting.value);
+    FD.append("polish", changeData.polish);
+    FD.append("hinge", changeData.hinge);
+    FD.append("knob", changeData.knob);
+    FD.append("handle", changeData.handle);
+    FD.append("door", changeData.door);
+    FD.append("fitting", changeData.fitting);
 
-    FD.append("category_id", e.target.category_name.value);
-    FD.append("sub_category_id", e.target.sub_category_name.value);
-    FD.append("dispatch_time", e.target.dispatch_time.value);
-    FD.append("product_title", e.target.product_title.value);
+    FD.append("category_id", changeData.category_name);
+    FD.append("sub_category_id", changeData.sub_category_name);
+    FD.append("dispatch_time", changeData.dispatch_time);
+    FD.append("product_title", changeData.product_title);
     FD.append("product_description", editorRef.current.getContent());
     FD.append("selling_points", sellingRef.current.getContent());
-    FD.append("SKU", e.target.SKU.value);
-    FD.append("MRP", e.target.MRP.value);
-    FD.append("showroom_price", e.target.showroom_price.value);
-    FD.append("seo_title", e.target.seo_title.value);
-    FD.append("seo_description", e.target.seo_description.value);
-    FD.append("seo_keyword", e.target.seo_keyword.value);
-    FD.append("discount_limit", e.target.discount_limit.value);
-    FD.append("selling_price", e.target.selling_price.value);
-    FD.append("primary_material", e.target.primary_material.value);
-    FD.append("secondary_material", e.target.secondary_material.value);
-    // FD.append("fabric", e.target.fabric.value);
+    FD.append("SKU", SKU);
+    FD.append("MRP", changeData.MRP ? changeData.MRP : 0);
+    FD.append(
+      "showroom_price",
+      changeData.showroom_price ? changeData.showroom_price : 0
+    );
+    FD.append("seo_title", changeData.seo_title);
+    FD.append("seo_description", changeData.seo_description);
+    FD.append("seo_keyword", changeData.seo_keyword);
+    FD.append("discount_limit", changeData.discount_limit);
+    FD.append("selling_price", changeData.selling_price);
+    FD.append("primary_material", changeData.primary_material);
+    FD.append("fabric", changeData.fabric);
     //  console.log(secMaterial)
-    if (e.target.secondary_material_weight !== undefined)
+    if (changeData.secondary_material_weight !== undefined)
       FD.append(
         "secondary_material_weight",
-        e.target.secondary_material_weight.value
+        changeData.secondary_material_weight
       );
-    FD.append("length_main", e.target.length_main.value);
-    FD.append("breadth", e.target.breadth.value);
-    FD.append("height", e.target.height.value);
-    FD.append("weight", e.target.weight.value);
+    FD.append(
+      "length_main",
+      changeData.length_main ? changeData.length_main : 0
+    );
+    FD.append("breadth", changeData.breadth ? changeData.breadth : 0);
+    FD.append("height", changeData.height ? changeData.height : 0);
+    FD.append("weight", changeData.weight ? changeData.weight : 0);
 
-    FD.append("top_size", e.target.top_size.value);
-    FD.append("dial_size", e.target.dial_size.value);
-    FD.append("seating_size_width", e.target.seating_size_width.value);
-    FD.append("seating_size_depth", e.target.seating_size_depth.value);
-    FD.append("seating_size_height", e.target.seating_size_height.value);
-    FD.append("weight_capacity", e.target.weight_capacity.value);
-    FD.append("assembly_required", e.target.assembly_required.value);
+    FD.append("top_size", changeData.top_size);
+    FD.append("dial_size", changeData.dial_size);
+    FD.append(
+      "seating_size_width",
+      changeData.seating_size_width ? changeData.seating_size_width : 0
+    );
+    FD.append(
+      "seating_size_depth",
+      changeData.seating_size_depth ? changeData.seating_size_depth : 0
+    );
+    FD.append(
+      "seating_size_height",
+      changeData.seating_size_height ? changeData.seating_size_height : 0
+    );
+    FD.append("weight_capacity", changeData.weight_capacity);
+    FD.append("assembly_required", changeData.assembly_required);
 
-    if (assemblyVal === "shipping")
-      FD.append("assembly_part", e.target.assembly_part.value);
-    if (assemblyVal === "yes") FD.append("legs", e.target.legs.value);
+    if (changeData.assembly_required === "shipping")
+      FD.append("assembly_part", changeData.assembly_part);
+    if (changeData.assembly_required === "yes")
+      FD.append("legs", changeData.legs);
 
-    if (silver === "yes")
-      FD.append("silver_weight", e.target.silver_weight.value);
+    if (changeData.silver === "yes")
+      FD.append("silver_weight", changeData.silver_weight);
 
-    if (trolly === "yes")
-      FD.append("trolley_material", e.target.trolley_material.value);
+    if (changeData.trolley === "yes")
+      FD.append("trolley_material", changeData.trolley_material);
 
-    if (e.target.upholstery.value === "Yes")
-      FD.append("fabric", e.target.fabric.value);
+    if (changeData.upholstery === "Yes") FD.append("fabric", changeData.fabric);
 
-    FD.append("mirror", e.target.mirror.value);
+    FD.append("mirror", changeData.mirror);
 
-    if (e.target.mirror.value === "yes") {
-      FD.append("mirror_length", e.target.mirror_length.value);
-      FD.append("mirror_width", e.target.mirror_width.value);
+    if (changeData.mirror === "yes") {
+      FD.append("mirror_length", changeData.mirror_length && 0);
+      FD.append("mirror_width", changeData.mirror_width && 0);
     }
-    FD.append("joints", e.target.joints.value);
-    FD.append("upholstery", e.target.upholstery.value);
-    FD.append("wheel", e.target.wheel.value);
-    FD.append("trolley", e.target.trolley.value);
-    FD.append("silver", e.target.silver.value);
-    FD.append("rotating_seats", e.target.rotating_seats.checked);
-    FD.append("eatable_oil_polish", e.target.eatable_oil_polish.checked);
-    FD.append("no_chemical", e.target.no_chemical.checked);
-    FD.append("lean_back", e.target.lean_back.checked);
-    FD.append("weaving", e.target.weaving.checked);
-    FD.append("knife", e.target.knife.checked);
-    FD.append("wall_hanging", e.target.wall_hanging.checked);
+    FD.append("joints", changeData.joints ? changeData.joints : "");
+    FD.append(
+      "upholstery",
+      changeData.upholstery ? changeData.upholstery : "no"
+    );
+    FD.append("wheel", changeData.wheel ? changeData.wheel : "no");
+    FD.append("trolley", changeData.trolley ? changeData.trolley : "no");
+    FD.append("silver", changeData.silver ? changeData.silver : "no");
+    FD.append(
+      "rotating_seats",
+      changeData.rotating_seats ? changeData.rotating_seats : false
+    );
+    FD.append(
+      "eatable_oil_polish",
+      changeData.eatable_oil_polish ? changeData.eatable_oil_polish : false
+    );
+    FD.append(
+      "no_chemical",
+      changeData.no_chemical ? changeData.no_chemical : false
+    );
+    FD.append("lean_back", changeData.lean_back ? changeData.lean_back : false);
+    FD.append("weaving", changeData.weaving ? changeData.weaving : false);
+    FD.append("knife", changeData.knife ? changeData.knife : false);
+    FD.append(
+      "wall_hanging",
+      changeData.wall_hanging ? changeData.wall_hanging : false
+    );
 
     FD.append(
       "not_suitable_for_Micro_Dish",
-      e.target.not_suitable_for_Micro_Dish.checked
+      changeData.not_suitable_for_Micro_Dish && false
     );
-    FD.append("straight_back", e.target.straight_back.checked);
-    FD.append("tilt_top", e.target.tilt_top.checked);
-    FD.append("inside_compartments", e.target.inside_compartments.checked);
-    FD.append("stackable", e.target.stackable.checked);
-    FD.append("tax_rate", e.target.tax_rate.value);
-
-    // FD.get('product_image')
-
-    for (var value of FD.values()) {
-      console.log(">>>>", value);
-    }
+    FD.append(
+      "straight_back",
+      changeData.straight_back ? changeData.straight_back : false
+    );
+    FD.append("tilt_top", changeData.tilt_top ? changeData.tilt_top : false);
+    FD.append(
+      "inside_compartments",
+      changeData.inside_compartments ? changeData.inside_compartments : false
+    );
+    FD.append("stackable", changeData.stackable ? changeData.stackable : false);
+    FD.append("tax_rate", changeData.tax_rate);
 
     const res = addProduct(FD);
 
@@ -2847,7 +2883,8 @@ const Sideform = () => {
                             >
                               {subCategory.map(
                                 (option) =>
-                                  cat === option.category_id && (
+                                  changeData.category_name ===
+                                    option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -3113,9 +3150,9 @@ const Sideform = () => {
                               select
                               name="dispatch_time"
                               label="Dispatch Time"
-                              value={dispatchTime}
+                              value={changeData.dispatch_time}
+                              onChange={handleProductFelids}
                               multiple
-                              onChange={handleChangeDispatchTime}
                               helperText="Please select your dispatch time"
                             >
                               {dispatchTimeCatalog.map((option) => (
@@ -3166,55 +3203,125 @@ const Sideform = () => {
                                 Features
                               </FormLabel>
                               <FormControlLabel
-                                control={<Checkbox name="rotating_seats" />}
+                                control={
+                                  <Checkbox
+                                    checked={changeData.rotating_seats}
+                                    onChange={handleProductFelids}
+                                    name="rotating_seats"
+                                  />
+                                }
                                 label="Rotating Seats"
                               />
                               <FormControlLabel
-                                control={<Checkbox name="eatable_oil_polish" />}
+                                control={
+                                  <Checkbox
+                                    checked={changeData.eatable_oil_polish}
+                                    onChange={handleProductFelids}
+                                    name="eatable_oil_polish"
+                                  />
+                                }
                                 label="Eatable Oil Polished"
                               />
                               <FormControlLabel
-                                control={<Checkbox name="no_chemical" />}
+                                control={
+                                  <Checkbox
+                                    checked={changeData.no_chemical}
+                                    onChange={handleProductFelids}
+                                    name="no_chemical"
+                                  />
+                                }
                                 label="No Chemical Used"
                               />
                               <FormControlLabel
-                                control={<Checkbox name="lean_back" />}
+                                control={
+                                  <Checkbox
+                                    checked={changeData.lean_back}
+                                    onChange={handleProductFelids}
+                                    name="lean_back"
+                                  />
+                                }
                                 label="Lean Back"
                               />
                               <FormControlLabel
-                                control={<Checkbox name="straight_back" />}
+                                control={
+                                  <Checkbox
+                                    checked={changeData.straight_back}
+                                    onChange={handleProductFelids}
+                                    name="straight_back"
+                                  />
+                                }
                                 label="Straight Back"
                               />
                               <FormControlLabel
-                                control={<Checkbox name="weaving" />}
+                                control={
+                                  <Checkbox
+                                    checked={changeData.weaving}
+                                    onChange={handleProductFelids}
+                                    name="weaving"
+                                  />
+                                }
                                 label="Weaving"
                               />
                               <FormControlLabel
                                 control={
-                                  <Checkbox name="not_suitable_for_Micro_Dish" />
+                                  <Checkbox
+                                    checked={
+                                      changeData.not_suitable_for_Micro_Dish
+                                    }
+                                    onChange={handleProductFelids}
+                                    name="not_suitable_for_Micro_Dish"
+                                  />
                                 }
                                 label="Not Suitable For Microwave/Dishwasher"
                               />
                               <FormControlLabel
-                                control={<Checkbox name="tilt_top" />}
+                                control={
+                                  <Checkbox
+                                    checked={changeData.tilt_top}
+                                    onChange={handleProductFelids}
+                                    name="tilt_top"
+                                  />
+                                }
                                 label="Tilt Top"
                               />
                               <FormControlLabel
                                 control={
-                                  <Checkbox name="inside_compartments" />
+                                  <Checkbox
+                                    checked={changeData.inside_compartments}
+                                    onChange={handleProductFelids}
+                                    name="inside_compartments"
+                                  />
                                 }
                                 label="Inside Compartments"
                               />
                               <FormControlLabel
-                                control={<Checkbox name="stackable" />}
+                                control={
+                                  <Checkbox
+                                    checked={changeData.stackable}
+                                    onChange={handleProductFelids}
+                                    name="stackable"
+                                  />
+                                }
                                 label="Stackable"
                               />
                               <FormControlLabel
-                                control={<Checkbox name="knife" />}
+                                control={
+                                  <Checkbox
+                                    checked={changeData.knife}
+                                    onChange={handleProductFelids}
+                                    name="knife"
+                                  />
+                                }
                                 label="Knife Friendly Surface"
                               />
                               <FormControlLabel
-                                control={<Checkbox name="wall_hanging" />}
+                                control={
+                                  <Checkbox
+                                    checked={changeData.wall_hanging}
+                                    onChange={handleProductFelids}
+                                    name="wall_hanging"
+                                  />
+                                }
                                 label="Wall Hanging"
                               />
                             </FormGroup>
@@ -3253,7 +3360,8 @@ const Sideform = () => {
                               </FormLabel>
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
-                                onChange={handleChangeSilver}
+                                value={changeData.silver || "no"}
+                                onChange={handleProductFelids}
                                 name="silver"
                               >
                                 <FormControlLabel
@@ -3269,7 +3377,7 @@ const Sideform = () => {
                               </RadioGroup>
                             </FormControl>
 
-                            {silver === "yes" && (
+                            {changeData.silver === "yes" && (
                               <TextField
                                 fullWidth
                                 autoComplete={false}
@@ -3285,6 +3393,8 @@ const Sideform = () => {
                                 }}
                                 variant="outlined"
                                 name="silver_weight"
+                                value={changeData.silver_weight}
+                                onChange={handleProductFelids}
                               />
                             )}
                             <br></br>
@@ -3295,9 +3405,9 @@ const Sideform = () => {
                               select
                               name="polish"
                               label="Polish"
-                              value={Polish}
+                              value={changeData.polish}
+                              onChange={handleProductFelids}
                               multiple
-                              onChange={handleChangePolish}
                               helperText="Please select your Polish."
                             >
                               {polishCatalog.map(
@@ -3324,9 +3434,9 @@ const Sideform = () => {
                               select
                               name="hinge"
                               label="Hinge"
-                              value={Hinge}
                               multiple
-                              onChange={handleChangeHinge}
+                              value={changeData.hinge}
+                              onChange={handleProductFelids}
                               helperText="Please select your hinge."
                             >
                               {hingeCatalog.map(
@@ -3353,9 +3463,9 @@ const Sideform = () => {
                               select
                               name="knob"
                               label="Knob"
-                              value={Knob}
                               multiple
-                              onChange={handleChangeKnob}
+                              value={changeData.knob}
+                              onChange={handleProductFelids}
                               helperText="Please select your fitting."
                             >
                               {knobCatalog.map(
@@ -3382,9 +3492,9 @@ const Sideform = () => {
                               select
                               name="door"
                               label="Door"
-                              value={door}
                               multiple
-                              onChange={handleChangeDoor}
+                              value={changeData.door}
+                              onChange={handleProductFelids}
                               helperText="Please select your fitting."
                             >
                               {doorCatalog.map(
@@ -3411,9 +3521,9 @@ const Sideform = () => {
                               select
                               name="handle"
                               label="Handle"
-                              value={handle}
                               multiple
-                              onChange={handleChangeHandle}
+                              value={changeData.handle}
+                              onChange={handleProductFelids}
                               helperText="Please select your fitting."
                             >
                               {handleCatalog.map(
@@ -3440,9 +3550,9 @@ const Sideform = () => {
                               select
                               name="weight_capacity"
                               label="Weight Capacity"
-                              value={weightCap}
                               multiple
-                              onChange={handleChangeWeightCap}
+                              value={changeData.weight_capacity}
+                              onChange={handleProductFelids}
                               helperText="Please select your fitting."
                             >
                               {weightCapCatalog.map((option) => (
@@ -3466,9 +3576,9 @@ const Sideform = () => {
                               </FormLabel>
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
-                                defaultValue="no"
                                 name="assembly_required"
-                                onChange={handleChangeAssembly}
+                                value={changeData.assembly_required || "no"}
+                                onChange={handleProductFelids}
                               >
                                 <FormControlLabel
                                   value="shipping"
@@ -3488,7 +3598,7 @@ const Sideform = () => {
                               </RadioGroup>
                             </FormControl>
 
-                            {assemblyVal === "shipping" && (
+                            {changeData.assembly_required === "shipping" && (
                               <>
                                 <br></br>
                                 <TextField
@@ -3507,10 +3617,12 @@ const Sideform = () => {
                                   }}
                                   variant="outlined"
                                   name="assembly_part"
+                                  value={changeData.assembly_part}
+                                  onChange={handleProductFelids}
                                 />
                               </>
                             )}
-                            {assemblyVal === "yes" && (
+                            {changeData.assembly_required === "yes" && (
                               <>
                                 <br></br>
                                 <TextField
@@ -3520,9 +3632,9 @@ const Sideform = () => {
                                   select
                                   name="legs"
                                   label="Table Legs"
-                                  value={leg}
+                                  value={changeData.legs}
+                                  onChange={handleProductFelids}
                                   multiple
-                                  onChange={handleChangeLeg}
                                   helperText="Please select your leg "
                                 >
                                   {legCatalog.map((option) => (
@@ -3546,11 +3658,11 @@ const Sideform = () => {
                               fullWidth
                               id="outlined-select"
                               select
-                              name="fitting"
                               label="Fitting"
-                              value={fitting}
+                              name="fitting"
                               multiple
-                              onChange={handleChangeFitting}
+                              value={changeData.fitting}
+                              onChange={handleProductFelids}
                               helperText="Please select your fitting."
                             >
                               {fittingCatalog.map(
@@ -3597,6 +3709,8 @@ const Sideform = () => {
                               type="text"
                               variant="outlined"
                               name="product_title"
+                              value={changeData.product_title}
+                              onChange={handleProductFelids}
                             />
 
                             <br></br>
@@ -3609,6 +3723,8 @@ const Sideform = () => {
                               type="text"
                               variant="outlined"
                               name="seo_title"
+                              value={changeData.seo_title}
+                              onChange={handleProductFelids}
                             />
 
                             <br></br>
@@ -3621,6 +3737,8 @@ const Sideform = () => {
                               type="text"
                               variant="outlined"
                               name="seo_description"
+                              value={changeData.seo_description}
+                              onChange={handleProductFelids}
                             />
                             <br></br>
                             <TextField
@@ -3632,6 +3750,8 @@ const Sideform = () => {
                               type="text"
                               variant="outlined"
                               name="seo_keyword"
+                              value={changeData.seo_keyword}
+                              onChange={handleProductFelids}
                             />
 
                             <br></br>
@@ -3668,6 +3788,8 @@ const Sideform = () => {
                               }}
                               variant="outlined"
                               name="showroom_price"
+                              value={changeData.showroom_price}
+                              onChange={handleProductFelids}
                             />
 
                             <br></br>
@@ -3677,7 +3799,6 @@ const Sideform = () => {
                               id="fullWidth"
                               required
                               label="MRP"
-                              onChange={handleDiscount}
                               type="number"
                               InputProps={{
                                 startAdornment: (
@@ -3688,6 +3809,8 @@ const Sideform = () => {
                               }}
                               variant="outlined"
                               name="MRP"
+                              onChange={handleProductFelids}
+                              value={changeData.MRP}
                             />
 
                             <br></br>
@@ -3696,7 +3819,10 @@ const Sideform = () => {
                               required
                               autoComplete={false}
                               id="fullWidth"
-                              onChange={handleDiscount}
+                              onChange={(e) => {
+                                handleDiscount(e);
+                                handleProductFelids(e);
+                              }}
                               label="Discount Limit"
                               type="number"
                               InputProps={{
@@ -3708,6 +3834,7 @@ const Sideform = () => {
                               }}
                               variant="outlined"
                               name="discount_limit"
+                              value={changeData.discount_limit}
                             />
 
                             <br></br>
@@ -3726,31 +3853,18 @@ const Sideform = () => {
                                 ),
                               }}
                               value={
-                                discount.MRP > 0 && discount.discount_limit > 0
-                                  ? discount.MRP -
-                                    (discount.MRP / 100) *
-                                      discount.discount_limit
+                                changeData.MRP > 0 &&
+                                changeData.discount_limit > 0
+                                  ? (changeData.selling_price =
+                                      changeData.MRP -
+                                      (changeData.MRP / 100) *
+                                        changeData.discount_limit)
                                   : 0
                               }
+                              onChange={handleProductFelids}
                               variant="outlined"
                               name="selling_price"
                             />
-
-                            {/* 
-                    <br></br>
-                    <FormLabel id="demo-radio-buttons-group-label">Selling Points </FormLabel>
-
-                    <Editor
-                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
-                      initialValue="<p>Selling Points !!!</p>"
-                      onInit={(event, editor) => sellingPoints.current = editor}
-                      init={{
-                        height: 300,
-                        max_chars: 1000,
-                        menubar: false,
-                      }}
-
-                    /> */}
 
                             <br></br>
 
@@ -3760,9 +3874,10 @@ const Sideform = () => {
                               </FormLabel>
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
-                                defaultValue="no"
                                 name="mirror"
-                                onChange={handleChangeMirror}
+                                // onChange={handleChangeMirror}
+                                value={changeData.mirror || "no"}
+                                onChange={handleProductFelids}
                               >
                                 <FormControlLabel
                                   value="yes"
@@ -3777,14 +3892,14 @@ const Sideform = () => {
                               </RadioGroup>
                             </FormControl>
 
-                            {mirrorVal !== "no" && (
+                            {changeData.mirror !== "no" && (
                               <>
                                 <br></br>
                                 <TextField
                                   fullWidth
                                   autoComplete={false}
                                   id="fullWidth"
-                                  label="Mirror Lenth"
+                                  label="Mirror Length"
                                   type="text"
                                   InputProps={{
                                     startAdornment: (
@@ -3794,6 +3909,8 @@ const Sideform = () => {
                                     ),
                                   }}
                                   variant="outlined"
+                                  value={changeData.mirror_length}
+                                  onChange={handleProductFelids}
                                   name="mirror_length"
                                 />
 
@@ -3813,6 +3930,8 @@ const Sideform = () => {
                                   }}
                                   variant="outlined"
                                   name="mirror_width"
+                                  value={changeData.mirror_width}
+                                  onChange={handleProductFelids}
                                 />
                               </>
                             )}
@@ -3827,6 +3946,8 @@ const Sideform = () => {
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
                                 name="joints"
+                                value={changeData.joints}
+                                onChange={handleProductFelids}
                               >
                                 <FormControlLabel
                                   value="single"
@@ -3848,25 +3969,28 @@ const Sideform = () => {
                                 Upholstery
                               </FormLabel>
                               <RadioGroup
+                                defaultValue="no"
                                 aria-labelledby="demo-radio-buttons-group-label"
-                                onChange={(e) => {
-                                  setShowFabric(e.target.value);
-                                }}
+                                // onChange={(e) => {
+                                //   setShowFabric(e.target.value);
+                                // }}
+                                value={changeData.upholstery || "no"}
+                                onChange={handleProductFelids}
                                 name="upholstery"
                               >
                                 <FormControlLabel
-                                  value="Yes"
+                                  value="yes"
                                   control={<Radio />}
                                   label="Yes"
                                 />
                                 <FormControlLabel
-                                  value="No"
+                                  value="no"
                                   control={<Radio />}
                                   label="No"
                                 />
                               </RadioGroup>
 
-                              {showFabric === "Yes" && (
+                              {changeData.upholstery === "yes" && (
                                 <>
                                   <br></br>
                                   <TextField
@@ -3875,9 +3999,9 @@ const Sideform = () => {
                                     select
                                     name="fabric"
                                     label="Fabric"
-                                    value={fabric}
                                     multiple
-                                    onChange={handleChangeFabric}
+                                    value={changeData.fabric}
+                                    onChange={handleProductFelids}
                                     helperText="Please select your fabric."
                                   >
                                     {fabricCatalog.map(
@@ -3908,9 +4032,9 @@ const Sideform = () => {
                               select
                               name="tax_rate"
                               label="Tax Rate"
-                              value={taxRate}
+                              value={changeData.tax_rate}
+                              onChange={handleProductFelids}
                               multiple
-                              onChange={handleChangeTaxRate}
                               helperText="Please select your tax rate."
                               InputProps={{
                                 startAdornment: (
@@ -3949,6 +4073,8 @@ const Sideform = () => {
                               }}
                               variant="outlined"
                               name="seating_size_width"
+                              value={changeData.seating_size_width}
+                              onChange={handleProductFelids}
                             />
 
                             <br></br>
@@ -3967,6 +4093,8 @@ const Sideform = () => {
                               }}
                               variant="outlined"
                               name="seating_size_depth"
+                              value={changeData.seating_size_depth}
+                              onChange={handleProductFelids}
                             />
 
                             <br></br>
@@ -3985,6 +4113,8 @@ const Sideform = () => {
                               }}
                               variant="outlined"
                               name="seating_size_height"
+                              value={changeData.seating_size_height}
+                              onChange={handleProductFelids}
                             />
 
                             <br></br>
@@ -3996,6 +4126,8 @@ const Sideform = () => {
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
                                 name="wheel"
+                                value={changeData.wheel || "no"}
+                                onChange={handleProductFelids}
                               >
                                 <FormControlLabel
                                   value="yes"
@@ -4018,9 +4150,9 @@ const Sideform = () => {
                               </FormLabel>
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
-                                onChange={handleChangeTrolly}
                                 name="trolley"
-                                // defaultValue={trolley}
+                                value={changeData.trolley || "no"}
+                                onChange={handleProductFelids}
                               >
                                 <FormControlLabel
                                   value="yes"
@@ -4035,7 +4167,7 @@ const Sideform = () => {
                               </RadioGroup>
                             </FormControl>
 
-                            {trolly === "yes" && (
+                            {changeData.trolley === "yes" && (
                               <>
                                 <br></br>
                                 <TextField
@@ -4044,10 +4176,10 @@ const Sideform = () => {
                                   select
                                   name="trolley_material"
                                   label="Trolly Material"
-                                  value={trollyVal}
                                   multiple
-                                  onChange={handleChangeTrollyVal}
-                                  helperText="Please select your Trolly Matterial "
+                                  value={changeData.trolley_material}
+                                  onChange={handleProductFelids}
+                                  helperText="Please select your Trolly Material "
                                 >
                                   {trollyMaterial.map((option) => (
                                     <MenuItem
@@ -4077,6 +4209,8 @@ const Sideform = () => {
                               }}
                               variant="outlined"
                               name="top_size"
+                              value={changeData.top_size}
+                              onChange={handleProductFelids}
                             />
 
                             <br></br>
@@ -4094,6 +4228,8 @@ const Sideform = () => {
                                 ),
                               }}
                               variant="outlined"
+                              value={changeData.dial_size}
+                              onChange={handleProductFelids}
                               name="dial_size"
                             />
                           </Box>{" "}
@@ -4159,7 +4295,7 @@ const Sideform = () => {
                   <form
                     className="form"
                     id="myForm"
-                    onSubmit={handleUpdateProduct}
+                    // onSubmit={handleUpdateProduct}
                     enctype="multipart/form-data"
                     method="post"
                   >
@@ -5331,7 +5467,7 @@ const Sideform = () => {
                           value={trollyVal || ""}
                           multiple
                           onChange={handleChangeTrollyVal}
-                          helperText="Please select your Trolly Matterial "
+                          helperText="Please select your Trolly Material "
                         >
                           {trollyMaterial.map((option) => (
                             <MenuItem key={option.value} value={option.value}>
