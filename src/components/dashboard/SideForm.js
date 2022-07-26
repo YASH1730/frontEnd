@@ -21,7 +21,10 @@ import {
   Step,
   StepLabel,
   StepContent,
+  Slider,
+  Tooltip
 } from "@mui/material";
+import PropTypes from 'prop-types';
 import { Editor } from "@tinymce/tinymce-react";
 import Slide from "@mui/material/Slide";
 import Backdrop from "@mui/material/Backdrop";
@@ -941,8 +944,11 @@ const Sideform = () => {
     "wall_hanging",
   ];
 
+ 
+
   //  for product felids
   const handleProductFelids = (e) => {
+    // console.log(e);
     if (feature.includes(e.target.name)) {
       setData({
         ...changeData,
@@ -1728,7 +1734,10 @@ const Sideform = () => {
       FD.append("legs", changeData.legs);
 
     if (changeData.silver === "yes")
-      FD.append("silver_weight", changeData.silver_weight);
+      FD.append(
+        "silver_weight",
+        changeData.silver_weight ? changeData.silver_weight : 0
+      );
 
     if (changeData.trolley === "yes")
       FD.append("trolley_material", changeData.trolley_material);
@@ -1738,8 +1747,14 @@ const Sideform = () => {
     FD.append("mirror", changeData.mirror);
 
     if (changeData.mirror === "yes") {
-      FD.append("mirror_length", changeData.mirror_length && 0);
-      FD.append("mirror_width", changeData.mirror_width && 0);
+      FD.append(
+        "mirror_length",
+        changeData.mirror_length ? changeData.mirror_length : 0
+      );
+      FD.append(
+        "mirror_width",
+        changeData.mirror_width ? changeData.mirror_width : 0
+      );
     }
     FD.append("joints", changeData.joints ? changeData.joints : "");
     FD.append(
@@ -1771,7 +1786,9 @@ const Sideform = () => {
 
     FD.append(
       "not_suitable_for_Micro_Dish",
-      changeData.not_suitable_for_Micro_Dish && false
+      changeData.not_suitable_for_Micro_Dish
+        ? changeData.not_suitable_for_Micro_Dish
+        : false
     );
     FD.append(
       "straight_back",
@@ -2757,6 +2774,7 @@ const Sideform = () => {
       });
   };
 
+
   return (
     <>
       <Slide
@@ -2829,7 +2847,7 @@ const Sideform = () => {
                               fullWidth
                               autoComplete={false}
                               id="fullWidth"
-                              required
+                              // // required
                               label="SKU"
                               type="text"
                               value={SKU}
@@ -2842,7 +2860,7 @@ const Sideform = () => {
 
                             <TextField
                               fullWidth
-                              required
+                              // required
                               id="outlined-select"
                               select
                               name="category_name"
@@ -2871,7 +2889,7 @@ const Sideform = () => {
 
                             <TextField
                               fullWidth
-                              required
+                              // required
                               id="outlined-select"
                               select
                               name="sub_category_name"
@@ -2965,7 +2983,7 @@ const Sideform = () => {
 
                             <TextField
                               fullWidth
-                              required
+                              // required
                               id="outlined-select"
                               select
                               name="primary_material"
@@ -3143,9 +3161,22 @@ const Sideform = () => {
                           <Box className="fields">
                             <br></br>
 
-                            <TextField
+                            <Typography variant = 'Caption' > Dispatch in {changeData.dispatch_time} Days</Typography>
+
+                            <Slider
+                              aria-label="Construction Days"
+                              defaultValue={0}
+                              name = "dispatch_time"
+                              value = {changeData.dispatch_time}
+                              onChange = {handleProductFelids}
+                              helperText="Please select your dispatch time"
+
+                            />
+
+
+                            {/* <TextField
                               fullWidth
-                              required
+                              // required
                               id="outlined-select"
                               select
                               name="dispatch_time"
@@ -3166,7 +3197,7 @@ const Sideform = () => {
                               <MenuItem key={"none"} value={undefined}>
                                 {"None"}
                               </MenuItem>
-                            </TextField>
+                            </TextField> */}
                           </Box>{" "}
                           <Box className="stepAction">
                             <Button
@@ -3572,7 +3603,7 @@ const Sideform = () => {
 
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
-                                Assembly Required
+                                Assembly // required
                               </FormLabel>
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
@@ -3603,7 +3634,7 @@ const Sideform = () => {
                                 <br></br>
                                 <TextField
                                   fullWidth
-                                  required
+                                  // required
                                   autoComplete={false}
                                   id="fullWidth"
                                   label="Assemble Part"
@@ -3627,7 +3658,7 @@ const Sideform = () => {
                                 <br></br>
                                 <TextField
                                   fullWidth
-                                  required
+                                  // required
                                   id="outlined-select"
                                   select
                                   name="legs"
@@ -3704,7 +3735,7 @@ const Sideform = () => {
                               fullWidth
                               autoComplete={false}
                               id="fullWidth"
-                              required
+                              // required
                               label="Product Title"
                               type="text"
                               variant="outlined"
@@ -3716,7 +3747,7 @@ const Sideform = () => {
                             <br></br>
                             <TextField
                               fullWidth
-                              required
+                              // required
                               autoComplete={false}
                               id="fullWidth"
                               label="SEO Title"
@@ -3730,7 +3761,7 @@ const Sideform = () => {
                             <br></br>
                             <TextField
                               fullWidth
-                              required
+                              // required
                               autoComplete={false}
                               id="fullWidth"
                               label="SEO Description"
@@ -3743,7 +3774,7 @@ const Sideform = () => {
                             <br></br>
                             <TextField
                               fullWidth
-                              required
+                              // required
                               autoComplete={false}
                               id="fullWidth"
                               label="SEO Keyword"
@@ -3776,7 +3807,7 @@ const Sideform = () => {
                               fullWidth
                               autoComplete={false}
                               id="fullWidth"
-                              required
+                              // required
                               label="Showroom Price"
                               type="number"
                               InputProps={{
@@ -3797,7 +3828,7 @@ const Sideform = () => {
                               fullWidth
                               autoComplete={false}
                               id="fullWidth"
-                              required
+                              // required
                               label="MRP"
                               type="number"
                               InputProps={{
@@ -3816,7 +3847,7 @@ const Sideform = () => {
                             <br></br>
                             <TextField
                               fullWidth
-                              required
+                              // required
                               autoComplete={false}
                               id="fullWidth"
                               onChange={(e) => {
@@ -4027,7 +4058,7 @@ const Sideform = () => {
 
                             <TextField
                               fullWidth
-                              required
+                              // required
                               id="outlined-select"
                               select
                               name="tax_rate"
@@ -4319,7 +4350,7 @@ const Sideform = () => {
                       fullWidth
                       autoComplete={false}
                       id="fullWidth"
-                      required
+                      // required
                       label="SKU"
                       type="text"
                       value={preData.SKU}
@@ -4333,7 +4364,7 @@ const Sideform = () => {
                       fullWidth
                       autoComplete={false}
                       id="fullWidth"
-                      required
+                      // required
                       value={preData.product_title}
                       onChange={handleChangeData}
                       label="Product Title"
@@ -4345,7 +4376,7 @@ const Sideform = () => {
                     <br></br>
                     <TextField
                       fullWidth
-                      required
+                      // required
                       autoComplete={false}
                       id="fullWidth"
                       label="SEO Title"
@@ -4359,7 +4390,7 @@ const Sideform = () => {
                     <br></br>
                     <TextField
                       fullWidth
-                      required
+                      // required
                       autoComplete={false}
                       id="fullWidth"
                       value={preData.seo_description}
@@ -4372,7 +4403,7 @@ const Sideform = () => {
                     <br></br>
                     <TextField
                       fullWidth
-                      required
+                      // required
                       autoComplete={false}
                       id="fullWidth"
                       value={preData.seo_keyword}
@@ -4403,7 +4434,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       select
                       name="category_name"
@@ -4429,7 +4460,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       select
                       name="sub_category_name"
@@ -4513,7 +4544,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       select
                       name="primary_material"
@@ -4608,7 +4639,7 @@ const Sideform = () => {
                       fullWidth
                       autoComplete={false}
                       id="fullWidth"
-                      required
+                      // required
                       value={preData.showroom_price}
                       onChange={handleChangeData}
                       label="Showroom Price"
@@ -4627,7 +4658,7 @@ const Sideform = () => {
                       fullWidth
                       autoComplete={false}
                       id="fullWidth"
-                      required
+                      // required
                       value={preData.MRP}
                       onChange={(e) => {
                         handleChangeData(e);
@@ -4647,7 +4678,7 @@ const Sideform = () => {
                     <br></br>
                     <TextField
                       fullWidth
-                      required
+                      // required
                       autoComplete={false}
                       id="fullWidth"
                       label="Discount Limit"
@@ -4669,7 +4700,7 @@ const Sideform = () => {
                     <br></br>
                     <TextField
                       fullWidth
-                      required
+                      // required
                       autoComplete={false}
                       id="fullWidth"
                       label="Selling Price"
@@ -4693,7 +4724,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       select
                       name="dispatch_time"
@@ -4894,7 +4925,7 @@ const Sideform = () => {
 
                     <FormControl>
                       <FormLabel id="demo-radio-buttons-group-label">
-                        Assembly Required
+                        Assembly // required
                       </FormLabel>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
@@ -5325,7 +5356,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       select
                       name="tax_rate"
@@ -5566,7 +5597,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="fabric_name"
                       label="Fabric"
@@ -5686,7 +5717,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="category_name"
                       label="Category"
@@ -5803,7 +5834,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="primaryMaterial_name"
                       label="Primary Material"
@@ -5913,7 +5944,7 @@ const Sideform = () => {
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="knob_name"
                       label="Knob Name"
@@ -5971,7 +6002,7 @@ const Sideform = () => {
                   >
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       onChange={handleChangeData}
                       name="knob_name"
@@ -6024,7 +6055,7 @@ const Sideform = () => {
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="handle_name"
                       label="Handle Material Name"
@@ -6083,7 +6114,7 @@ const Sideform = () => {
                     <TextField
                       onChange={handleChangeData}
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="handle_name"
                       value={preData.handle}
@@ -6135,7 +6166,7 @@ const Sideform = () => {
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="door_name"
                       label="Door Name"
@@ -6194,7 +6225,7 @@ const Sideform = () => {
                     <TextField
                       fullWidth
                       onChange={handleChangeData}
-                      required
+                      // required
                       id="outlined-select"
                       name="door_name"
                       label="Door Name"
@@ -6246,7 +6277,7 @@ const Sideform = () => {
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="fitting_name"
                       label="Fitting Name"
@@ -6304,7 +6335,7 @@ const Sideform = () => {
                   >
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="fitting_name"
                       label="Fitting Name"
@@ -6357,7 +6388,7 @@ const Sideform = () => {
                     {/* <ImagePreviews text={'Plese Drag and Drop the Category image'}> </ImagePreviews> */}
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="hinge_name"
                       label="Hinge Name"
@@ -6416,7 +6447,7 @@ const Sideform = () => {
                     <TextField
                       fullWidth
                       onChange={handleChangeData}
-                      required
+                      // required
                       id="outlined-select"
                       name="hinge_name"
                       label="Hinge Name"
@@ -6469,7 +6500,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="polish_name"
                       label="Polish Name"
@@ -6530,7 +6561,7 @@ const Sideform = () => {
                     <TextField
                       fullWidth
                       onChange={handleChangeData}
-                      required
+                      // required
                       id="outlined-select"
                       name="polish_name"
                       label="Polish Name"
@@ -6644,7 +6675,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="seo_title"
                       label="SEO Title"
@@ -6653,7 +6684,7 @@ const Sideform = () => {
                     />
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="seo_description"
                       label="SEO Description"
@@ -6663,7 +6694,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       value={preData.card_description}
                       onChange={handleChangeData}
@@ -6673,7 +6704,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       value={preData.title}
                       onChange={handleChangeData}
@@ -6814,21 +6845,21 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="seo_title"
                       label="SEO Title"
                     />
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="seo_description"
                       label="SEO Description"
                     />
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="card_description"
                       label="Card Description"
@@ -6836,7 +6867,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="title"
                       label="Blog Title"
@@ -6924,7 +6955,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="SKU"
                       label="Product SKU"
@@ -7025,7 +7056,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="secondaryMaterial_name"
                       label="Secondary Material"
@@ -7136,7 +7167,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       select
                       name="category_id"
@@ -7158,7 +7189,7 @@ const Sideform = () => {
 
                     <TextField
                       fullWidth
-                      required
+                      // required
                       id="outlined-select"
                       name="sub_category_name"
                       label="Sub Category"
