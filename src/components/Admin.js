@@ -106,12 +106,12 @@ function BasicTabs() {
                   label="Primary Material"
                   {...a11yProps(2)}
                 />
-                <Tab
+                {/* <Tab
                   wrapped
                   icon={<FilterListIcon />}
                   label="Secondary Material"
                   {...a11yProps(3)}
-                />
+                /> */}
                 <Tab
                   wrapped
                   icon={<AutoAwesomeIcon />}

@@ -22,7 +22,11 @@ import {
   StepLabel,
   StepContent,
   Slider,
-  Tooltip
+  Tooltip,
+  Select,
+  OutlinedInput,
+  ListItemText,
+  InputLabel
 } from "@mui/material";
 import PropTypes from 'prop-types';
 import { Editor } from "@tinymce/tinymce-react";
@@ -548,6 +552,7 @@ const Sideform = () => {
   });
   // pres data
   const [changeData, setData] = useState({
+    primary_material : [],
     product_title: "",
     seo_title: "",
     seo_des: "",
@@ -944,7 +949,7 @@ const Sideform = () => {
     "wall_hanging",
   ];
 
- 
+
 
   //  for product felids
   const handleProductFelids = (e) => {
@@ -963,6 +968,7 @@ const Sideform = () => {
     console.log(changeData);
   };
 
+  
   const handleChange = (event) => {
     console.log(event.target.name);
     setCat(event.target.value);
@@ -1607,14 +1613,15 @@ const Sideform = () => {
     featured.map((element) => {
       return FD.append("featured_image", element);
     });
-    materialCatalog.map((item) => {
-      return (
-        item._id === changeData.primary_material &&
-        FD.append("primary_material_name", item.primaryMaterial_name)
-      );
-    });
-
-    category.map((item) => {
+    // materialCatalog.map((item) => {
+    //   return (
+    //     item.primaryMaterial_name === changeData.primary_material &&
+    //     FD.append("primary_material_name", item.primaryMaterial_name)
+    //     );
+    //   });
+      FD.append("primary_material_name", JSON.stringify(changeData.primary_material))
+    
+      category.map((item) => {
       return (
         item._id === changeData.category_name &&
         FD.append("category_name", item.category_name)
@@ -2980,6 +2987,25 @@ const Sideform = () => {
                             />
 
                             <br></br>
+                            <InputLabel id="demo-multiple-checkbox-label">Primary Material</InputLabel>
+                            <Select
+                              multiple
+                              fullWidth
+                              value={changeData.primary_material}
+                              name="primary_material"
+                              onChange={handleProductFelids}
+                              renderValue={(selected) => selected.join(', ')}
+                              // MenuProps={MenuProps}
+                            >
+                              {materialCatalog.map((option) => (
+                                <MenuItem key={option._id} value={option.primaryMaterial_name}>
+                                  <Checkbox   checked = {changeData.primary_material.indexOf(option.primaryMaterial_name) > -1}/>
+                                  <ListItemText primary={option.primaryMaterial_name} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+
+                            {/* <br></br>
 
                             <TextField
                               fullWidth
@@ -3008,7 +3034,7 @@ const Sideform = () => {
                                 {"None"}
                               </MenuItem>
                             </TextField>
-
+ */}
                             <br></br>
                             <TextField
                               fullWidth
