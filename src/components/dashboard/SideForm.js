@@ -80,6 +80,9 @@ import {
   addFabric,
   editFabric,
   getFabric,
+  addTextile,
+  editTextile,
+  getTextile,
 } from "../../services/service.js";
 
 const thumbsContainer = {
@@ -484,6 +487,7 @@ const Sideform = () => {
   const [materialCatalog, setMaterialCatalog] = useState([]);
   const [secMaterialCatalog, setSecMaterialCatalog] = useState([]);
   const [polishCatalog, setPolishCatalog] = useState([]);
+  const [textileCatalog, setTextileCatalog] = useState([]);
   const [hingeCatalog, setHingeCatalog] = useState([]);
   const [fittingCatalog, setFittingCatalog] = useState([]);
   const [knobCatalog, setKnobCatalog] = useState([]);
@@ -603,9 +607,12 @@ const Sideform = () => {
     seat_height: "",
     wheel: "",
     trolly: "",
+    returnable : false,
+    returnDays : 0, 
     trolly_mater: "",
     top_size: "",
     dial_size: "",
+    COD : false
   });
 
   useEffect(() => {
@@ -764,6 +771,13 @@ const Sideform = () => {
           fabric_name: SideBox.open.payload.row.fabric_name,
         });
         break;
+
+      case "update_textile":
+        setPreData({
+          ...preData,
+          textile_name: SideBox.open.payload.row.textile_name,
+        });
+        break;
       default:
         console.log("");
     }
@@ -796,6 +810,11 @@ const Sideform = () => {
       if (data.data === null) return setPolishCatalog([]);
 
       return setPolishCatalog(data.data);
+    });
+
+    getTextile().then((data) => {
+      if (data.data === null) return setTextileCatalog([]);
+      return setTextileCatalog(data.data);
     });
 
     getHinge().then((data) => {
@@ -947,6 +966,8 @@ const Sideform = () => {
     "stackable",
     "knife",
     "wall_hanging",
+    "COD",
+    "returnable"
   ];
 
 
@@ -1083,6 +1104,50 @@ const Sideform = () => {
   };
 
   // function for handling category
+  const handleTextile = (e) => {
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append("textile_image", Image[0]);
+    FD.append("textile_name", e.target.textile_name.value);
+    FD.append("textile_status", e.target.textile_status.checked);
+
+    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+
+    const res = addTextile(FD);
+
+    res
+      .then((data) => {
+        console.log(data.status);
+
+        if (data.status === 203) {
+          setImages([]);
+          dispatchAlert.setNote({
+            open: true,
+            variant: "error",
+            message: data.data.message,
+          });
+        } else {
+          setImages([]);
+          handleClose();
+          dispatchAlert.setNote({
+            open: true,
+            variant: "success",
+            message: data.data.message,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        });
+      });
+  };
   const handleFabric = (e) => {
     e.preventDefault();
 
@@ -1174,6 +1239,52 @@ const Sideform = () => {
       });
   };
 
+  // function for handling update category
+  const handleUpdateTextile = (e) => {
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append("_id", SideBox.open.payload.row.action);
+
+    Image[0] !== undefined && FD.append("fabric_image", Image[0]);
+
+    e.target.textile_name.value !== ""
+      ? FD.append("textile_name", e.target.textile_name.value)
+      : console.log();
+
+    const res = editTextile(FD);
+    res
+      .then((data) => {
+        console.log(data.status);
+
+        if (data.status === 203) {
+          setImages([]);
+          dispatchAlert.setNote({
+            open: true,
+            variant: "error",
+            message: data.data.message,
+          });
+        } else {
+          setImages([]);
+          handleClose();
+          dispatchAlert.setNote({
+            open: true,
+            variant: "success",
+            message: data.data.message,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setImages([]);
+        dispatchAlert.setNote({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        });
+      });
+  };
   // function for handling update category
   const handleUpdateFabric = (e) => {
     e.preventDefault();
@@ -1641,6 +1752,13 @@ const Sideform = () => {
         FD.append("polish_name", item.polish_name)
       );
     });
+
+    textileCatalog.map((item) => {
+      return (
+        item._id === changeData.polish &&
+        FD.append("textile_name", item.textile_name)
+      );
+    });
     hingeCatalog.map((item) => {
       return (
         item._id === changeData.hinge &&
@@ -1678,12 +1796,18 @@ const Sideform = () => {
         );
       });
     }
+
+    
+    FD.append("returnDays", changeData.returnable ? changeData.returnDays : 0);
+    FD.append("returnable", changeData.returnable);
+    FD.append("COD", changeData.COD);
     FD.append("polish", changeData.polish);
     FD.append("hinge", changeData.hinge);
     FD.append("knob", changeData.knob);
     FD.append("handle", changeData.handle);
     FD.append("door", changeData.door);
     FD.append("fitting", changeData.fitting);
+    FD.append("textile", changeData.textile);
 
     FD.append("category_id", changeData.category_name);
     FD.append("sub_category_id", changeData.sub_category_name);
@@ -3185,19 +3309,69 @@ const Sideform = () => {
                         <StepLabel>Inventory & Shipping</StepLabel>
                         <StepContent className="stepContent">
                           <Box className="fields">
-                            <br></br>
+                            
+                            <br/>
 
-                            <Typography variant = 'Caption' > Dispatch in {changeData.dispatch_time} Days</Typography>
+                            <FormGroup>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Return & Payment Policy
+                              </FormLabel>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.COD}
+                                    onChange={handleProductFelids}
+                                    name="COD"
+                                  />
+                                }
+                                label="COD Available"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.returnable}
+                                    onChange={handleProductFelids}
+                                    name="returnable"
+                                  />
+                                }
+                                label="Return Item"
+                              />
+                              </FormGroup>
 
-                            <Slider
-                              aria-label="Construction Days"
-                              defaultValue={0}
-                              name = "dispatch_time"
-                              value = {changeData.dispatch_time}
-                              onChange = {handleProductFelids}
-                              helperText="Please select your dispatch time"
+                              {
+                                changeData.returnable && <>
+                                
+                            <Typography variant = 'Caption' > Return in {changeData.returnDays} Days</Typography>
+                                 <Slider
+                                aria-label="Return Days"
+                                defaultValue={0}
+                                size="small"
+                                name = "returnDays"
+                                value = {changeData.returnDays}
+                                onChange = {handleProductFelids}
+                                helperText="Please select your return days"
+  valueLabelDisplay="auto"
 
-                            />
+                                />
+                                </>
+                              }
+
+<br></br>
+
+<Typography variant = 'Caption' > Dispatch in {changeData.dispatch_time} Days</Typography>
+
+<Slider
+  aria-label="Construction Days"
+  defaultValue={0}
+  size="small"
+  valueLabelDisplay="auto"
+  name = "dispatch_time"
+  value = {changeData.dispatch_time}
+  onChange = {handleProductFelids}
+  helperText="Please select your dispatch time"
+
+/>
+
 
 
                             {/* <TextField
@@ -3454,6 +3628,34 @@ const Sideform = () => {
                                 onChange={handleProductFelids}
                               />
                             )}
+                            <br></br>
+
+                            <TextField
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="textile"
+                              label="Textile"
+                              value={changeData.textile}
+                              onChange={handleProductFelids}
+                              multiple
+                              helperText="Please select your textile."
+                            >
+                              {textileCatalog.map(
+                                (option) =>
+                                  option.textile_status && (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option._id}
+                                    >
+                                      {option.textile_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
                             <br></br>
 
                             <TextField
@@ -5590,6 +5792,125 @@ const Sideform = () => {
             )}
 
             {/* update Products Ends */}
+
+            {/*  add textile */}
+
+            {SideBox.open.formType === "textile" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Add Textile
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add Textile and necessary information from here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form
+                    className="form"
+                    onSubmit={handleTextile}
+                    id="myForm"
+                    enctype="multipart/form-data"
+                    method="post"
+                  >
+                    <ImagePreviews
+                      text={"Please Drag and Drop the Textile image"}
+                    >
+                      {" "}
+                    </ImagePreviews>
+
+                    <TextField
+                      fullWidth
+                      // required
+                      id="outlined-select"
+                      name="textile_name"
+                      label="Textile"
+                      type="text"
+                      helperText="Please enter your textile"
+                    />
+
+                    <br></br>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Checkbox name="textile_status" />}
+                        label="Status (On/Off)"
+                      />
+                    </FormGroup>
+
+                    <br></br>
+
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Add Textile
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+            {/* add textile Ends */}
+
+            {/*  update textile */}
+
+            {SideBox.open.formType === "update_textile" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Textile
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update your Textile and necessary information from here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form
+                    className="form"
+                    id="myForm"
+                    onSubmit={handleUpdateTextile}
+                    enctype="multipart/form-data"
+                    method="post"
+                  >
+                    <ImagePreviews
+                      text={"Please Drag and Drop the Fabric image"}
+                    >
+                      {" "}
+                    </ImagePreviews>
+
+                    <TextField
+                      fullWidth
+                      id="outlined-select"
+                      onChange={handleChangeData}
+                      value={preData.textile_name}
+                      name="textile_name"
+                      label="Textile"
+                      helperText="Please enter the update"
+                    />
+
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Update Textile
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* update Textile Ends */}
 
             {/*  add fabric */}
 

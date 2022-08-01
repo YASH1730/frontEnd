@@ -663,3 +663,45 @@ export const deleteFabric = async (data) => {
     },
   });
 };
+
+// ================== CURD for Textile ==========================
+
+export const addTextile = async (data) => {
+  return await axios.post(`${localURL}/addTextile`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+export const editTextile = async (data) => {
+  return await axios.patch(`${localURL}/editTextile`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+export const getTextile = async () => {
+  return await axios.get(`${localURL}/getTextile`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+export const changeTextileStatus = async (data) => {
+  return await axios.patch(`${localURL}/changeTextileStatus`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+export const deleteTextile = async (data) => {
+  return await axios.delete(`${localURL}/deleteTextile?_id=${data}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
