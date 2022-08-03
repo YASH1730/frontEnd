@@ -612,7 +612,8 @@ const Sideform = () => {
     trolly_mater: "",
     top_size: "",
     dial_size: "",
-    COD : false
+    COD : false,
+    textile : ''
   });
 
   useEffect(() => {
@@ -1755,7 +1756,7 @@ const Sideform = () => {
 
     textileCatalog.map((item) => {
       return (
-        item._id === changeData.polish &&
+        item._id === changeData.textile_type &&
         FD.append("textile_name", item.textile_name)
       );
     });
@@ -1808,6 +1809,7 @@ const Sideform = () => {
     FD.append("door", changeData.door);
     FD.append("fitting", changeData.fitting);
     FD.append("textile", changeData.textile);
+    FD.append("textile_type", changeData.textile_type);
 
     FD.append("category_id", changeData.category_name);
     FD.append("sub_category_id", changeData.sub_category_name);
@@ -1869,6 +1871,7 @@ const Sideform = () => {
         "silver_weight",
         changeData.silver_weight ? changeData.silver_weight : 0
       );
+   
 
     if (changeData.trolley === "yes")
       FD.append("trolley_material", changeData.trolley_material);
@@ -3628,15 +3631,41 @@ const Sideform = () => {
                                 onChange={handleProductFelids}
                               />
                             )}
-                            <br></br>
 
+<br></br>
+
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Textile
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.textile || "no"}
+                                onChange={handleProductFelids}
+                                name="textile"
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+
+                            <br></br>
+{changeData.textile === 'yes' && 
                             <TextField
                               fullWidth
                               id="outlined-select"
                               select
-                              name="textile"
+                              name="textile_type"
                               label="Textile"
-                              value={changeData.textile}
+                              value={changeData.textile_type}
                               onChange={handleProductFelids}
                               multiple
                               helperText="Please select your textile."
@@ -3655,7 +3684,7 @@ const Sideform = () => {
                               <MenuItem key={"none"} value={undefined}>
                                 {"None"}
                               </MenuItem>
-                            </TextField>
+                            </TextField>}
                             <br></br>
 
                             <TextField
