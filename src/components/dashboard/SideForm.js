@@ -600,7 +600,7 @@ const Sideform = () => {
     selling_point: "",
     mirror: "",
     joints: "",
-    tax_rate: "",
+    tax_rate: 18,
     seat_width: "",
     seat_depth: "",
     seat_height: "",
@@ -780,7 +780,7 @@ const Sideform = () => {
         });
         break;
       default:
-        console.log("");
+        // console.log("");
     }
 
     categoryList().then((data) => {
@@ -885,7 +885,7 @@ const Sideform = () => {
       case "update_PrimaryMaterial":
         setPreData({
           ...preData,
-          priMater: e.target.value,
+          [e.target.name]: e.target.value,
         });
         break;
       case "update_polish":
@@ -950,7 +950,7 @@ const Sideform = () => {
         break;
 
       default:
-        console.log("");
+        // console.log("");
     }
   };
 
@@ -975,7 +975,7 @@ const Sideform = () => {
 
   //  for product felids
   const handleProductFelids = (e) => {
-    // console.log(e);
+    // // console.log(e);
     if (feature.includes(e.target.name)) {
       setData({
         ...changeData,
@@ -987,12 +987,12 @@ const Sideform = () => {
         [e.target.name]: e.target.value,
       });
     }
-    console.log(changeData);
+    // console.log(changeData);
   };
 
   
   const handleChange = (event) => {
-    console.log(event.target.name);
+    // console.log(event.target.name);
     setCat(event.target.value);
   };
   const handleChangeSubCat = (event) => {
@@ -1052,7 +1052,7 @@ const Sideform = () => {
  
 
   const handleChangeLeg = (event) => {
-    // console.log(event.target.value);
+    // // console.log(event.target.value);
     setLeg(event.target.value);
   };
 
@@ -1079,7 +1079,7 @@ const Sideform = () => {
     getLastProduct()
       .then((res) => {
         if (res.data.length > 0) {
-          // console.log(res.data[0].SKU)
+          // // console.log(res.data[0].SKU)
 
           let index = parseInt(res.data[0].SKU.split("-")[1]) + 1;
 
@@ -1089,7 +1089,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 
@@ -1103,13 +1103,13 @@ const Sideform = () => {
     FD.append("textile_name", e.target.textile_name.value);
     FD.append("textile_status", e.target.textile_status.checked);
 
-    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+    // // console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     const res = addTextile(FD);
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -1129,7 +1129,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -1147,13 +1147,13 @@ const Sideform = () => {
     FD.append("fabric_name", e.target.fabric_name.value);
     FD.append("fabric_status", e.target.fabric_status.checked);
 
-    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+    // // console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     const res = addFabric(FD);
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -1173,7 +1173,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -1193,13 +1193,13 @@ const Sideform = () => {
     FD.append("category_name", e.target.category_name.value);
     FD.append("category_status", e.target.category_status.checked);
 
-    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+    // // console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     const res = addCategory(FD);
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -1219,7 +1219,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -1246,7 +1246,7 @@ const Sideform = () => {
     const res = editTextile(FD);
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -1266,7 +1266,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -1292,7 +1292,7 @@ const Sideform = () => {
     const res = editFabric(FD);
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -1312,7 +1312,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -1333,12 +1333,12 @@ const Sideform = () => {
 
     e.target.category_name.value !== undefined
       ? FD.append("category_name", e.target.category_name.value)
-      : console.log();
+      :  console.log();
 
     const res = editCategory(FD);
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -1358,7 +1358,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -1438,7 +1438,7 @@ const Sideform = () => {
 
     const res = updateImage(FD);
 
-    console.log(SideBox.open.payload);
+    // console.log(SideBox.open.payload);
 
     res
       .then((data) => {
@@ -1465,7 +1465,7 @@ const Sideform = () => {
 
   //   FD.append("_id", SideBox.open.payload.row.action._id);
 
-  //   // console.log(SideBox.open.payload.row.action);
+  //   // // console.log(SideBox.open.payload.row.action);
 
   //   FD.append("SKU", e.target.SKU.value);
 
@@ -1659,14 +1659,14 @@ const Sideform = () => {
   //   // FD.get('product_image')
 
   //   for (var value of FD.values()) {
-  //     console.log(">>>>", value);
+  //     // console.log(">>>>", value);
   //   }
 
   //   const res = updateProduct(FD);
 
   //   res
   //     .then((data) => {
-  //       console.log(data.status);
+  //       // console.log(data.status);
 
   //       if (data.status === 203) {
   //         setImages([]);
@@ -1686,7 +1686,7 @@ const Sideform = () => {
   //       }
   //     })
   //     .catch((err) => {
-  //       console.log(err);
+  //       // console.log(err);
   //       setImages([]);
   //       dispatchAlert.setNote({
   //         open: true,
@@ -1819,7 +1819,14 @@ const Sideform = () => {
     FD.append("selling_price", changeData.selling_price);
     FD.append("primary_material", changeData.primary_material);
     FD.append("fabric", changeData.fabric);
-    //  console.log(secMaterial)
+    
+    FD.append("drawer", changeData.drawer);
+    
+    if (changeData.drawer !== undefined || changeData.drawer !== 'none' ) 
+    FD.append("drawer_count", changeData.drawer_count ? changeData.drawer_count : 0 );
+
+
+    //  // console.log(secMaterial)
     if (changeData.secondary_material_weight !== undefined)
       FD.append(
         "secondary_material_weight",
@@ -1929,7 +1936,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           dispatchAlert.setNote({
@@ -1947,7 +1954,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         dispatchAlert.setNote({
           open: true,
           variant: "error",
@@ -1967,13 +1974,13 @@ const Sideform = () => {
       e.target.secondaryMaterial_status.checked
     );
 
-    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+    // // console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     const res = addSecondaryMaterial(FD);
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -1993,7 +2000,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2019,13 +2026,13 @@ const Sideform = () => {
       e.target.primaryMaterial_status.checked
     );
 
-    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+    // // console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     const res = addPrimaryMaterial(FD);
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2045,7 +2052,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2076,7 +2083,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2096,7 +2103,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2122,7 +2129,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2142,7 +2149,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2164,7 +2171,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2184,7 +2191,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2207,7 +2214,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2227,7 +2234,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2248,7 +2255,7 @@ const Sideform = () => {
     const res = addHinge(FD);
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2268,7 +2275,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2291,7 +2298,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2311,7 +2318,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2332,7 +2339,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2353,7 +2360,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2376,7 +2383,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2396,7 +2403,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2417,7 +2424,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2437,7 +2444,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2459,7 +2466,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2479,7 +2486,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2501,7 +2508,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2521,7 +2528,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2544,7 +2551,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2564,7 +2571,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2586,7 +2593,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2606,7 +2613,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2628,7 +2635,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2648,7 +2655,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2672,13 +2679,13 @@ const Sideform = () => {
     FD.append("sub_category_name", e.target.sub_category_name.value);
     FD.append("sub_category_status", e.target.sub_category_status.checked);
 
-    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+    // // console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     const res = addSubCategories(FD);
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2698,7 +2705,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2712,7 +2719,7 @@ const Sideform = () => {
 
     const FD = new FormData();
 
-    console.log(SideBox.open.payload);
+    // console.log(SideBox.open.payload);
 
     FD.append("_id", SideBox.open.payload.row.action);
 
@@ -2728,13 +2735,13 @@ const Sideform = () => {
     e.target.sub_category_name.value !== "" &&
       FD.append("sub_category_name", e.target.sub_category_name.value);
 
-    // console.log(acceptedFiles[0].name, e.target.category_name.value)
+    // // console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     const res = editSubCatagories(FD);
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2754,7 +2761,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2779,7 +2786,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2799,7 +2806,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2827,7 +2834,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2848,7 +2855,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -2879,7 +2886,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        console.log(data.status);
+        // console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2900,7 +2907,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatchAlert.setNote({
           open: true,
@@ -3665,6 +3672,7 @@ const Sideform = () => {
                               fullWidth
                               id="outlined-select"
                               select
+                      
                               name="textile_type"
                               label="Textile"
                               value={changeData.textile_type}
@@ -3687,6 +3695,46 @@ const Sideform = () => {
                                 {"None"}
                               </MenuItem>
                             </TextField>}
+
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Drawer
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.drawer || "no"}
+                                onChange={handleProductFelids}
+                                name="drawer"
+                              >
+                                <FormControlLabel
+                                  value="mechanical"
+                                  control={<Radio />}
+                                  label="Mechanical"
+                                />
+                                <FormControlLabel
+                                  value="wooden"
+                                  control={<Radio />}
+                                  label="Wooden"
+                                />
+                                <FormControlLabel
+                                  value="none"
+                                  control={<Radio />}
+                                  label="None"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+
+                            <br></br>
+{(changeData.drawer === 'mechanical' || changeData.drawer === 'wooden')  && 
+                            <TextField
+                              fullWidth
+                              type = 'number'
+                              id="outlined-select"
+                              name="drawer_count"
+                              label="Drawer Count"
+                              value={changeData.drawer_count}
+                              onChange={handleProductFelids}
+                            />}
                             <br></br>
 
                             <TextField
@@ -4165,7 +4213,6 @@ const Sideform = () => {
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
                                 name="mirror"
-                                // onChange={handleChangeMirror}
                                 value={changeData.mirror || "no"}
                                 onChange={handleProductFelids}
                               >
@@ -4182,7 +4229,7 @@ const Sideform = () => {
                               </RadioGroup>
                             </FormControl>
 
-                            {changeData.mirror !== "no" && (
+                            {changeData.mirror === 'yes' && (
                               <>
                                 <br></br>
                                 <TextField
@@ -4567,7 +4614,7 @@ const Sideform = () => {
 
             {SideBox.open.formType === "update_product" && (
               <Grid container p={5}>
-                {/* {console.log(SideBox.open.payload)} */}
+                {/* {// console.log(SideBox.open.payload)} */}
                 <Grid item xs={12}>
                   <Typography variant="h5">
                     Update Product
@@ -6291,17 +6338,18 @@ const Sideform = () => {
                       value={preData.priMater}
                       helperText="Please enter the update"
                     />
-                     <br></br>
+
                     <TextareaAutosize
                       fullWidth 
                       minRows = {5}
                       id="outlined-select"
                       name="primaryMaterial_description"
                       onChange={handleChangeData}
-                      value = {preData.primaryMaterial_description}
+                      defaultValue = {preData.primaryMaterial_description}
                       type="text"
                       helperText="Please enter your primary material description"
                     />
+                    <br></br>
 
                     <Button
                       color="primary"
@@ -7112,7 +7160,7 @@ const Sideform = () => {
                       label="Blog Title"
                     />
                     {/* product description  */}
-                    {console.log(SideBox.open.payload)}
+                    
                     <Editor
                       apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
                       initialValue={`${preData.description}`}
