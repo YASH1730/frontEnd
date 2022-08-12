@@ -134,8 +134,8 @@ export const listBanner = async () => {
 
 // change status banner
 
-export const chaneStatus = async (data) => {
-  return await axios.patch(`${localURL}/chaneStatusBanner`, data, {
+export const changeStatus = async (data) => {
+  return await axios.patch(`${localURL}/changeStatusBanner`, data, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("WDToken")}`,

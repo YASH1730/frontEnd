@@ -12,7 +12,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
 import { OpenBox, Notify } from "../../App";
 import {getListProduct, deleteProduct} from '../../services/service'
-
+import MergeIcon from '@mui/icons-material/Merge';
 import {
   DataGrid,
   gridPageCountSelector,
@@ -48,7 +48,7 @@ export default function Products() {
 
 
   // states
-
+  const [selectedSKU, setSelection] = useState([]);
   const [search,setSearch] = useState('')
   const [Row, setRows] = useState()
 
@@ -201,16 +201,6 @@ export default function Products() {
     {
       field: "primary_material",
       headerName: "Primary Material",
-      width: 160,
-    },
-    {
-      field: "secondary_material",
-      headerName: "Secondary material",
-      width: 160,
-    },
-    {
-      field: "secondary_material_weight",
-      headerName: "Secondary material Weight",
       width: 160,
     },
     {
@@ -527,6 +517,7 @@ export default function Products() {
     return (
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
+          checkboxSelection
           rows={Row}
           columns={columns}
           pageSize={5}
@@ -537,7 +528,14 @@ export default function Products() {
           components={{
             Pagination: CustomPagination,
           }}
-          
+          onSelectionModelChange={(ids) => {
+            const selectedIDs = new Set(ids);
+            const selectedRows = Row.filter((row) =>
+              selectedIDs.has(row.id),
+            );
+  
+            setSelection(selectedRows);
+          }}
         />
       </div>
     );
@@ -602,7 +600,22 @@ export default function Products() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
+          <div style= {
+            {
+              display  : 'flex',
+              justifyContent : 'space-between',
+            }
+          } >
+
           <Typography variant="h6"> Product List </Typography>
+          {selectedSKU.length > 1 &&  <Button startIcon = {<MergeIcon/>} variant = 'outlined' onClick = {()=>{
+            SideBox.setOpen({
+              state : true,
+              formType : 'merge_product',
+              payload : selectedSKU
+            }) 
+          }}>Merge</Button>}
+          </div>
           <br></br>
           {DataGridView()}
         </Grid>
