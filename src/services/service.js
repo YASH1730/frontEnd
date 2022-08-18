@@ -1,4 +1,6 @@
+
 import axios from "axios";
+
 
 const localURL = "http://localhost:8000/api";
 const official = "http://157.245.102.136/api";
@@ -104,6 +106,16 @@ export const updateProduct = async (data) => {
 
 export const getLastProduct = async () => {
   return await axios.get(`${official}/getLastProduct`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+// for getting the last product
+
+export const getPresentSKUs = async () => {
+  return await axios.get(`${official}/getPresentSKUs`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
     },
@@ -761,6 +773,27 @@ export const updateMergeProduct = async (data) => {
 
 export const getLastMergeProduct = async () => {
   return await axios.get(`${official}/getLastMergeProduct`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+// =========================== CURD FOR MERGE PRODUCTS  ===========================
+
+// for  adding category to the list
+
+export const getOrder = async () => {
+  return await axios.get(`${official}/listOrders`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+// change status 
+export const changeOrderStatus = async (data) => {
+  return await axios.post(`${official}/changeOrderStatus`, data, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
     },

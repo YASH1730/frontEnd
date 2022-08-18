@@ -745,7 +745,7 @@ export default function Products() {
           console.log(params)
               SideBox.setOpen({
                 state : true,
-                formType : 'update_product',
+                formType : 'update_merge',
                 payload : params
               }) 
             }} aria-label="update"  >

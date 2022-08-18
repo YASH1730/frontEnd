@@ -27,7 +27,6 @@ import {
   ListItemText,
   InputLabel
 } from "@mui/material";
-import PropTypes from 'prop-types';
 import { Editor } from "@tinymce/tinymce-react";
 import Slide from "@mui/material/Slide";
 import Backdrop from "@mui/material/Backdrop";
@@ -49,10 +48,7 @@ import {
   editSubCatagories,
   addPrimaryMaterial,
   editPrimaryMaterial,
-  addSecondaryMaterial,
-  editSecondaryMaterial,
   getPrimaryMaterial,
-  getSecondaryMaterial,
   addPolish,
   editPolish,
   getPolish,
@@ -83,7 +79,9 @@ import {
   editTextile,
   getTextile,
   addMergeProduct,
-  getLastMergeProduct
+  updateMergeProduct,
+  getLastMergeProduct,
+  getPresentSKUs
 } from "../../services/service.js";
 
 const thumbsContainer = {
@@ -421,25 +419,6 @@ const Sideform = () => {
 
   // states
   const [cat, setCat] = useState();
-  const [subCat, setSubCat] = useState();
-  const [dispatchTime, setDispatch] = useState();
-  const [taxRate, setTaxRate] = useState("18");
-  const [fabric, setFabric] = useState();
-  const [fitting, setFitting] = useState();
-  const [Polish, setPolish] = useState();
-  const [Hinge, setHinge] = useState();
-  const [Knob, setKnob] = useState();
-  const [handle, setHandle] = useState();
-  const [door, setDoor] = useState();
-  const [weightCap, setWeightCap] = useState();
-  const [material, setMaterial] = useState();
-  const [secMaterial, setSecMaterial] = useState();
-  const [mirrorVal, setMirrorVal] = useState("no");
-  const [assemblyVal, setAssemblyVal] = useState();
-  const [leg, setLeg] = useState();
-  const [silver, setSilver] = useState();
-  const [trollyVal, setTrollyVal] = useState();
-  const [trolly, settrolly] = useState();
   const [discount, setDiscount] = useState({ discount_limit: 0, MRP: 0 });
   const [showFabric, setShowFabric] = useState("No");
 
@@ -459,6 +438,7 @@ const Sideform = () => {
   const [doorCatalog, setDoorCatalog] = useState([]);
   const [handleCatalog, setHandleCatalog] = useState([]);
   const [fabricCatalog, setFabricCatalog] = useState([]);
+  const [SKUCatalog, setSKUCatalog] = useState([]);
 
   // ref
   const editorRef = useRef();
@@ -522,6 +502,7 @@ const Sideform = () => {
   // pres data
   const [changeData, setData] = useState({
     primary_material: [],
+    product_array: [],
     product_title: "",
     seo_title: "",
     seo_des: "",
@@ -575,14 +556,13 @@ const Sideform = () => {
     returnable: false,
     returnDays: 0,
     trolly_mater: "",
-    top_size: "",
-    dial_size: "",
+    top_size: 0,
+    dial_size: 0,
     COD: false,
     textile: ''
   });
 
   useEffect(() => {
-    getMKU()
 
     switch (SideBox.open.formType) {
       case "update_category":
@@ -652,9 +632,9 @@ const Sideform = () => {
         setData({
           SKU: SideBox.open.payload.value.SKU,
           product_title: SideBox.open.payload.value.product_title,
-          category_name: SideBox.open.payload.value.category_name,
+          category_name: SideBox.open.payload.value.category_id,
           category_id: SideBox.open.payload.value.category_id,
-          sub_category_name: SideBox.open.payload.value.sub_category_name,
+          sub_category_name: SideBox.open.payload.value.sub_category_id,
           sub_category_id: SideBox.open.payload.value.sub_category_id,
           product_description: SideBox.open.payload.value.product_description,
           seo_title: SideBox.open.payload.value.seo_title,
@@ -733,22 +713,6 @@ const Sideform = () => {
         });
 
         setCat(SideBox.open.payload.value.category_id);
-        setSubCat(SideBox.open.payload.value.sub_category_id);
-        setPolish(SideBox.open.payload.value.polish);
-        setHinge(SideBox.open.payload.value.hinge);
-        setKnob(SideBox.open.payload.value.knob);
-        setHandle(SideBox.open.payload.value.handle);
-        setDoor(SideBox.open.payload.value.door);
-        setFitting(SideBox.open.payload.value.fitting);
-        setLeg(SideBox.open.payload.value.legs);
-        setTaxRate(SideBox.open.payload.value.tax_rate);
-        setDispatch(SideBox.open.payload.value.dispatch_time);
-        setWeightCap(SideBox.open.payload.row.weight_capacity);
-        setMirrorVal(SideBox.open.payload.row.mirror);
-        setAssemblyVal(SideBox.open.payload.row.assembly_required);
-        setSilver(SideBox.open.payload.row.silver);
-        setTrollyVal(SideBox.open.payload.trolley);
-        settrolly(SideBox.open.payload.trolley_material);
 
         break;
 
@@ -767,11 +731,12 @@ const Sideform = () => {
         break;
 
       case "merge_product":
+        getMKU()
 
         let productArray = [];
 
         SideBox.open.payload.map((obj, index) => {
-            return productArray.push(obj.SKU) 
+          return productArray.push(obj.SKU)
         })
 
         setData({
@@ -781,9 +746,58 @@ const Sideform = () => {
 
         break;
 
+      case "update_merge":
+
+        setData({
+          SKU: SideBox.open.payload.value.SKU,
+          product_array: SideBox.open.payload.value.product_array.split(','),
+          product_title: SideBox.open.payload.value.product_title,
+          category_name: SideBox.open.payload.value.category_id,
+          category_id: SideBox.open.payload.value.category_id,
+          sub_category_name: SideBox.open.payload.value.sub_category_id,
+          sub_category_id: SideBox.open.payload.value.sub_category_id,
+          product_description: SideBox.open.payload.value.product_description,
+          seo_title: SideBox.open.payload.value.seo_title,
+          seo_description: SideBox.open.payload.value.seo_description,
+          seo_keyword: SideBox.open.payload.value.seo_keyword,
+          product_image: SideBox.open.payload.value.product_image,
+          featured_image: SideBox.open.payload.value.featured_image,
+          specification_image: SideBox.open.payload.value.specification_image,
+          selling_points: SideBox.open.payload.value.selling_points,
+          rotating_seats: SideBox.open.payload.value.rotating_seats,
+          eatable_oil_polish: SideBox.open.payload.value.eatable_oil_polish,
+          no_chemical: SideBox.open.payload.value.no_chemical,
+          straight_back: SideBox.open.payload.value.straight_back,
+          lean_back: SideBox.open.payload.value.lean_back,
+          weaving: SideBox.open.payload.value.weaving,
+          knife: SideBox.open.payload.value.knife,
+          not_suitable_for_Micro_Dish: SideBox.open.payload.value.not_suitable_for_Micro_Dish,
+          tilt_top: SideBox.open.payload.value.tilt_top,
+          inside_compartments: SideBox.open.payload.value.inside_compartments,
+          stackable: SideBox.open.payload.value.stackable,
+          MRP: SideBox.open.payload.value.MRP,
+          tax_rate: SideBox.open.payload.value.tax_rate,
+          selling_price: SideBox.open.payload.value.selling_price,
+          showroom_price: SideBox.open.payload.value.showroom_price,
+          discount_limit: SideBox.open.payload.value.discount_limit,
+          dispatch_time: SideBox.open.payload.value.dispatch_time,
+          status: SideBox.open.payload.value.status,
+          returnDays: SideBox.open.payload.value.returnDays,
+          COD: SideBox.open.payload.value.COD,
+          returnable: SideBox.open.payload.value.returnable
+        });
+
+        break;
+
       default:
       // console.log("");
     }
+
+    getPresentSKUs().then((data) => {
+      if (data.data === null) return setSKUCatalog([]);
+
+      return setSKUCatalog(data.data);
+    });
 
     categoryList().then((data) => {
       if (data.data === null) return setCategory([]);
@@ -803,7 +817,6 @@ const Sideform = () => {
       return setMaterialCatalog(data.data);
     });
 
- 
     getPolish().then((data) => {
       if (data.data === null) return setPolishCatalog([]);
 
@@ -992,68 +1005,9 @@ const Sideform = () => {
     // console.log(event.target.name);
     setCat(event.target.value);
   };
-  const handleChangeSubCat = (event) => {
-    setSubCat(event.target.value);
-  };
-  const handleChangeTrollyVal = (event) => {
-    setTrollyVal(event.target.value);
-  };
-
-  const handleChangeDispatchTime = (event) => {
-    setDispatch(event.target.value);
-  };
-
-  const handleChangeTaxRate = (event) => {
-    setTaxRate(event.target.value);
-  };
-
-  const handleChangeFabric = (event) => {
-    setFabric(event.target.value);
-  };
-
-  const handleChangeFitting = (event) => {
-    setFitting(event.target.value);
-  };
-
-  const handleChangePolish = (event) => {
-    setPolish(event.target.value);
-  };
-
-  const handleChangeHinge = (event) => {
-    setHinge(event.target.value);
-  };
-
-  const handleChangeKnob = (event) => {
-    setKnob(event.target.value);
-  };
-
-  const handleChangeHandle = (event) => {
-    setHandle(event.target.value);
-  };
-
-  const handleChangeDoor = (event) => {
-    setDoor(event.target.value);
-  };
-
-  const handleChangeWeightCap = (event) => {
-    setWeightCap(event.target.value);
-  };
-
-  const handleChangeMaterial = (event) => {
-    setMaterial(event.target.value);
-  };
-
-  const handleChangeSecMaterial = (event) => {
-    setSecMaterial(event.target.value);
-  };
-
-
-  const handleChangeLeg = (event) => {
-    // // console.log(event.target.value);
-    setLeg(event.target.value);
-  };
-
+  
   const handleClose = () => {
+
     resetAll();
     SideBox.setOpen({ state: false, formType: null });
   };
@@ -1390,27 +1344,12 @@ const Sideform = () => {
     setImages([]);
     setFeatured([]);
     setFiles([]);
-    setFabric(null);
-    setCat(null);
-    setSubCat(null);
-    setDispatch(null);
-    setTaxRate(null);
-    setFitting(null);
-    setPolish(null);
-    setHinge(null);
-    setKnob(null);
-    setHandle(null);
-    setDoor(null);
-    setWeightCap(null);
-    setMaterial(null);
-    setSecMaterial(null);
-    setMirrorVal(null);
-    setAssemblyVal(null);
-    setLeg(null);
-    setSilver(null);
-    setTrollyVal(null);
-    settrolly(null);
+ 
     setShowFabric("No");
+    setData({
+      product_array: [],
+      primary_material: []
+    });
     document.getElementById("myForm").reset();
   };
 
@@ -1740,6 +1679,269 @@ const Sideform = () => {
         });
       });
   };
+  const handleUpdateProduct = (e) => {
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    
+
+    files.map((element) => {
+      return FD.append("product_image", element);
+    });
+
+    FD.append("_id", SideBox.open.payload.value._id);
+
+    Image.map((element) => {
+      return FD.append("specification_image", element);
+    });
+
+    featured.map((element) => {
+      return FD.append("featured_image", element);
+    });
+  
+    FD.append("primary_material_name", JSON.stringify(changeData.primary_material))
+
+    category.map((item) => {
+      return (
+        item._id === changeData.category_name &&
+        FD.append("category_name", item.category_name)
+      );
+    });
+
+    subCategory.map((item) => {
+      return (
+        item._id === changeData.sub_category_name &&
+        FD.append("sub_category_name", item.sub_category_name)
+      );
+    });
+
+    polishCatalog.map((item) => {
+      return (
+        item._id === changeData.polish &&
+        FD.append("polish_name", item.polish_name)
+      );
+    });
+
+    textileCatalog.map((item) => {
+      return (
+        item._id === changeData.textile_type &&
+        FD.append("textile_name", item.textile_name)
+      );
+    });
+    hingeCatalog.map((item) => {
+      return (
+        item._id === changeData.hinge &&
+        FD.append("hinge_name", item.hinge_name)
+      );
+    });
+    fittingCatalog.map((item) => {
+      return (
+        item._id === changeData.fitting &&
+        FD.append("fitting_name", item.fitting_name)
+      );
+    });
+    knobCatalog.map((item) => {
+      return (
+        item._id === changeData.knob && FD.append("knob_name", item.knob_name)
+      );
+    });
+    doorCatalog.map((item) => {
+      return (
+        item._id === changeData.door && FD.append("door_name", item.door_name)
+      );
+    });
+    handleCatalog.map((item) => {
+      return (
+        item._id === changeData.handle &&
+        FD.append("handle_name", item.handle_name)
+      );
+    });
+
+    if (showFabric === "Yes") {
+      fabricCatalog.map((item) => {
+        return (
+          item._id === changeData.fabric &&
+          FD.append("fabric_name", item.fabric_name)
+        );
+      });
+    }
+
+
+    FD.append("returnDays", changeData.returnable ? changeData.returnDays : 0);
+    FD.append("returnable", changeData.returnable);
+    FD.append("COD", changeData.COD);
+    FD.append("polish", changeData.polish);
+    FD.append("hinge", changeData.hinge);
+    FD.append("knob", changeData.knob);
+    FD.append("handle", changeData.handle);
+    FD.append("door", changeData.door);
+    FD.append("fitting", changeData.fitting);
+    FD.append("textile", changeData.textile);
+    FD.append("textile_type", changeData.textile_type);
+
+    FD.append("category_id", changeData.category_name);
+    FD.append("sub_category_id", changeData.sub_category_name);
+    FD.append("dispatch_time", changeData.dispatch_time);
+    FD.append("product_title", changeData.product_title);
+    FD.append("product_description", editorRef.current.getContent());
+    FD.append("selling_points", sellingRef.current.getContent());
+    FD.append("SKU", changeData.SKU);
+    FD.append("MRP", changeData.MRP ? changeData.MRP : 0);
+    FD.append(
+      "showroom_price",
+      changeData.showroom_price ? changeData.showroom_price : 0
+    );
+    FD.append("seo_title", changeData.seo_title);
+    FD.append("seo_description", changeData.seo_description);
+    FD.append("seo_keyword", changeData.seo_keyword);
+    FD.append("discount_limit", changeData.discount_limit);
+    FD.append("selling_price", changeData.selling_price);
+    FD.append("primary_material", changeData.primary_material);
+    FD.append("fabric", changeData.fabric);
+
+    FD.append("drawer", changeData.drawer);
+
+    if (changeData.drawer !== undefined || changeData.drawer !== 'none')
+      FD.append("drawer_count", changeData.drawer_count ? changeData.drawer_count : 0);
+
+
+    //  // console.log(secMaterial)
+    if (changeData.secondary_material_weight !== undefined)
+      FD.append(
+        "secondary_material_weight",
+        changeData.secondary_material_weight
+      );
+    FD.append(
+      "length_main",
+      changeData.length_main ? changeData.length_main : 0
+    );
+    FD.append("breadth", changeData.breadth ? changeData.breadth : 0);
+    FD.append("height", changeData.height ? changeData.height : 0);
+    FD.append("weight", changeData.weight ? changeData.weight : 0);
+
+    FD.append("top_size", changeData.top_size);
+    FD.append("dial_size", changeData.dial_size);
+    FD.append(
+      "seating_size_width",
+      changeData.seating_size_width ? changeData.seating_size_width : 0
+    );
+    FD.append(
+      "seating_size_depth",
+      changeData.seating_size_depth ? changeData.seating_size_depth : 0
+    );
+    FD.append(
+      "seating_size_height",
+      changeData.seating_size_height ? changeData.seating_size_height : 0
+    );
+    FD.append("weight_capacity", changeData.weight_capacity);
+    FD.append("assembly_required", changeData.assembly_required);
+
+    if (changeData.assembly_required === "shipping")
+      FD.append("assembly_part", changeData.assembly_part);
+    if (changeData.assembly_required === "yes")
+      FD.append("legs", changeData.legs);
+
+    if (changeData.silver === "yes")
+      FD.append(
+        "silver_weight",
+        changeData.silver_weight ? changeData.silver_weight : 0
+      );
+
+
+    if (changeData.trolley === "yes")
+      FD.append("trolley_material", changeData.trolley_material);
+
+    if (changeData.upholstery === "Yes") FD.append("fabric", changeData.fabric);
+
+    FD.append("mirror", changeData.mirror);
+
+    if (changeData.mirror === "yes") {
+      FD.append(
+        "mirror_length",
+        changeData.mirror_length ? changeData.mirror_length : 0
+      );
+      FD.append(
+        "mirror_width",
+        changeData.mirror_width ? changeData.mirror_width : 0
+      );
+    }
+    FD.append("joints", changeData.joints ? changeData.joints : "");
+    FD.append(
+      "upholstery",
+      changeData.upholstery ? changeData.upholstery : "no"
+    );
+    FD.append("wheel", changeData.wheel ? changeData.wheel : "no");
+    FD.append("trolley", changeData.trolley ? changeData.trolley : "no");
+    FD.append("silver", changeData.silver ? changeData.silver : "no");
+    FD.append(
+      "rotating_seats",
+      changeData.rotating_seats ? changeData.rotating_seats : false
+    );
+    FD.append(
+      "eatable_oil_polish",
+      changeData.eatable_oil_polish ? changeData.eatable_oil_polish : false
+    );
+    FD.append(
+      "no_chemical",
+      changeData.no_chemical ? changeData.no_chemical : false
+    );
+    FD.append("lean_back", changeData.lean_back ? changeData.lean_back : false);
+    FD.append("weaving", changeData.weaving ? changeData.weaving : false);
+    FD.append("knife", changeData.knife ? changeData.knife : false);
+    FD.append(
+      "wall_hanging",
+      changeData.wall_hanging ? changeData.wall_hanging : false
+    );
+
+    FD.append(
+      "not_suitable_for_Micro_Dish",
+      changeData.not_suitable_for_Micro_Dish
+        ? changeData.not_suitable_for_Micro_Dish
+        : false
+    );
+    FD.append(
+      "straight_back",
+      changeData.straight_back ? changeData.straight_back : false
+    );
+    FD.append("tilt_top", changeData.tilt_top ? changeData.tilt_top : false);
+    FD.append(
+      "inside_compartments",
+      changeData.inside_compartments ? changeData.inside_compartments : false
+    );
+    FD.append("stackable", changeData.stackable ? changeData.stackable : false);
+    FD.append("tax_rate", changeData.tax_rate);
+
+    const res = updateProduct(FD);
+
+    res
+      .then((data) => {
+        // console.log(data.status);
+
+        if (data.status === 203) {
+          dispatchAlert.setNote({
+            open: true,
+            variant: "error",
+            message: data.data.message,
+          });
+        } else {
+          handleClose();
+          dispatchAlert.setNote({
+            open: true,
+            variant: "success",
+            message: data.data.message,
+          });
+        }
+      })
+      .catch((err) => {
+        // console.log(err);
+        dispatchAlert.setNote({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        });
+      });
+  };
 
 
   const handleMergeProduct = (e) => {
@@ -1760,7 +1962,7 @@ const Sideform = () => {
     featured.map((element) => {
       return FD.append("featured_image", element);
     });
-    
+
     category.map((item) => {
       return (
         item._id === changeData.category_name &&
@@ -1778,7 +1980,7 @@ const Sideform = () => {
     FD.append("returnDays", changeData.returnable ? changeData.returnDays : 0);
     FD.append("returnable", changeData.returnable);
     FD.append("COD", changeData.COD);
-    
+
     FD.append("category_id", changeData.category_name);
     FD.append("sub_category_id", changeData.sub_category_name);
     FD.append("dispatch_time", changeData.dispatch_time);
@@ -1864,35 +2066,110 @@ const Sideform = () => {
         });
       });
   };
-
-  const handleSecondaryMaterial = (e) => {
+  const handleUpdateMergeProduct = (e) => {
     e.preventDefault();
 
     const FD = new FormData();
 
-    FD.append("secondaryMaterial_name", e.target.secondaryMaterial_name.value);
+
+
+    FD.append("_id", SideBox.open.payload.value._id);
+    
+
+    Image.map((element) => {
+      return FD.append("specification_image", element);
+    });
+
+    featured.map((element) => {
+      return FD.append("featured_image", element);
+    });
+
+    category.map((item) => {
+      return (
+        item._id === changeData.category_name &&
+        FD.append("category_name", item.category_name)
+      );
+    });
+
+    subCategory.map((item) => {
+      return (
+        item._id === changeData.sub_category_name &&
+        FD.append("sub_category_name", item.sub_category_name)
+      );
+    });
+
+    FD.append("returnDays", changeData.returnable ? changeData.returnDays : 0);
+    FD.append("returnable", changeData.returnable);
+    FD.append("COD", changeData.COD);
+
+    FD.append("category_id", changeData.category_name);
+    FD.append("sub_category_id", changeData.sub_category_name);
+    FD.append("dispatch_time", changeData.dispatch_time);
+    FD.append("product_title", changeData.product_title);
+    FD.append("product_description", editorRef.current.getContent());
+    FD.append("selling_points", sellingRef.current.getContent());
+    FD.append("SKU", SKU);
+    FD.append("product_array", JSON.stringify(changeData.product_array));
+    FD.append("MRP", changeData.MRP ? changeData.MRP : 0);
     FD.append(
-      "secondaryMaterial_status",
-      e.target.secondaryMaterial_status.checked
+      "showroom_price",
+      changeData.showroom_price ? changeData.showroom_price : 0
+    );
+    FD.append("seo_title", changeData.seo_title);
+    FD.append("seo_description", changeData.seo_description);
+    FD.append("seo_keyword", changeData.seo_keyword);
+    FD.append("discount_limit", changeData.discount_limit);
+    FD.append("selling_price", changeData.selling_price);
+    FD.append(
+      "rotating_seats",
+      changeData.rotating_seats ? changeData.rotating_seats : false
+    );
+    FD.append(
+      "eatable_oil_polish",
+      changeData.eatable_oil_polish ? changeData.eatable_oil_polish : false
+    );
+    FD.append(
+      "no_chemical",
+      changeData.no_chemical ? changeData.no_chemical : false
+    );
+    FD.append("lean_back", changeData.lean_back ? changeData.lean_back : false);
+    FD.append("weaving", changeData.weaving ? changeData.weaving : false);
+    FD.append("knife", changeData.knife ? changeData.knife : false);
+    FD.append(
+      "wall_hanging",
+      changeData.wall_hanging ? changeData.wall_hanging : false
     );
 
-    // // console.log(acceptedFiles[0].name, e.target.category_name.value)
+    FD.append(
+      "not_suitable_for_Micro_Dish",
+      changeData.not_suitable_for_Micro_Dish
+        ? changeData.not_suitable_for_Micro_Dish
+        : false
+    );
+    FD.append(
+      "straight_back",
+      changeData.straight_back ? changeData.straight_back : false
+    );
+    FD.append("tilt_top", changeData.tilt_top ? changeData.tilt_top : false);
+    FD.append(
+      "inside_compartments",
+      changeData.inside_compartments ? changeData.inside_compartments : false
+    );
+    FD.append("stackable", changeData.stackable ? changeData.stackable : false);
+    FD.append("tax_rate", changeData.tax_rate);
 
-    const res = addSecondaryMaterial(FD);
+    const res = updateMergeProduct(FD);
 
     res
       .then((data) => {
-        // console.log(data.status);
 
         if (data.status === 203) {
-          setImages([]);
           dispatchAlert.setNote({
             open: true,
             variant: "error",
             message: data.data.message,
           });
         } else {
-          setImages([]);
           handleClose();
           dispatchAlert.setNote({
             open: true,
@@ -1903,7 +2180,6 @@ const Sideform = () => {
       })
       .catch((err) => {
         // console.log(err);
-        setImages([]);
         dispatchAlert.setNote({
           open: true,
           variant: "error",
@@ -1911,6 +2187,8 @@ const Sideform = () => {
         });
       });
   };
+
+ 
   const handlePrimaryMaterial = (e) => {
     e.preventDefault();
 
@@ -2014,53 +2292,7 @@ const Sideform = () => {
         });
       });
   };
-  const handleUpdateSecondaryMaterial = (e) => {
-    e.preventDefault();
-
-    const FD = new FormData();
-
-    FD.append("_id", SideBox.open.payload.row.action);
-
-    e.target.secondaryMaterial_name.value !== "" &&
-      FD.append(
-        "secondaryMaterial_name",
-        e.target.secondaryMaterial_name.value
-      );
-
-    const res = editSecondaryMaterial(FD);
-
-    res
-      .then((data) => {
-        // console.log(data.status);
-
-        if (data.status === 203) {
-          setImages([]);
-          dispatchAlert.setNote({
-            open: true,
-            variant: "error",
-            message: data.data.message,
-          });
-        } else {
-          setImages([]);
-          handleClose();
-          dispatchAlert.setNote({
-            open: true,
-            variant: "success",
-            message: data.data.message,
-          });
-        }
-      })
-      .catch((err) => {
-        // console.log(err);
-        setImages([]);
-        dispatchAlert.setNote({
-          open: true,
-          variant: "error",
-          message: "Something Went Wrong !!!",
-        });
-      });
-  };
-
+ 
   const handleHandle = (e) => {
     e.preventDefault();
 
@@ -3706,7 +3938,7 @@ const Sideform = () => {
                               multiple
                               value={changeData.knob}
                               onChange={handleProductFelids}
-                              helperText="Please select your fitting."
+                              helperText="Please select your knob."
                             >
                               {knobCatalog.map(
                                 (option) =>
@@ -3735,7 +3967,7 @@ const Sideform = () => {
                               multiple
                               value={changeData.door}
                               onChange={handleProductFelids}
-                              helperText="Please select your fitting."
+                              helperText="Please select your door."
                             >
                               {doorCatalog.map(
                                 (option) =>
@@ -3764,7 +3996,7 @@ const Sideform = () => {
                               multiple
                               value={changeData.handle}
                               onChange={handleProductFelids}
-                              helperText="Please select your fitting."
+                              helperText="Please select your handle."
                             >
                               {handleCatalog.map(
                                 (option) =>
@@ -3793,7 +4025,7 @@ const Sideform = () => {
                               multiple
                               value={changeData.weight_capacity}
                               onChange={handleProductFelids}
-                              helperText="Please select your fitting."
+                              helperText="Please select your Weight Capacity."
                             >
                               {weightCapCatalog.map((option) => (
                                 <MenuItem
@@ -3812,7 +4044,7 @@ const Sideform = () => {
 
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
-                                Assembly // required
+                                Assembly
                               </FormLabel>
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
@@ -4515,7 +4747,6 @@ const Sideform = () => {
 
             {SideBox.open.formType === "update_product" && (
               <Grid container p={5} className="productPadding">
-                {getSKU()}
 
                 <Grid item xs={12}>
                   <Typography variant="h5">
@@ -4534,7 +4765,7 @@ const Sideform = () => {
                   <form
                     className="form"
                     id="myForm"
-                    onSubmit={handleProduct}
+                    onSubmit={handleUpdateProduct}
                     enctype="multipart/form-data"
                     method="post"
                   >
@@ -4552,7 +4783,6 @@ const Sideform = () => {
                               fullWidth
                               autoComplete={false}
                               id="fullWidth"
-                              // // required
                               label="SKU"
                               type="text"
                               value={changeData.SKU}
@@ -4570,7 +4800,7 @@ const Sideform = () => {
                               select
                               name="category_name"
                               label="Category"
-                              value={changeData.category_name}
+                              value={changeData.category_name || '' }
                               multiple
                               onChange={handleProductFelids}
                               helperText="Please select your category"
@@ -4600,7 +4830,7 @@ const Sideform = () => {
                               name="sub_category_name"
                               label="Sub Category"
                               multiple
-                              value={changeData.sub_category_name}
+                              value={changeData.sub_category_name || ''}
                               onChange={handleProductFelids}
                               helperText="Please select your sub category"
                             >
@@ -4833,13 +5063,7 @@ const Sideform = () => {
                           <Box className="fields">
                             {/* <AcceptMaxFiles className="dorpContainer"/> */}
 
-                            <FormLabel id="demo-radio-buttons-group-label">
-                              Product Images
-                            </FormLabel>
-                            <ProductsPreviews
-                              text={"Please Drag and Drop the product images"}
-                            ></ProductsPreviews>
-
+                           
                             <FormLabel id="demo-radio-buttons-group-label">
                               Featured Images
                             </FormLabel>
@@ -5305,7 +5529,7 @@ const Sideform = () => {
                               select
                               name="polish"
                               label="Polish"
-                              value={changeData.polish}
+                              value={changeData.polish || ''}
                               onChange={handleProductFelids}
                               multiple
                               helperText="Please select your Polish."
@@ -5335,7 +5559,7 @@ const Sideform = () => {
                               name="hinge"
                               label="Hinge"
                               multiple
-                              value={changeData.hinge}
+                              value={changeData.hinge || ''}
                               onChange={handleProductFelids}
                               helperText="Please select your hinge."
                             >
@@ -5364,9 +5588,9 @@ const Sideform = () => {
                               name="knob"
                               label="Knob"
                               multiple
-                              value={changeData.knob}
+                              value={changeData.knob || ''}
                               onChange={handleProductFelids}
-                              helperText="Please select your fitting."
+                              helperText="Please select your koon ."
                             >
                               {knobCatalog.map(
                                 (option) =>
@@ -5393,9 +5617,9 @@ const Sideform = () => {
                               name="door"
                               label="Door"
                               multiple
-                              value={changeData.door}
+                              value={changeData.door || ''}
                               onChange={handleProductFelids}
-                              helperText="Please select your fitting."
+                              helperText="Please select your door."
                             >
                               {doorCatalog.map(
                                 (option) =>
@@ -5422,7 +5646,7 @@ const Sideform = () => {
                               name="handle"
                               label="Handle"
                               multiple
-                              value={changeData.handle}
+                              value={changeData.handle || ''}
                               onChange={handleProductFelids}
                               helperText="Please select your fitting."
                             >
@@ -5451,9 +5675,9 @@ const Sideform = () => {
                               name="weight_capacity"
                               label="Weight Capacity"
                               multiple
-                              value={changeData.weight_capacity}
+                              value={changeData.weight_capacity || ''}
                               onChange={handleProductFelids}
-                              helperText="Please select your fitting."
+                              helperText="Please select your Weight Capacity."
                             >
                               {weightCapCatalog.map((option) => (
                                 <MenuItem
@@ -5472,7 +5696,7 @@ const Sideform = () => {
 
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
-                                Assembly // required
+                                Assembly
                               </FormLabel>
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
@@ -5561,7 +5785,7 @@ const Sideform = () => {
                               label="Fitting"
                               name="fitting"
                               multiple
-                              value={changeData.fitting}
+                              value={changeData.fitting || ''}
                               onChange={handleProductFelids}
                               helperText="Please select your fitting."
                             >
@@ -6228,7 +6452,7 @@ const Sideform = () => {
                               id="fullWidth"
                               label="Merging SKUs"
                               type="text"
-                              value= {changeData.productArray}
+                              value={changeData.productArray}
                               disabled
                               variant="outlined"
                               name="productArray"
@@ -6648,8 +6872,8 @@ const Sideform = () => {
                         <StepLabel>Miscellaneous</StepLabel>
                         <StepContent className="stepContent">
                           <Box className="fields">
-                          
-                          
+
+
                             {/* selling points  */}
 
                             <br></br>
@@ -6908,6 +7132,743 @@ const Sideform = () => {
             )}
 
             {/* merge Products Ends */}
+
+            {/* update merge Products */}
+
+            {SideBox.open.formType === "update_merge" && (
+              <Grid container p={5} className="productPadding">
+
+                <Grid item xs={12}>
+                  <Typography variant="h5">
+                    Update Merge Product
+                    <Typography
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update Merge your products and necessary information from
+                      here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form
+                    className="form"
+                    id="myForm"
+                    onSubmit={handleUpdateMergeProduct}
+                    enctype="multipart/form-data"
+                    method="post"
+                  >
+                    <Stepper
+                      className="stepper"
+                      activeStep={activeStep}
+                      orientation="vertical"
+                    >
+                      {/* // Specification */}
+                      <Step>
+                        <StepLabel>Specifications</StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="SKU"
+                              type="text"
+                              value={changeData.SKU}
+                              disabled
+                              variant="outlined"
+                              name="SKU"
+                            />
+                            <br></br>
+
+                            <InputLabel id="demo-multiple-checkbox-label">Merging Product</InputLabel>
+                            <Select
+                              multiple
+                              fullWidth
+                              value={changeData.product_array}
+                              name="product_array"
+                              onChange={handleProductFelids}
+                              renderValue={(selected) => selected.join(', ')}
+                            >
+                              {SKUCatalog.map((option) => (
+                                <MenuItem key={option._id} value={option.SKU}>
+                                  <Checkbox checked={changeData.product_array.indexOf(option.SKU) > -1} />
+                                  <ListItemText primary={option.SKU} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+
+
+                            <br></br>
+
+                            <TextField
+                              fullWidth
+                              // required
+                              id="outlined-select"
+                              select
+                              name="category_name"
+                              label="Category"
+                              value={changeData.category_name || ''}
+                              multiple
+                              onChange={handleProductFelids}
+                              helperText="Please select your category"
+                            >
+                              {category.map(
+                                (option) =>
+                                  option.category_status && (
+                                    <MenuItem
+                                      key={option._id}
+                                      value={option._id}
+                                    >
+                                      {option.category_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            <br></br>
+
+                            <TextField
+                              fullWidth
+                              // required
+                              id="outlined-select"
+                              select
+                              name="sub_category_name"
+                              label="Sub Category"
+                              multiple
+                              value={changeData.sub_category_name || ''}
+                              onChange={handleProductFelids}
+                              helperText="Please select your sub category"
+                            >
+                              {subCategory.map(
+                                (option) =>
+                                  changeData.category_name ===
+                                  option.category_id && (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option._id}
+                                    >
+                                      {option.sub_category_name}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+
+                          </Box>{" "}
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 4}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* // Specification Ends*/}
+
+                      {/* Images */}
+                      <Step>
+                        <StepLabel>Images</StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            {/* <AcceptMaxFiles className="dorpContainer"/> */}
+
+                          
+
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Featured Images
+                            </FormLabel>
+
+                            <FeaturesPreviews
+                              text={"Please Drag and Drop featured images"}
+                            ></FeaturesPreviews>
+
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Specification Images
+                            </FormLabel>
+
+                            <ImagePreviews
+                              text={"Please Drag and Drop specification images"}
+                            ></ImagePreviews>
+                          </Box>{" "}
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 4}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* Images End */}
+
+                      {/* Inventory & Shipping */}
+                      <Step>
+                        <StepLabel>Inventory & Shipping</StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+
+                            <br />
+
+                            <FormGroup>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Return & Payment Policy
+                              </FormLabel>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.COD}
+                                    onChange={handleProductFelids}
+                                    name="COD"
+                                  />
+                                }
+                                label="COD Available"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.returnable}
+                                    onChange={handleProductFelids}
+                                    name="returnable"
+                                  />
+                                }
+                                label="Return Item"
+                              />
+                            </FormGroup>
+
+                            {
+                              changeData.returnable && <>
+
+                                <Typography variant='Caption' > Return in {changeData.returnDays} Days</Typography>
+                                <Slider
+                                  aria-label="Return Days"
+                                  defaultValue={0}
+                                  size="small"
+                                  name="returnDays"
+                                  value={changeData.returnDays}
+                                  onChange={handleProductFelids}
+                                  helperText="Please select your return days"
+                                  valueLabelDisplay="auto"
+
+                                />
+                              </>
+                            }
+
+                            <br></br>
+
+                            <Typography variant='Caption' > Dispatch in {changeData.dispatch_time} Days</Typography>
+
+                            <Slider
+                              aria-label="Construction Days"
+                              defaultValue={0}
+                              size="small"
+                              valueLabelDisplay="auto"
+                              name="dispatch_time"
+                              value={changeData.dispatch_time}
+                              onChange={handleProductFelids}
+                              helperText="Please select your dispatch time"
+
+                            />
+
+
+
+                            {/* <TextField
+                              fullWidth
+                              // required
+                              id="outlined-select"
+                              select
+                              name="dispatch_time"
+                              label="Dispatch Time"
+                              value={changeData.dispatch_time}
+                              onChange={handleProductFelids}
+                              multiple
+                              helperText="Please select your dispatch time"
+                            >
+                              {dispatchTimeCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField> */}
+                          </Box>{" "}
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 4}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* Inventory & Shipping End */}
+                      {/* Features */}
+                      <Step>
+                        <StepLabel>Features</StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            <br></br>
+
+                            {/* {Features} */}
+
+                            <FormGroup>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Features
+                              </FormLabel>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.rotating_seats}
+                                    onChange={handleProductFelids}
+                                    name="rotating_seats"
+                                  />
+                                }
+                                label="Rotating Seats"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.eatable_oil_polish}
+                                    onChange={handleProductFelids}
+                                    name="eatable_oil_polish"
+                                  />
+                                }
+                                label="Eatable Oil Polished"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.no_chemical}
+                                    onChange={handleProductFelids}
+                                    name="no_chemical"
+                                  />
+                                }
+                                label="No Chemical Used"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.lean_back}
+                                    onChange={handleProductFelids}
+                                    name="lean_back"
+                                  />
+                                }
+                                label="Lean Back"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.straight_back}
+                                    onChange={handleProductFelids}
+                                    name="straight_back"
+                                  />
+                                }
+                                label="Straight Back"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.weaving}
+                                    onChange={handleProductFelids}
+                                    name="weaving"
+                                  />
+                                }
+                                label="Weaving"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={
+                                      changeData.not_suitable_for_Micro_Dish
+                                    }
+                                    onChange={handleProductFelids}
+                                    name="not_suitable_for_Micro_Dish"
+                                  />
+                                }
+                                label="Not Suitable For Microwave/Dishwasher"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.tilt_top}
+                                    onChange={handleProductFelids}
+                                    name="tilt_top"
+                                  />
+                                }
+                                label="Tilt Top"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.inside_compartments}
+                                    onChange={handleProductFelids}
+                                    name="inside_compartments"
+                                  />
+                                }
+                                label="Inside Compartments"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.stackable}
+                                    onChange={handleProductFelids}
+                                    name="stackable"
+                                  />
+                                }
+                                label="Stackable"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.knife}
+                                    onChange={handleProductFelids}
+                                    name="knife"
+                                  />
+                                }
+                                label="Knife Friendly Surface"
+                              />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.wall_hanging}
+                                    onChange={handleProductFelids}
+                                    name="wall_hanging"
+                                  />
+                                }
+                                label="Wall Hanging"
+                              />
+                            </FormGroup>
+                          </Box>{" "}
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 4}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* Features ends */}
+                      {/* Miscellaneous */}
+                      <Step>
+                        <StepLabel>Miscellaneous</StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+
+
+                            {/* selling points  */}
+
+                            <br></br>
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Selling Points{" "}
+                            </FormLabel>
+
+                            <Editor
+                              apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                              onInit={(event, editor) =>
+                                (sellingRef.current = editor)
+                              }
+                              init={{
+                                height: 400,
+                                menubar: true,
+                              }}
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              // required
+                              label="Product Title"
+                              type="text"
+                              variant="outlined"
+                              name="product_title"
+                              value={changeData.product_title}
+                              onChange={handleProductFelids}
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              // required
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="SEO Title"
+                              type="text"
+                              variant="outlined"
+                              name="seo_title"
+                              value={changeData.seo_title}
+                              onChange={handleProductFelids}
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              // required
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="SEO Description"
+                              type="text"
+                              variant="outlined"
+                              name="seo_description"
+                              value={changeData.seo_description}
+                              onChange={handleProductFelids}
+                            />
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              // required
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="SEO Keyword"
+                              type="text"
+                              variant="outlined"
+                              name="seo_keyword"
+                              value={changeData.seo_keyword}
+                              onChange={handleProductFelids}
+                            />
+
+                            <br></br>
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Product Description
+                            </FormLabel>
+
+                            {/* product description  */}
+                            <Editor
+                              apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                              onInit={(event, editor) =>
+                                (editorRef.current = editor)
+                              }
+                              init={{
+                                height: 300,
+                                menubar: true,
+                              }}
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              // required
+                              label="Showroom Price"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    ₹
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="showroom_price"
+                              value={changeData.showroom_price}
+                              onChange={handleProductFelids}
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              autoComplete={false}
+                              id="fullWidth"
+                              // required
+                              label="MRP"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    ₹
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="MRP"
+                              onChange={handleProductFelids}
+                              value={changeData.MRP}
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              // required
+                              autoComplete={false}
+                              id="fullWidth"
+                              onChange={(e) => {
+                                handleDiscount(e);
+                                handleProductFelids(e);
+                              }}
+                              label="Discount Limit"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    %
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="discount_limit"
+                              value={changeData.discount_limit}
+                            />
+
+                            <br></br>
+                            <TextField
+                              fullWidth
+                              disabled
+                              autoComplete={false}
+                              id="fullWidth"
+                              label="Selling Price"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    ₹
+                                  </InputAdornment>
+                                ),
+                              }}
+                              value={
+                                changeData.MRP > 0 &&
+                                  changeData.discount_limit > 0
+                                  ? (changeData.selling_price =
+                                    changeData.MRP -
+                                    (changeData.MRP / 100) *
+                                    changeData.discount_limit)
+                                  : 0
+                              }
+                              onChange={handleProductFelids}
+                              variant="outlined"
+                              name="selling_price"
+                            />
+
+                            <br></br>
+
+                            <TextField
+                              fullWidth
+                              // required
+                              id="outlined-select"
+                              select
+                              name="tax_rate"
+                              label="Tax Rate"
+                              value={changeData.tax_rate}
+                              onChange={handleProductFelids}
+                              multiple
+                              helperText="Please select your tax rate."
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    %
+                                  </InputAdornment>
+                                ),
+                              }}
+                            >
+                              {taxRateCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                          </Box>{" "}
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 4}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* Miscellaneous ends */}
+                    </Stepper>
+
+                    <br></br>
+
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Update Merge Product
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* update merge Products Ends */}
 
             {/*  add textile */}
 
@@ -7958,7 +8919,7 @@ const Sideform = () => {
             )}
             {/* add hinge   Ends */}
 
-            {/*  add Polish Meterial */}
+            {/*  add Polish Material */}
 
             {SideBox.open.formType === "addPolish" && (
               <Grid container p={5}>
@@ -8053,7 +9014,7 @@ const Sideform = () => {
                       label="Polish Name"
                       type="text"
                       value={preData.polish}
-                      helperText="Please enter your primary material"
+                      helperText="Please enter your polish"
                     />
 
                     {/* <br></br>
@@ -8512,119 +9473,7 @@ const Sideform = () => {
               </Grid>
             )}
             {/* add update Gallery  Ends */}
-
-            {/*  add secondary Meterial */}
-
-            {SideBox.open.formType === "secondaryMaterial" && (
-              <Grid container p={5}>
-                <Grid item xs={12}>
-                  <Typography variant="h5">
-                    Add Secondary Material
-                    <Typography
-                      sx={{ display: "block !important" }}
-                      variant="caption"
-                    >
-                      Add your Secondary Material and necessary information from
-                      here
-                    </Typography>
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12} mt={5}>
-                  <form
-                    className="form"
-                    onSubmit={handleSecondaryMaterial}
-                    id="myForm"
-                    enctype="multipart/form-data"
-                    method="post"
-                  >
-                    {/* <ImagePreviews text={'Please Drag and Drop the Category image'}> </ImagePreviews> */}
-
-                    <TextField
-                      fullWidth
-                      // required
-                      id="outlined-select"
-                      name="secondaryMaterial_name"
-                      label="Secondary Material"
-                      type="text"
-                      helperText="Please enter your primary material"
-                    />
-
-                    <br></br>
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox name="secondaryMaterial_status" />}
-                        label="Status (On/Off)"
-                      />
-                    </FormGroup>
-
-                    <br></br>
-
-                    <Button
-                      color="primary"
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                    >
-                      Add Secondary Material
-                    </Button>
-                  </form>
-                </Grid>
-              </Grid>
-            )}
-            {/* add secondary Meterial Ends */}
-
-            {/*  update secondaryMaterial */}
-
-            {SideBox.open.formType === "update_secondaryMaterial" && (
-              <Grid container p={5}>
-                <Grid item xs={12}>
-                  <Typography variant="h5">
-                    Update Secondary Material
-                    <Typography
-                      sx={{ display: "block !important" }}
-                      variant="caption"
-                    >
-                      Update your Secondary Material and necessary information
-                      from here
-                    </Typography>
-                  </Typography>
-                </Grid>
-
-                <Grid item xs={12} mt={5}>
-                  <form
-                    className="form"
-                    id="myForm"
-                    onSubmit={handleUpdateSecondaryMaterial}
-                    enctype="multipart/form-data"
-                    method="post"
-                  >
-                    {/* <ImagePreviews text={'Please Drag and Drop the Category image'}> </ImagePreviews> */}
-
-                    <TextField
-                      fullWidth
-                      id="outlined-select"
-                      name="secondaryMaterial_name"
-                      label="Secondary Material"
-                      helperText="Please enter the update"
-                      onChange={handleChangeData}
-                      value={preData.secMater}
-                    />
-
-                    <Button
-                      color="primary"
-                      type="submit"
-                      fullWidth
-                      variant="contained"
-                    >
-                      Update SecondaryMaterial
-                    </Button>
-                  </form>
-                </Grid>
-              </Grid>
-            )}
-            {/* update secondaryMaterial Ends */}
-
+        
             {/*  add subCategory */}
 
             {SideBox.open.formType === "subcategory" && (
@@ -8705,9 +9554,9 @@ const Sideform = () => {
                 </Grid>
               </Grid>
             )}
-            {/* add sebCatagory Ends */}
+            {/* add sebCategory Ends */}
 
-            {/*update subCatagory */}
+            {/*update subCategory */}
 
             {SideBox.open.formType === "update_Subcategory" && (
               <Grid container p={5}>
@@ -8782,7 +9631,7 @@ const Sideform = () => {
                 </Grid>
               </Grid>
             )}
-            {/* update sebCatagory Ends */}
+            {/* update sebCategory Ends */}
 
             {/* Ore Staff */}
 
@@ -8888,12 +9737,12 @@ const Sideform = () => {
 
             {/* Ore Staff Ends */}
 
-            {/* Coupone  */}
-            {SideBox.open.formType === "coupone" && (
+            {/* Coupon */}
+            {SideBox.open.formType === "coupon" && (
               <Grid container p={5}>
                 <Grid item xs={12}>
                   <Typography variant="h5">
-                    Add Coupone
+                    Add Coupon
                     <Typography
                       sx={{ display: "block !important" }}
                       variant="caption"
