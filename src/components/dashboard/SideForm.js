@@ -1471,11 +1471,70 @@ const Sideform = () => {
     setImages([]);
     setFeatured([]);
     setFiles([]);
- 
+
     setShowFabric("No");
     setData({
-      product_array: [],
-      primary_material: []
+      primary_material: [],
+    product_array: [],
+    shipping: [],
+    product_title: "",
+    seo_title: "",
+    seo_des: "",
+    seo_keyword: "",
+    product_des: "",
+    category: "",
+    sub_category: "",
+    length: "",
+    breadth: "",
+    selling_points: "",
+    height: "",
+    priMater: "",
+    priMater_weight: "",
+    secMater: "",
+    secMater_weight: "",
+    selling_price: "",
+    mrp: "",
+    discount_cap: "",
+    dispatch_time: "",
+    polish: "",
+    hinge: "",
+    knob: "",
+    handle: "",
+    door: "",
+    wight_cap: "",
+    wall_hanging: "",
+    assembly_required: "",
+    assembly_leg: "",
+    assembly_parts: "",
+    fitting: "",
+    rotating: "",
+    eatable: "",
+    no_chemical: "",
+    straight_back: "",
+    lean_back: "",
+    weaving: "",
+    not_micro_dish: "",
+    tilt_top: "",
+    inside_comp: "",
+    stackable: "",
+    silver: "",
+    selling_point: "",
+    mirror: "",
+    joints: "",
+    tax_rate: 18,
+    seat_width: "",
+    seat_depth: "",
+    seat_height: "",
+    wheel: "",
+    trolly: "",
+    returnable: false,
+    returnDays: 0,
+    trolly_mater: "",
+    top_size: 0,
+    dial_size: 0,
+    COD: false,
+    textile: ''
+
     });
     document.getElementById("myForm").reset();
   };
