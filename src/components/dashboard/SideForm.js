@@ -10003,7 +10003,7 @@ const Sideform = () => {
                     <TextareaAutosize
                       fullWidth
                       minRows={5}
-                      defaultValue={changeData.shipping[0]}
+                      value={changeData.shipping[0] || ''} 
                       onChange={handleProductFelids}
                       id="outlined-select"
                       name="shipping"
