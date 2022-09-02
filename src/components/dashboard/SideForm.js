@@ -283,7 +283,7 @@ const Sideform = () => {
   }
 
 
-
+  // static catalog
   const taxRateCatalog = [
     {
       value: "18",
@@ -387,6 +387,34 @@ const Sideform = () => {
       label: "Glass Jali",
     },
   ];
+  const rangeCatalog = [
+    {
+      value: "Traditional",
+      label: "Traditional",
+    },
+
+    {
+      value: "Distressed",
+      label: "Distressed",
+    },
+
+    {
+      value: "Crackle",
+      label: "Crackle",
+    },
+
+    {
+      value: "Painting",
+      label: "Painting",
+    },
+
+    {
+      value: "Antique",
+      label: "Antique",
+    },
+
+  ]
+
 
   // context
   const SideBox = useContext(OpenBox);
@@ -420,65 +448,11 @@ const Sideform = () => {
   // ref
   const editorRef = useRef();
   const sellingRef = useRef();
-  // pres data
-  const [preData, setPreData] = useState({
-    product_title: "",
-    seo_title: "",
-    seo_des: "",
-    seo_keyword: "",
-    product_des: "",
-    category: "",
-    sub_category: "",
-    length: "",
-    breadth: "",
-    selling_points: "",
-    height: "",
-    priMater: "",
-    priMater_weight: "",
-    secMater: "",
-    secMater_weight: "",
-    selling_price: "",
-    mrp: "",
-    discount_cap: "",
-    dispatch_time: "",
-    polish: "",
-    hinge: "",
-    knob: "",
-    handle: "",
-    door: "",
-    wight_cap: "",
-    wall_hanging: "",
-    assembly_required: "",
-    assembly_leg: "",
-    assembly_parts: "",
-    fitting: "",
-    rotating: "",
-    eatable: "",
-    no_chemical: "",
-    straight_back: "",
-    lean_back: "",
-    weaving: "",
-    not_micro_dish: "",
-    tilt_top: "",
-    inside_comp: "",
-    stackable: "",
-    silver: "",
-    selling_point: "",
-    mirror: "",
-    joints: "",
-    tax_rate: "",
-    seat_width: "",
-    seat_depth: "",
-    seat_height: "",
-    wheel: "",
-    trolly: "",
-    trolly_mater: "",
-    top_size: "",
-    dial_size: "",
-  });
+
   // pres data
   const [changeData, setData] = useState({
     primary_material: [],
+    range : '',
     product_array: [],
     shipping: '',
     product_title: "",
@@ -543,7 +517,8 @@ const Sideform = () => {
     customer_name: '',
     customer_email: '',
     shipping_address: '',
-    searchCustomer: ''
+    searchCustomer: '',
+    show_on_mobile : false,
   });
 
   useEffect(() => {
@@ -642,7 +617,7 @@ const Sideform = () => {
 
           return setCategory(data.data);
         });
-        setPreData({
+        setData({
           category: SideBox.open.payload.row.category_name,
         });
         break;
@@ -652,7 +627,7 @@ const Sideform = () => {
 
           return setMaterialCatalog(data.data);
         });
-        setPreData({
+        setData({
           priMater: SideBox.open.payload.row.primaryMaterial_name,
           primaryMaterial_description: SideBox.open.payload.row.primaryMaterial_description,
         });
@@ -664,7 +639,7 @@ const Sideform = () => {
           return setPolishCatalog(data.data);
         });
 
-        setPreData({
+        setData({
           polish: SideBox.open.payload.row.polish_name,
         });
         break;
@@ -674,7 +649,7 @@ const Sideform = () => {
 
           return setKnobCatalog(data.data);
         });
-        setPreData({
+        setData({
           knob: SideBox.open.payload.row.knob_name,
         });
         break;
@@ -684,7 +659,7 @@ const Sideform = () => {
 
           return setFittingCatalog(data.data);
         });
-        setPreData({
+        setData({
           fitting: SideBox.open.payload.row.fitting_name,
         });
         break;
@@ -694,7 +669,7 @@ const Sideform = () => {
 
           return setHingeCatalog(data.data);
         });
-        setPreData({
+        setData({
           hinge: SideBox.open.payload.row.hinge_name,
         });
         break;
@@ -704,7 +679,7 @@ const Sideform = () => {
 
           return setDoorCatalog(data.data);
         });
-        setPreData({
+        setData({
           door: SideBox.open.payload.row.door_name,
         });
         break;
@@ -715,7 +690,7 @@ const Sideform = () => {
           return setHandleCatalog(data.data);
         });
 
-        setPreData({
+        setData({
           handle: SideBox.open.payload.row.handle_name,
         });
         break;
@@ -738,7 +713,7 @@ const Sideform = () => {
         setCat(SideBox.open.payload.row.category_id);
         break;
       case "update_blog":
-        setPreData({
+        setData({
           title: SideBox.open.payload.value.title,
           card_image: SideBox.open.payload.value.card_image,
           seo_title: SideBox.open.payload.value.seo_title,
@@ -895,7 +870,9 @@ const Sideform = () => {
           COD: SideBox.open.payload.value.COD,
           returnable: SideBox.open.payload.value.returnable,
           drawer: SideBox.open.payload.value.drawer,
-          drawer_count: SideBox.open.payload.value.drawer_count
+          drawer_count: SideBox.open.payload.value.drawer_count,
+          range: SideBox.open.payload.value.range,
+          show_on_mobile : SideBox.open.payload.value.show_on_mobile
         });
 
         setCat(SideBox.open.payload.value.category_id);
@@ -907,8 +884,8 @@ const Sideform = () => {
 
           return setFittingCatalog(data.data);
         });
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           fabric_name: SideBox.open.payload.row.fabric_name,
         });
         break;
@@ -917,8 +894,8 @@ const Sideform = () => {
           if (data.data === null) return setTextileCatalog([]);
           return setTextileCatalog(data.data);
         });
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           textile_name: SideBox.open.payload.row.textile_name,
         });
         break;
@@ -1140,84 +1117,17 @@ const Sideform = () => {
       // console.log("");
     }
 
-    // getPresentSKUs().then((data) => {
-    //   if (data.data === null) return setSKUCatalog([]);
-
-    //   return setSKUCatalog(data.data);
-    // });
-
-    // categoryList().then((data) => {
-    //   if (data.data === null) return setCategory([]);
-
-    //   return setCategory(data.data);
-    // });
-
-    // getSubCatagories().then((data) => {
-    //   if (data.data === null) return setSubCategory([]);
-
-    //   return setSubCategory(data.data);
-    // });
-
-    // getPrimaryMaterial().then((data) => {
-    //   if (data.data === null) return setMaterialCatalog([]);
-
-    //   return setMaterialCatalog(data.data);
-    // });
-
-    // getPolish().then((data) => {
-    //   if (data.data === null) return setPolishCatalog([]);
-
-    //   return setPolishCatalog(data.data);
-    // });
-
-    // getTextile().then((data) => {
-    //   if (data.data === null) return setTextileCatalog([]);
-    //   return setTextileCatalog(data.data);
-    // });
-
-    // getHinge().then((data) => {
-    //   if (data.data === null) return setHingeCatalog([]);
-
-    //   return setHingeCatalog(data.data);
-    // });
-
-    // getFitting().then((data) => {
-    //   if (data.data === null) return setFittingCatalog([]);
-
-    //   return setFittingCatalog(data.data);
-    // });
-
-    // getKnob().then((data) => {
-    //   if (data.data === null) return setKnobCatalog([]);
-
-    //   return setKnobCatalog(data.data);
-    // });
-
-    // getDoor().then((data) => {
-    //   if (data.data === null) return setDoorCatalog([]);
-
-    //   return setDoorCatalog(data.data);
-    // });
-
-    // getHandle().then((data) => {
-    //   if (data.data === null) return setHandleCatalog([]);
-
-    //   return setHandleCatalog(data.data);
-    // });
-
-    // getFabric().then((data) => {
-    //   if (data.data === null) return setFabricCatalog([]);
-
-    //   return setFabricCatalog(data.data);
-    // });
-
+  
   }, [SideBox.open.formType, SideBox.open.state]);
 
+ 
 
+  // stepper button
   const handleNextStep = () => {
     setActiveStep(activeStep + 1);
   };
 
+  // stepper button
   const handleBackStep = () => {
     setActiveStep(activeStep - 1);
   };
@@ -1236,74 +1146,74 @@ const Sideform = () => {
   const handleChangeData = (e) => {
     switch (SideBox.open.formType) {
       case "update_category":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           category: e.target.value,
         });
         break;
       case "update_PrimaryMaterial":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           [e.target.name]: e.target.value,
         });
         break;
       case "update_polish":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           polish: e.target.value,
         });
         break;
       case "update_knob":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           knob: e.target.value,
         });
         break;
       case "update_fitting":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           fitting: e.target.value,
         });
         break;
       case "update_hinge":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           hinge: e.target.value,
         });
         break;
       case "update_door":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           door: e.target.value,
         });
         break;
       case "update_handle":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           handle: e.target.value,
         });
         break;
       case "update_secondaryMaterial":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           secMater: e.target.value,
         });
         break;
       case "update_product":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           [e.target.name]: e.target.value,
         });
         break;
       case "update_blog":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           [e.target.name]: e.target.value,
         });
         break;
       case "update_fabric":
-        setPreData({
-          ...preData,
+        setData({
+          ...changeData,
           [e.target.name]: e.target.value,
         });
         break;
@@ -1327,7 +1237,8 @@ const Sideform = () => {
     "knife",
     "wall_hanging",
     "COD",
-    "returnable"
+    "returnable",
+    "show_on_mobile"
   ];
 
 
@@ -1359,10 +1270,6 @@ const Sideform = () => {
     resetAll();
     SideBox.setOpen({ state: false, formType: null });
   };
-
-
-
-
 
   // function for generating Merged product  ID
 
@@ -1957,12 +1864,7 @@ const Sideform = () => {
     featured.map((element) => {
       return FD.append("featured_image", element);
     });
-    // materialCatalog.map((item) => {
-    //   return (
-    //     item.primaryMaterial_name === changeData.primary_material &&
-    //     FD.append("primary_material_name", item.primaryMaterial_name)
-    //     );
-    //   });
+   
     FD.append("primary_material_name", JSON.stringify(changeData.primary_material))
 
     category.map((item) => {
@@ -2042,6 +1944,7 @@ const Sideform = () => {
     FD.append("fitting", changeData.fitting);
     FD.append("textile", changeData.textile);
     FD.append("textile_type", changeData.textile_type);
+    FD.append("range", changeData.range);
 
     FD.append("category_id", changeData.category_name);
     FD.append("sub_category_id", changeData.sub_category_name);
@@ -2152,6 +2055,8 @@ const Sideform = () => {
     FD.append("lean_back", changeData.lean_back ? changeData.lean_back : false);
     FD.append("weaving", changeData.weaving ? changeData.weaving : false);
     FD.append("knife", changeData.knife ? changeData.knife : false);
+    FD.append("show_on_mobile", changeData.show_on_mobile ? changeData.show_on_mobile : false);
+    
     FD.append(
       "wall_hanging",
       changeData.wall_hanging ? changeData.wall_hanging : false
@@ -2305,6 +2210,7 @@ const Sideform = () => {
     FD.append("fitting", changeData.fitting);
     FD.append("textile", changeData.textile);
     FD.append("textile_type", changeData.textile_type);
+    FD.append("range", changeData.range);
 
     FD.append("category_id", changeData.category_name);
     FD.append("sub_category_id", changeData.sub_category_name);
@@ -2415,6 +2321,7 @@ const Sideform = () => {
     FD.append("lean_back", changeData.lean_back ? changeData.lean_back : false);
     FD.append("weaving", changeData.weaving ? changeData.weaving : false);
     FD.append("knife", changeData.knife ? changeData.knife : false);
+    FD.append("show_on_mobile", changeData.show_on_mobile ? changeData.show_on_mobile : false);
     FD.append(
       "wall_hanging",
       changeData.wall_hanging ? changeData.wall_hanging : false
@@ -3594,9 +3501,9 @@ const Sideform = () => {
       FD.append("city", e.target.city.value);
       FD.append("state", e.target.state.value);
     }
-    else 
-    FD.append('searchCustomer', changeData.searchCustomer);
-   
+    else
+      FD.append('searchCustomer', changeData.searchCustomer);
+
     FD.append('paid_amount', e.target.paid_amount.value);
     FD.append('total_amount', e.target.total_amount.value);
 
@@ -3606,7 +3513,7 @@ const Sideform = () => {
     res
       .then((data) => {
 
-        if (data.status !== 200 ) {
+        if (data.status !== 200) {
           setImages([]);
           dispatchAlert.setNote({
             open: true,
@@ -3635,7 +3542,6 @@ const Sideform = () => {
       });
 
   }
-
 
   return (
     <>
@@ -4093,6 +3999,34 @@ const Sideform = () => {
                               value={changeData.weight}
                               onChange={handleProductFelids}
                             />
+
+
+                            <br></br>
+
+                            <TextField size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="range"
+                              label="Range"
+                              multiple
+                              value={changeData.range || ''}
+                              onChange={handleProductFelids}
+                              helperText="Please select the range."
+                            >
+                              {rangeCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+
 
                             {/* <br></br>
 
@@ -5294,6 +5228,19 @@ const Sideform = () => {
                               onChange={handleProductFelids}
                               name="dial_size"
                             />
+<br></br>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.show_on_mobile}
+                                    onChange={handleProductFelids}
+                                    name="show_on_mobile"
+                                    helperText="Check it if want it on mobile."
+
+                                  />
+                                }
+                                label="Show On Mobile"
+                              />
                           </Box>{" "}
                           <Box className="stepAction">
                             <Button
@@ -5725,6 +5672,35 @@ const Sideform = () => {
                                 </MenuItem>
                               ))}
                             </Select>
+
+
+                            <br></br>
+
+                            <TextField size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="range"
+                              label="Range"
+                              multiple
+                              value={changeData.range || ''}
+                              onChange={handleProductFelids}
+                              helperText="Please select the range."
+
+                            >
+                              {rangeCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value={undefined}>
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+
 
                             {/* <br></br>
 
@@ -6949,6 +6925,19 @@ const Sideform = () => {
                               onChange={handleProductFelids}
                               name="dial_size"
                             />
+<br></br>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.show_on_mobile}
+                                    onChange={handleProductFelids}
+                                    name="show_on_mobile"
+                                    helperText="Check it if want it on mobile."
+
+                                  />
+                                }
+                                label="Show On Mobile"
+                              />
                           </Box>{" "}
                           <Box className="stepAction">
                             <Button
@@ -8562,7 +8551,7 @@ const Sideform = () => {
                       fullWidth
                       id="outlined-select"
                       onChange={handleChangeData}
-                      value={preData.textile_name}
+                      value={changeData.textile_name}
                       name="textile_name"
                       label="Textile"
                       helperText="Please enter the update"
@@ -8681,7 +8670,7 @@ const Sideform = () => {
                       fullWidth
                       id="outlined-select"
                       onChange={handleChangeData}
-                      value={preData.fabric_name}
+                      value={changeData.fabric_name}
                       name="fabric_name"
                       label="Fabric"
                       helperText="Please enter the update"
@@ -8802,7 +8791,7 @@ const Sideform = () => {
                       fullWidth
                       id="outlined-select"
                       onChange={handleChangeData}
-                      value={preData.category}
+                      value={changeData.category}
                       name="category_name"
                       label="Category"
                       helperText="Please enter the update"
@@ -8928,7 +8917,7 @@ const Sideform = () => {
                       id="outlined-select"
                       name="primaryMaterial_name"
                       label="Primary Material"
-                      value={preData.priMater}
+                      value={changeData.priMater}
                       helperText="Please enter the update"
                     />
 
@@ -8938,7 +8927,7 @@ const Sideform = () => {
                       id="outlined-select"
                       name="primaryMaterial_description"
                       onChange={handleChangeData}
-                      defaultValue={preData.primaryMaterial_description}
+                      defaultValue={changeData.primaryMaterial_description}
                       type="text"
                       helperText="Please enter your primary material description"
                     />
@@ -9049,7 +9038,7 @@ const Sideform = () => {
                       name="knob_name"
                       label="Knob Name"
                       type="text"
-                      value={preData.knob}
+                      value={changeData.knob}
                       helperText="Please enter your knob "
                     />
 
@@ -9158,7 +9147,7 @@ const Sideform = () => {
                       // required
                       id="outlined-select"
                       name="handle_name"
-                      value={preData.handle}
+                      value={changeData.handle}
                       label="Handle Material Name"
                       type="text"
                       helperText="Please enter your Door "
@@ -9270,7 +9259,7 @@ const Sideform = () => {
                       id="outlined-select"
                       name="door_name"
                       label="Door Name"
-                      value={preData.door}
+                      value={changeData.door}
                       type="text"
                       helperText="Please enter your Door "
                     />
@@ -9380,7 +9369,7 @@ const Sideform = () => {
                       id="outlined-select"
                       name="fitting_name"
                       label="Fitting Name"
-                      value={preData.fitting}
+                      value={changeData.fitting}
                       onChange={handleChangeData}
                       type="text"
                       helperText="Please enter your fitting "
@@ -9492,7 +9481,7 @@ const Sideform = () => {
                       id="outlined-select"
                       name="hinge_name"
                       label="Hinge Name"
-                      value={preData.hinge}
+                      value={changeData.hinge}
                       type="text"
                       helperText="Please enter your hinge "
                     />
@@ -9607,7 +9596,7 @@ const Sideform = () => {
                       name="polish_name"
                       label="Polish Name"
                       type="text"
-                      value={preData.polish}
+                      value={changeData.polish}
                       helperText="Please enter your polish"
                     />
 
@@ -9720,7 +9709,7 @@ const Sideform = () => {
                       id="outlined-select"
                       name="seo_title"
                       label="SEO Title"
-                      value={preData.seo_title}
+                      value={changeData.seo_title}
                       onChange={handleChangeData}
                     />
                     <TextField size="small"
@@ -9729,7 +9718,7 @@ const Sideform = () => {
                       id="outlined-select"
                       name="seo_description"
                       label="SEO Description"
-                      value={preData.seo_description}
+                      value={changeData.seo_description}
                       onChange={handleChangeData}
                     />
 
@@ -9737,7 +9726,7 @@ const Sideform = () => {
                       fullWidth
                       // required
                       id="outlined-select"
-                      value={preData.card_description}
+                      value={changeData.card_description}
                       onChange={handleChangeData}
                       name="card_description"
                       label="Card Description"
@@ -9747,7 +9736,7 @@ const Sideform = () => {
                       fullWidth
                       // required
                       id="outlined-select"
-                      value={preData.title}
+                      value={changeData.title}
                       onChange={handleChangeData}
                       name="title"
                       label="Blog Title"
@@ -9756,7 +9745,7 @@ const Sideform = () => {
 
                     <Editor
                       apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
-                      initialValue={`${preData.description}`}
+                      initialValue={`${changeData.description}`}
                       onInit={(event, editor) => (editorRef.current = editor)}
                       init={{
                         height: 400,

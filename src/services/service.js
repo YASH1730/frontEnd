@@ -784,7 +784,7 @@ export const getLastMergeProduct = async () => {
 // for  adding order to the list
 
 export const addOrder = async (data) => {
-  return await axios.post(`${localURL}/placeOrder`,data,{
+  return await axios.post(`${official}/placeOrder`,data,{
     headers: {
       Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
     },
@@ -812,7 +812,7 @@ export const changeOrderStatus = async (data) => {
 
 // order ID at last
 export const getLastOrder = async () => {
-  return await axios.get(`${localURL}/getLastOrder`,{
+  return await axios.get(`${official}/getLastOrder`,{
     headers: {
       Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
     },
@@ -824,7 +824,7 @@ export const getLastOrder = async () => {
 // for  list customer to the list
 
 export const listCustomer = async () => {
-  return await axios.get(`${localURL}/listCustomer`,{
+  return await axios.get(`${official}/listCustomer`,{
     headers: {
       Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
     },
@@ -834,7 +834,7 @@ export const listCustomer = async () => {
 // for  list customer to the list
 
 export const deleteCustomer = async () => {
-  return await axios.delete(`${localURL}/deleteCustomer`,{
+  return await axios.delete(`${official}/deleteCustomer`,{
     headers: {
       Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
     },
@@ -843,7 +843,7 @@ export const deleteCustomer = async () => {
 
 // change add Customer 
 export const addCustomer = async (data) => {
-  return await axios.post(`${localURL}/addCustomer`, data, {
+  return await axios.post(`${official}/addCustomer`, data, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
     },
@@ -851,7 +851,7 @@ export const addCustomer = async (data) => {
 };
 //  add Customer 
 export const updateCustomer = async (data) => {
-  return await axios.patch(`${localURL}/updateCustomer`, data, {
+  return await axios.patch(`${official}/updateCustomer`, data, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
     },
@@ -859,7 +859,7 @@ export const updateCustomer = async (data) => {
 };
 // Catalog Customer 
 export const customerCatalog = async () => {
-  return await axios.get(`${localURL}/customerCatalog`, {
+  return await axios.get(`${official}/customerCatalog`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
     },
