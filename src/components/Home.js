@@ -30,6 +30,7 @@ import Draft from "./dashboard/Draft";
 import Admin from "./Admin";
 import Gallery from "./dashboard/Gallery";
 import Blog from "./dashboard/Blog";
+import StockChannel from "./dashboard/StockChannel";
 
 // icons
 import ArticleIcon from '@mui/icons-material/Article';
@@ -51,7 +52,7 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import CollectionsIcon from "@mui/icons-material/Collections";
 import DraftsIcon from '@mui/icons-material/Drafts';
 import GridViewIcon from '@mui/icons-material/GridView';
-
+import InventoryIcon from '@mui/icons-material/Inventory';
 
 
 const Home = (props) => {
@@ -211,66 +212,7 @@ console.log(window.location.search)
                   label="Product"
                   {...a11yProps(1)}
                 />
-                {/* <Tab
-                  wrapped
-                  icon={<FormatListBulletedOutlinedIcon />}
-                  label="Category"
-                  {...a11yProps(2)}
-                />
-                <Tab
-                  wrapped
-                  icon={<ViewCarouselIcon />}
-                  label="Sub Category"
-                  {...a11yProps(3)}
-                />
-                <Tab
-                  wrapped
-                  icon={<ForestIcon />}
-                  label="Primary Material"
-                  {...a11yProps(4)}
-                />
-                <Tab
-                  wrapped
-                  icon={<FilterListIcon />}
-                  label="Secondary Material"
-                  {...a11yProps(5)}
-                />
-                <Tab
-                  wrapped
-                  icon={<AutoAwesomeIcon />}
-                  label="Polish"
-                  {...a11yProps(6)}
-                />
-                <Tab
-                  wrapped
-                  icon={<ConstructionIcon />}
-                  label="Fitting"
-                  {...a11yProps(7)}
-                />
-                <Tab
-                  wrapped
-                  icon={<InsertLinkIcon />}
-                  label="Hinge"
-                  {...a11yProps(8)}
-                />
-                <Tab
-                  wrapped
-                  icon={<AdjustIcon />}
-                  label="Knob"
-                  {...a11yProps(9)}
-                />
-                <Tab
-                  wrapped
-                  icon={<DoorSlidingIcon />}
-                  label="Door"
-                  {...a11yProps(10)}
-                />
-                <Tab
-                  wrapped
-                  icon={<DragHandleIcon />}
-                  label="Handle Material"
-                  {...a11yProps(11)}
-                /> */}
+                
                 <Tab
                   wrapped
                   icon={<CollectionsIcon />}
@@ -327,9 +269,15 @@ console.log(window.location.search)
                 />}
                 <Tab
                   wrapped
+                  icon={<InventoryIcon />}
+                  label="Stock Channel"
+                  {...a11yProps(11)}
+                />
+                <Tab
+                  wrapped
                   icon={<SettingsOutlinedIcon />}
                   label="Profile"
-                  {...a11yProps(11)}
+                  {...a11yProps(12)}
                 />
                 <Button
                   color="primary"
@@ -343,140 +291,7 @@ console.log(window.location.search)
             </Backdrop>
           </Slide>
         )}
-        {/* <Tabs
-          orientation="vertical"
-          value={value}
-          variant="scrollable"
-          onChange={handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          aria-label="Vertical tabs example"
-          className={viewMode.mode === true ? "darkTabs" : "tabs"}
-          sx={{
-            borderRight: 1,
-            borderColor: "divider",
-            ".MuiTabs-indicator": {
-              left: 0,
-              width: "5px",
-            },
-          }}
-        >
-          <Tab
-            wrapped
-            icon={<GridViewIcon />}
-            label="Dashboard"
-            {...a11yProps(0)}
-          />
-          <Tab
-            wrapped
-            icon={<ShoppingBagOutlinedIcon />}
-            label="Product"
-            {...a11yProps(1)}
-          />
-          <Tab
-            wrapped
-            icon={<FormatListBulletedOutlinedIcon />}
-            label="Category"
-            {...a11yProps(2)}
-          />
-          <Tab
-            wrapped
-            icon={<MenuOpenIcon />}
-            label="Sub Category"
-            {...a11yProps(3)}
-          />
-          <Tab
-            wrapped
-            icon={<ForestIcon />}
-            label="Primary Material"
-            {...a11yProps(4)}
-          />
-          <Tab
-            wrapped
-            icon={<FilterListIcon />}
-            label="Secondary Material"
-            {...a11yProps(5)}
-          />
-          <Tab
-            wrapped
-            icon={<AutoAwesomeIcon />}
-            label="Polish"
-            {...a11yProps(6)}
-          />
-          <Tab
-            wrapped
-            icon={<ConstructionIcon />}
-            label="Fitting"
-            {...a11yProps(7)}
-          />
-          <Tab
-            wrapped
-            icon={<InsertLinkIcon />}
-            label="Hinge"
-            {...a11yProps(8)}
-          />
-          <Tab wrapped icon={<AdjustIcon />} label="Knob" {...a11yProps(9)} />
-          <Tab
-            wrapped
-            icon={<DoorSlidingIcon />}
-            label="Door"
-            {...a11yProps(10)}
-          />
-          <Tab
-            wrapped
-            icon={<DragHandleIcon />}
-            label="Handle Material"
-            {...a11yProps(11)}
-          />
-          <Tab
-            wrapped
-            icon={<CollectionsIcon />}
-            label="Gallery"
-            {...a11yProps(12)}
-          />
-          <Tab
-            wrapped
-            icon={<ViewCarouselIcon />}
-            label="Banner"
-            {...a11yProps(13)}
-          />
-          <Tab
-            wrapped
-            icon={<PeopleAltOutlinedIcon />}
-            label="Customer"
-            {...a11yProps(14)}
-          />
-          <Tab
-            wrapped
-            icon={<ExploreOutlinedIcon />}
-            label="Order"
-            {...a11yProps(15)}
-          />
-          <Tab
-            wrapped
-            icon={<CardGiftcardOutlinedIcon />}
-            label="Coupons"
-            {...a11yProps(16)}
-          />
-          <Tab
-            wrapped
-            icon={<PersonOutlineOutlinedIcon />}
-            label="Our Staff"
-            {...a11yProps(17)}
-          />
-          <Tab
-            wrapped
-            icon={<ArticleIcon />}
-            label="Blog"
-            {...a11yProps(18)}
-          />
-          <Tab
-            wrapped
-            icon={<SettingsOutlinedIcon />}
-            label="Settings"
-            {...a11yProps(19)}
-          />
-        </Tabs> */}
+      
 
         <TabPanel value={value} index={0}>
           <Dashboard />
@@ -485,46 +300,6 @@ console.log(window.location.search)
         <TabPanel value={value} index={1}>
           <Products />
         </TabPanel>
-{/* 
-        <TabPanel value={value} index={2}>
-          <Category />
-        </TabPanel>
-
-        <TabPanel value={value} index={3}>
-          <SubCategory />
-        </TabPanel>
-
-        <TabPanel value={value} index={4}>
-          <PrimaryMaterial />
-        </TabPanel>
-
-        <TabPanel value={value} index={5}>
-          <SecondaryMaterial />
-        </TabPanel>
-
-        <TabPanel value={value} index={6}>
-          <Polish />
-        </TabPanel>
-
-        <TabPanel value={value} index={7}>
-          <Fitting />
-        </TabPanel>
-
-        <TabPanel value={value} index={8}>
-          <Hinge />
-        </TabPanel>
-
-        <TabPanel value={value} index={9}>
-          <Knob />
-        </TabPanel>
-
-        <TabPanel value={value} index={10}>
-          <Door />
-        </TabPanel>
-
-        <TabPanel value={value} index={11}>
-          <Handle />
-        </TabPanel> */}
 
         <TabPanel value={value} index={2}>
           <Gallery />
@@ -564,6 +339,10 @@ console.log(window.location.search)
         </TabPanel>
         
         <TabPanel value={value} index={11}>
+          <StockChannel />
+        </TabPanel>
+        
+        <TabPanel value={value} index={12}>
           <Setting />
         </TabPanel>
       </Box>
