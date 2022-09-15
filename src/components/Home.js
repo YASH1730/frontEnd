@@ -69,7 +69,8 @@ const Home = (props) => {
     8 : 'blog',
     9 : 'admin',
     10 : 'draft' ,
-    11 : 'profile' ,
+    11 : 'stock' ,
+    12 : 'profile' ,
   }
   const ModuleNumber = {
      'dashboard': 0,
@@ -83,7 +84,8 @@ const Home = (props) => {
      'blog': 8,
      'admin': 9,
      'draft': 10,
-     'profile': 11,
+     'stock': 11,
+     'profile': 12,
   }
   
   const [ShowTabs, setShowTabs] = useState(false);
@@ -185,21 +187,7 @@ console.log(window.location.search)
                   },
                 }}
               >
-                {/* <Tab
-                  wrapped
-                  label={
-                    <Typography
-                      align="center"
-                      pt={3}
-                      pb={3}
-                      color="primary"
-                      variant="h5"
-                    >
-                      WoodSala
-                    </Typography>
-                  }
-                  {...a11yProps(0)}
-                /> */}
+      
                 <Tab
                   wrapped
                   icon={<GridViewIcon />}
