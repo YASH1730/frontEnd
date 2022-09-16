@@ -54,7 +54,7 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 
 // import state 
 import {Store} from '../store/Context' 
-import {DarkMode, SideTabs} from '../store/Types' 
+import {DarkMode, SideTabs, Auth} from '../store/Types' 
 
 const Home = (props) => {
 
@@ -361,6 +361,11 @@ const Home = (props) => {
 
   const handleLogout = () => {
     localStorage.clear();
+    dispatch({type : Auth,payload : {
+      isLogin : false,
+      WDToken : null,
+      role : null
+    }})
     history("/");
   };
 
