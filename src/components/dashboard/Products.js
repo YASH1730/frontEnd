@@ -1,4 +1,4 @@
-import React, { useState, useContext,useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import {
 
   Typography,
@@ -10,7 +10,6 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
-import { OpenBox, Notify } from "../../App";
 import {getListProduct, deleteProduct, getListMergeProduct, deleteMergeProduct} from '../../services/service'
 import MergeIcon from '@mui/icons-material/Merge';
 import {
@@ -21,6 +20,8 @@ import {
   useGridSelector,
 } from '@mui/x-data-grid';
 import Pagination from '@mui/material/Pagination';
+import {Store} from '../../store/Context'
+import {OpenBox,Notify} from '../../store/Types'
 
 function CustomPagination() {
   const apiRef = useGridApiContext();
@@ -40,12 +41,10 @@ function CustomPagination() {
 
 export default function Products() {
   
+  // store
+  const {dispatch} = Store();
+
   
-  // useContext 
-
-  const SideBox = useContext(OpenBox);
-  const despatchAlert = useContext(Notify);
-
 
   // states
   const [selectedSKU, setSelection] = useState([]);
@@ -541,22 +540,26 @@ export default function Products() {
         <IconButton onClick={() => {
           
           console.log(params)
-              SideBox.setOpen({
+              
+          dispatch({type : OpenBox, payload :{
                 state : true,
                 formType : 'update_product',
                 payload : params
-              }) 
+              }}) 
+
             }} aria-label="update"  >
               <CreateIcon />
         </IconButton>
         
         <IconButton onClick={() => { deleteProduct(params.formattedValue._id).then((res)=>{
-              despatchAlert.setNote({
+              dispatch({type: Notify,payload:{
                 open : true,
                 variant : 'success',
                 message : "Product deleted successfully !!!"
-              })
-            }) }} aria-label="delete"  >
+              }})
+            }
+            
+            )}} >
               <DeleteIcon />
         </IconButton>
         
@@ -743,21 +746,22 @@ export default function Products() {
         <IconButton onClick={() => {
           
           console.log(params)
-              SideBox.setOpen({
+              dispatch({type : OpenBox, payload :{
                 state : true,
                 formType : 'update_merge',
                 payload : params
-              }) 
+              }}) 
+
             }} aria-label="update"  >
               <CreateIcon />
         </IconButton>
         
         <IconButton onClick={() => { deleteMergeProduct(params.formattedValue._id).then((res)=>{
-              despatchAlert.setNote({
+              dispatch({type: Notify,payload:{
                 open : true,
                 variant : 'success',
                 message : "Merged Product deleted successfully !!!"
-              })
+              }})
             }) }} aria-label="delete"  >
               <DeleteIcon />
         </IconButton>
@@ -844,7 +848,7 @@ export default function Products() {
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
-            onClick = {()=>{SideBox.setOpen({state : true, formType : 'product'})}}
+            onClick = {()=>{dispatch({type : OpenBox, payload : {state : true, formType : 'product'}})}}
           >
             Add Product
           </Button>
@@ -866,11 +870,12 @@ export default function Products() {
 
           <Typography variant="h6"> Product List </Typography>
           {selectedSKU.length > 1 &&  <Button startIcon = {<MergeIcon/>} variant = 'outlined' onClick = {()=>{
-            SideBox.setOpen({
+             dispatch({type : OpenBox, payload :{
               state : true,
               formType : 'merge_product',
               payload : selectedSKU
-            }) 
+            }}) 
+            
           }}>Merge</Button>}
           </div>
           <br></br>
@@ -893,11 +898,13 @@ export default function Products() {
 
           <Typography variant="h6"> Merge Product List </Typography>
           {selectedSKU.length > 1 &&  <Button startIcon = {<MergeIcon/>} variant = 'outlined' onClick = {()=>{
-            SideBox.setOpen({
+            dispatch({type : OpenBox, payload :{
               state : true,
               formType : 'merge_product',
               payload : selectedSKU
-            }) 
+            }}) 
+         
+            
           }}>Merge</Button>}
           </div>
           <br></br>
