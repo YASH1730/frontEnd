@@ -41,10 +41,10 @@ export default function ConfirmationBox(props) {
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={style}>
-          <Typography id="keep-mounted-modal-title" variant="h6" component="h2">
+          <Typography component={'span'} id="keep-mounted-modal-title" variant="h6" component="h2">
             Alert
           </Typography>
-          <Typography id="keep-mounted-modal-description" sx={{ mt: 2 }}>
+          <Typography component={'span'} id="keep-mounted-modal-description" sx={{ mt: 2 }}>
               {dialog.message}
           </Typography>
           <Box sx = {

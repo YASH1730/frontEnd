@@ -64,7 +64,7 @@ export default function Fitting() {
         }))
       })
       .catch((err) => {
-        console.log(err)
+        //console.log(err)
       })
   }, []);
 
@@ -130,7 +130,7 @@ export default function Fitting() {
 
     res.then((data)=>{
       setCheck(check.map((row,index)=>{
-        // console.log(parseInt(id[1]) === index)
+        // //console.log(parseInt(id[1]) === index)
         if (parseInt(id[1]) === index)
         return !row
         else 
@@ -144,7 +144,7 @@ export default function Fitting() {
     //   }})
     })
     .catch((err)=>{
-      console.log(err)
+      //console.log(err)
      dispatch({type : Notify,payload : {
         open : true,
         variant : 'error',
@@ -159,7 +159,7 @@ export default function Fitting() {
   } 
 
   const handelSearch = (e)=>{
-    console.log(e.target.value)
+    //console.log(e.target.value)
     setSearch(e.target.value)
   }
 
@@ -187,7 +187,7 @@ export default function Fitting() {
 
   return (
     <>
-      <Typography sx={{ display: "block" }} variant="h5">
+      <Typography component={'span'} sx={{ display: "block" }} variant="h5">
       Fitting
       </Typography>
 
@@ -209,7 +209,7 @@ export default function Fitting() {
         <Grid xs={12} md={9}>
           <TextField
             fullWidth
-            autoComplete={false}
+            // autoComplete={false}
             id="demo-helper-text-aligned-no-helper"
             label="Search by fitting name"
             type="text"
@@ -240,7 +240,7 @@ export default function Fitting() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Fitting List  </Typography>
+          <Typography component={'span'} variant="h6"> Fitting List  </Typography>
           <br></br>
           {DataGridView()}
         </Grid>

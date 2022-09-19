@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import {
-
+Box,
   Typography,
   TextField,
   Grid,
@@ -57,7 +57,7 @@ export default function Products() {
   useEffect(()=>{
     getListProduct()
     .then((data) => {
-      console.log(data.data)
+      //console.log(data.data)
 
       setRows(data.data.map((row,index) => {
 
@@ -131,13 +131,13 @@ export default function Products() {
       }))
     })
     .catch((err) => {
-      console.log(err)
+      //console.log(err)
     })
 
 
     getListMergeProduct()
     .then((data) => {
-      console.log(data.data)
+      //console.log(data.data)
 
       setMergeRows(data.data.map((row,index) => {
 
@@ -184,7 +184,7 @@ export default function Products() {
       }))
     })
     .catch((err) => {
-      console.log(err)
+      //console.log(err)
     })
 
 
@@ -539,7 +539,7 @@ export default function Products() {
         
         <IconButton onClick={() => {
           
-          console.log(params)
+          //console.log(params)
               
           dispatch({type : OpenBox, payload :{
                 state : true,
@@ -745,7 +745,7 @@ export default function Products() {
         
         <IconButton onClick={() => {
           
-          console.log(params)
+          //console.log(params)
               dispatch({type : OpenBox, payload :{
                 state : true,
                 formType : 'update_merge',
@@ -803,13 +803,13 @@ export default function Products() {
   }
 
   const handleSearch = (e)=>{
-    // console.log(e.target.value)
+    // //console.log(e.target.value)
      setSearch(e.target.value)
   }
 
   return (
-    <>
-      <Typography sx={{ display: "block" }} variant="h5">
+    <Box  sx = {{pl:4,pr:4}}>
+      <Typography component={'span'} sx={{ display: "block" }} variant="h5">
         Products
       </Typography>
 
@@ -831,7 +831,7 @@ export default function Products() {
         <Grid xs={12} md = {9}>
           <TextField
             fullWidth
-            autoComplete={false}
+            // autoComplete={false}
             id="demo-helper-text-aligned-no-helper"
             label="Search by SKU"
             onChange = {handleSearch}
@@ -868,7 +868,7 @@ export default function Products() {
             }
           } >
 
-          <Typography variant="h6"> Product List </Typography>
+          <Typography component={'span'} variant="h6"> Product List </Typography>
           {selectedSKU.length > 1 &&  <Button startIcon = {<MergeIcon/>} variant = 'outlined' onClick = {()=>{
              dispatch({type : OpenBox, payload :{
               state : true,
@@ -896,7 +896,7 @@ export default function Products() {
             }
           } >
 
-          <Typography variant="h6"> Merge Product List </Typography>
+          <Typography component={'span'} variant="h6"> Merge Product List </Typography>
           {selectedSKU.length > 1 &&  <Button startIcon = {<MergeIcon/>} variant = 'outlined' onClick = {()=>{
             dispatch({type : OpenBox, payload :{
               state : true,
@@ -913,6 +913,6 @@ export default function Products() {
       </Grid>
 
       {/* data grid ends  */}
-    </>
+    </Box>
   );
 }

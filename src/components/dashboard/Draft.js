@@ -35,6 +35,7 @@ import {
   gridPageSelector,
   useGridApiContext,
   useGridSelector,
+  useGridApiRef
 } from "@mui/x-data-grid";
 import Pagination from "@mui/material/Pagination";
 
@@ -55,6 +56,7 @@ function CustomPagination() {
 
 export default function Products() {
   // useContext
+  const useAPIRef = useGridApiRef();
 
   const {dispatch} = Store()
   // states
@@ -84,7 +86,7 @@ export default function Products() {
   useEffect(() => {
     getDraft()
       .then((data) => {
-        console.log(data.data);
+        //console.log(data.data);
 
         setRows(
           data.data.map((row, index) => {
@@ -155,7 +157,7 @@ export default function Products() {
         );
       })
       .catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
   }, []);
 
@@ -500,7 +502,7 @@ export default function Products() {
         <div>
           <IconButton
             onClick={() => {
-              console.log(params);
+              //console.log(params);
               dispatch({type : OpenBox,payload : {
                 state: true,
                 formType: "update_product",
@@ -571,7 +573,7 @@ export default function Products() {
 
                   <Grid item xs={12} md={6}>
                     <CardContent>
-                      <Typography gutterBottom variant="h5" component="div">
+                      <Typography component={'span'} gutterBottom variant="h5" component="div">
                         Product Details
                       </Typography>
                       <Stack
@@ -579,311 +581,311 @@ export default function Products() {
                         spacing={1}
                       >
                         <Item>
-                          <Typography variant="button">SKU :: </Typography>
+                          <Typography component={'span'} variant="button">SKU :: </Typography>
                           {data.SKU}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             product_title ::{" "}
                           </Typography>
                           {data.product_title}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             category_name ::{" "}
                           </Typography>
                           {data.category_name}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             sub_category_name ::{" "}
                           </Typography>
                           {data.sub_category_name}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             product_description ::{" "}
                           </Typography>
                           {data.product_description}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             seo_title ::{" "}
                           </Typography>
                           {data.seo_title}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             seo_description ::{" "}
                           </Typography>
                           {data.seo_description}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             seo_keyword ::{" "}
                           </Typography>
                           {data.seo_keyword}
                         </Item>
                         <Item>
-                          <Typography variant="button">status :: </Typography>
+                          <Typography component={'span'} variant="button">status :: </Typography>
                           {data.status ? "Activated" : "Deactivated"}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             primary_material_name ::{" "}
                           </Typography>
                           {data.primary_material_name}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             secondary_material_name ::{" "}
                           </Typography>
                           {data.secondary_material_name}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             secondary_material_weight ::{" "}
                           </Typography>
                           {data.secondary_material_weight}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             length_main ::{" "}
                           </Typography>
                           {data.length_main}
                         </Item>
                         <Item>
-                          <Typography variant="button">breadth :: </Typography>
+                          <Typography component={'span'} variant="button">breadth :: </Typography>
                           {data.breadth}
                         </Item>
                         <Item>
-                          <Typography variant="button">height :: </Typography>
+                          <Typography component={'span'} variant="button">height :: </Typography>
                           {data.height}
                         </Item>
                         <Item>
-                          <Typography variant="button">weight :: </Typography>
+                          <Typography component={'span'} variant="button">weight :: </Typography>
                           {data.weight}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             polish_name ::{" "}
                           </Typography>
                           {data.polish_name}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             hinge_name ::{" "}
                           </Typography>
                           {data.hinge_name}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             knob_name ::{" "}
                           </Typography>
                           {data.knob_name}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             handle_name ::{" "}
                           </Typography>
                           {data.handle_name}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             door_name ::{" "}
                           </Typography>
                           {data.door_name}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             fitting_name ::{" "}
                           </Typography>
                           {data.fitting_name}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             selling_points ::{" "}
                           </Typography>
                           {data.selling_points}
                         </Item>
                         <Item>
-                          <Typography variant="button">top_size :: </Typography>
+                          <Typography component={'span'} variant="button">top_size :: </Typography>
                           {data.top_size}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             dial_size ::{" "}
                           </Typography>
                           {data.dial_size}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             seating_size_width ::{" "}
                           </Typography>
                           {data.seating_size_width}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             seating_size_depth ::{" "}
                           </Typography>
                           {data.seating_size_depth}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             seating_size_height ::{" "}
                           </Typography>
                           {data.seating_size_height}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             weight_capacity ::{" "}
                           </Typography>
                           {data.weight_capacity}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             wall_hanging ::{" "}
                           </Typography>
                           {data.wall_hanging}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             assembly_required ::{" "}
                           </Typography>
                           {data.assembly_required}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             assembly_part ::{" "}
                           </Typography>
                           {data.assembly_part}
                         </Item>
                         <Item>
-                          <Typography variant="button">legs :: </Typography>
+                          <Typography component={'span'} variant="button">legs :: </Typography>
                           {data.legs}
                         </Item>
                         <Item>
-                          <Typography variant="button">mirror :: </Typography>
+                          <Typography component={'span'} variant="button">mirror :: </Typography>
                           {data.mirror}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             mirror_width ::{" "}
                           </Typography>
                           {data.mirror_width}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             mirror_length ::{" "}
                           </Typography>
                           {data.mirror_length}
                         </Item>
                         <Item>
-                          <Typography variant="button">silver :: </Typography>
+                          <Typography component={'span'} variant="button">silver :: </Typography>
                           {data.silver}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             silver_weight ::{" "}
                           </Typography>
                           {data.silver_weight}
                         </Item>
                         <Item>
-                          <Typography variant="button">joints :: </Typography>
+                          <Typography component={'span'} variant="button">joints :: </Typography>
                           {data.joints}
                         </Item>
                         <Item>
-                          <Typography variant="button">wheel :: </Typography>
+                          <Typography component={'span'} variant="button">wheel :: </Typography>
                           {data.wheel}
                         </Item>
                         <Item>
-                          <Typography variant="button">trolley :: </Typography>
+                          <Typography component={'span'} variant="button">trolley :: </Typography>
                           {data.trolley}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             trolley_material ::{" "}
                           </Typography>
                           {data.trolley_material}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             rotating_seats ::{" "}
                           </Typography>
                           {data.rotating_seats}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             eatable_oil_polish ::{" "}
                           </Typography>
                           {data.eatable_oil_polish}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             no_chemical ::{" "}
                           </Typography>
                           {data.no_chemical}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             straight_back ::{" "}
                           </Typography>
                           {data.straight_back}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             lean_back ::{" "}
                           </Typography>
                           {data.lean_back}
                         </Item>
                         <Item>
-                          <Typography variant="button">weaving :: </Typography>
+                          <Typography component={'span'} variant="button">weaving :: </Typography>
                           {data.weaving}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             not_suitable_for_Micro_Dish ::{" "}
                           </Typography>
                           {data.not_suitable_for_Micro_Dish}
                         </Item>
                         <Item>
-                          <Typography variant="button">tilt_top :: </Typography>
+                          <Typography component={'span'} variant="button">tilt_top :: </Typography>
                           {data.tilt_top}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             inside_compartments ::{" "}
                           </Typography>
                           {data.inside_compartments}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             stackable ::{" "}
                           </Typography>
                           {data.stackable}
                         </Item>
                         <Item>
-                          <Typography variant="button">MRP :: </Typography>
+                          <Typography component={'span'} variant="button">MRP :: </Typography>
                           {data.MRP}
                         </Item>
                         <Item>
-                          <Typography variant="button">tax_rate :: </Typography>
+                          <Typography component={'span'} variant="button">tax_rate :: </Typography>
                           {data.tax_rate}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             selling_price ::{" "}
                           </Typography>
                           {data.selling_price}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             discount_limit ::{" "}
                           </Typography>
                           {data.discount_limit}
                         </Item>
                         <Item>
-                          <Typography variant="button">
+                          <Typography component={'span'} variant="button">
                             dispatch_time ::{" "}
                           </Typography>
                           {data.dispatch_time}
@@ -901,7 +903,7 @@ export default function Products() {
                         onClick={() => {
                           const FD = new FormData();
 
-                          console.log(data)
+                          //console.log(data)
 
                           FD.append("_id", data.action._id);
                           FD.append("status", open.value);
@@ -910,7 +912,8 @@ export default function Products() {
 
                           res
                             .then((data) => {
-                              console.log(data);
+                              //console.log(data);
+                              handleClose();
                               dispatch({type : Notify,payload : {
                                 open: true,
                                 variant: "success",
@@ -919,7 +922,7 @@ export default function Products() {
                              } });
                             })
                             .catch((err) => {
-                              console.log(err);
+                              //console.log(err);
                               dispatch({type : Notify,payload : {
                                 open: true,
                                 variant: "error",
@@ -942,18 +945,22 @@ export default function Products() {
   }
 
   const handleSwitch = (e) => {
-    console.log(e.target.name);
-
+    //console.log(e.target.name);
+    useAPIRef.
     handleOpen(e.target.name, e.target.checked);
   };
 
   function DataGridView() {
+    
+    
+    
     return (
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
           rows={Row}
           columns={columns}
           pageSize={5}
+          apiRef = {useAPIRef}
           rowsPerPageOptions={[5]}
           filterModel={{
             items: [
@@ -973,13 +980,13 @@ export default function Products() {
   }
 
   const handleSearch = (e) => {
-    // console.log(e.target.value)
+    // //console.log(e.target.value)
     setSearch(e.target.value);
   };
 
   return (
-    <>
-      <Typography sx={{ display: "block" }} variant="h5">
+    <Box  sx = {{pl:4,pr:4}}>
+      <Typography component={'span'} sx={{ display: "block" }} variant="h5">
         Products Draft
       </Typography>
 
@@ -1001,7 +1008,7 @@ export default function Products() {
         <Grid xs={12} md={9}>
           <TextField
             fullWidth
-            autoComplete={false}
+            // autoComplete={false}
             id="demo-helper-text-aligned-no-helper"
             label="Search by SKU"
             onChange={handleSearch}
@@ -1031,7 +1038,7 @@ export default function Products() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Draft Product List </Typography>
+          <Typography component={'span'} variant="h6"> Draft Product List </Typography>
           <br></br>
           {DataGridView()}
         </Grid>
@@ -1040,6 +1047,6 @@ export default function Products() {
       {open.status && SpringModal()}
 
       {/* data grid ends  */}
-    </>
+    </Box>
   );
 }

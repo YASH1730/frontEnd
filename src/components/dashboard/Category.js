@@ -75,7 +75,7 @@ export default function Category() {
         }))
       })
       .catch((err) => {
-        console.log(err)
+        //console.log(err)
       })
   }, []);
 
@@ -137,8 +137,8 @@ export default function Category() {
 
 
   const handleSwitch = (e)=>{
-    // console.log(e.target.name)
-    // console.log(check)
+    // //console.log(e.target.name)
+    // //console.log(check)
 
     const id = e.target.name.split(' ')
     const FD = new FormData()
@@ -151,7 +151,7 @@ export default function Category() {
     res.then((data)=>{
 
       setCheck(check.map((row,index)=>{
-        // console.log(parseInt(id[1]) === index)
+        // //console.log(parseInt(id[1]) === index)
         if (parseInt(id[1]) === index)
         return !row
         else 
@@ -166,7 +166,7 @@ export default function Category() {
       // }})
     })
     .catch((err)=>{
-      console.log(err)
+      //console.log(err)
       dispatch({type : Notify,payload : {
         open : true,
         variant : 'error',
@@ -181,7 +181,7 @@ export default function Category() {
   } 
 
   const handelSearch = (e)=>{
-    console.log(e.target.value)
+    //console.log(e.target.value)
     setSearch(e.target.value)
   }
 
@@ -210,7 +210,7 @@ export default function Category() {
 
   return (
     <>
-      <Typography sx={{ display: "block" }} variant="h5">
+      <Typography component={'span'} sx={{ display: "block" }} variant="h5">
         Category
       </Typography>
 
@@ -232,7 +232,7 @@ export default function Category() {
         <Grid xs={12} md={9}>
           <TextField
             fullWidth
-            autoComplete={false}
+            // autoComplete={false}
             id="demo-helper-text-aligned-no-helper"
             label="Search by category type"
             type="text"
@@ -262,7 +262,7 @@ export default function Category() {
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Category List </Typography>
+          <Typography component={'span'} variant="h6"> Category List </Typography>
           <br></br>
           {DataGridView()}
         </Grid>
