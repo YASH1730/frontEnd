@@ -105,7 +105,9 @@ export default function Door() {
           dispatch({type : OpenBox,payload : {
             state : true,
             formType : 'update_door',
-            payload : params
+            payload : params,
+            row : Row,
+            setRow : setRows,
           }}) 
         }} aria-label="delete"  >
           <CreateIcon />
@@ -145,12 +147,12 @@ export default function Door() {
         else 
         return row
       }))
-      // dispatch({type : Notify,payload : {
-      //   open : true,
-      //   variant : 'success',
-      //   message : " Door Status Updated Successfully !!!"
+      dispatch({type : Notify,payload : {
+        open : true,
+        variant : 'success',
+        message : " Door Status Updated Successfully !!!"
   
-      // }})
+      }})
     })
     .catch((err)=>{
       //console.log(err)

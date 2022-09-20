@@ -148,6 +148,9 @@ const Sideform = () => {
   const [files, setFiles] = useState([]);
   const [featured, setFeatured] = useState([]);
 
+  // image link 
+  const imageLink= 'https://woodshala.in/upload/'
+
   const confirm = useConfirm();
 
   // confirmBox 
@@ -156,7 +159,7 @@ const Sideform = () => {
 
     confirm({ description: `Data will listed in Database !!!` },option)
                       .then(() => action(e))
-                      .catch((err) => {console.log("Opreation cancelled.")});
+                      .catch((err) => {console.log("Opreation cancelled because. ",err)});
   }
 
 
@@ -655,7 +658,7 @@ const Sideform = () => {
           return setMaterialCatalog(data.data);
         });
         setData({
-          priMater: state.OpenBox.payload.row.primaryMaterial_name,
+          primaryMaterial_name: state.OpenBox.payload.row.primaryMaterial_name,
           primaryMaterial_description:
             state.OpenBox.payload.row.primaryMaterial_description,
         });
@@ -674,7 +677,6 @@ const Sideform = () => {
       case "update_knob":
         getKnob().then((data) => {
           if (data.data === null) return setKnobCatalog([]);
-
           return setKnobCatalog(data.data);
         });
         setData({
@@ -733,11 +735,12 @@ const Sideform = () => {
       case "update_Subcategory":
         categoryList().then((data) => {
           if (data.data === null) return setCategory([]);
-
           return setCategory(data.data);
         });
-
         setCat(state.OpenBox.payload.row.category_id);
+        setData({
+          sub_category_name: state.OpenBox.payload.row.sub_category_name,
+        });
         break;
       case "update_blog":
         setData({
@@ -1256,6 +1259,12 @@ const Sideform = () => {
           [e.target.name]: e.target.value,
         });
         break;
+      case "update_textile":
+        setData({
+          ...changeData,
+          [e.target.name]: e.target.value,
+        });
+        break;
 
       default:
       // //console.log("");
@@ -1391,6 +1400,13 @@ const Sideform = () => {
             }
           });
         } else {
+          state.OpenBox.setRow([...state.OpenBox.row,{
+            id : state.OpenBox.row.length + 1,
+            textile_name : data.data.response.textile_name,
+            textile_status : data.data.response.textile_status,
+            textile_image : data.data.response.textile_image,
+            action : data.data.response._id
+        }])
           setImages([]);
           handleClose();
           dispatch({
@@ -1403,7 +1419,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        console.log(err);
         setImages([]);
         dispatch({
           type: Notify, payload: {
@@ -1661,6 +1677,15 @@ const Sideform = () => {
             }
           });
         } else {
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action)
+            {
+              set.textile_name = e.target.textile_name.value;
+              set.textile_image = Image[0] !== undefined ? `${imageLink}${Image[0].path}` : console.log()
+
+            } 
+            return set;
+          }))
           setImages([]);
           handleClose();
           dispatch({
@@ -1713,6 +1738,15 @@ const Sideform = () => {
             }
           });
         } else {
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action)
+            {
+              set.fabric_name = e.target.fabric_name.value;
+              set.fabric_image = Image[0] !== undefined ? `${imageLink}${Image[0].path}` : console.log()
+
+            } 
+            return set;
+          }))
           setImages([]);
           handleClose();
           dispatch({
@@ -1745,6 +1779,7 @@ const Sideform = () => {
     FD.append("_id", state.OpenBox.payload.row.action);
 
     Image[0] !== undefined && FD.append("category_image", Image[0]);
+    console.log(Image[0])
 
     e.target.category_name.value !== undefined
       ? FD.append("category_name", e.target.category_name.value)
@@ -1753,8 +1788,7 @@ const Sideform = () => {
     const res = editCategory(FD);
     res
       .then((data) => {
-        // //console.log(data.status);
-
+       
         if (data.status === 203) {
           setImages([]);
           dispatch({
@@ -1765,6 +1799,14 @@ const Sideform = () => {
             }
           });
         } else {
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action)
+            {
+              set.category_name = e.target.category_name.value;
+              Image[0] !== undefined ? set.category_image = `https://woodshala.in/upload/${Image[0].path}` : console.log();  
+            } 
+            return set;
+          }))
           setImages([]);
           handleClose();
           dispatch({
@@ -2847,6 +2889,16 @@ const Sideform = () => {
               message: data.data.message,
             } });
         } else {
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action)
+            {
+              set.primaryMaterial_description = e.target.primaryMaterial_description.value;
+              set.primaryMaterial_name = e.target.primaryMaterial_name.value;
+              set.primaryMaterial_image = Image[0] !== undefined ? `${imageLink}${Image[0].path}` : console.log()
+
+            } 
+            return set;
+          }))
           setImages([]);
           handleClose();
           dispatch({
@@ -2939,7 +2991,11 @@ const Sideform = () => {
             }
           });
         } else {
-          setImages([]);
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action) 
+              set.handle_name = e.target.handle_name.value;
+            return set;
+          }))
           handleClose();
           dispatch({
             type: Notify, payload: {
@@ -3035,7 +3091,11 @@ const Sideform = () => {
             }
           });
         } else {
-          setImages([]);
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action) 
+              set.hinge_name = e.target.hinge_name.value;
+            return set;
+          }))
           handleClose();
           dispatch({
             type: Notify, payload: {
@@ -3127,7 +3187,11 @@ const Sideform = () => {
               message: data.data.message,
             }});
         } else {
-          setImages([]);
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action) 
+              set.door_name = e.target.door_name.value;
+            return set;
+          }))
           handleClose();
           dispatch({
             type: Notify, payload: {
@@ -3211,10 +3275,7 @@ const Sideform = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
-
         if (data.status === 203) {
-          setImages([]);
           dispatch({
             type: Notify, payload: {
               open: true,
@@ -3223,7 +3284,11 @@ const Sideform = () => {
             }
           });
         } else {
-          setImages([]);
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action) 
+              set.knob_name = e.target.knob_name.value;
+            return set;
+          }))
           handleClose();
           dispatch({
             type: Notify, payload: {
@@ -3235,8 +3300,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
-        setImages([]);
+        console.log(err);
         dispatch({
           type: Notify, payload: {
             open: true,
@@ -3308,7 +3372,7 @@ const Sideform = () => {
         // //console.log(data.status);
 
         if (data.status === 203) {
-          setImages([]);
+
           dispatch({
             type: Notify, payload: {
               open: true,
@@ -3316,7 +3380,11 @@ const Sideform = () => {
               message: data.data.message,
             }});
         } else {
-          setImages([]);
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action) 
+              set.fitting_name = e.target.fitting_name.value;
+            return set;
+          }))
           handleClose();
           dispatch({
             type: Notify, payload: {
@@ -3398,7 +3466,6 @@ const Sideform = () => {
         // //console.log(data.status);
 
         if (data.status === 203) {
-          setImages([]);
           dispatch({
             type: Notify, payload: {
               open: true,
@@ -3406,8 +3473,14 @@ const Sideform = () => {
               message: data.data.message,
             } });
         } else {
-          setImages([]);
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            
+            if (set.action===state.OpenBox.payload.row.action) 
+              set.polish_name = e.target.polish_name.value;
+            return set;
+          }))
           handleClose();
+
           dispatch({
             type: Notify, payload: {
               open: true,
@@ -3484,15 +3557,16 @@ const Sideform = () => {
     e.preventDefault();
 
     const FD = new FormData();
+    let catName = ''
 
     // //console.log(state.OpenBox.payload);
 
     FD.append("_id", state.OpenBox.payload.row.action);
 
     category.map((item) => {
+      if(item._id === e.target.category_id.value) catName = item.category_name
       return (
-        item._id === e.target.category_id.value &&
-        FD.append("category_name", item.category_name)
+        item._id === e.target.category_id.value && FD.append("category_name",catName )
       );
     });
 
@@ -3501,7 +3575,6 @@ const Sideform = () => {
     e.target.sub_category_name.value !== "" &&
       FD.append("sub_category_name", e.target.sub_category_name.value);
 
-    // // //console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     const res = editSubCatagories(FD);
 
@@ -3518,7 +3591,14 @@ const Sideform = () => {
               message: data.data.message,
             }});
         } else {
-          setImages([]);
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action)
+            {
+              set.sub_category_name = e.target.sub_category_name.value;
+              set.category_name = catName;
+            } 
+            return set;
+          }))
           handleClose();
           dispatch({
             type: Notify, payload: {
@@ -3529,7 +3609,7 @@ const Sideform = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        console.log(err);
         setImages([]);
         dispatch({
           type: Notify, payload: {
@@ -9173,7 +9253,7 @@ const Sideform = () => {
                     method="post"
                   >
                     <ImagePreviews
-                      text={"Please Drag and Drop the Fabric image"}
+                      text={"Please Drag and Drop the Textile image"}
                     >
                       {" "}
                     </ImagePreviews>
@@ -9558,7 +9638,7 @@ const Sideform = () => {
                       id="outlined-select"
                       name="primaryMaterial_name"
                       label="Material"
-                      value={changeData.priMater}
+                      value={changeData.primaryMaterial_name}
                       helperText="Please enter the update"
                     />
 
@@ -10850,6 +10930,8 @@ const Sideform = () => {
                       id="outlined-select"
                       name="sub_category_name"
                       label="Sub Category"
+                      value = {changeData.sub_category_name || ''}
+                      onChange={handleProductFelids}
                       type="text"
                       helperText="Please enter your sub category"
                     />

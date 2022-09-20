@@ -53,7 +53,6 @@ export default function Category() {
 
 
   const [Row, setRows] = useState()
-  // function for get cetegory list
 
   useEffect(() => {
     categoryList()
@@ -115,7 +114,9 @@ export default function Category() {
           dispatch({type : OpenBox,payload : {
             state : true,
             formType : 'update_category',
-            payload : params
+            payload : params,
+            row : Row,
+            setRow : setRows,
           }}) 
         }} aria-label="delete"  >
           <CreateIcon />
@@ -158,12 +159,12 @@ export default function Category() {
         return row
       }))
       
-      // dispatch({type : Notify,payload : {
-      //   open : true,
-      //   variant : 'success',
-      //   message : "Category Status Updated Successfully !!!"
+      dispatch({type : Notify,payload : {
+        open : true,
+        variant : 'success',
+        message : "Category Status Updated Successfully !!!"
   
-      // }})
+      }})
     })
     .catch((err)=>{
       //console.log(err)

@@ -102,7 +102,9 @@ const {dispatch} = Store();
          dispatch({type : OpenBox,payload : {
             state : true,
             formType : 'update_hinge',
-            payload : params
+            payload : params,
+            row : Row,
+            setRow : setRows,
           }}) 
         }} aria-label="delete"  >
           <CreateIcon />
@@ -141,12 +143,12 @@ const {dispatch} = Store();
         else 
         return row
       }))
-      // dispatch({type : Notify,payload : {
-      //   open : true,
-      //   variant : 'success',
-      //   message : " Polish Status Updated Successfully !!!"
+      dispatch({type : Notify,payload : {
+        open : true,
+        variant : 'success',
+        message : " Polish Status Updated Successfully !!!"
   
-      // }})
+      }})
     })
     .catch((err)=>{
       //console.log(err)

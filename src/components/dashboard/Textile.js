@@ -112,21 +112,23 @@ const {dispatch} = Store();
          dispatch({type : OpenBox,payload : {
             state : true,
             formType : 'update_textile',
-            payload : params
+            payload : params,
+            row : Row,
+            setRow : setRows
           }}) 
         }} aria-label="delete"  >
           <CreateIcon />
         </IconButton>
-        {/* <IconButton onClick={() => { deletefabric(params.formattedValue).then((res)=>{
+        {/* <IconButton onClick={() => { deleteTextile(params.formattedValue).then((res)=>{
           dispatch({type : Notify,payload : {
             open : true,
             variant : 'success',
             message : 'textile Deleted !!!'
-          })
+          }})
         }) }} aria-label="delete"  >
           <DeleteIcon />
-        </IconButton> */}
-        
+        </IconButton>
+         */}
       </div>,
     }
 
@@ -151,12 +153,12 @@ const {dispatch} = Store();
         else 
         return row
       }))
-      // dispatch({type : Notify,payload : {
-      //   open : true,
-      //   variant : 'success',
-      //   message : "Textile Status Updated Successfully !!!"
+      dispatch({type : Notify,payload : {
+        open : true,
+        variant : 'success',
+        message : "Textile Status Updated Successfully !!!"
   
-      // } })
+      } })
     })
     .catch((err)=>{
       //console.log(err)
@@ -240,7 +242,8 @@ const {dispatch} = Store();
         <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
-             dispatch({type : OpenBox,payload : { state: true, formType: "textile" }});
+             dispatch({type : OpenBox,payload : { state: true, formType: "textile",row : Row,
+             setRow : setRows }});
             }}
             sx={{ width: "100%" }}
             color="primary"

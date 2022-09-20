@@ -111,7 +111,9 @@ export default function Fabric() {
           dispatch({type : OpenBox,payload : {
             state : true,
             formType : 'update_fabric',
-            payload : params
+            payload : params,
+            row : Row,
+            setRow : setRows
           }}) 
         }} aria-label="delete"  >
           <CreateIcon />
@@ -151,12 +153,12 @@ export default function Fabric() {
         else 
         return row
       }))
-      // dispatch({type : Notify,payload : {
-      //   open : true,
-      //   variant : 'success',
-      //   message : "Fabric Status Updated Successfully !!!"
+      dispatch({type : Notify,payload : {
+        open : true,
+        variant : 'success',
+        message : "Fabric Status Updated Successfully !!!"
   
-      // }})
+      }})
     })
     .catch((err)=>{
       //console.log(err)

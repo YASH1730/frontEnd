@@ -97,7 +97,9 @@ export default function Fitting() {
          dispatch({type : OpenBox,payload : {
             state : true,
             formType : 'update_fitting',
-            payload : params
+            payload : params,
+            row : Row,
+            setRow : setRows,
           }}) 
         }} aria-label="delete"  >
           <CreateIcon />
@@ -136,12 +138,12 @@ export default function Fitting() {
         else 
         return row
       }))
-    //  dispatch({type : Notify,payload : {
-    //     open : true,
-    //     variant : 'success',
-    //     message : " Fitting Status Updated Successfully !!!"
+     dispatch({type : Notify,payload : {
+        open : true,
+        variant : 'success',
+        message : " Fitting Status Updated Successfully !!!"
   
-    //   }})
+      }})
     })
     .catch((err)=>{
       //console.log(err)

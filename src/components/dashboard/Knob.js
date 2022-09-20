@@ -100,7 +100,9 @@ const {dispatch} = Store();
          dispatch({type : OpenBox,payload : {
             state : true,
             formType : 'update_knob',
-            payload : params
+            payload : params,
+            row : Row,
+            setRow : setRows,
           }}) 
         }} aria-label="delete"  >
           <CreateIcon />
@@ -139,12 +141,12 @@ const {dispatch} = Store();
         else 
         return row
       }))
-      // dispatch({type : Notify,payload : {
-      //   open : true,
-      //   variant : 'success',
-      //   message : " Knob Status Updated Successfully !!!"
+      dispatch({type : Notify,payload : {
+        open : true,
+        variant : 'success',
+        message : " Knob Status Updated Successfully !!!"
   
-      //  }})
+       }})
     })
     .catch((err)=>{
       //console.log(err)
@@ -162,7 +164,6 @@ const {dispatch} = Store();
   } 
 
   const handelSearch = (e)=>{
-    //console.log(e.target.value)
     setSearch(e.target.value)
   }
 

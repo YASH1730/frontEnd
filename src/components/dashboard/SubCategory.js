@@ -110,7 +110,9 @@ const {dispatch} = Store();
          dispatch({type : OpenBox,payload : {
             state : true,
             formType : 'update_Subcategory',
-            payload : params
+            payload : params,
+            row : Row,
+            setRow : setRows,
           }}) 
         }} aria-label="delete"  >
           <CreateIcon />
@@ -149,15 +151,14 @@ const {dispatch} = Store();
         else 
         return row
       }))
-      // dispatch({type : Notify,payload : {
-      //   open : true,
-      //   variant : 'success',
-      //   message : " Sub Category Status Updated Successfully !!!"
-  
-      // }})
+      dispatch({type : Notify,payload : {
+        open : true,
+        variant : 'success',
+        message : " Sub Category Status Updated Successfully !!!"
+      }})
     })
     .catch((err)=>{
-      //console.log(err)
+      console.log(err)
       dispatch({type : Notify,payload : {
         open : true,
         variant : 'error',

@@ -102,7 +102,9 @@ export default function Knob() {
          dispatch({type : OpenBox,payload : {
             state : true,
             formType : 'update_handle',
-            payload : params
+            payload : params,
+            row : Row,
+            setRow : setRows,
           }}) 
         }} aria-label="delete"  >
           <CreateIcon />
@@ -141,12 +143,11 @@ export default function Knob() {
         else 
         return row
       }))
-    //   dispatch({type : Notify,payload : {
-    //     open : true,
-    //     variant : 'success',
-    //     message : " Handle Material Status Updated Successfully !!!"
-  
-    // }})
+      dispatch({type : Notify,payload : {
+        open : true,
+        variant : 'success',
+        message : " Handle Material Status Updated Successfully !!!"
+    }})
     })
     .catch((err)=>{
       //console.log(err)
