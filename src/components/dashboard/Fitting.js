@@ -223,7 +223,7 @@ export default function Fitting() {
         <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
-             dispatch({type : OpenBox,payload : { state: true, formType: "addFitting" }});
+             dispatch({type : OpenBox,payload : { state: true, formType: "addFitting", row : Row,setRow : setRows }});
             }}
             sx={{ width: "100%" }}
             color="primary"

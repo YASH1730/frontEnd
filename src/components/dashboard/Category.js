@@ -245,7 +245,7 @@ export default function Category() {
         <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
-              dispatch({type : OpenBox,payload : { state: true, formType: "category" }});
+              dispatch({type : OpenBox,payload : { state: true, formType: "category",row : Row,setRow : setRows }});
             }}
             sx={{ width: "100%" }}
             color="primary"

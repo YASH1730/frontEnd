@@ -87,7 +87,7 @@ const {dispatch} = Store();
               city : row.city ,
               state : row.state ,
               shipping : row.shipping ,
-              action: row._id,
+              action: row,
             };
           })
         );
@@ -177,6 +177,8 @@ const {dispatch} = Store();
                 state: true,
                 formType: "update_customer",
                 payload: params,
+                row : Row,
+                setRow : setRows
               }});
             }}
             aria-label="update"
@@ -184,7 +186,10 @@ const {dispatch} = Store();
             <CreateIcon />
           </IconButton>
           <IconButton onClick={() => { deleteCustomer(params.formattedValue).then((res)=>{
-          dispatch({type : Notify,payload : {
+
+          setRows(Row.filter((set)=>{ return set.action._id !== params.formattedValue._id
+          }))
+         dispatch({type : Notify,payload : {
             open : true,
             variant : 'success',
             message : 'Customer Deleted !!!'
@@ -346,7 +351,7 @@ const {dispatch} = Store();
           <Typography component={'span'} variant="h6"> Customer List </Typography>
           <Button
             onClick={() => {
-              dispatch({type : OpenBox,payload : { state: true, formType: "add_customer" }});
+              dispatch({type : OpenBox,payload : { state: true, formType: "add_customer", row : Row,setRow : setRows }});
             }}
             color="primary"
             variant="contained"

@@ -243,7 +243,7 @@ const {dispatch} = Store();
         <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
-             dispatch({type : OpenBox,payload : { state: true, formType: "primaryMaterial"} });
+             dispatch({type : OpenBox,payload : { state: true, formType: "primaryMaterial",row : Row,setRow : setRows} });
             }}
             sx={{ width: "100%" }}
             color="primary"

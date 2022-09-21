@@ -68,12 +68,11 @@ const Home = (props) => {
      '/customer': 4,
      '/order': 5,
      '/coupons': 6,
-     '/users': 7,
-     '/blog': 8,
-     '/admin': 9,
-     '/draft': 10,
-     '/stock': 11,
-     '/profile': 12,
+     '/blogModule': 7,
+     '/admin': 8,
+     '/draft': 9,
+     '/stock': 10,
+     '/profile': 11,
   }
 
   

@@ -231,7 +231,7 @@ components={{
         <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
-              dispatch({type : OpenBox,payload : { state: true, formType: "addDoor" }});
+              dispatch({type : OpenBox,payload : { state: true, formType: "addDoor", row : Row,setRow : setRows }});
             }}
             sx={{ width: "100%" }}
             color="primary"

@@ -70,7 +70,7 @@ const {dispatch} = Store();
             warehouse: row.warehouse,
             product_id: row.product_id,
             stock: row.stock,
-            action: row._id
+            action: row
           })
         }))
       })
@@ -130,17 +130,24 @@ const {dispatch} = Store();
            dispatch({type : OpenBox,payload : {
               state: true,
               formType: 'update_Stock',
-              payload: params
+              payload: params,
+              row : Row,
+              setRow : setRows
             }})
           }} aria-label="update"  >
             <CreateIcon />
           </IconButton>
           <IconButton onClick={() => {
-            deleteStock(params.formattedValue).then((res) => {
+            deleteStock(params.formattedValue._id).then((res) => {
+              setRows(Row.filter((set)=>{
+                return  set.action._id !== params.formattedValue._id  ;
+              }))
               dispatch({type : Notify,payload : {
                 open: true,
                 variant: 'success',
-                message: 'Category Deleted !!!'
+                message: 'Category Deleted !!!',
+                row : Row,
+              setRow : setRows
               }})
             })
           }} aria-label="delete"  >
@@ -278,7 +285,8 @@ const {dispatch} = Store();
         <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
-             dispatch({type : OpenBox,payload : { state: true, formType: "addStock" }});
+             dispatch({type : OpenBox,payload : { state: true, formType: "addStock",row : Row,
+             setRow : setRows }});
             }}
             sx={{ width: "100%" }}
             color="primary"

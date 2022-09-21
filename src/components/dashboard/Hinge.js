@@ -229,7 +229,7 @@ const {dispatch} = Store();
         <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
-             dispatch({type : OpenBox,payload : { state: true, formType: "addHinge" }});
+             dispatch({type : OpenBox,payload : { state: true, formType: "addHinge",row : Row, setRow : setRows }});
             }}
             sx={{ width: "100%" }}
             color="primary"

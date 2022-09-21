@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Typography,
   TextField,
@@ -39,6 +39,7 @@ import Pagination from "@mui/material/Pagination";
 
 import { customerCatalog, getPresentSKUs, getLastOrder, addOrder, getLastCp, addCustomProduct } from '../../services/service'
 import { useConfirm } from "material-ui-confirm";
+import { Editor } from "@tinymce/tinymce-react";
 
 // style for drop box in custom
 const thumbsContainer = {
@@ -106,6 +107,9 @@ const style = {
 
 export default function Order() {
 
+  const editorRef = useRef();
+
+
   // confirm box 
 
   const confirm = useConfirm();
@@ -116,7 +120,7 @@ export default function Order() {
 
     confirm({ description: `Data will listed in Database !!!` })
       .then(() => handleSubmit(e))
-      .catch((err) => { console.log("Opreation cancelled.") });
+      .catch((err) => { console.log("Operation cancelled.") });
   }
 
 
@@ -482,6 +486,8 @@ export default function Order() {
                   state: true,
                   formType: "update_order",
                   payload: params,
+                  row : Row,
+                  setRow : setRows
                 }
               });
             }}
@@ -583,20 +589,20 @@ export default function Order() {
 
     res
       .then((data) => {
-        //console.log(data);
-        // dispatch({type : Notify,payload : {
-        //   open: true,
-        //   variant: "success",
-        //   message: " Order Status Updated Successfully !!!",
-        // }});
+        console.log(data);
+        dispatch({type : Notify,payload : {
+          open: true,
+          variant: "success",
+          message: " Order Status Updated Successfully !!!",
+        }});
       })
       .catch((err) => {
-        //console.log(err);
-        // dispatch({type : Notify,payload : {
-        //   open: true,
-        //   variant: "error",
-        //   message: "Something Went Wrong !!!",
-        // }});
+        console.log(err);
+        dispatch({type : Notify,payload : {
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        }});
       });
   };
 
@@ -866,11 +872,35 @@ export default function Order() {
   }
 
   function handleSubmit() {
+   
+    /// for adding the note 
+
+    setData({...data,note : editorRef.current.getContent() ? editorRef.current.getContent() : '' })
+
+    console.log(data.note) 
+
     const res = addOrder(data)
+   
     res
       .then((data) => {
         if (data.status !== 200) {
-
+          setData({ OID: '',
+          CUS: '',
+          CID: null,
+          customer_email: '',
+          customer_mobile: '',
+          customer_name: '',
+          shipping: '',
+          product_array: [],
+          quantity: [],
+          subTotal: 0,
+          discount: 0,
+          total: 0,
+          status: 'processing',
+          city: '',
+          state: '',
+          paid: 0,
+          note: ''})
           dispatch({
             type: Notify, payload: {
               open: true,
@@ -879,6 +909,25 @@ export default function Order() {
             }
           });
         } else {
+          setRows([...Row,{
+            id : Row.length + 1,
+            OID : data.data.response.OID,
+            order_time : data.data.response.order_time,
+            status : data.data.response.status,
+            CID : data.data.response.CID,
+            customer_name : data.data.response.customer_name,
+            customer_email : data.data.response.customer_email,
+            customer_mobile : data.data.response.customer_mobile,
+            city : data.data.response.city,
+            state : data.data.response.state,
+            shipping : data.data.response.shipping,
+            quantity : data.data.response.quantity,
+            discount : data.data.response.discount,
+            paid : data.data.response.paid,
+            total : data.data.response.total,
+            note : data.data.response.note,
+            action : data.data.response
+        }])
           dispatch({
             type: Notify, payload: {
               open: true,
@@ -1172,7 +1221,16 @@ export default function Order() {
 
                   <Grid container >
                     <Grid item xs={12}>
-                      <TextField fullWidth sx={{ mb: 2 }} size='small' name='note' onChange={handelData} label='Note' value={data.note} ></TextField>
+                    <Editor
+                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                      initialValue="<p>Note</p>"
+                      onInit={(event, editor) => (editorRef.current = editor)}
+                      init={{
+                        height: 400,
+                        menubar: true,
+                        plugins: "image code",
+                      }}
+                    />
                     </Grid>
 
                     <Grid item xs={12}>
