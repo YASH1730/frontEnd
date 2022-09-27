@@ -4073,6 +4073,17 @@ const Sideform = () => {
               message: data.data.message,
             }});
         } else {
+          state.OpenBox.setRow([...state.OpenBox.row,{
+            id : state.OpenBox.row.length + 1,
+            uuid : data.data.response.uuid,
+            seo_title : data.data.response.seo_title,
+            seo_description : data.data.response.seo_description,
+            title : data.data.response.title,
+            card_image : data.data.response.card_image,
+            card_description : data.data.response.card_description,
+            description : data.data.response.description,
+            action : data.data.response
+        }])
           setImages([]);
           setUrl(data.data.url);
           handleClose();
@@ -4128,6 +4139,18 @@ const Sideform = () => {
               message: data.data.message,
             } });
         } else {
+          state.OpenBox.setRow(state.OpenBox.row.map((set)=>{
+            if (set.action===state.OpenBox.payload.row.action)
+            {
+              set.seo_title = e.target.seo_title.value
+              set.seo_description = e.target.seo_description.value
+              set.title = e.target.title.value
+              set.card_image = featured[0] !== undefined ? `${imageLink}${Image[0].path}` : changeData.card_image
+              set.card_description = e.target.card_description.value
+              set.description = editorRef.current.getContent() || set.description
+           } 
+            return set;
+          }))
           setImages([]);
           setUrl(data.data.url);
           handleClose();

@@ -31,7 +31,7 @@ export default function EntryPoints(props) {
   
   useEffect(()=>{
     if(state.Auth.isLogin === true)
-      history('/adminpanel')
+      history('/dashboard')
   },[state.Auth.isLogin])
 
   // context 

@@ -85,7 +85,8 @@ const Home = (props) => {
   const [anchor, setAnchor] = useState(null);
 
   useEffect(() => {
-    if (state.Auth.isLogin !== true)
+    console.log(state.Auth.isLogin)
+    if (state.Auth.isLogin === false)
       history("/");
   }, [state.Auth.isLogin]);
 
@@ -325,7 +326,9 @@ const Home = (props) => {
   };
 
   return (
-    <Box  sx = {{mb : 10}}>
+    <Box  sx = {{mb : 10,
+    display : window.location.pathname === '/blog' || window.location.pathname === '/blogContent' ? "none":'block' 
+    }}>
       {/* Top Bar  */}
       <title>Dashboard</title>
       <Grid
