@@ -94,7 +94,7 @@ export default function EntryPoints(props) {
         localStorage.setItem('WDToken',data.data.token);
         localStorage.setItem('role',data.data.role);
         // redirecting to main board
-        history('/adminpanel')
+        history('/dashboard')
 
       }
       else {

@@ -118,7 +118,7 @@ export default function BlogContent() {
             <br></br>
             <img
             src = {data.card_image}
-            className  = 'banner'
+            className  = 'banner-img'
             alt = 'banner blog'
           />
             <br></br>

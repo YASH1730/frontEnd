@@ -72,6 +72,12 @@
                     }
                     
                     .banner {
+                        width: 600px;
+                        display: block;
+                        margin: auto;
+                    }
+                    
+                    .banner-img {
                         padding-top: 3%;
                         width: 600px;
                         display: block;

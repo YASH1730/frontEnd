@@ -26,7 +26,7 @@ import Admin from "./components/Admin";
 import Gallery from "./components/dashboard/Gallery";
 import StockChannel from "./components/dashboard/StockChannel";
 import BlogModule from "./components/dashboard/Blog";
-
+import Merge from "./components/dashboard/Merge"
 
 global.Buffer = Buffer;
 
@@ -53,6 +53,7 @@ function MyRoutes(){
     <Route exact path="/blogModule" element={<BlogModule history = {history} />} />
     <Route exact path="/blog" element={<Blog />} />
     <Route exact path="/blogContent" element={<BlogContent />} />
+    <Route exact path="/merge" element={<Merge />} />
     <Route exact path="/" element={<EntryPoints history = {history} />} />
   </Routes>
   </>
