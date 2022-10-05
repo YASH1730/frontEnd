@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
-import AddIcon from "@mui/icons-material/Add";
+// import AddIcon from "@mui/icons-material/Add";
 import { getListProduct, deleteProduct, getListMergeProduct, deleteMergeProduct } from '../../services/service'
 import MergeIcon from '@mui/icons-material/Merge';
 import {
@@ -22,7 +22,7 @@ import {
 } from '@mui/x-data-grid';
 import Pagination from '@mui/material/Pagination';
 import { Store } from '../../store/Context'
-import { OpenBox, Notify, Unit } from '../../store/Types'
+import { OpenBox, Notify } from '../../store/Types'
 
 function CustomPagination() {
   const apiRef = useGridApiContext();
@@ -42,7 +42,7 @@ function CustomPagination() {
 export default function Products() {
 
   // store
-  const {state, dispatch } = Store();
+  const {dispatch } = Store();
 
   // states
   const [modalState, setModal] = useState(false);

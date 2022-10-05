@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Tabs,
   Tab,
-  Typography,
   IconButton,
   Menu,
   MenuItem,
@@ -26,7 +25,7 @@ import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import CardGiftcardOutlinedIcon from "@mui/icons-material/CardGiftcardOutlined";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+// import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -57,7 +56,7 @@ const Home = (props) => {
     6 : '/order', 
     7 : '/coupons', 
     8 : '/blogModule', 
-    9 : '/admin', 
+    9 : '/hardware', 
     10 : '/draft'  ,
     11 : '/stock'  ,
     12 : '/profile' 
@@ -72,7 +71,7 @@ const Home = (props) => {
      '/order': 6,
      '/coupons': 7,
      '/blogModule': 8,
-     '/admin': 9,
+     '/hardware': 9,
      '/draft': 10,
      '/stock': 11,
      '/profile': 12,
@@ -214,7 +213,7 @@ const Home = (props) => {
                 <Tab
                   wrapped
                   icon={<AdminPanelSettingsIcon />}
-                  label="Admin Tab"
+                  label="Hardware"
                   {...a11yProps(9)}
                 />
                 {localStorage.getItem('role') === 'Super Admin' && <Tab

@@ -6,7 +6,7 @@ import {Auth, DarkMode} from '../../store/Types'
 
 const PersistData = () => {
 
-    const {state,dispatch} = Store();
+    const {dispatch} = Store();
 
     useEffect(() => {
         if (localStorage.getItem('isLogin'))
