@@ -541,7 +541,6 @@ const Sideform = () => {
 
   // ref
   const editorRef = useRef();
-  const sellingRef = useRef();
 
   // pres data
   const [changeData, setData] = useState({
@@ -3069,14 +3068,14 @@ const Sideform = () => {
               set.category_id = changeData.category_id
               set.sub_category_name = changeData.sub_category_name
               set.sub_category_id = changeData.sub_category_id
-              set.product_description = editorRef.current ? editorRef.current.getContent() : changeData.product_description
+              set.product_description =  changeData.product_description
               set.seo_title = changeData.seo_title
               set.seo_description = changeData.seo_description
               set.seo_keyword = changeData.seo_keyword
               set.product_image = changeData.product_image
               set.featured_image = changeData.featured_image
               set.specification_image = changeData.specification_image
-              set.selling_points = sellingRef.current ? sellingRef.current.getContent() : changeData.selling_points
+              set.selling_points = changeData.selling_points
               set.rotating_seats = changeData.rotating_seats
               set.eatable_oil_polish = changeData.eatable_oil_polish
               set.no_chemical = changeData.no_chemical
