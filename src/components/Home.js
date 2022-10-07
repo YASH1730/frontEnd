@@ -330,6 +330,7 @@ const Home = (props) => {
       WDToken : null,
       role : null
     }})
+    handleMenuClose()
     history("/");
   };
 

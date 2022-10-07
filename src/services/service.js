@@ -626,6 +626,14 @@ export const getDraft = async () => {
   });
 };
 
+export const getProduct = async () => {
+  return await axios.get(`${API}/getProduct`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
 export const changeProductStatus = async (data) => {
   return await axios.patch(`${API}/changeProductStatus`, data, {
     headers: {

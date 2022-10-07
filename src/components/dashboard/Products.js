@@ -553,7 +553,7 @@ export default function Products() {
               <CreateIcon />
         </IconButton>
         
-        <IconButton onClick={() => { deleteProduct(params.formattedValue._id).then((res)=>{
+        {/* <IconButton onClick={() => { deleteProduct(params.formattedValue._id).then((res)=>{
                  setRows(Row.filter((set)=>{
                   return  set.action._id !== params.formattedValue._id  ;
                 }))
@@ -566,7 +566,7 @@ export default function Products() {
             
             )}} >
               <DeleteIcon />
-        </IconButton>
+        </IconButton> */}
         
       </div>,
     }
