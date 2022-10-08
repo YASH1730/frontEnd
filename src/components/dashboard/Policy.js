@@ -37,20 +37,20 @@ import {
 } from "@mui/x-data-grid";
 import Pagination from "@mui/material/Pagination";
 
-function CustomPagination() {
-  const apiRef = useGridApiContext();
-  const page = useGridSelector(apiRef, gridPageSelector);
-  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+// function CustomPagination() {
+//   const apiRef = useGridApiContext();
+//   const page = useGridSelector(apiRef, gridPageSelector);
+//   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
 
-  return (
-    <Pagination
-      color="primary"
-      count={pageCount}
-      page={page + 1}
-      onChange={(event, value) => apiRef.current.setPage(value - 1)}
-    />
-  );
-}
+//   return (
+//     <Pagination
+//       color="primary"
+//       count={pageCount}
+//       page={page + 1}
+//       onChange={(event, value) => apiRef.current.setPage(value - 1)}
+//     />
+//   );
+// }
 
 export default function Policy() {
 
@@ -68,6 +68,8 @@ const {dispatch} = Store();
     Returnable: false
   })
   const [selectedSKU, setSelection] = useState([]);
+  const [pageSize, setPageSize] = useState(50);
+
 
   useEffect(() => {
     categoryList()
@@ -254,9 +256,10 @@ const {dispatch} = Store();
               },
             ],
           }}
-          components={{
-            Pagination: CustomPagination,
-          }}
+        pagination
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          rowsPerPageOptions={[25,50, 100]}
           onSelectionModelChange={(ids) => {
             const selectedIDs = new Set(ids);
             const selectedRows = Row.filter((row) =>

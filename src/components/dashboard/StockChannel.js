@@ -31,26 +31,28 @@ import {
 } from '@mui/x-data-grid';
 import Pagination from '@mui/material/Pagination';
 
-function CustomPagination() {
-  const apiRef = useGridApiContext();
-  const page = useGridSelector(apiRef, gridPageSelector);
-  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
 
-  return (
-    <Pagination
-      color="primary"
-      count={pageCount}
-      page={page + 1}
-      onChange={(event, value) => apiRef.current.setPage(value - 1)}
-    />
-  );
-}
+// function CustomPagination() {
+//   const apiRef = useGridApiContext();
+//   const page = useGridSelector(apiRef, gridPageSelector);
+//   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+//   return (
+//     <Pagination
+//       color="primary"
+//       count={pageCount}
+//       page={page + 1}
+//       onChange={(event, value) => apiRef.current.setPage(value - 1)}
+//     />
+//   );
+// }
 
 
 
 export default function StockChannel() {
 
   const [search, setSearch] = useState({ warehouse: '' });
+  const [pageSize, setPageSize] = useState(50);
 
   const [product, setProductData] = useState();
 
@@ -225,9 +227,10 @@ const {dispatch} = Store();
           rowsPerPageOptions={[5]}
           disableSelectionOnClick
 
-          components={{
-            Pagination: CustomPagination,
-          }}
+        pagination
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          rowsPerPageOptions={[25,50, 100]}
         />
       </div>
     );

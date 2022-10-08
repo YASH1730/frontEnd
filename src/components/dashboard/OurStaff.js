@@ -13,6 +13,8 @@ export default function OurStaff() {
   const [order, setOrder] = useState('');
   const [status, setStatus] = useState('');
   const { dispatch } = Store();
+  const [pageSize, setPageSize] = useState(50);
+
 
 
   const columns = [

@@ -40,6 +40,8 @@ function CustomPagination() {
 export default function Banner() {
 
   const { dispatch } = Store();
+  const [pageSize, setPageSize] = useState(50);
+
 
 
   const {
@@ -202,9 +204,10 @@ export default function Banner() {
           pageSize={5}
           rowsPerPageOptions={[5]}
           disableSelectionOnClick
-          components={{
-            Pagination: CustomPagination,
-          }}
+        pagination
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          rowsPerPageOptions={[25,50, 100]}
         />
       </div>
     );
