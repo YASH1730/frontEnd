@@ -32,10 +32,10 @@ import {
 
 import {
   DataGrid,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
+// gridPageCountSelector,
+  // gridPageSelector,
+  // useGridApiContext,
+  // useGridSelector,
 } from "@mui/x-data-grid";
 import Pagination from "@mui/material/Pagination";
 
@@ -1336,8 +1336,8 @@ export default function Products() {
         <DataGrid
           rows={row}
           columns={col}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          
+          
           filterModel={{
             items: [
               {

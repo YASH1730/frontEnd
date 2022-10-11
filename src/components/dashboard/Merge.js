@@ -15,12 +15,12 @@ import { getListProduct, deleteProduct, getListMergeProduct, deleteMergeProduct 
 import MergeIcon from '@mui/icons-material/Merge';
 import {
   DataGrid,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
+// gridPageCountSelector,
+  // gridPageSelector,
+  // useGridApiContext,
+  // useGridSelector,
 } from '@mui/x-data-grid';
-import Pagination from '@mui/material/Pagination';
+// import Pagination from '@mui/material/Pagination';
 import { Store } from '../../store/Context'
 import { OpenBox, Notify } from '../../store/Types'
 
@@ -804,8 +804,8 @@ export default function Products() {
           checkboxSelection={select}
           rows={Row}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          
+          
           filterModel={{
             items: [{ columnField: searchSection, operatorValue: 'contains', value: searchSection === 'MS' ? search.MS : search.P }],
           }}

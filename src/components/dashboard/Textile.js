@@ -16,12 +16,12 @@ import '../../assets/custom/css/category.css'
 
 import {
   DataGrid,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
+// gridPageCountSelector,
+  // gridPageSelector,
+  // useGridApiContext,
+  // useGridSelector,
 } from '@mui/x-data-grid';
-import Pagination from '@mui/material/Pagination';
+// import Pagination from '@mui/material/Pagination';
 
 
 // function CustomPagination() {
@@ -192,8 +192,8 @@ const [pageSize, setPageSize] = useState(50);
           }}
           rows={Row}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          
+          
           disableSelectionOnClick
         pagination
           pageSize={pageSize}

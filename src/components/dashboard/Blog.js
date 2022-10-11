@@ -17,12 +17,12 @@ import { Store } from "../../store/Context";
 
 import {
   DataGrid,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
+// gridPageCountSelector,
+  // gridPageSelector,
+  // useGridApiContext,
+  // useGridSelector,
 } from '@mui/x-data-grid';
-import Pagination from '@mui/material/Pagination';
+// import Pagination from '@mui/material/Pagination';
 
 
 // function CustomPagination() {
@@ -179,8 +179,8 @@ export default function Knob() {
           }}
           rows={Row}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          
+          
           disableSelectionOnClick
         pagination
           pageSize={pageSize}

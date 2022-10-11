@@ -30,10 +30,10 @@ import {
 
 import {
   DataGrid,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
+// gridPageCountSelector,
+  // gridPageSelector,
+  // useGridApiContext,
+  // useGridSelector,
 } from "@mui/x-data-grid";
 import Pagination from "@mui/material/Pagination";
 
@@ -244,8 +244,8 @@ const {dispatch} = Store();
           rows={Row}
           columns={columns}
           checkboxSelection
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          
+          
           value={changeData.SKU || ''}
           filterModel={{
             items: [

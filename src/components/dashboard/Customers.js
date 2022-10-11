@@ -15,10 +15,10 @@ import "../../assets/custom/css/category.css";
 
 import {
   DataGrid,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
+// gridPageCountSelector,
+  // gridPageSelector,
+  // useGridApiContext,
+  // useGridSelector,
 } from "@mui/x-data-grid";
 
 import { OpenBox, Notify } from "../../store/Types";
@@ -258,8 +258,8 @@ const {dispatch} = Store();
           }}
           rows={Row}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          
+          
           disableSelectionOnClick
         pagination
           pageSize={pageSize}

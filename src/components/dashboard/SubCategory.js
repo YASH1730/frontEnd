@@ -15,12 +15,12 @@ import { getSubCatagories, changeSubSatatus } from '../../services/service'
 
 import {
   DataGrid,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
+// gridPageCountSelector,
+  // gridPageSelector,
+  // useGridApiContext,
+  // useGridSelector,
 } from '@mui/x-data-grid';
-import Pagination from '@mui/material/Pagination';
+// import Pagination from '@mui/material/Pagination';
 
 // function CustomPagination() {
 //   const apiRef = useGridApiContext();
@@ -189,8 +189,8 @@ const [pageSize, setPageSize] = useState(50);
           }}
           rows={Row}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          
+          
           disableSelectionOnClick
         pagination
           pageSize={pageSize}

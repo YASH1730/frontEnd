@@ -30,12 +30,12 @@ import { useDropzone } from "react-dropzone";
 
 import {
   DataGrid,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
+  // gridPageCountSelector,
+  // gridPageSelector,
+  // useGridApiContext,
+  // useGridSelector,
 } from "@mui/x-data-grid";
-import Pagination from "@mui/material/Pagination";
+// import Pagination from "@mui/material/Pagination";
 
 import { customerCatalog, getPresentSKUs, getLastOrder, addOrder, getLastCp, addCustomProduct } from '../../services/service'
 import { useConfirm } from "material-ui-confirm";
@@ -137,7 +137,7 @@ export default function Order() {
   const [files, setFiles] = useState([]);
 
   const [Row, setRows] = useState([]);
-  const [productRow, setproductRows] = useState([]);
+  const [productRow, setProductRows] = useState([]);
   // const [pageSize, setPageSize] = useState(50);
 
   const [catalogs, setCatalogs] = useState({
@@ -262,7 +262,7 @@ export default function Order() {
 
     const rows = catalogs.products.filter((row) => {  return data.product_array.includes(row.SKU) && row })
 
-    setproductRows(rows.map((dataOBJ, index) => {
+    setProductRows(rows.map((dataOBJ, index) => {
 
       setData({ ...data, quantity: { ...data.quantity, [dataOBJ.SKU]: 1 } })
 
@@ -650,8 +650,8 @@ export default function Order() {
           }}
           rows={Row}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          
+          
           disableSelectionOnClick
         pagination
           pageSize={pageSize}
@@ -744,7 +744,7 @@ export default function Order() {
 
     setData({ ...data, quantity: { ...data.quantity, [e.target.CUS.value]: e.target.quantity.value } })
 
-    setproductRows(
+    setProductRows(
       [...productRow, {
         id: productRow.length + 1,
         SKU: e.target.CUS.value,

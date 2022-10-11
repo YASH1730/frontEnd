@@ -14,12 +14,12 @@ import {getListProduct, deleteProduct, getListMergeProduct, deleteMergeProduct} 
 import MergeIcon from '@mui/icons-material/Merge';
 import {
   DataGrid,
-  gridPageCountSelector,
-  gridPageSelector,
-  useGridApiContext,
-  useGridSelector,
+// gridPageCountSelector,
+  // gridPageSelector,
+  // useGridApiContext,
+  // useGridSelector,
 } from '@mui/x-data-grid';
-import Pagination from '@mui/material/Pagination';
+// import Pagination from '@mui/material/Pagination';
 import {Store} from '../../store/Context'
 import {OpenBox,Notify} from '../../store/Types'
 
