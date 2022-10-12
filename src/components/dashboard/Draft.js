@@ -1420,14 +1420,14 @@ export default function Products() {
           {DataGridView(Row,columns)}
         </Grid>
       </Grid>
-   
+{/*    
       <Grid sx = {{mt:3}} container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
           <Typography variant="h6"> Product List </Typography>
           <br></br>
           {DataGridView(productRow,productCol)}
         </Grid>
-      </Grid>
+      </Grid> */}
 
       {open.status && SpringModal()}
 

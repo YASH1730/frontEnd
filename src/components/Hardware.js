@@ -171,12 +171,12 @@ function BasicTabs() {
                   label="Textile"
                   {...a11yProps(10)}
                 />
-                <Tab
+                {/* <Tab
                   wrapped
                   icon={<PolicyIcon />}
                   label="Policy"
                   {...a11yProps(11)}
-                />
+                /> */}
         </Tabs>
       </Box>
 

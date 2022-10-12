@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import PropTypes from 'prop-types';
 import {
   Typography,
   TextField,
+  TextareaAutosize,
   Grid,
   InputAdornment,
   IconButton,
@@ -18,6 +20,9 @@ import {
   Modal,
   Backdrop,
   Fade,
+  Tabs,
+  Tab,
+  FormLabel
 } from "@mui/material";
 // import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from "@mui/icons-material/Create";
@@ -106,9 +111,47 @@ const style = {
   p: 2,
 };
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `vertical-tab-${index}`,
+    'aria-controls': `vertical-tabpanel-${index}`,
+  };
+}
+
+
+
+
+
 export default function Order() {
 
   const editorRef = useRef();
+  const [value, setValue] = useState(0);
 
 
   // confirm box 
@@ -154,6 +197,7 @@ export default function Order() {
     customer_mobile: '',
     customer_name: '',
     shipping: '',
+    billing: '',
     product_array: [],
     quantity: [],
     subTotal: 0,
@@ -169,6 +213,10 @@ export default function Order() {
   //  State for stepper
   const [activeStep, setActiveStep] = useState(0);
 
+  // tab 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   // context
   const { dispatch } = Store();
@@ -260,7 +308,7 @@ export default function Order() {
   // for product data row 
   useEffect(() => {
 
-    const rows = catalogs.products.filter((row) => {  return data.product_array.includes(row.SKU) && row })
+    const rows = catalogs.products.filter((row) => { return data.product_array.includes(row.SKU) && row })
 
     setProductRows(rows.map((dataOBJ, index) => {
 
@@ -490,8 +538,8 @@ export default function Order() {
                   state: true,
                   formType: "update_order",
                   payload: params,
-                  row : Row,
-                  setRow : setRows
+                  row: Row,
+                  setRow: setRows
                 }
               });
             }}
@@ -594,19 +642,23 @@ export default function Order() {
     res
       .then((data) => {
         console.log(data);
-        dispatch({type : Notify,payload : {
-          open: true,
-          variant: "success",
-          message: " Order Status Updated Successfully !!!",
-        }});
+        dispatch({
+          type: Notify, payload: {
+            open: true,
+            variant: "success",
+            message: " Order Status Updated Successfully !!!",
+          }
+        });
       })
       .catch((err) => {
         console.log(err);
-        dispatch({type : Notify,payload : {
-          open: true,
-          variant: "error",
-          message: "Something Went Wrong !!!",
-        }});
+        dispatch({
+          type: Notify, payload: {
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong !!!",
+          }
+        });
       });
   };
 
@@ -634,6 +686,30 @@ export default function Order() {
     });
   };
 
+  const resetValue = () => {
+    setData({
+      OID: '',
+      CUS: '',
+      CID: null,
+      customer_email: '',
+      customer_mobile: '',
+      customer_name: '',
+      shipping: '',
+      product_array: [],
+      quantity: [],
+      subTotal: 0,
+      discount: 0,
+      total: 0,
+      status: 'processing',
+      city: '',
+      state: '',
+      paid: 0,
+      note: ''
+    })
+    setActiveStep(0)
+    setValue(0)
+  }
+
   // data grid for data view
   function DataGridView(Row, columns, height) {
     return (
@@ -650,13 +726,13 @@ export default function Order() {
           }}
           rows={Row}
           columns={columns}
-          
-          
+
+
           disableSelectionOnClick
-        pagination
+          pagination
           pageSize={pageSize}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          rowsPerPageOptions={[25,50, 100]}
+          rowsPerPageOptions={[25, 50, 100]}
         />
       </div>
     );
@@ -785,7 +861,7 @@ export default function Order() {
           <Fade in={open}>
             <Box sx={style}>
               <Grid container >
-                <Grid item xs={12} sx={{ mb: 2 }}><Typography component={'span'} id="transition-modal-title" variant="h6" component="h2">
+                <Grid item xs={12} sx={{ mb: 2 }}><Typography component={'span'} id="transition-modal-title" variant="h6" >
                   Create Product
                 </Typography></Grid>
                 <Grid item xs={12} sx={{ pb: 2 }}>
@@ -877,35 +953,37 @@ export default function Order() {
   }
 
   function handleSubmit() {
-   
+
     /// for adding the note 
 
-    setData({...data,note : editorRef.current.getContent() ? editorRef.current.getContent() : '' })
+    setData({ ...data, note: editorRef.current.getContent() ? editorRef.current.getContent() : '' })
 
-    console.log(data.note) 
+    console.log(data.note)
 
     const res = addOrder(data)
-   
+
     res
       .then((data) => {
         if (data.status !== 200) {
-          setData({ OID: '',
-          CUS: '',
-          CID: null,
-          customer_email: '',
-          customer_mobile: '',
-          customer_name: '',
-          shipping: '',
-          product_array: [],
-          quantity: [],
-          subTotal: 0,
-          discount: 0,
-          total: 0,
-          status: 'processing',
-          city: '',
-          state: '',
-          paid: 0,
-          note: ''})
+          setData({
+            OID: '',
+            CUS: '',
+            CID: null,
+            customer_email: '',
+            customer_mobile: '',
+            customer_name: '',
+            shipping: '',
+            product_array: [],
+            quantity: [],
+            subTotal: 0,
+            discount: 0,
+            total: 0,
+            status: 'processing',
+            city: '',
+            state: '',
+            paid: 0,
+            note: ''
+          })
           dispatch({
             type: Notify, payload: {
               open: true,
@@ -913,26 +991,27 @@ export default function Order() {
               message: data.data.message || "Something Went Wrong !!!",
             }
           });
+
         } else {
-          setRows([...Row,{
-            id : Row.length + 1,
-            OID : data.data.response.OID,
-            order_time : data.data.response.order_time,
-            status : data.data.response.status,
-            CID : data.data.response.CID,
-            customer_name : data.data.response.customer_name,
-            customer_email : data.data.response.customer_email,
-            customer_mobile : data.data.response.customer_mobile,
-            city : data.data.response.city,
-            state : data.data.response.state,
-            shipping : data.data.response.shipping,
-            quantity : data.data.response.quantity,
-            discount : data.data.response.discount,
-            paid : data.data.response.paid,
-            total : data.data.response.total,
-            note : data.data.response.note,
-            action : data.data.response
-        }])
+          setRows([...Row, {
+            id: Row.length + 1,
+            OID: data.data.response.OID,
+            order_time: data.data.response.order_time,
+            status: data.data.response.status,
+            CID: data.data.response.CID,
+            customer_name: data.data.response.customer_name,
+            customer_email: data.data.response.customer_email,
+            customer_mobile: data.data.response.customer_mobile,
+            city: data.data.response.city,
+            state: data.data.response.state,
+            shipping: data.data.response.shipping,
+            quantity: data.data.response.quantity,
+            discount: data.data.response.discount,
+            paid: data.data.response.paid,
+            total: data.data.response.total,
+            note: data.data.response.note,
+            action: data.data.response
+          }])
           dispatch({
             type: Notify, payload: {
               open: true,
@@ -940,6 +1019,8 @@ export default function Order() {
               message: data.data.message,
             }
           });
+          resetValue();
+
         }
       })
       .catch((err) => {
@@ -1029,7 +1110,7 @@ export default function Order() {
       <Grid container scaping={2} sx={{
         display: 'flex', justifyContent: 'space-between', alignItem: 'center'
       }}>
-        <Grid item p={2} xs={12} md={6} sx={{ boxShadow: 1, borderRadius: 5, maxHeight: 500 }}>
+        <Grid item p={2} xs={12} sx={{ boxShadow: 1, borderRadius: 5, maxHeight: 500 }}>
           <div style={
             {
               display: 'flex',
@@ -1055,7 +1136,7 @@ export default function Order() {
         </Grid>
 
         {/* create order  */}
-        <Grid item p={2} xs={12} md={5.9} sx={{ boxShadow: 1, borderRadius: 5 }}>
+        <Grid item p={2} xs={12} sx={{ boxShadow: 1, borderRadius: 5, mt: 3 }}>
           <Typography component={'span'} variant="h6"> Create Order </Typography>
 
           <Grid container className='orderSteps' sx={{ boxShadow: 1, borderRadius: 5, mt: 2, p: 2, }}>
@@ -1073,99 +1154,266 @@ export default function Order() {
                 {/* // Select Customer */}
 
                 {activeStep === 0 &&
-                  <Box sx={{
-                    p: 2.5,
-                  }}>
 
-                    <Autocomplete
-                      id="free-solo-demo"
-                      freeSolo
-                      onChange={(event, val) => handleAutoFillCustomer(val)}
-                      options={catalogs.customer.map((option) => option.username + ' - ' + option.mobile)}
-                      renderInput={(params) => <TextField {...params}
-                        name='customer'
-                        size={'small'}
-                        label="Select Customer..."
-                      />
-                      }
-                    />
-                    <br></br>
+                  <Box
+                    sx={{ pt: 2, flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
+                  >
+                    <Tabs
+                      orientation="vertical"
+                      variant="scrollable"
+                      value={value}
+                      onChange={handleChange}
+                      aria-label="Vertical tabs example"
+                      sx={{ borderRight: 1, borderColor: 'divider' }}
+                    >
+                      <Tab label="Guest" {...a11yProps(0)} />
+                      <Tab label="Existing Customer" {...a11yProps(1)} />
+                    </Tabs>
+                    {/* // guest customer  */}
+                    <TabPanel value={value} index={0}>
+                      <Box sx={{
+                        p: 2, pt: 0
+                      }}>
+                        <Typography component={'span'} variant="h5">
+                          Guest
+                          <Typography component={'span'}
+                            sx={{ display: "block !important" }}
+                            variant="caption"
+                          >
+                            Add guest details and necessary information from here
+                          </Typography>
+                        </Typography>
+                        <TextField sx={{ mt: 2, pb: 2 }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="customer_name"
+                          value={data.customer_name || ''}
+                          onChange={handelData}
+                          label="Customer Name"
+                          type="text"
+                        />
 
-                    <TextField sx={{ pb: 2 }}
-                      size="small"
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      name="customer_name"
-                      value={data.customer_name || ''}
-                      onChange={handelData}
-                      label="Customer Name"
-                      type="text"
-                    />
+                        <TextField sx={{ pb: 2 }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          value={data.customer_email || ''}
+                          onChange={handelData}
+                          name="customer_email"
+                          label="Customer Email"
+                          type="email"
+                        />
 
-                    <TextField sx={{ pb: 2 }}
-                      size="small"
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      value={data.customer_email || ''}
-                      onChange={handelData}
-                      name="customer_email"
-                      label="Customer Email"
-                      type="email"
-                    />
+                        <TextField sx={{ pb: 2 }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="customer_mobile"
+                          value={data.customer_mobile || ''}
+                          onChange={handelData}
+                          label="Contact Number"
+                          type="number"
+                        />
 
-                    <TextField sx={{ pb: 2 }}
-                      size="small"
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      name="customer_mobile"
-                      value={data.customer_mobile || ''}
-                      onChange={handelData}
-                      label="Contact Number"
-                      type="number"
-                    />
+                        <TextField sx={{ pb: 2 }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="city"
+                          value={data.city || ''}
+                          onChange={handelData}
+                          label="City"
+                          type="text"
+                        />
 
-                    <TextField sx={{ pb: 2 }}
-                      size="small"
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      name="city"
-                      value={data.city || ''}
-                      onChange={handelData}
-                      label="City"
-                      type="text"
-                    />
+                        <TextField sx={{ pb: 2 }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="state"
+                          value={data.state || ''}
+                          onChange={handelData}
+                          label="State"
+                          type="text"
+                        />
 
-                    <TextField sx={{ pb: 2 }}
-                      size="small"
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      name="state"
-                      value={data.state || ''}
-                      onChange={handelData}
-                      label="State"
-                      type="text"
-                    />
+                        <FormLabel id="demo-radio-buttons-group-label">
+                          Shipping Address
+                        </FormLabel>
+                        <TextareaAutosize
+                          minRows={4}
+                          placeholder="Shipping Address..."
+                          style={{ marginTop: '10px', width: '100%' }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="shipping"
+                          value={data.shipping || ''}
+                          onChange={handelData}
+                          label="Shipping"
+                          type="text"
+                        />
+                        <FormLabel id="demo-radio-buttons-group-label">
+                          Billing Address
+                        </FormLabel>
+                        <TextareaAutosize
+                          minRows={4}
+                          placeholder="Billing Address..."
+                          style={{ marginTop: '10px', width: '100%' }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="billing"
+                          value={data.billing || ''}
+                          onChange={handelData}
+                          label="Shipping"
+                          type="text"
+                        />
 
 
-                    <TextField
-                      size="small"
-                      fullWidth
-                      required
-                      id="outlined-select"
-                      name="shipping"
-                      value={data.shipping || ''}
-                      onChange={handelData}
-                      label="Shipping"
-                      type="text"
-                    />
+                      </Box>
+                    </TabPanel>
+                    {/* // existing customer  */}
+                    <TabPanel value={value} index={1}>
+                      <Box sx={{
+                        p: 2, pt: 1
+                      }}>
 
+                        <Typography component={'span'} variant="h5">
+                          Existing Customer
+                          <Typography component={'span'}
+                            sx={{ display: "block !important" }}
+                            variant="caption"
+                          >
+                            Search for existing customer details and necessary information from here
+                          </Typography>
+                        </Typography>
+
+                        <Autocomplete
+                          id="free-solo-demo"
+                          freeSolo
+                          sx={{ mt: 1 }}
+                          onChange={(event, val) => handleAutoFillCustomer(val)}
+                          options={catalogs.customer.map((option) => option.username + ' - ' + option.mobile)}
+                          renderInput={(params) => <TextField {...params}
+                            name='customer'
+                            size={'small'}
+                            label="Select Customer..."
+                          />
+                          }
+                        />
+                        <br></br>
+
+                        <TextField sx={{ pb: 2 }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="customer_name"
+                          value={data.customer_name || ''}
+                          onChange={handelData}
+                          label="Customer Name"
+                          type="text"
+                        />
+
+                        <TextField sx={{ pb: 2 }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          value={data.customer_email || ''}
+                          onChange={handelData}
+                          name="customer_email"
+                          label="Customer Email"
+                          type="email"
+                        />
+
+                        <TextField sx={{ pb: 2 }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="customer_mobile"
+                          value={data.customer_mobile || ''}
+                          onChange={handelData}
+                          label="Contact Number"
+                          type="number"
+                        />
+
+                        <TextField sx={{ pb: 2 }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="city"
+                          value={data.city || ''}
+                          onChange={handelData}
+                          label="City"
+                          type="text"
+                        />
+
+                        <TextField sx={{ pb: 2 }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="state"
+                          value={data.state || ''}
+                          onChange={handelData}
+                          label="State"
+                          type="text"
+                        />
+
+                        <FormLabel id="demo-radio-buttons-group-label">
+                          Shipping Address
+                        </FormLabel>
+                        <TextareaAutosize
+                          minRows={4}
+                          placeholder="Shipping Address..."
+                          style={{ marginTop: '10px', width: '100%' }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="shipping"
+                          value={data.shipping || ''}
+                          onChange={handelData}
+                          label="Shipping"
+                          type="text"
+                        />
+                        <FormLabel id="demo-radio-buttons-group-label">
+                          Billing Address
+                        </FormLabel>
+                        <TextareaAutosize
+                          minRows={4}
+                          placeholder="Billing Address..."
+                          style={{ marginTop: '10px', width: '100%' }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="billing"
+                          value={data.billing || ''}
+                          onChange={handelData}
+                          label="Shipping"
+                          type="text"
+                        />
+
+
+
+                      </Box>
+                    </TabPanel>
 
                   </Box>
+
                 }
                 {/* // Select Customer ends */}
 
@@ -1226,16 +1474,16 @@ export default function Order() {
 
                   <Grid container >
                     <Grid item xs={12}>
-                    <Editor
-                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
-                      initialValue="<p>Note</p>"
-                      onInit={(event, editor) => (editorRef.current = editor)}
-                      init={{
-                        height: 400,
-                        menubar: true,
-                        plugins: "image code",
-                      }}
-                    />
+                      <Editor
+                        apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                        initialValue="<p>Note</p>"
+                        onInit={(event, editor) => (editorRef.current = editor)}
+                        init={{
+                          height: 400,
+                          menubar: true,
+                          plugins: "image code",
+                        }}
+                      />
                     </Grid>
 
                     <Grid item xs={12}>
