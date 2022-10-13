@@ -131,41 +131,17 @@ const {dispatch} = Store();
       width: 250,
       align: "center",
     },
-    {
-      field: "shipping",
-      headerName: "Shipping Address",
-      width: 200,
-    },
+    // {
+    //   field: "shipping",
+    //   headerName: "Shipping Address",
+    //   width: 200,
+    // },
     {
       field: "register_time",
       headerName: "Registration Date",
       width: 200,
       align: "center",
     },
-    // {
-    //   field: "pincode",
-    //   headerName: "Pincode",
-    //   width: 100,
-    // },
-
-    {
-      field: "city",
-      headerName: "City",
-      width: 100,
-      align: "center",
-    },
-    {
-      field: "state",
-      headerName: "State",
-      width: 100,
-      align: "center",
-    },
-    // {
-    //   field: "landmark",
-    //   headerName: "Landmark",
-    //   width: 100,
-    //   align: "center",
-    // },
 
     {
       field: "action",
@@ -173,7 +149,7 @@ const {dispatch} = Store();
       width: 200,
       renderCell: (params) => (
         <div className="categoryImage">
-          <IconButton
+          {/* <IconButton
             onClick={() => {
               dispatch({type : OpenBox,payload : {
                 state: true,
@@ -186,7 +162,7 @@ const {dispatch} = Store();
             aria-label="update"
           >
             <CreateIcon />
-          </IconButton>
+          </IconButton> */}
           <IconButton onClick={() => { deleteCustomer(params.formattedValue).then((res)=>{
 
           setRows(Row.filter((set)=>{ return set.action._id !== params.formattedValue._id

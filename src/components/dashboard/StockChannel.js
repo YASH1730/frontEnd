@@ -240,7 +240,7 @@ const {dispatch} = Store();
   return (
     <Box  sx = {{pl:4,pr:4}}>
       <Typography component={'span'} sx={{ display: "block" }} variant="h5">
-        Stock Channel
+        Product Inventory
       </Typography>
 
       <br></br>

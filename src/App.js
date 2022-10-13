@@ -22,8 +22,9 @@ import OurStaff from "./components/dashboard/OurStaff";
 import Setting from "./components/dashboard/Setting";
 import Banner from "./components/dashboard/Banner";
 import Draft from "./components/dashboard/Draft";
-import Hardware from "./components/Hardware";
-import Gallery from "./components/dashboard/Gallery";
+import Accessories from "./components/Accessories";
+// import Gallery from "./components/dashboard/Gallery";
+import Hardware from "./components/dashboard/Hardware";
 import StockChannel from "./components/dashboard/StockChannel";
 import BlogModule from "./components/dashboard/Blog";
 import Merge from "./components/dashboard/Merge"
@@ -48,6 +49,7 @@ function MyRoutes(){
     <Route exact path="/banner" element={<Banner history = {history} />} />
     <Route exact path="/draft" element={<Draft history = {history} />} />
     <Route exact path="/inventory" element={<StockChannel history = {history} />} />
+    <Route exact path="/accessories" element={<Accessories history = {history} />} />
     <Route exact path="/hardware" element={<Hardware history = {history} />} />
     {/* <Route exact path="/gallery" element={<Gallery history = {history} />} /> */}
     <Route exact path="/blogs" element={<BlogModule history = {history} />} />

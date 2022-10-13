@@ -144,10 +144,6 @@ function a11yProps(index) {
   };
 }
 
-
-
-
-
 export default function Order() {
 
   const editorRef = useRef();
@@ -185,7 +181,8 @@ export default function Order() {
 
   const [catalogs, setCatalogs] = useState({
     customer: [],
-    products: []
+    products: [],
+    address : [],
   })
 
   // state for data 
@@ -741,7 +738,16 @@ export default function Order() {
   // for handling the form data
 
   const handelData = (e) => {
-    if (e.target.name !== 'discount')
+    console.log(e.target.name)
+    if(e.target.name === 'shipping')
+    {
+      const row = catalogs.address.filter((data)=>{ return data.shipping === e.target.value})
+      console.log(row)
+      setData({ ...data, [e.target.name]: e.target.value, city : row[0].city, state : row[0].state })
+
+    }
+
+    else if (e.target.name !== 'discount')
       setData({ ...data, [e.target.name]: e.target.value })
     else {
       setData({ ...data, [e.target.name]: e.target.value, subTotal: calSubtotal(), total: data.subTotal - (calSubtotal() / 100 * e.target.value) })
@@ -755,14 +761,17 @@ export default function Order() {
     const number = parseInt(e.split(' - ')[1])
 
     const row = catalogs.customer.filter((row) => { return row.mobile === number && row })[0]
-    // //console.log(row, number)
+
+    setCatalogs({
+      ...catalogs,
+      address : row.address
+    })
 
     setData({
       ...data,
       customer_email: row.email,
       customer_mobile: row.mobile,
       customer_name: row.username,
-      shipping: row.shipping,
       city: row.city,
       state: row.state,
       CID: row.CID,
@@ -1169,7 +1178,9 @@ export default function Order() {
                       <Tab label="Guest" {...a11yProps(0)} />
                       <Tab label="Existing Customer" {...a11yProps(1)} />
                     </Tabs>
+
                     {/* // guest customer  */}
+
                     <TabPanel value={value} index={0}>
                       <Box sx={{
                         p: 2, pt: 0
@@ -1281,7 +1292,9 @@ export default function Order() {
 
                       </Box>
                     </TabPanel>
+
                     {/* // existing customer  */}
+                    
                     <TabPanel value={value} index={1}>
                       <Box sx={{
                         p: 2, pt: 1
@@ -1372,7 +1385,31 @@ export default function Order() {
                           type="text"
                         />
 
-                        <FormLabel id="demo-radio-buttons-group-label">
+                        {catalogs.address.length > 0 ?   <TextField sx={{ mb: 2 }}
+                      fullWidth
+                      size="small"
+
+                      id="outlined-select"
+                      select
+                      onChange={handelData}
+                      name="shipping"
+                      label="Select Shipping..."
+                      value={data.shipping || ''}
+                      multiple
+                    >
+                      {catalogs.address.map(
+                        (option) =>
+                          <MenuItem
+                            key={option.shipping}
+                            value={option.shipping}
+                          >
+                            {option.shipping}
+                          </MenuItem>
+                      )}
+                      <MenuItem key={"none"} value={undefined}>
+                        {"None"}
+                      </MenuItem>
+                    </TextField> : <>  <FormLabel id="demo-radio-buttons-group-label">
                           Shipping Address
                         </FormLabel>
                         <TextareaAutosize
@@ -1388,7 +1425,10 @@ export default function Order() {
                           onChange={handelData}
                           label="Shipping"
                           type="text"
-                        />
+                        /></> }
+
+                      
+
                         <FormLabel id="demo-radio-buttons-group-label">
                           Billing Address
                         </FormLabel>

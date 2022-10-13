@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
-  Tabs,
-  Tab,
+  // Tabs,
+  // Tab,
   IconButton,
   Menu,
   MenuItem,
@@ -12,9 +12,6 @@ import {
   List,
   ListItem,
   ListItemText,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Typography,
   Drawer,
   Divider,
@@ -24,8 +21,8 @@ import {
 
 } from "@mui/material";
 import "../assets/custom/css/home.css";
-import Slide from "@mui/material/Slide";
-import Backdrop from "@mui/material/Backdrop";
+// import Slide from "@mui/material/Slide";
+// import Backdrop from "@mui/material/Backdrop";
 import logo from "../assets/img/Blog/logo.webp";
 
 // icons
@@ -38,11 +35,12 @@ import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
-import CardGiftcardOutlinedIcon from "@mui/icons-material/CardGiftcardOutlined";
+// import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
+// import CardGiftcardOutlinedIcon from "@mui/icons-material/CardGiftcardOutlined";
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+// import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import CategoryIcon from '@mui/icons-material/Category';
 import InboxIcon from '@mui/icons-material/Inbox';
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -50,8 +48,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import CollectionsIcon from "@mui/icons-material/Collections";
-import DraftsIcon from '@mui/icons-material/Drafts';
+// import CollectionsIcon from "@mui/icons-material/Collections";
+// import DraftsIcon from '@mui/icons-material/Drafts';
 import GridViewIcon from '@mui/icons-material/GridView';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import MergeIcon from '@mui/icons-material/Merge';
@@ -65,39 +63,39 @@ const Home = (props) => {
 
   const { state, dispatch } = Store()
 
-  const ModuleName = {
-    0: '/dashboard',
-    1: '/products',
-    2: '/merge',
-    3: '/gallery',
-    4: '/banner',
-    5: '/customer',
-    6: '/order',
-    7: '/coupons',
-    8: '/blogModule',
-    9: '/hardware',
-    10: '/draft',
-    11: '/stock',
-    12: '/profile'
-  }
-  const ModuleNumber = {
-    '/dashboard': 0,
-    '/products': 1,
-    '/merge': 2,
-    '/gallery': 3,
-    '/banner': 4,
-    '/customer': 5,
-    '/order': 6,
-    '/coupons': 7,
-    '/blogModule': 8,
-    '/hardware': 9,
-    '/draft': 10,
-    '/stock': 11,
-    '/profile': 12,
-  }
+  // const ModuleName = {
+  //   0: '/dashboard',
+  //   1: '/products',
+  //   2: '/merge',
+  //   3: '/gallery',
+  //   4: '/banner',
+  //   5: '/customer',
+  //   6: '/order',
+  //   7: '/coupons',
+  //   8: '/blogModule',
+  //   9: '/hardware',
+  //   10: '/draft',
+  //   11: '/stock',
+  //   12: '/profile'
+  // }
+  // const ModuleNumber = {
+  //   '/dashboard': 0,
+  //   '/products': 1,
+  //   '/merge': 2,
+  //   '/gallery': 3,
+  //   '/banner': 4,
+  //   '/customer': 5,
+  //   '/order': 6,
+  //   '/coupons': 7,
+  //   '/blogModule': 8,
+  //   '/hardware': 9,
+  //   '/draft': 10,
+  //   '/stock': 11,
+  //   '/profile': 12,
+  // }
 
 
-  const [value, setValue] = useState(ModuleNumber[window.location.pathname]);
+  // const [value, setValue] = useState(ModuleNumber[window.location.pathname]);
 
   const history = props.history;
 
@@ -135,188 +133,190 @@ const Home = (props) => {
 
 
 
-  function a11yProps(index) {
-    return {
-      id: `vertical-tab-${index}`,
-      "aria-controls": `vertical-tabpanel-${index}`,
-    };
-  }
+  // function a11yProps(index) {
+  //   return {
+  //     id: `vertical-tab-${index}`,
+  //     "aria-controls": `vertical-tabpanel-${index}`,
+  //   };
+  // }
+
+// this tab commented because client demand something new and compact to show   
+  // function VerticalTabs() {
+
+  //   const handleChange = (event, newValue) => {
+  //     history(`${ModuleName[newValue]}`)
+  //     setValue(newValue);
+  //   };
+
+  //   return (
+  //     <Box sx={{ flexGrow: 1, display: "flex", width: "100%" }}>
+  //       {state.SideTabs.open && (
+  //         <Slide direction="right" in={state.SideTabs.open} mountOnEnter unmountOnExit>
+  //           <Backdrop
+  //             sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+  //             open={state.SideTabs.open}
+  //             onClick={handleClose}
+  //           >
+  //             <Tabs
+  //               orientation="vertical"
+  //               value={value}
+  //               variant="scrollable"
+  //               onChange={handleChange}
+  //               indicatorColor="primary"
+  //               textColor="primary"
+  //               aria-label="Vertical tabs example"
+  //               className={state.DarkMode.mode === true ? "darkTabs2" : "tabs2"}
+  //               sx={{
+  //                 borderRight: 1,
+  //                 borderColor: "divider",
+  //                 ".MuiTabs-indicator": {
+  //                   left: 0,
+  //                   width: "5px",
+  //                 },
+  //               }}
+  //             >
 
 
-  function VerticalTabs() {
+  //               <Tab
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<GridViewIcon />}
+  //                 label="DashBoard"
+  //                 {...a11yProps(0)}
+  //               />
 
-    const handleChange = (event, newValue) => {
-      history(`${ModuleName[newValue]}`)
-      setValue(newValue);
-    };
+  //               <Accordion>
+  //                 <AccordionSummary
+  //                   expandIcon={<ExpandMoreIcon />}
+  //                   aria-controls="panel1a-content"
+  //                   id="panel1a-header"
+  //                 >
+  //                   <Typography>Accordion 1</Typography>
+  //                 </AccordionSummary>
+  //                 <AccordionDetails>
+  //                   <Typography>
+  //                     Product
+  //                   </Typography>
+  //                 </AccordionDetails>
+  //               </Accordion>
+  //               <Tab
 
-    return (
-      <Box sx={{ flexGrow: 1, display: "flex", width: "100%" }}>
-        {state.SideTabs.open && (
-          <Slide direction="right" in={state.SideTabs.open} mountOnEnter unmountOnExit>
-            <Backdrop
-              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-              open={state.SideTabs.open}
-              onClick={handleClose}
-            >
-              <Tabs
-                orientation="vertical"
-                value={value}
-                variant="scrollable"
-                onChange={handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                aria-label="Vertical tabs example"
-                className={state.DarkMode.mode === true ? "darkTabs2" : "tabs2"}
-                sx={{
-                  borderRight: 1,
-                  borderColor: "divider",
-                  ".MuiTabs-indicator": {
-                    left: 0,
-                    width: "5px",
-                  },
-                }}
-              >
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<ShoppingBagOutlinedIcon />}
+  //                 label="Product"
+  //                 {...a11yProps(1)}
+  //               />
+  //               <Tab
 
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<MergeIcon />}
+  //                 label="Merge Product"
+  //                 {...a11yProps(2)}
+  //               />
 
-                <Tab
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<GridViewIcon />}
-                  label="DashBoard"
-                  {...a11yProps(0)}
-                />
+  //               <Tab
 
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography>Accordion 1</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Typography>
-                      Product
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
-                <Tab
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<CollectionsIcon />}
+  //                 label="Gallery"
+  //                 {...a11yProps(3)}
+  //               />
+  //               <Tab
 
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<ShoppingBagOutlinedIcon />}
-                  label="Product"
-                  {...a11yProps(1)}
-                />
-                <Tab
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<ViewCarouselIcon />}
+  //                 label="Banner"
+  //                 {...a11yProps(4)}
+  //               />
+  //               <Tab
 
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<MergeIcon />}
-                  label="Merge Product"
-                  {...a11yProps(2)}
-                />
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<PeopleAltOutlinedIcon />}
+  //                 label="Customer"
+  //                 {...a11yProps(5)}
+  //               />
+  //               <Tab
 
-                <Tab
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<ExploreOutlinedIcon />}
+  //                 label="Order"
+  //                 {...a11yProps(6)}
+  //               />
+  //               <Tab
 
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<CollectionsIcon />}
-                  label="Gallery"
-                  {...a11yProps(3)}
-                />
-                <Tab
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<CardGiftcardOutlinedIcon />}
+  //                 label="Coupons"
+  //                 {...a11yProps(7)}
+  //               />
+  //               <Tab
 
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<ViewCarouselIcon />}
-                  label="Banner"
-                  {...a11yProps(4)}
-                />
-                <Tab
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<ArticleIcon />}
+  //                 label="Blog"
+  //                 {...a11yProps(8)}
+  //               />
+  //               <Tab
 
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<PeopleAltOutlinedIcon />}
-                  label="Customer"
-                  {...a11yProps(5)}
-                />
-                <Tab
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<AdminPanelSettingsIcon />}
+  //                 label="Hardware"
+  //                 {...a11yProps(9)}
+  //               />
+  //               {localStorage.getItem('role') === 'Super Admin' && <Tab
 
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<ExploreOutlinedIcon />}
-                  label="Order"
-                  {...a11yProps(6)}
-                />
-                <Tab
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<DraftsIcon />}
+  //                 label="Draft"
+  //                 {...a11yProps(10)}
+  //               />}
+  //               <Tab
 
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<CardGiftcardOutlinedIcon />}
-                  label="Coupons"
-                  {...a11yProps(7)}
-                />
-                <Tab
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<InventoryIcon />}
+  //                 label="Stock Channel"
+  //                 {...a11yProps(11)}
+  //               />
+  //               <Tab
 
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<ArticleIcon />}
-                  label="Blog"
-                  {...a11yProps(8)}
-                />
-                <Tab
-
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<AdminPanelSettingsIcon />}
-                  label="Hardware"
-                  {...a11yProps(9)}
-                />
-                {localStorage.getItem('role') === 'Super Admin' && <Tab
-
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<DraftsIcon />}
-                  label="Draft"
-                  {...a11yProps(10)}
-                />}
-                <Tab
-
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<InventoryIcon />}
-                  label="Stock Channel"
-                  {...a11yProps(11)}
-                />
-                <Tab
-
-                  sx={{ justifyContent: 'left !important' }}
-                  iconPosition="start"
-                  icon={<SettingsOutlinedIcon />}
-                  label="Profile"
-                  {...a11yProps(12)}
-                />
-                <Button
-                  color="primary"
-                  sx={{ margin: "auto" }}
-                  startIcon={<LogoutIcon />}
-                  variant="contained"
-                >
-                  Log Out
-                </Button>
-              </Tabs>
-            </Backdrop>
-          </Slide>
-        )}
+  //                 sx={{ justifyContent: 'left !important' }}
+  //                 iconPosition="start"
+  //                 icon={<SettingsOutlinedIcon />}
+  //                 label="Profile"
+  //                 {...a11yProps(12)}
+  //               />
+  //               <Button
+  //                 color="primary"
+  //                 sx={{ margin: "auto" }}
+  //                 startIcon={<LogoutIcon />}
+  //                 variant="contained"
+  //               >
+  //                 Log Out
+  //               </Button>
+  //             </Tabs>
+  //           </Backdrop>
+  //         </Slide>
+  //       )}
 
 
 
-      </Box>
-    );
-  }
+  //     </Box>
+  //   );
+  // }
 
+
+  // side bar for the tabs 
   function SwipeableTemporaryDrawer() {
 
     const list = () => (
@@ -593,6 +593,23 @@ const Home = (props) => {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary="Hardware" />
+              </ListItem>
+
+
+              <ListItem button onClick={() => { history('/accessories'); handleClose(); }}>
+                <ListItemAvatar>
+                  <Avatar
+                    sx={{
+                      width: '30px',
+                      height: '30px',
+                      svg: {
+                        fontSize: '1.1rem'
+                      }
+                    }}>
+                    <CategoryIcon color={window.location.pathname === '/accessories' ? 'primary' : ''} />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary="Accessories" />
               </ListItem>
 
               {/* // logout  */}

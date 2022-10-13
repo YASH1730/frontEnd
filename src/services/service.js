@@ -937,3 +937,53 @@ export const deleteStock = async (data) => {
     },
   });
 };
+
+// ================== CURD for Hardware ==========================
+
+export const addHardware = async (data) => {
+  return await axios.post(`${API}/addHardware`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+export const editHardware = async (data) => {
+  return await axios.patch(`${API}/editHardware`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+export const getHardware = async () => {
+  return await axios.get(`${API}/getHardware`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+export const changeHardwareStatus = async (data) => {
+  return await axios.patch(`${API}/changeHardwareStatus`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+export const deleteHardware = async (data) => {
+  return await axios.delete(`${API}/deleteHardware?_id=${data}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
+
+export const getLastHardware = async () => {
+  return await axios.get(`${API}/getLastHardware`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+};
