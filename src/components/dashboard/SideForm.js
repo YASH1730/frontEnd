@@ -588,7 +588,7 @@ const Sideform = () => {
     sub_category: "",
     length: "",
     breadth: "",
-    selling_points: "",
+    selling_points: [],
     height: "",
     priMater: "",
     priMater_weight: "",
@@ -644,68 +644,71 @@ const Sideform = () => {
     shipping_address: "",
     searchCustomer: "",
     show_on_mobile: false,
-    unit : 'Kg'
+    unit: 'Kg'
   });
 
   useEffect(() => {
     switch (state.OpenBox.formType) {
-      case "hardware" : 
-      getHKU();
-      categoryList().then((data) => {
-        if (data.data === null) return setCategory([]);
+      case "hardware":
+        getHKU();
+        categoryList().then((data) => {
+          if (data.data === null) return setCategory([]);
 
-        return setCategory(data.data);
-      });
+          return setCategory(data.data);
+        });
 
-      getSubCatagories().then((data) => {
-        if (data.data === null) return setSubCategory([]);
+        getSubCatagories().then((data) => {
+          if (data.data === null) return setSubCategory([]);
 
-        return setSubCategory(data.data);
-      });
-      break;
-      case "update_hardware" : 
-      getHKU();
-      categoryList().then((data) => {
-        if (data.data === null) return setCategory([]);
+          return setSubCategory(data.data);
+        });
 
-        return setCategory(data.data);
-      });
+        setData({ ...changeData, category_name: category.filter((row) => { return row.category_name === 'Hardware' })[0]._id })
 
-      getSubCatagories().then((data) => {
-        if (data.data === null) return setSubCategory([]);
+        break;
+      case "update_hardware":
+        getHKU();
+        categoryList().then((data) => {
+          if (data.data === null) return setCategory([]);
 
-        return setSubCategory(data.data);
-      });
+          return setCategory(data.data);
+        });
 
-      const row = state.OpenBox.payload.row; 
-console.log(row)
-      setData({
-        SKU : row.SKU,
-        title : row.title,
-        category_name : row.category_id,
-        category_id : row.category_id,
-        sub_category_name : row.sub_category_id,
-        sub_category_id : row.sub_category_id,
-        hardware_image : row.hardware_image,
-        warehouse : row.warehouse ?
-        row.warehouse.split(',') : [],
-        bangalore_stock : row.bangalore_stock,
-        jodhpur_stock : row.jodhpur_stock,
-        manufacturing_time : row.manufacturing_time,
-        status : row.status === true ? 'on' : 'off' ,
-        returnDays : row.returnDays,
-        COD : row.COD,
-        returnable : row.returnable,
-        quantity : row.quantity,
-        package_length : row.package_length,
-        package_height : row.package_height,
-        package_breadth : row.package_breadth,
-        unit : row.unit,
-        selling_price : row.selling_price,
-        showroom_price : row.showroom_price,
-        polish_time : row.polish_time
-      })
-      break;
+        getSubCatagories().then((data) => {
+          if (data.data === null) return setSubCategory([]);
+
+          return setSubCategory(data.data);
+        });
+
+        const row = state.OpenBox.payload.row;
+
+        setData({
+          SKU: row.SKU,
+          title: row.title,
+          category_name: row.category_id,
+          category_id: row.category_id,
+          sub_category_name: row.sub_category_id,
+          sub_category_id: row.sub_category_id,
+          hardware_image: row.hardware_image,
+          warehouse: row.warehouse ?
+            row.warehouse.split(',') : [],
+          bangalore_stock: row.bangalore_stock,
+          jodhpur_stock: row.jodhpur_stock,
+          manufacturing_time: row.manufacturing_time,
+          status: row.status === true ? 'on' : 'off',
+          returnDays: row.returnDays,
+          COD: row.COD,
+          returnable: row.returnable,
+          quantity: row.quantity,
+          package_length: row.package_length,
+          package_height: row.package_height,
+          package_breadth: row.package_breadth,
+          unit: row.unit,
+          selling_price: row.selling_price,
+          showroom_price: row.showroom_price,
+          polish_time: row.polish_time
+        })
+        break;
       case "product":
         getSKU();
         categoryList().then((data) => {
@@ -1066,6 +1069,8 @@ console.log(row)
           drawer_count: data.drawer_count,
           range: data.range,
           show_on_mobile: data.show_on_mobile,
+          quantity: data.quantity,
+          unit: data.unit,
         });
 
         setCat(data.category_id);
@@ -2303,7 +2308,7 @@ console.log(row)
     FD.append("manufacturing_time", changeData.manufacturing_time);
     FD.append("product_title", changeData.product_title);
     FD.append("product_description", changeData.product_description);
-    FD.append("selling_points", changeData.selling_points);
+    FD.append("selling_points", JSON.stringify(changeData.selling_points));
     FD.append("SKU", SKU);
     FD.append("MRP", changeData.MRP ? changeData.MRP : 0);
     FD.append(
@@ -2320,6 +2325,9 @@ console.log(row)
     FD.append("fabric", changeData.fabric);
 
     FD.append("drawer", changeData.drawer);
+
+    FD.append("unit", changeData.unit);
+    FD.append("quantity", changeData.quantity);
 
     if (changeData.drawer !== undefined || changeData.drawer !== "none")
       FD.append(
@@ -2699,7 +2707,8 @@ console.log(row)
     FD.append("textile", changeData.textile);
     FD.append("textile_type", changeData.textile_type);
     FD.append("range", changeData.range);
-
+    FD.append("unit", changeData.unit);
+    FD.append("quantity", changeData.quantity);
     FD.append("category_id", changeData.category_name);
     FD.append("back_style", changeData.back_style);
     FD.append("sub_category_id", changeData.sub_category_name);
@@ -2708,7 +2717,7 @@ console.log(row)
     FD.append("product_title", changeData.product_title);
 
     FD.append("product_description", changeData.product_description);
-    FD.append("selling_points", changeData.selling_points);
+    FD.append("selling_points", JSON.stringify(changeData.selling_points));
 
     FD.append("SKU", changeData.SKU);
     FD.append("MRP", changeData.MRP ? changeData.MRP : 0);
@@ -4514,16 +4523,16 @@ console.log(row)
     FD.append("returnDays", changeData.returnable ? changeData.returnDays : 0);
     FD.append("returnable", changeData.returnable);
     FD.append("COD", changeData.COD);
-    
+
 
     FD.append("category_id", changeData.category_name);
     FD.append("sub_category_id", changeData.sub_category_name);
     FD.append("polish_time", changeData.polish_time);
     FD.append("manufacturing_time", changeData.manufacturing_time);
     FD.append("title", changeData.title);
-   
+
     FD.append("SKU", SKU);
-   
+
     FD.append(
       "showroom_price",
       changeData.showroom_price ? changeData.showroom_price : 0
@@ -4534,12 +4543,12 @@ console.log(row)
 
     FD.append("unit", changeData.unit);
     FD.append("quantity", changeData.quantity);
-   
+
     FD.append("package_length", changeData.package_length ? changeData.package_length : 0);
     FD.append("package_height", changeData.package_height ? changeData.package_height : 0);
     FD.append("package_breadth", changeData.package_breadth ? changeData.package_breadth : 0);
 
-    
+
     if (changeData.jodhpur_stock && changeData.jodhpur_stock > 0)
       FD.append("jodhpur_stock", changeData.jodhpur_stock);
 
@@ -4563,26 +4572,26 @@ console.log(row)
         } else {
           state.OpenBox.setRow([...state.OpenBox.row, {
             id: state.OpenBox.row.length + 1,
-            SKU : data.data.response.SKU,
-            title : data.data.response.title,
-            category_name : data.data.response.category_name,
-            category_id : data.data.response.category_id,
-            sub_category_name : data.data.response.sub_category_name,
-            sub_category_id : data.data.response.sub_category_id,
-            hardware_image : data.data.response.hardware_image,
-            warehouse : data.data.response.warehouse,
-            bangalore_stock : data.data.response.bangalore_stock,
-            jodhpur_stock : data.data.response.jodhpur_stock,
-            manufacturing_time : data.data.response.manufacturing_time,
-            status : data.data.response.status,
-            returnDays : data.data.response.returnDays,
-            COD : data.data.response.COD,
-            returnable : data.data.response.returnable,
-            quantity : data.data.response.quantity,
-            package_length : data.data.response.package_length,
-            package_height : data.data.response.package_height,
-            package_breadth : data.data.response.package_breadth,
-            unit : data.data.response.unit,
+            SKU: data.data.response.SKU,
+            title: data.data.response.title,
+            category_name: data.data.response.category_name,
+            category_id: data.data.response.category_id,
+            sub_category_name: data.data.response.sub_category_name,
+            sub_category_id: data.data.response.sub_category_id,
+            hardware_image: data.data.response.hardware_image,
+            warehouse: data.data.response.warehouse,
+            bangalore_stock: data.data.response.bangalore_stock,
+            jodhpur_stock: data.data.response.jodhpur_stock,
+            manufacturing_time: data.data.response.manufacturing_time,
+            status: data.data.response.status,
+            returnDays: data.data.response.returnDays,
+            COD: data.data.response.COD,
+            returnable: data.data.response.returnable,
+            quantity: data.data.response.quantity,
+            package_length: data.data.response.package_length,
+            package_height: data.data.response.package_height,
+            package_breadth: data.data.response.package_breadth,
+            unit: data.data.response.unit,
             range: data.data.response.range,
             action: data.data.response
           }])
@@ -4612,7 +4621,7 @@ console.log(row)
     e.preventDefault();
 
     const FD = new FormData();
-    
+
     FD.append("_id", state.OpenBox.payload.row.action);
 
     FD.append("status", changeData.status === 'on' ? true : false);
@@ -4640,16 +4649,16 @@ console.log(row)
     FD.append("returnDays", changeData.returnable ? changeData.returnDays : 0);
     FD.append("returnable", changeData.returnable);
     FD.append("COD", changeData.COD);
-    
+
 
     FD.append("category_id", changeData.category_name);
     FD.append("sub_category_id", changeData.sub_category_name);
     FD.append("polish_time", changeData.polish_time);
     FD.append("manufacturing_time", changeData.manufacturing_time);
     FD.append("title", changeData.title);
-   
+
     FD.append("SKU", changeData.SKU);
-   
+
     FD.append(
       "showroom_price",
       changeData.showroom_price ? changeData.showroom_price : 0
@@ -4665,7 +4674,7 @@ console.log(row)
     FD.append("package_height", changeData.package_height ? changeData.package_height : 0);
     FD.append("package_breadth", changeData.package_breadth ? changeData.package_breadth : 0);
 
-    
+
     if (changeData.jodhpur_stock && changeData.jodhpur_stock > 0)
       FD.append("jodhpur_stock", changeData.jodhpur_stock);
 
@@ -5913,6 +5922,99 @@ console.log(row)
                               onChange={handleProductFelids}
                               helperText="From bottom to top"
                             />
+
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Selling Points{" "}
+                            </FormLabel>
+
+                            <Grid container sx={{ mt: 1 }}>
+                              <Grid item xs={12} sx={{ mb: 2 }} >
+                                <Grid container sx={{ display: 'flex', alignItem: 'center', justifyContent: 'space-between' }} >
+                                  <Grid item xs={11}><TextField fullWidth value={changeData.item || ''} size={'small'} type='text' name='item'
+                                    onChange={handleProductFelids}
+                                    label='Write a point...' /></Grid>
+                                  <Grid item xs={0.8}>
+                                    {changeData.select === undefined ? <Button
+                                      fullWidth
+                                      onClick={() => {
+                                        changeData.item !== '' && setData({
+                                          ...changeData,
+                                          selling_points: [...changeData.selling_points, changeData.item],
+                                          item: ''
+                                        });
+                                      }}
+                                      variant='outlined'>Add</Button> : <Button onClick={() => {
+                                        setData({
+                                          ...changeData,
+                                          selling_points: changeData.selling_points.filter((row, i) => {
+                                            return i !== changeData.select;
+                                          }),
+                                          select: undefined
+
+                                        })
+
+
+                                      }}
+                                        variant='outlined'>Remove</Button>}
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+                              {changeData.selling_points.length > 0 && <Grid sx={{
+                                maxHeight: '100px', overflowY: 'scroll', mb: 2,
+                                border: '2px solid #91441f',
+                                padding: '7px'
+                              }} item xs={12}>
+                                <ul style={{ listStyleType: 'square' }}>
+                                  {
+                                    changeData.selling_points && changeData.selling_points.map((item, index) => {
+                                      return <li><Typography sx={{ cursor: 'pointer' }}
+                                        onClick={() => {
+                                          setData({
+                                            ...changeData,
+                                            select: index,
+                                            item: item
+                                          })
+                                        }}
+                                        variant='body'>{index + 1 + ". "}{item}</Typography>
+                                      </li>
+                                    })
+                                  }
+                                </ul>
+                              </Grid>}
+                            </Grid>
+
+                            <Box sx={{ display: 'flex', mb: 2 }}>
+
+                              <TextField
+                                size="small"
+                                sx={{ width: '90%' }}
+                                id="fullWidth"
+                                label="Quantity"
+                                type="Number"
+                                variant="outlined"
+                                name="quantity"
+                                value={changeData.quantity}
+                                onChange={handleProductFelids}
+                              />
+
+
+                              <TextField
+                                id="outlined-select-currency"
+                                select
+                                sx={{ ml: 1, width: '10%' }}
+                                size='small'
+                                label="Unit"
+                                name='unit'
+                                value={changeData.unit || ''}
+                                onChange={handleProductFelids}
+                              >
+                                {unitCatalog.map((option) => (
+                                  <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            </Box>
                           </Box >
                           <Box className="stepAction">
                             <Button
@@ -6030,7 +6132,7 @@ console.log(row)
                             <br />
                             {/* selling points  */}
 
-                            <FormLabel id="demo-radio-buttons-group-label">
+                            {/* <FormLabel id="demo-radio-buttons-group-label">
                               Selling Points{" "}
                             </FormLabel>
 
@@ -6042,7 +6144,7 @@ console.log(row)
                               defaultValue={"Selling Points" || changeData.selling_points}
                               type="text"
                               helperText="Please enter your selling points."
-                            />
+                            /> */}
 
                             {/* <Editor
                               apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
@@ -7298,12 +7400,12 @@ console.log(row)
                             </Box > <br />
 
                             {/* <AcceptMaxFiles className="dorpContainer"/> */}
-                            <FormLabel id="demo-radio-buttons-group-label">
+                            {/* <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
                             <ProductsPreviews
                               text={"Please Drag and Drop the product images"}
-                            ></ProductsPreviews>
+                            ></ProductsPreviews> */}
                             <FormLabel id="demo-radio-buttons-group-label">
                               Featured Images
                             </FormLabel>
@@ -7890,6 +7992,100 @@ console.log(row)
                               onChange={handleProductFelids}
                               helperText="From bottom to top"
                             />
+
+<FormLabel id="demo-radio-buttons-group-label">
+                              Selling Points{" "}
+                            </FormLabel>
+
+                            <Grid container sx={{ mt: 1 }}>
+                              <Grid item xs={12} sx={{ mb: 2 }} >
+                                <Grid container sx={{ display: 'flex', alignItem: 'center', justifyContent: 'space-between' }} >
+                                  <Grid item xs={11}><TextField fullWidth value={changeData.item || ''} size={'small'} type='text' name='item'
+                                    onChange={handleProductFelids}
+                                    label='Write a point...' /></Grid>
+                                  <Grid item xs={0.8}>
+                                    {changeData.select === undefined ? <Button
+                                      fullWidth
+                                      onClick={() => {
+                                        changeData.item !== '' && setData({
+                                          ...changeData,
+                                          selling_points: [...changeData.selling_points, changeData.item],
+                                          item: ''
+                                        });
+                                      }}
+                                      variant='outlined'>Add</Button> : <Button onClick={() => {
+                                        setData({
+                                          ...changeData,
+                                          selling_points: changeData.selling_points.filter((row, i) => {
+                                            return i !== changeData.select;
+                                          }),
+                                          select: undefined
+
+                                        })
+
+
+                                      }}
+                                        variant='outlined'>Remove</Button>}
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+                              {changeData.selling_points.length > 0 && <Grid sx={{
+                                maxHeight: '100px', overflowY: 'scroll', mb: 2,
+                                border: '2px solid #91441f',
+                                padding: '7px'
+                              }} item xs={12}>
+                                <ul style={{ listStyleType: 'square' }}>
+                                  {
+                                    changeData.selling_points && changeData.selling_points.map((item, index) => {
+                                      return <li><Typography sx={{ cursor: 'pointer' }}
+                                        onClick={() => {
+                                          setData({
+                                            ...changeData,
+                                            select: index,
+                                            item: item
+                                          })
+                                        }}
+                                        variant='body'>{index + 1 + ". "}{item}</Typography>
+                                      </li>
+                                    })
+                                  }
+                                </ul>
+                              </Grid>}
+                            </Grid>
+
+
+                            <Box sx={{ display: 'flex', mb: 2 }}>
+
+                              <TextField
+                                size="small"
+                                sx={{ width: '85%' }}
+                                id="fullWidth"
+                                label="Quantity"
+                                type="Number"
+                                variant="outlined"
+                                name="quantity"
+                                value={changeData.quantity}
+                                onChange={handleProductFelids}
+                              />
+
+
+                              <TextField
+                                id="outlined-select-currency"
+                                select
+                                sx={{ ml: 1 }}
+                                size='small'
+                                label="Unit"
+                                name='unit'
+                                value={changeData.unit || ''}
+                                onChange={handleProductFelids}
+                              >
+                                {unitCatalog.map((option) => (
+                                  <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
+                            </Box>
                           </Box >
                           <Box className="stepAction">
                             <Button
@@ -8007,7 +8203,7 @@ console.log(row)
                             <br />
                             {/* selling points  */}
 
-                            <FormLabel id="demo-radio-buttons-group-label">
+                            {/* <FormLabel id="demo-radio-buttons-group-label">
                               Selling Points{" "}
                             </FormLabel>
 
@@ -8019,7 +8215,7 @@ console.log(row)
                               defaultValue={"Selling Points" || changeData.selling_points}
                               type="text"
                               helperText="Please enter your selling points."
-                            />
+                            /> */}
 
                             {/* <Editor
                               apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
@@ -11264,16 +11460,16 @@ console.log(row)
                   >
                     <Fade in={open}>
                       <Box sx={style}>
-                      <Typography sx = {{pb:1}} variant = 'h6'>
-                            Address
-                          </Typography>
+                        <Typography sx={{ pb: 1 }} variant='h6'>
+                          Address
+                        </Typography>
                         <form
                           className="form"
                           id="myForm" onSubmit={(e) => { confirmBox(e, handleAddress) }}
                           enctype="multipart/form-data"
                           method="post"
                         >
-                          
+
                           <TextField sx={{ mb: 1 }} size="small"
                             fullWidth
                             // required
@@ -11424,30 +11620,30 @@ console.log(row)
                       Shipping Address
                     </FormLabel>
                     <Grid container >
-                     {
-                      address && address.map((item)=>{
-                        return <Grid item xs = {3}>
-                          <Box sx= {{
-                                overflowWrap: 'break-word',
-                                    border: '2px solid #a52a2a80',
-                                    borderStyle: 'dashed',
-                                     p: 1,
-                                     ml : 1,
-                                     mr : 1,
-                                     width : '130px',
-                                     height : '150px',
-                                     overflow : 'hidden'
-                                     }}>
-                        <Typography variant = 'caption'>{item.shipping}</Typography></Box>
-                        </Grid>
-                      })
-                     }
-                      <Grid item xs = {3}>
-                      <Button variant='outlined' sx={{ width: '20%' }} onClick={() => { setOpen(true) }}><AddIcon/></Button>
+                      {
+                        address && address.map((item) => {
+                          return <Grid item xs={3}>
+                            <Box sx={{
+                              overflowWrap: 'break-word',
+                              border: '2px solid #a52a2a80',
+                              borderStyle: 'dashed',
+                              p: 1,
+                              ml: 1,
+                              mr: 1,
+                              width: '130px',
+                              height: '150px',
+                              overflow: 'hidden'
+                            }}>
+                              <Typography variant='caption'>{item.shipping}</Typography></Box>
+                          </Grid>
+                        })
+                      }
+                      <Grid item xs={3}>
+                        <Button variant='outlined' sx={{ width: '20%' }} onClick={() => { setOpen(true) }}><AddIcon /></Button>
                       </Grid>
                     </Grid>
 
-                    
+
 
                     <Button
                       color="primary"
@@ -11990,9 +12186,9 @@ console.log(row)
             {/* update Stock Ends */}
 
 
-                 {/* add Hardware */}
+            {/* add Hardware */}
 
-                 {state.OpenBox.formType === "hardware" && (
+            {state.OpenBox.formType === "hardware" && (
               <Grid container p={5} className="productPadding">
                 <Grid item xs={12}>
                   <Typography component={'span'} variant="h5">
@@ -12070,16 +12266,17 @@ console.log(row)
                               onChange={handleProductFelids}
                             />
 
-                          
+
                             <TextField sx={{ mb: 2 }}
                               size="small"
                               fullWidth
                               // required
                               id="outlined-select"
                               select
+                              disabled
                               name="category_name"
                               label="Category"
-                              value={changeData.category_name}
+                              value={changeData.category_name || ''}
                               multiple
                               onChange={handleProductFelids}
                               helperText="Please select your category"
@@ -12130,37 +12327,37 @@ console.log(row)
                               </MenuItem>
                             </TextField>
 
-                            <Box sx = {{display : 'flex' ,mb: 2 }}>
+                            <Box sx={{ display: 'flex', mb: 2 }}>
 
-                            <TextField 
-                              size="small"
-                              sx = {{width : '85%'}}
-                              id="fullWidth"
-                              label="Quantity"
-                              type="Number"
-                              variant="outlined"
-                              name="quantity"
-                              value={changeData.quantity}
-                              onChange={handleProductFelids}
-                            />
+                              <TextField
+                                size="small"
+                                sx={{ width: '85%' }}
+                                id="fullWidth"
+                                label="Quantity"
+                                type="Number"
+                                variant="outlined"
+                                name="quantity"
+                                value={changeData.quantity}
+                                onChange={handleProductFelids}
+                              />
 
 
-                            <TextField
-                              id="outlined-select-currency"
-                              select
-                              sx = {{ml : 1}}
-                              size = 'small'
-                              label="Unit"
-                              name = 'unit'
-                              value={changeData.unit}
-                              onChange={handleProductFelids}
-                            >
-                              {unitCatalog.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                  {option.label}
-                                </MenuItem>
-                              ))}
-                            </TextField>
+                              <TextField
+                                id="outlined-select-currency"
+                                select
+                                sx={{ ml: 1 }}
+                                size='small'
+                                label="Unit"
+                                name='unit'
+                                value={changeData.unit}
+                                onChange={handleProductFelids}
+                              >
+                                {unitCatalog.map((option) => (
+                                  <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
                             </Box>
 
                             <TextField sx={{ mb: 2 }}
@@ -12185,7 +12382,7 @@ console.log(row)
                             />
 
 
-                          
+
 
                             <TextField sx={{ mb: 2 }}
                               size="small"
@@ -12217,7 +12414,7 @@ console.log(row)
                               name="selling_price"
                             />
 
-                           
+
 
                             <FormControlLabel
                               control={
@@ -12286,7 +12483,7 @@ console.log(row)
                             <ProductsPreviews
                               text={"Please Drag and Drop the hardware images"}
                             ></ProductsPreviews>
-                          
+
                           </Box >
                           <Box className="stepAction">
                             <Button
@@ -12534,7 +12731,7 @@ console.log(row)
                       </Step>
                       {/* Inventory & Shipping End */}
 
-              
+
 
                     </Stepper>
 
@@ -12552,9 +12749,9 @@ console.log(row)
             )}
 
             {/* add Hardware Ends */}
-                 {/* update Hardware */}
+            {/* update Hardware */}
 
-                 {state.OpenBox.formType === "update_hardware" && (
+            {state.OpenBox.formType === "update_hardware" && (
               <Grid container p={5} className="productPadding">
                 <Grid item xs={12}>
                   <Typography component={'span'} variant="h5">
@@ -12632,13 +12829,15 @@ console.log(row)
                               onChange={handleProductFelids}
                             />
 
-                          
+
                             <TextField sx={{ mb: 2 }}
                               size="small"
                               fullWidth
                               // required
                               id="outlined-select"
                               select
+                              disabled
+
                               name="category_name"
                               label="Category"
                               value={changeData.category_name || ''}
@@ -12692,37 +12891,37 @@ console.log(row)
                               </MenuItem>
                             </TextField>
 
-                            <Box sx = {{display : 'flex' ,mb: 2 }}>
+                            <Box sx={{ display: 'flex', mb: 2 }}>
 
-                            <TextField 
-                              size="small"
-                              sx = {{width : '85%'}}
-                              id="fullWidth"
-                              label="Quantity"
-                              type="Number"
-                              variant="outlined"
-                              name="quantity"
-                              value={changeData.quantity}
-                              onChange={handleProductFelids}
-                            />
+                              <TextField
+                                size="small"
+                                sx={{ width: '85%' }}
+                                id="fullWidth"
+                                label="Quantity"
+                                type="Number"
+                                variant="outlined"
+                                name="quantity"
+                                value={changeData.quantity}
+                                onChange={handleProductFelids}
+                              />
 
 
-                            <TextField
-                              id="outlined-select-currency"
-                              select
-                              sx = {{ml : 1}}
-                              size = 'small'
-                              label="Unit"
-                              name = 'unit'
-                              value={changeData.unit || ''}
-                              onChange={handleProductFelids}
-                            >
-                              {unitCatalog.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                  {option.label}
-                                </MenuItem>
-                              ))}
-                            </TextField>
+                              <TextField
+                                id="outlined-select-currency"
+                                select
+                                sx={{ ml: 1 }}
+                                size='small'
+                                label="Unit"
+                                name='unit'
+                                value={changeData.unit || ''}
+                                onChange={handleProductFelids}
+                              >
+                                {unitCatalog.map((option) => (
+                                  <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                  </MenuItem>
+                                ))}
+                              </TextField>
                             </Box>
 
                             <TextField sx={{ mb: 2 }}
@@ -12747,7 +12946,7 @@ console.log(row)
                             />
 
 
-                          
+
 
                             <TextField sx={{ mb: 2 }}
                               size="small"
@@ -12779,12 +12978,12 @@ console.log(row)
                               name="selling_price"
                             />
 
-                           
+
 
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={changeData.status || false }
+                                  checked={changeData.status || false}
                                   onChange={handleProductFelids}
                                   name="status"
                                   helperText="Check it if want it on mobile."
@@ -13040,7 +13239,7 @@ console.log(row)
                       </Step>
                       {/* Inventory & Shipping End */}
 
-              
+
 
                     </Stepper>
 

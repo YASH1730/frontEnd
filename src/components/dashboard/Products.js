@@ -127,6 +127,8 @@ export default function Products() {
           selling_price: row.selling_price,
           discount_limit: row.discount_limit,
           polish_time: row.polish_time,
+          quantity : row.quantity,
+          unit : row.unit,
           action: row
         })
       }))

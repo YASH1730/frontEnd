@@ -17,6 +17,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import Products from "./components/dashboard/Products";
 import Customers from "./components/dashboard/Customers";
 import Orders from "./components/dashboard/Orders";
+import CreateOrder from "./components/dashboard/CreateOrder";
 import Coupons from "./components/dashboard/Coupons";
 import OurStaff from "./components/dashboard/OurStaff";
 import Setting from "./components/dashboard/Setting";
@@ -43,6 +44,7 @@ function MyRoutes(){
     <Route exact path="/products" element={<Products history = {history} />} />
     <Route exact path="/customer" element={<Customers history = {history} />} />
     <Route exact path="/order" element={<Orders history = {history} />} />
+    <Route exact path="/create_order" element={<CreateOrder history = {history} />} />
     <Route exact path="/user" element={<OurStaff history = {history} />} />
     <Route exact path="/reward" element={<Coupons history = {history} />} />
     <Route exact path="/admin" element={<Setting history = {history} />} />
