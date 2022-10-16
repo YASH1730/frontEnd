@@ -967,7 +967,7 @@ export default function Products() {
 
       <Grid container scaping={2} className="overviewContainer">
 
-        <Grid item p={2} xs={12} md={7.9} sx={{ boxShadow: 2, borderRadius: 5 }}>
+        <Grid item p={2} xs={12}  sx={{ boxShadow: 2, borderRadius: 5 }}>
 
           <Typography component={'span'} variant="h6"> Merge Product List </Typography>
           <br></br>
@@ -975,7 +975,7 @@ export default function Products() {
           {DataGridView(MergeRow, mergeColumns, 'MS', false)}
         </Grid>
 
-        <Grid item p={2} xs={12} md={4} sx={{ boxShadow: 2, borderRadius: 5 }}>
+        <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
           <div style={
             {
               display: 'flex',
