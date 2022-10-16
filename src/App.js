@@ -29,6 +29,7 @@ import Hardware from "./components/dashboard/Hardware";
 import StockChannel from "./components/dashboard/StockChannel";
 import BlogModule from "./components/dashboard/Blog";
 import Merge from "./components/dashboard/Merge"
+import ProductDetails from "./components/Utility/ProductDetails"
 
 global.Buffer = Buffer;
 
@@ -53,6 +54,7 @@ function MyRoutes(){
     <Route exact path="/inventory" element={<StockChannel history = {history} />} />
     <Route exact path="/accessories" element={<Accessories history = {history} />} />
     <Route exact path="/hardware" element={<Hardware history = {history} />} />
+    <Route exact path="/productDetails" element={<ProductDetails history = {history} />} />
     {/* <Route exact path="/gallery" element={<Gallery history = {history} />} /> */}
     <Route exact path="/blogs" element={<BlogModule history = {history} />} />
     <Route exact path="/blog" element={<Blog />} />

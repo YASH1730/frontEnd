@@ -2457,6 +2457,7 @@ const Sideform = () => {
 
     const res = addProduct(FD);
 
+
     res
       .then((data) => {
         // //console.log(data.status);
@@ -2485,6 +2486,7 @@ const Sideform = () => {
             product_image: data.data.response.product_image,
             featured_image: data.data.response.featured_image,
             specification_image: data.data.response.specification_image,
+            mannequin_image: data.data.response.mannequin_image,
             primary_material: data.data.response.primary_material,
             warehouse: data.data.response.warehouse,
             primary_material_name: data.data.response.primary_material_name,
@@ -2884,6 +2886,7 @@ const Sideform = () => {
               set.seo_keyword = changeData.seo_keyword
               set.featured_image = Image[0] !== undefined ? `${imageLink}${Image[0].path}` : changeData.featured_image
               set.specification_image = featured[0] !== undefined ? `${imageLink}${Image[0].path}` : changeData.specification_image
+              set.mannequin_image = featured[0] !== undefined ? `${imageLink}${Image[0].path}` : changeData.mannequin_image
               set.primary_material = changeData.primary_material
               set.warehouse = changeData.warehouse.join(',')
               set.primary_material_name = changeData.primary_material_name
@@ -6115,7 +6118,8 @@ const Sideform = () => {
                               minRows={5}
                               id="outlined-select"
                               name="product_description"
-                              defaultValue={"Product Description" || changeData.product_description}
+                              onChange={handleProductFelids}
+                              defaultValue={changeData.product_description}
                               type="text"
                               helperText="Please enter your product description"
                             />
@@ -8186,7 +8190,8 @@ const Sideform = () => {
                               minRows={5}
                               id="outlined-select"
                               name="product_description"
-                              defaultValue={"Product Description" || changeData.product_description}
+                              onChange={handleProductFelids}
+                              defaultValue={changeData.product_description}
                               type="text"
                               helperText="Please enter your product description"
                             />

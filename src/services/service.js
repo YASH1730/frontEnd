@@ -121,6 +121,16 @@ export const getPresentSKUs = async () => {
   });
 };
 
+// get product details for display  
+export const getProductDetails = async (data) => {
+  return await axios.get(`${API}/getProductDetails?SKU=${data}`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("WDToken")}`,
+    },
+  });
+}
+
+
 //  =========================== CURD For Bannner ========================
 
 // add banner
