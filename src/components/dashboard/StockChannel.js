@@ -85,7 +85,7 @@ const {dispatch} = Store();
 
   const handlePreview = (e) => {
 
-    if (e.target.value.length < 8) return 0;
+    if (e.target.value.length < 7) return 0;
 
     preview(e.target.value)
       .then((data) => {
