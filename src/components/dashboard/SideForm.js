@@ -517,10 +517,21 @@ const Sideform = () => {
     },
   ];
 
+  const assemblyLevelCatalog = [
+    {
+      value: "Easy Assembly",
+      label: "Easy Assembly",
+    },
+    {
+      value: "Carpenter Assembly",
+      label: "Carpenter Assembly",
+    }
+  ];
+
   const unitCatalog = [
     {
-      value: "Pc",
-      label: "Pc",
+      value: "Pcs",
+      label: "Pcs",
     },
     {
       value: "Kg",
@@ -580,6 +591,7 @@ const Sideform = () => {
     product_array: [],
     variation_array: [],
     warehouse: [],
+    savedImages: [],
     shipping: "",
     product_title: "",
     seo_title: "",
@@ -645,8 +657,10 @@ const Sideform = () => {
     customer_email: "",
     shipping_address: "",
     searchCustomer: "",
-    show_on_mobile: false,
-    unit: 'Kg',
+    mobile_store : true,
+    online_store : true,
+    unit: 'Pcs',
+    quantity : 1,
     textile_type : '',
     category_id : '',
     back_style : '',
@@ -656,6 +670,8 @@ const Sideform = () => {
     fabric : '',
     drawer : '',
     weight_capacity : '',
+    legs : 'None',
+    assembly_level : 'Easy Assembly',
   });
 
   useEffect(() => {
@@ -1159,8 +1175,10 @@ const Sideform = () => {
 
           return setFabricCatalog(data.data);
         });
-        // console.log(state.OpenBox.payload)
+        console.log(state.OpenBox.payload)
         setData({
+          _id  : state.OpenBox.payload.value._id || state.OpenBox.payload.row.action._id ,
+          assembly_level: state.OpenBox.payload.row.action.assembly_level,
           SKU: state.OpenBox.payload.row.action.SKU,
           product_title: state.OpenBox.payload.row.action.product_title,
           category_name: state.OpenBox.payload.row.action.category_id,
@@ -1173,18 +1191,20 @@ const Sideform = () => {
           seo_description: state.OpenBox.payload.row.action.seo_description,
           seo_keyword: state.OpenBox.payload.row.action.seo_keyword,
           product_image: state.OpenBox.payload.row.action.product_image,
+          savedImages: state.OpenBox.payload.row.action.product_image,
           featured_image: state.OpenBox.payload.row.action.featured_image,
           specification_image: state.OpenBox.payload.row.action.specification_image,
           mannequin_image: state.OpenBox.payload.row.action.mannequin_image,
           primary_material: JSON.parse(
             state.OpenBox.payload.row.action.primary_material_name
           ) || [],
-          warehouse: state.OpenBox.payload.row.action.warehouse ?
-          state.OpenBox.payload.row.action.warehouse.split(',') : [],
+          warehouse: JSON.parse(
+            state.OpenBox.payload.row.action.warehouse_name
+          ) || [],
+          warehouse_name : state.OpenBox.payload.row.action.warehouse_name,
           bangalore_stock: state.OpenBox.payload.row.action.bangalore_stock,
           jodhpur_stock: state.OpenBox.payload.row.action.jodhpur_stock,
-          primary_material_name:
-          state.OpenBox.payload.row.action.primary_material_name,
+          primary_material_name:state.OpenBox.payload.row.action.primary_material_name,
           package_length: state.OpenBox.payload.row.action.package_length,
           package_height: state.OpenBox.payload.row.action.package_height,
           package_breadth: state.OpenBox.payload.row.action.package_breadth,
@@ -1258,7 +1278,8 @@ const Sideform = () => {
           drawer: state.OpenBox.payload.row.action.drawer,
           drawer_count: state.OpenBox.payload.row.action.drawer_count,
           range: state.OpenBox.payload.row.action.range,
-          show_on_mobile: state.OpenBox.payload.row.action.show_on_mobile,
+          mobile_store: state.OpenBox.payload.row.action.mobile_store,
+          online_store: state.OpenBox.payload.row.action.online_store,
           quantity: state.OpenBox.payload.row.action.quantity,
           unit: state.OpenBox.payload.row.action.unit,
         });
@@ -1642,7 +1663,8 @@ const Sideform = () => {
     "wall_hanging",
     "COD",
     "returnable",
-    "show_on_mobile",
+    "mobile_store",
+    "online_store",
     "ceramic_drawers",
     "ceramic_tiles",
     "status"
@@ -2251,6 +2273,8 @@ const Sideform = () => {
     setActiveStep(0);
     setShowFabric("No");
     setData({
+      savedImages : [],
+      warehouse_name : '',
       searchCustomer: "",
       primary_material: [],
       product_array: [],
@@ -2314,6 +2338,12 @@ const Sideform = () => {
       dial_size: 0,
       COD: false,
       textile: "",
+      quantity : 1,
+      unit : 'Pcs',
+      legs : 'None',
+      assembly_level : 'Easy Assembly',
+      mobile_store : true,
+      online_store : true
     });
     document.getElementById("myForm").reset();
   };
@@ -2412,6 +2442,12 @@ const Sideform = () => {
       "primary_material_name",
       JSON.stringify(changeData.primary_material)
     );
+
+    FD.append(
+      "warehouse_name",
+      JSON.stringify(changeData.warehouse)
+    );
+
 
     category.map((item) => {
       return (
@@ -2518,7 +2554,7 @@ const Sideform = () => {
     FD.append("drawer", changeData.drawer);
 
     FD.append("unit", changeData.unit);
-    FD.append("quantity", changeData.quantity ? changeData.quantity : 0);
+    FD.append("quantity", changeData.quantity ? changeData.quantity : 1);
 
     if (changeData.drawer !== undefined || changeData.drawer !== "none")
       FD.append(
@@ -2536,6 +2572,7 @@ const Sideform = () => {
       "length_main",
       changeData.length_main ? changeData.length_main : 0
     );
+    FD.append("assembly_level", changeData.assembly_level );
 
     FD.append("package_length", changeData.package_length ? changeData.package_length : 0);
     FD.append("package_height", changeData.package_height ? changeData.package_height : 0);
@@ -2622,8 +2659,12 @@ const Sideform = () => {
     FD.append("weaving", changeData.weaving ? changeData.weaving : false);
     FD.append("knife", changeData.knife ? changeData.knife : false);
     FD.append(
-      "show_on_mobile",
-      changeData.show_on_mobile ? changeData.show_on_mobile : false
+      "mobile_store",
+      changeData.mobile_store ? changeData.mobile_store : true
+    );
+    FD.append(
+      "online_store",
+      changeData.online_store ? changeData.online_store : true
     );
 
     FD.append(
@@ -2749,7 +2790,6 @@ const Sideform = () => {
             returnable: data.data.response.returnable,
             drawer: data.data.response.drawer,
             drawer_count: data.data.response.drawer_count,
-            show_on_mobile: data.data.response.show_on_mobile,
             range: data.data.response.range,
             action: data.data.response
           }])
@@ -2808,6 +2848,12 @@ const Sideform = () => {
       "primary_material_name",
       JSON.stringify(changeData.primary_material)
     );
+
+    FD.append(
+      "warehouse_name",
+      JSON.stringify(changeData.warehouse)
+    );
+
 
     category.map((item) => {
       return (
@@ -2921,7 +2967,7 @@ const Sideform = () => {
     FD.append("drawer", changeData.drawer);
 
     FD.append("unit", changeData.unit);
-    FD.append("quantity", changeData.quantity ? changeData.quantity : 0);
+    FD.append("quantity", changeData.quantity ? changeData.quantity : 1);
 
     if (changeData.drawer !== undefined || changeData.drawer !== "none")
       FD.append(
@@ -2939,6 +2985,8 @@ const Sideform = () => {
       "length_main",
       changeData.length_main ? changeData.length_main : 0
     );
+    FD.append("assembly_level", changeData.assembly_level );
+
 
     FD.append("package_length", changeData.package_length ? changeData.package_length : 0);
     FD.append("package_height", changeData.package_height ? changeData.package_height : 0);
@@ -3025,8 +3073,12 @@ const Sideform = () => {
     FD.append("weaving", changeData.weaving ? changeData.weaving : false);
     FD.append("knife", changeData.knife ? changeData.knife : false);
     FD.append(
-      "show_on_mobile",
-      changeData.show_on_mobile ? changeData.show_on_mobile : false
+      "mobile_store",
+      changeData.mobile_store ? changeData.mobile_store : true
+    );
+    FD.append(
+      "online_store",
+      changeData.online_store ? changeData.online_store : true
     );
 
     FD.append(
@@ -3152,7 +3204,6 @@ const Sideform = () => {
             returnable: data.data.response.returnable,
             drawer: data.data.response.drawer,
             drawer_count: data.data.response.drawer_count,
-            show_on_mobile: data.data.response.show_on_mobile,
             range: data.data.response.range,
             action: data.data.response
           }])
@@ -3183,11 +3234,12 @@ const Sideform = () => {
     const FD = new FormData();
     let multiOBJ = {};
 
-    // files.map((element) => {
-    //   return FD.append("product_image", element);
-    // });
+    files.map((element) => {
+      return FD.append("product_image", element);
+    });
+    FD.append('savedImages',JSON.stringify(changeData.savedImages));
 
-    FD.append("_id", state.OpenBox.payload.value._id);
+    FD.append("_id", changeData._id );
 
     Image.map((element) => {
       return FD.append("specification_image", element);
@@ -3204,6 +3256,10 @@ const Sideform = () => {
     FD.append(
       "primary_material_name",
       JSON.stringify(changeData.primary_material)
+    );
+    FD.append(
+      "warehouse_name",
+      JSON.stringify(changeData.warehouse)
     );
 
     category.map((item) => {
@@ -3292,6 +3348,7 @@ const Sideform = () => {
     }
 
     FD.append("returnDays", changeData.returnable ? changeData.returnDays : 0);
+    FD.append("assembly_level", changeData.assembly_level );
     FD.append("returnable", changeData.returnable);
     FD.append("COD", changeData.COD);
     FD.append("polish", changeData.polish);
@@ -3345,11 +3402,11 @@ const Sideform = () => {
       );
 
     //  // //console.log(secMaterial)
-    if (changeData.secondary_material_weight !== undefined)
-      FD.append(
-        "secondary_material_weight",
-        changeData.secondary_material_weight
-      );
+    // if (changeData.secondary_material_weight !== undefined)
+    //   FD.append(
+    //     "secondary_material_weight",
+    //     changeData.secondary_material_weight
+    //   );
     FD.append(
       "length_main",
       changeData.length_main ? changeData.length_main : 0
@@ -3431,8 +3488,12 @@ const Sideform = () => {
     FD.append("weaving", changeData.weaving ? changeData.weaving : false);
     FD.append("knife", changeData.knife ? changeData.knife : false);
     FD.append(
-      "show_on_mobile",
-      changeData.show_on_mobile ? changeData.show_on_mobile : false
+      "mobile_store",
+      changeData.mobile_store ? changeData.mobile_store : true
+    );
+    FD.append(
+      "online_store",
+      changeData.online_store ? changeData.online_store : true
     );
     FD.append(
       "wall_hanging",
@@ -3475,6 +3536,7 @@ const Sideform = () => {
               set.category_name = multiOBJ.category_name || changeData.category_name
               set.sub_category_name = multiOBJ.sub_category_name || changeData.sub_category_name
               set.product_description = changeData.product_description
+              set.product_image = data.data.image
               set.seo_title = changeData.seo_title
               set.seo_description = changeData.seo_description
               set.seo_keyword = changeData.seo_keyword
@@ -3482,7 +3544,8 @@ const Sideform = () => {
               set.specification_image = Image[0] !== undefined ? `${imageLink}${Image[0].path}` : changeData.specification_image
               set.mannequin_image = Mannequin[0] !== undefined ? `${imageLink}${Mannequin[0].path}` : changeData.mannequin_image
               set.primary_material = changeData.primary_material
-              set.warehouse = changeData.warehouse.join(',')
+              set.warehouse = changeData.warehouse
+              set.warehouse_name = changeData.warehouse_name
               set.primary_material_name = changeData.primary_material_name
               set.length_main = changeData.length_main
               set.breadth = changeData.breadth
@@ -3510,6 +3573,7 @@ const Sideform = () => {
               set.wall_hanging = changeData.wall_hanging
               set.assembly_required = changeData.assembly_required
               set.assembly_part = changeData.assembly_part
+              set.assembly_level = changeData.assembly_level
               set.legs = changeData.legs
               set.mirror = changeData.mirror
               set.mirror_length = changeData.mirror_length
@@ -3545,8 +3609,12 @@ const Sideform = () => {
               set.returnable = changeData.returnable
               set.drawer = changeData.drawer
               set.drawer_count = changeData.drawer_count
-              set.show_on_mobile = changeData.show_on_mobile
+              set.mobile_store = changeData.mobile_store
+              set.online_store = changeData.online_store
               set.range = changeData.range
+              set.action = changeData
+              set.action.warehouse_name = JSON.stringify(changeData.warehouse)
+              set.action.primary_material_name = JSON.stringify(changeData.primary_material)
               return set
             }
             else return set;
@@ -3652,6 +3720,7 @@ const Sideform = () => {
             sub_category_name: data.data.response.sub_category_name,
             sub_category_id: data.data.response.sub_category_id,
             product_description: data.data.response.product_description,
+            assembly_level: data.data.response.assembly_level,
             seo_title: data.data.response.seo_title,
             seo_description: data.data.response.seo_description,
             seo_keyword: data.data.response.seo_keyword,
@@ -5464,7 +5533,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -5494,7 +5563,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -5722,7 +5791,7 @@ const Sideform = () => {
                                   {option.label}
                                 </MenuItem>
                               ))}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -5750,7 +5819,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -5819,7 +5888,7 @@ const Sideform = () => {
                                   select
                                   name="legs"
                                   label="Table Legs"
-                                  value={changeData.legs}
+                                  value={changeData.legs || ""}
                                   onChange={handleProductFelids}
                                   multiple
                                   helperText="Please select your leg "
@@ -5832,23 +5901,64 @@ const Sideform = () => {
                                       {option.label}
                                     </MenuItem>
                                   ))}
-                                  <MenuItem key={"none"} value={undefined}>
+                                  <MenuItem key={"none"} value="None">
+                                    {"None"}
+                                  </MenuItem>
+                                </TextField> 
+                              </>
+                            )}
+
+                            <TextField sx={{mt : 2 , mb: 2 }}
+                                  size="small"
+                                  fullWidth
+                                  // required
+                                  id="outlined-select"
+                                  select
+                                  name="assembly_level"
+                                  label="Assembly Level"
+                                  value={changeData.assembly_level || ""}
+                                  onChange={handleProductFelids}
+                                  multiple
+                                  helperText="Please select your assembly level "
+                                >
+                                  {assemblyLevelCatalog.map((option) => (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </MenuItem>
+                                  ))}
+                                  <MenuItem key={"none"} value="None">
                                     {"None"}
                                   </MenuItem>
                                 </TextField>
-                              </>
-                            )}
+
+                         <FormLabel id="demo-radio-buttons-group-label">
+                                Availability
+                              </FormLabel>
 
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={changeData.show_on_mobile}
+                                  checked={changeData.mobile_store}
                                   onChange={handleProductFelids}
-                                  name="show_on_mobile"
+                                  name="mobile_store"
                                   helperText="Check it if want it on mobile."
                                 />
                               }
-                              label="Show On Mobile"
+                              label="Mobile Store"
+                            />
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={changeData.online_store}
+                                  onChange={handleProductFelids}
+                                  name="mobile_store"
+                                  helperText="Check it if want it on mobile."
+                                />
+                              }
+                              label="Online Store"
                             />
 
 
@@ -6194,7 +6304,7 @@ const Sideform = () => {
                                   {option.label}
                                 </MenuItem>
                               ))}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -6219,7 +6329,7 @@ const Sideform = () => {
                                   {option.label}
                                 </MenuItem>
                               ))}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -6834,7 +6944,7 @@ const Sideform = () => {
                                 {option.label}
                               </MenuItem>
                             ))}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -6909,7 +7019,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -6937,7 +7047,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -6965,7 +7075,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -6993,7 +7103,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -7021,7 +7131,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -7332,7 +7442,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -7395,7 +7505,7 @@ const Sideform = () => {
                                       </MenuItem>
                                     )
                                 )}
-                                <MenuItem key={"none"} value={undefined}>
+                                <MenuItem key={"none"} value="None">
                                   {"None"}
                                 </MenuItem>
                               </TextField>{" "}
@@ -7535,7 +7645,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -7565,7 +7675,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -7728,7 +7838,7 @@ const Sideform = () => {
                             <Select sx={{ mb: 2 }}
                               multiple
                               fullWidth
-                              value={changeData.primary_material}
+                              value={changeData.primary_material || []}
                               name="primary_material"
                               onChange={handleProductFelids}
                               renderValue={(selected) => selected.join(", ")}
@@ -7793,7 +7903,7 @@ const Sideform = () => {
                                   {option.label}
                                 </MenuItem>
                               ))}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -7821,7 +7931,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -7890,7 +8000,7 @@ const Sideform = () => {
                                   select
                                   name="legs"
                                   label="Table Legs"
-                                  value={changeData.legs}
+                                  value={changeData.legs || ""}
                                   onChange={handleProductFelids}
                                   multiple
                                   helperText="Please select your leg "
@@ -7903,25 +8013,65 @@ const Sideform = () => {
                                       {option.label}
                                     </MenuItem>
                                   ))}
-                                  <MenuItem key={"none"} value={undefined}>
+                                  <MenuItem key={"none"} value="None">
                                     {"None"}
                                   </MenuItem>
                                 </TextField>
                               </>
                             )}
 
+<TextField sx={{mt : 2 , mb: 2 }}
+                                  size="small"
+                                  fullWidth
+                                  // required
+                                  id="outlined-select"
+                                  select
+                                  name="assembly_level"
+                                  label="Assembly Level"
+                                  value={changeData.assembly_level || ""}
+                                  onChange={handleProductFelids}
+                                  multiple
+                                  helperText="Please select your assembly level "
+                                >
+                                  {assemblyLevelCatalog.map((option) => (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </MenuItem>
+                                  ))}
+                                  <MenuItem key={"none"} value="None">
+                                    {"None"}
+                                  </MenuItem>
+                                </TextField>
+
+
+                             <FormLabel id="demo-radio-buttons-group-label">
+                                Availability
+                              </FormLabel>
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={changeData.show_on_mobile}
+                                  checked={changeData.mobile_store}
                                   onChange={handleProductFelids}
-                                  name="show_on_mobile"
+                                  name="mobile_store"
                                   helperText="Check it if want it on mobile."
                                 />
                               }
-                              label="Show On Mobile"
+                              label="Mobile Store"
                             />
-
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={changeData.online_store}
+                                  onChange={handleProductFelids}
+                                  name="online_store"
+                                  helperText="Check it if want it on mobile."
+                                />
+                              }
+                              label="Online Store"
+                            />
 
                             {/*                            
                              <TextField sx = {{mb : 2}}
@@ -7996,14 +8146,34 @@ const Sideform = () => {
                                 Continue
                               </Button>
                             </Box > <br />
-
                             {/* <AcceptMaxFiles className="dorpContainer"/> */}
-                            {/* <FormLabel id="demo-radio-buttons-group-label">
+                            <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
+
                             <ProductsPreviews
                               text={"Please Drag and Drop the product images"}
-                            ></ProductsPreviews> */}
+                            ></ProductsPreviews>
+
+                            {changeData.savedImages.length > 0 && <Grid sx = {{p : 2}} spacing = {2} container>
+                              {
+                                changeData.savedImages.map((img,index)=>{
+                                  return <>
+                                  <Grid item xs = {2} sx = {{position : 'relative'}} >
+                                  <CancelIcon onClick = {()=>{
+                                    // this function is for removing the image from savedImage array 
+                                    let temp = changeData.savedImages;
+                                    temp.splice(index,1);
+                                    setData({...changeData,savedImages : temp})
+                                  }} className = 'imageCross' color = 'primary' />
+                                    <img style = {{width : '100%'}} src = {img} alt = 'productImage'/>
+                                  </Grid>
+                                  </>
+                                })
+                              }
+                                </Grid>
+                              }
+
                             <FormLabel id="demo-radio-buttons-group-label">
                               Featured Images
                             </FormLabel>
@@ -8265,7 +8435,7 @@ const Sideform = () => {
                                   {option.label}
                                 </MenuItem>
                               ))}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -8290,7 +8460,7 @@ const Sideform = () => {
                                   {option.label}
                                 </MenuItem>
                               ))}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -8906,7 +9076,7 @@ const Sideform = () => {
                                 {option.label}
                               </MenuItem>
                             ))}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -8981,7 +9151,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -9009,7 +9179,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -9037,7 +9207,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -9065,7 +9235,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -9093,7 +9263,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -9404,7 +9574,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -9467,7 +9637,7 @@ const Sideform = () => {
                                       </MenuItem>
                                     )
                                 )}
-                                <MenuItem key={"none"} value={undefined}>
+                                <MenuItem key={"none"} value="None">
                                   {"None"}
                                 </MenuItem>
                               </TextField>{" "}
@@ -9606,7 +9776,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -9636,7 +9806,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -9864,7 +10034,7 @@ const Sideform = () => {
                                   {option.label}
                                 </MenuItem>
                               ))}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -9892,7 +10062,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -9961,7 +10131,7 @@ const Sideform = () => {
                                   select
                                   name="legs"
                                   label="Table Legs"
-                                  value={changeData.legs}
+                                  value={changeData.legs || "none"}
                                   onChange={handleProductFelids}
                                   multiple
                                   helperText="Please select your leg "
@@ -9974,25 +10144,65 @@ const Sideform = () => {
                                       {option.label}
                                     </MenuItem>
                                   ))}
-                                  <MenuItem key={"none"} value={undefined}>
+                                  <MenuItem key={"none"} value="None">
                                     {"None"}
                                   </MenuItem>
                                 </TextField>
                               </>
                             )}
 
+<TextField sx={{mt : 2 , mb: 2 }}
+                                  size="small"
+                                  fullWidth
+                                  // required
+                                  id="outlined-select"
+                                  select
+                                  name="assembly_level"
+                                  label="Assembly Level"
+                                  value={changeData.assembly_level || ""}
+                                  onChange={handleProductFelids}
+                                  multiple
+                                  helperText="Please select your assembly level "
+                                >
+                                  {assemblyLevelCatalog.map((option) => (
+                                    <MenuItem
+                                      key={option.value}
+                                      value={option.value}
+                                    >
+                                      {option.label}
+                                    </MenuItem>
+                                  ))}
+                                  <MenuItem key={"none"} value="None">
+                                    {"None"}
+                                  </MenuItem>
+                                </TextField>
+
+
+                             <FormLabel id="demo-radio-buttons-group-label">
+                                Availability
+                              </FormLabel>
                             <FormControlLabel
                               control={
                                 <Checkbox
-                                  checked={changeData.show_on_mobile}
+                                  checked={changeData.mobile_store}
                                   onChange={handleProductFelids}
-                                  name="show_on_mobile"
+                                  name="mobile_store"
                                   helperText="Check it if want it on mobile."
                                 />
                               }
-                              label="Show On Mobile"
+                              label="Mobile Store"
                             />
-
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={changeData.online_store}
+                                  onChange={handleProductFelids}
+                                  name="online_store"
+                                  helperText="Check it if want it on mobile."
+                                />
+                              }
+                              label="Online Store"
+                            />
 
                             {/*                            
                              <TextField sx = {{mb : 2}}
@@ -10336,7 +10546,7 @@ const Sideform = () => {
                                   {option.label}
                                 </MenuItem>
                               ))}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -10361,7 +10571,7 @@ const Sideform = () => {
                                   {option.label}
                                 </MenuItem>
                               ))}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -10977,7 +11187,7 @@ const Sideform = () => {
                                 {option.label}
                               </MenuItem>
                             ))}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -11052,7 +11262,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -11080,7 +11290,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -11108,7 +11318,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -11136,7 +11346,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -11164,7 +11374,7 @@ const Sideform = () => {
                                   </MenuItem>
                                 )
                             )}
-                            <MenuItem key={"none"} value={undefined}>
+                            <MenuItem key={"none"} value="None">
                               {"None"}
                             </MenuItem>
                           </TextField>
@@ -11475,7 +11685,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -11538,7 +11748,7 @@ const Sideform = () => {
                                       </MenuItem>
                                     )
                                 )}
-                                <MenuItem key={"none"} value={undefined}>
+                                <MenuItem key={"none"} value="None">
                                   {"None"}
                                 </MenuItem>
                               </TextField>{" "}
@@ -11577,7 +11787,7 @@ const Sideform = () => {
                       fullWidth
                       variant="contained"
                     >
-                      Update Product
+                      Add Variant
                     </Button>
                   </form>
                 </Grid>
@@ -11691,7 +11901,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -11721,7 +11931,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -12058,7 +12268,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -12088,7 +12298,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -14718,7 +14928,7 @@ const Sideform = () => {
                             {option.value}
                           </MenuItem>
                       )}
-                      <MenuItem key={"none"} value={undefined}>
+                      <MenuItem key={"none"} value="None">
                         {"None"}
                       </MenuItem>
                     </TextField>
@@ -14808,7 +15018,7 @@ const Sideform = () => {
                             {option.value}
                           </MenuItem>
                       )}
-                      <MenuItem key={"none"} value={undefined}>
+                      <MenuItem key={"none"} value="None">
                         {"None"}
                       </MenuItem>
                     </TextField>
@@ -14962,7 +15172,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -14992,44 +15202,12 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
 
-                            <Box sx={{ display: 'flex', mb: 2 }}>
-
-                              <TextField
-                                size="small"
-                                sx={{ width: '85%' }}
-                                id="fullWidth"
-                                label="Quantity"
-                                type="Number"
-                                variant="outlined"
-                                name="quantity"
-                                value={changeData.quantity}
-                                onChange={handleProductFelids}
-                              />
-
-
-                              <TextField
-                                id="outlined-select-currency"
-                                select
-                                sx={{ ml: 1 }}
-                                size='small'
-                                label="Unit"
-                                name='unit'
-                                value={changeData.unit}
-                                onChange={handleProductFelids}
-                              >
-                                {unitCatalog.map((option) => (
-                                  <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                  </MenuItem>
-                                ))}
-                              </TextField>
-                            </Box>
-
+                           
                             <TextField sx={{ mb: 2 }}
                               size="small"
                               fullWidth
@@ -15378,6 +15556,39 @@ const Sideform = () => {
                               onChange={handleProductFelids}
                               helperText="From bottom to top"
                             />
+
+<Box sx={{ display: 'flex', mb: 2 }}>
+
+<TextField
+  size="small"
+  sx={{ width: '85%' }}
+  id="fullWidth"
+  label="Quantity"
+  type="Number"
+  variant="outlined"
+  name="quantity"
+  value={changeData.quantity}
+  onChange={handleProductFelids}
+/>
+
+
+<TextField
+  id="outlined-select-currency"
+  select
+  sx={{ ml: 1 }}
+  size='small'
+  label="Unit"
+  name='unit'
+  value={changeData.unit || ''}
+  onChange={handleProductFelids}
+>
+  {unitCatalog.map((option) => (
+    <MenuItem key={option.value} value={option.value}>
+      {option.label}
+    </MenuItem>
+  ))}
+</TextField>
+</Box>
                           </Box >
                           <Box className="stepAction">
                             <Button
@@ -15526,7 +15737,7 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
@@ -15556,43 +15767,12 @@ const Sideform = () => {
                                     </MenuItem>
                                   )
                               )}
-                              <MenuItem key={"none"} value={undefined}>
+                              <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
 
-                            <Box sx={{ display: 'flex', mb: 2 }}>
-
-                              <TextField
-                                size="small"
-                                sx={{ width: '85%' }}
-                                id="fullWidth"
-                                label="Quantity"
-                                type="Number"
-                                variant="outlined"
-                                name="quantity"
-                                value={changeData.quantity}
-                                onChange={handleProductFelids}
-                              />
-
-
-                              <TextField
-                                id="outlined-select-currency"
-                                select
-                                sx={{ ml: 1 }}
-                                size='small'
-                                label="Unit"
-                                name='unit'
-                                value={changeData.unit || ''}
-                                onChange={handleProductFelids}
-                              >
-                                {unitCatalog.map((option) => (
-                                  <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                  </MenuItem>
-                                ))}
-                              </TextField>
-                            </Box>
+                           
 
                             <TextField sx={{ mb: 2 }}
                               size="small"
@@ -15887,6 +16067,39 @@ const Sideform = () => {
                               helperText="From bottom to top"
                             />
                           </Box >
+
+                          <Box sx={{ display: 'flex', mb: 2 }}>
+
+<TextField
+  size="small"
+  sx={{ width: '85%' }}
+  id="fullWidth"
+  label="Quantity"
+  type="Number"
+  variant="outlined"
+  name="quantity"
+  value={changeData.quantity}
+  onChange={handleProductFelids}
+/>
+
+
+<TextField
+  id="outlined-select-currency"
+  select
+  sx={{ ml: 1 }}
+  size='small'
+  label="Unit"
+  name='unit'
+  value={changeData.unit || ''}
+  onChange={handleProductFelids}
+>
+  {unitCatalog.map((option) => (
+    <MenuItem key={option.value} value={option.value}>
+      {option.label}
+    </MenuItem>
+  ))}
+</TextField>
+</Box>
                           <Box className="stepAction">
                             <Button
                               variant="outlined"
@@ -15899,7 +16112,7 @@ const Sideform = () => {
                             <Button
                               variant="contained"
                               size="small"
-                              disabled={activeStep === 2}
+                              disabled={activeStep === 1}
                               onClick={handleNextStep}
                             >
                               Continue

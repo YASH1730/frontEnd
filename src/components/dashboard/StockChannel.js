@@ -216,7 +216,7 @@ const {dispatch} = Store();
 
   function DataGridView() {
     return (
-      <div style={{ height: 400, width: "100%" }}>
+      <div style={{ marginTop : '2%', height: 400, width: "100%" }}>
         <DataGrid
           filterModel={{
             items: [{ columnField: 'warehouse', operatorValue: 'contains', value: `${search.warehouse}` }],

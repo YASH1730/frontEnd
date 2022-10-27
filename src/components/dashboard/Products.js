@@ -243,7 +243,7 @@ export default function Products(props) {
     {
       field: "sub_category_name",
       headerName: "Sub Category Name",
-      type: "number",
+      
       width: 110,
     },
     
@@ -345,7 +345,7 @@ export default function Products(props) {
   //   {
   //     field: "sub_category_name",
   //     headerName: "Sub Category Name",
-  //     type: "number",
+  //     
   //     width: 110,
   //   },
   //   {
@@ -518,7 +518,7 @@ export default function Products(props) {
 
   function DataGridView(Row,columns,select = true) {
     return (
-       <div style={{ height: 400, width: "100%" }}>
+       <div style={{ marginTop : '2%', height: 400, width: "100%" }}>
         <DataGrid
           // checkboxSelection = {select}
           rows={Row}
@@ -622,7 +622,6 @@ export default function Products(props) {
             
           }}>Merge</Button>}
           </div>
-          <br></br>
           {DataGridView(Row,columns)}
         </Grid>
         {/* <Grid item p={2} xs={12} md= {5.9} sx={{ boxShadow: 2, borderRadius: 5 }}>
