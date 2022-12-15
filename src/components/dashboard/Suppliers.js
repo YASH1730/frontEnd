@@ -4,12 +4,13 @@ import {
   TextField,
   Grid,
   Button,
-  IconButton,Switch
+  IconButton,Switch,
+  Box
 } from "@mui/material";
 // import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import AddIcon from "@mui/icons-material/Add";
-import { getDoor,changeDoorStatus } from '../../services/service'
+import { getSupplier } from '../../services/service'
 import '../../assets/custom/css/category.css'
 
 import {
@@ -24,27 +25,7 @@ import {
 import { OpenBox, Notify } from "../../store/Types";
 import { Store} from "../../store/Context";
 
-
-
-
-// function CustomPagination() {
-//   const apiRef = useGridApiContext();
-//   const page = useGridSelector(apiRef, gridPageSelector);
-//   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-
-//   return (
-//     <Pagination
-//       color="primary"
-//       count={pageCount}
-//       page={page + 1}
-//       onChange={(event, value) => apiRef.current.setPage(value - 1)}
-//     />
-//   );
-// }
-
-
-
-export default function Door() {
+export default function Suppliers() {
 
   const [search, setSearch] = useState("");
 
@@ -56,18 +37,21 @@ const {dispatch} = Store();
   // function for get cetegory list
 
   useEffect(() => {
-    getDoor()
+    getSupplier()
       .then((data) => {
-        setCheck(data.data.map((row,index)=>{
-          return row.door_status
-        }))
+       
         
         setRows(data.data.map((row,index) => {
 
           return ({
             id: index+1,
-            door_name: row.door_name,
-            door_status: row.door_status,
+            supplier_name : row.supplier_name, 
+            mobile : row.mobile, 
+            gst_no : row.gst_no, 
+            alt_mobile : row.alt_mobile, 
+            specialization : row.specialization, 
+            SID : row.SID, 
+            address : row.address, 
             action: row._id
           })
         }))
@@ -82,20 +66,39 @@ const {dispatch} = Store();
     {
       field: "id",
       headerName: "ID",
-      width: 100
+      width: 50
     },
     {
-      field: "door_name",
-      headerName: "Door Name",
+      field: "SID",
+      headerName: "Supplier ID",
+      width: 100, 
+    },
+    {
+      field: "supplier_name",
+      headerName: "Supplier Name",
       width: 200,
     },
     {
-      field: "door_status",
-      headerName: "Door Status",
-      width: 200,
-      renderCell: (params) => <Switch onChange ={handleSwitch} name = {`${params.row.action+' '+(params.row.id-1)}`}   checked = {check[params.row.id-1]}></Switch> ,
-      
+      field: "mobile",
+      headerName: "Mobile Number",
+      width: 150, 
     },
+    {
+      field: "alt_mobile",
+      headerName: "Alternate Mobile",
+      width: 150, 
+    },
+    {
+      field: "gst_no",
+      headerName: "GST Number",
+      width: 200, 
+    },
+    {
+      field: "specialization",
+      headerName: "Specialization",
+      width: 200, 
+    },
+ 
     {
       field: "action",
       headerName: "Actions",
@@ -105,7 +108,7 @@ const {dispatch} = Store();
         <IconButton onClick={() => { 
           dispatch({type : OpenBox,payload : {
             state : true,
-            formType : 'update_door',
+            formType : 'update_supplier',
             payload : params,
             row : Row,
             setRow : setRows,
@@ -129,45 +132,6 @@ const {dispatch} = Store();
   ];
 
 
-  const handleSwitch = (e)=>{
-    // //console.log(e.target.name)
-    const id = e.target.name.split(' ')
-
-    const FD = new FormData()
-
-    FD.append('_id',id[0])
-    FD.append('door_status',e.target.checked)
-
-    const res = changeDoorStatus(FD);
-
-    res.then((data)=>{
-      setCheck(check.map((row,index)=>{
-        // //console.log(parseInt(id[1]) === index)
-        if (parseInt(id[1]) === index)
-        return !row
-        else 
-        return row
-      }))
-      dispatch({type : Notify,payload : {
-        open : true,
-        variant : 'success',
-        message : " Door Status Updated Successfully !!!"
-  
-      }})
-    })
-    .catch((err)=>{
-      //console.log(err)
-      dispatch({type : Notify,payload : {
-        open : true,
-        variant : 'error',
-        message : "Something Went Wrong !!!"
-  
-      }})
-    })
-
-  
-  } 
-
   const handelSearch = (e)=>{
     //console.log(e.target.value)
     setSearch(e.target.value)
@@ -179,7 +143,7 @@ const {dispatch} = Store();
       <div style={{ marginTop : '2%', height: 400, width: "100%" }}>
         <DataGrid
           filterModel={{
-            items: [{ columnField: 'door_name', operatorValue: 'contains', value: `${search}` }],
+            items: [{ columnField: 'SID', operatorValue: 'contains', value: `${search}` }],
           }}
           rows={Row}
           columns={columns}
@@ -197,9 +161,10 @@ const {dispatch} = Store();
 
 
   return (
-    <>
+    <Box  sx = {{pl:4,pr:4}}>
+
       <Typography component={'span'} sx={{ display: "block" }} variant="h5">
-      Door
+      Suppliers
       </Typography>
 
       <br></br>
@@ -221,8 +186,9 @@ const {dispatch} = Store();
           <TextField
             fullWidth
             // autoComplete={false}
+            size = 'small'
             id="demo-helper-text-aligned-no-helper"
-            label="Search by door type"
+            label="Search Suppliers"
             type="text"
             onChange={handelSearch}
           />
@@ -232,14 +198,14 @@ const {dispatch} = Store();
         <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
-              dispatch({type : OpenBox,payload : { state: true, formType: "addDoor", row : Row,setRow : setRows }});
+              dispatch({type : OpenBox,payload : { state: true, formType: "add_supplier", row : Row,setRow : setRows }});
             }}
             sx={{ width: "100%" }}
             color="primary"
             startIcon={<AddIcon />}
             variant="contained"
           >
-            Add Door
+            Add Supplier
           </Button>
         </Grid>
       </Grid>
@@ -251,13 +217,13 @@ const {dispatch} = Store();
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography component={'span'} variant="h6"> Door List</Typography>
+          <Typography component={'span'} variant="h6"> Suppliers List</Typography>
           <br></br>
           {DataGridView()}
         </Grid>
       </Grid>
 
       {/* data grid ends  */}
-    </>
+    </Box>
   );
 }
