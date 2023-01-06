@@ -536,13 +536,12 @@ export default function CreateOrder() {
 
     const handelData = (e) => {
         console.log(e.target.name)
-        if (e.target.name === 'shipping') {
+        if (e.target.name === 'shipping' && catalogs.address.length > 0) {
             const row = catalogs.address.filter((data) => { return data.address === e.target.value })
             console.log(row)
             setData({ ...data, [e.target.name]: e.target.value, city: row[0].city, state: row[0].state })
 
         }
-
         else if (e.target.name !== 'discount')
             setData({ ...data, [e.target.name]: e.target.value })
         else {
