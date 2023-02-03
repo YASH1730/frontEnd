@@ -4,20 +4,21 @@ import {
   TextField,
   Grid,
   Button,
-  IconButton,Box
+  IconButton, Box, Link
 } from "@mui/material";
 import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
 import { getBlogHome, deleteBLog } from "../../../services/service";
 import "../../../assets/custom/css/category.css";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {useDispatch} from 'react-redux';
-import {setForm,setAlert} from '../../../store/action/action';
+import { useDispatch } from 'react-redux';
+import { setForm, setAlert } from '../../../store/action/action';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 
 import {
   DataGrid,
-// gridPageCountSelector,
+  // gridPageCountSelector,
   // gridPageSelector,
   // useGridApiContext,
   // useGridSelector,
@@ -45,7 +46,7 @@ export default function Knob() {
   const [search, setSearch] = useState("");
 
 
-  const dispatch  = useDispatch();
+  const dispatch = useDispatch();
   const [pageSize, setPageSize] = useState(50);
 
 
@@ -59,12 +60,12 @@ export default function Knob() {
         //console.log(data);
 
         setRows(
-          data.data.map((row,index) => {
+          data.data.map((row, index) => {
             return {
-              id: index+1,
+              id: index + 1,
               title: row.title,
-              seo_title : row.seo_title,
-              seo_description : row.seo_description,
+              seo_title: row.seo_title,
+              seo_description: row.seo_description,
               image: row.card_image,
               action: row,
             };
@@ -101,7 +102,7 @@ export default function Knob() {
       field: "image",
       headerName: "Blog Image",
       width: 160,
-      align : 'center',
+      align: 'center',
       renderCell: (params) => <div className="categoryImage" ><img src={params.formattedValue} alt='featured' /></div>,
 
     },
@@ -117,47 +118,47 @@ export default function Knob() {
                 state: true,
                 formType: "update_blog",
                 payload: params,
-                row : Row,
-                setRow : setRows 
+                row: Row,
+                setRow: setRows
               }));
             }}
           >
             <CreateIcon />
           </IconButton>
-          <IconButton onClick={() => { deleteBLog(params.formattedValue._id).then((res)=>{
-            console.log(res)
-            if (res.status !==203)
-            {
-              setRows(Row.filter((set)=>{
-                return  set.action._id !== params.formattedValue._id  ;
-              }))
-              dispatch(setAlert({
-                open : true,
-                variant : 'success',
-                message : res.data.message
-              }))
-            }
-            else {
-              dispatch(setAlert({
-                open : true,
-                variant : 'error',
-                message : res.data.message
-              }))
+          <IconButton onClick={() => {
+            deleteBLog(params.formattedValue._id).then((res) => {
+              console.log(res)
+              if (res.status !== 203) {
+                setRows(Row.filter((set) => {
+                  return set.action._id !== params.formattedValue._id;
+                }))
+                dispatch(setAlert({
+                  open: true,
+                  variant: 'success',
+                  message: res.data.message
+                }))
+              }
+              else {
+                dispatch(setAlert({
+                  open: true,
+                  variant: 'error',
+                  message: res.data.message
+                }))
 
-            }
-
-            
-         
-        }) }} aria-label="delete"  >
-          <DeleteIcon />
-        </IconButton>
-        
+              }
+            })
+          }} aria-label="delete"  >
+            <DeleteIcon />
+          </IconButton>
+          <IconButton component = {Link} href = {`https://woodshala.in/blog/${params.formattedValue.uuid}`} target = '_blank'  aria-label="view"  >
+            <RemoveRedEyeIcon />
+          </IconButton>
         </div>
       ),
     },
   ];
 
-  
+
 
   const handelSearch = (e) => {
     //console.log(e.target.value);
@@ -166,7 +167,7 @@ export default function Knob() {
 
   function DataGridView() {
     return (
-      <div style={{ marginTop : '2%', height: 400, width: "100%" }}>
+      <div style={{ marginTop: '2%', height: 400, width: "100%" }}>
         <DataGrid
           filterModel={{
             items: [
@@ -179,20 +180,20 @@ export default function Knob() {
           }}
           rows={Row}
           columns={columns}
-          
-          
+
+
           disableSelectionOnClick
-        pagination
+          pagination
           pageSize={pageSize}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          rowsPerPageOptions={[25,50, 100]}
+          rowsPerPageOptions={[25, 50, 100]}
         />
       </div>
     );
   }
 
   return (
-    <Box  sx = {{pl:4,pr:4}}>
+    <Box sx={{ pl: 4, pr: 4 }}>
       <Typography component={'span'} sx={{ display: "block" }} variant="h5">
         Blog
       </Typography>
@@ -204,7 +205,7 @@ export default function Knob() {
       <Grid
         container
         p={3}
-        sx={{ 
+        sx={{
           boxShadow: 1,
           borderRadius: 2,
           justifyContent: "center !important",
@@ -226,9 +227,11 @@ export default function Knob() {
         <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
-              dispatch(setForm({ state: true, formType: "addBlog",
-              row : Row,
-              setRow : setRows  }));
+              dispatch(setForm({
+                state: true, formType: "addBlog",
+                row: Row,
+                setRow: setRows
+              }));
             }}
             sx={{ width: "100%" }}
             color="primary"
