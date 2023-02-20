@@ -38,7 +38,7 @@ const CreateOrder = lazy(() =>
   import("./components/dashboard/order/CreateOrder")
 );
 const Coupons = lazy(() => import("./components/dashboard/other/Coupons"));
-const Setting = lazy(() => import("./components/dashboard/admin/Setting"));
+const Profile = lazy(() => import("./components/dashboard/admin/Setting"));
 const Banner = lazy(() => import("./components/dashboard/other/Banner"));
 const Action = lazy(() => import("./components/dashboard/inventory/Action"));
 const Accessories = lazy(() => import("./components/Accessories"));
@@ -51,9 +51,9 @@ const ProductDetails = lazy(() =>
 const Variation = lazy(() =>
   import("./components/dashboard/product/Variation")
 );
-const Suppliers = lazy(() => import("./components/dashboard/admin/Suppliers"));
-const Security = lazy(() => import("./components/dashboard/admin/Security"));
-const Policy = lazy(() => import("./components/dashboard/admin/Policy"));
+// const Suppliers = lazy(() => import("./components/dashboard/admin/Suppliers"));
+// const Security = lazy(() => import("./components/dashboard/admin/Security"));
+// const Pincode = lazy(() => import("./components/dashboard/admin/Pincode"));
 
 global.Buffer = Buffer;
 
@@ -92,10 +92,10 @@ function MyRoutes() {
       <Routes>
         {/* All routes are in alphabetical order */}
         <Route exact path="/" element={<EntryPoints history={history} />} />
-        <Route exact path="/settings" element={<Setting history={history} />} />
+        <Route exact path="/profile" element={<Profile history={history} />} />
         <Route
           exact
-          path="/accessories"
+          path="/settings"
           element={<Accessories history={history} />}
         />
         <Route exact path="/blog" element={<BlogModule history={history} />} />
@@ -118,11 +118,11 @@ function MyRoutes() {
           element={<Dashboard history={history} />}
         />
         <Route exact path="/action" element={<Action history={history} />} />
-        <Route
+        {/* <Route
           exact
           path="/suppliers"
           element={<Suppliers history={history} />}
-        />
+        /> */}
         <Route
           exact
           path="/hardware"
@@ -146,12 +146,12 @@ function MyRoutes() {
           element={<ProductDetails history={history} />}
         />
         <Route exact path="/reward" element={<Coupons history={history} />} />
-        <Route
+        {/* <Route
           exact
           path="/security"
           element={<Security history={history} />}
         />
-        <Route exact path="/policy" element={<Policy history={history} />} />
+        <Route exact path="/pincode" element={<Pincode history={history} />} /> */}
         <Route
           exact
           path="/variation"

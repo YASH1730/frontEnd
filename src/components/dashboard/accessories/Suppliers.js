@@ -5,72 +5,68 @@ import {
   Grid,
   Button,
   IconButton,
-  Box
+  Box,
 } from "@mui/material";
 // import DeleteIcon from '@mui/icons-material/Delete';
-import CreateIcon from '@mui/icons-material/Create';
+import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
-import { getSupplier } from '../../../services/service'
-import '../../../assets/custom/css/category.css'
+import { getSupplier } from "../../../services/service";
+import "../../../assets/custom/css/category.css";
 
 import {
   DataGrid,
-// gridPageCountSelector,
+  // gridPageCountSelector,
   // gridPageSelector,
   // useGridApiContext,
   // useGridSelector,
-} from '@mui/x-data-grid';
+} from "@mui/x-data-grid";
 // import Pagination from '@mui/material/Pagination';
 
 import { setForm } from "../../../store/action/action";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function Suppliers() {
-
   const [search, setSearch] = useState("");
 
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-
-  const [Row, setRows] = useState([])
+  const [Row, setRows] = useState([]);
   // function for get cetegory list
 
   useEffect(() => {
     getSupplier()
       .then((data) => {
-       
-        
-        setRows(data.data.map((row,index) => {
-
-          return ({
-            id: index+1,
-            supplier_name : row.supplier_name, 
-            mobile : row.mobile, 
-            gst_no : row.gst_no, 
-            alt_mobile : row.alt_mobile, 
-            specialization : row.specialization, 
-            SID : row.SID, 
-            address : row.address, 
-            action: row._id
+        setRows(
+          data.data.map((row, index) => {
+            return {
+              id: index + 1,
+              supplier_name: row.supplier_name,
+              mobile: row.mobile,
+              gst_no: row.gst_no,
+              alt_mobile: row.alt_mobile,
+              specialization: row.specialization,
+              SID: row.SID,
+              address: row.address,
+              action: row._id,
+            };
           })
-        }))
+        );
       })
       .catch((err) => {
         //console.log(err)
-      })
+      });
   }, []);
-
 
   const columns = [
     {
       field: "id",
       headerName: "ID",
-      width: 50
+      width: 50,
     },
     {
       field: "SID",
       headerName: "Supplier ID",
-      width: 100, 
+      width: 100,
     },
     {
       field: "supplier_name",
@@ -80,42 +76,47 @@ const dispatch = useDispatch();
     {
       field: "mobile",
       headerName: "Mobile Number",
-      width: 150, 
+      width: 150,
     },
     {
       field: "alt_mobile",
       headerName: "Alternate Mobile",
-      width: 150, 
+      width: 150,
     },
     {
       field: "gst_no",
       headerName: "GST Number",
-      width: 200, 
+      width: 200,
     },
     {
       field: "specialization",
       headerName: "Specialization",
-      width: 200, 
+      width: 200,
     },
- 
+
     {
       field: "action",
       headerName: "Actions",
       width: 200,
-      renderCell: (params) => 
-      <div className="categoryImage" >
-        <IconButton onClick={() => { 
-          dispatch(setForm({
-            state : true,
-            formType : 'update_supplier',
-            payload : params,
-            row : Row,
-            setRow : setRows,
-          })) 
-        }} aria-label="delete"  >
-          <CreateIcon />
-        </IconButton>
-        {/* <IconButton onClick={() => { deleteCategory(params.formattedValue).then((res)=>{
+      renderCell: (params) => (
+        <div className="categoryImage">
+          <IconButton
+            onClick={() => {
+              dispatch(
+                setForm({
+                  state: true,
+                  formType: "update_supplier",
+                  payload: params,
+                  row: Row,
+                  setRow: setRows,
+                })
+              );
+            }}
+            aria-label="delete"
+          >
+            <CreateIcon />
+          </IconButton>
+          {/* <IconButton onClick={() => { deleteCategory(params.formattedValue).then((res)=>{
           dispatch({type : Notify,payload : {
             open : true,
             variant : 'success',
@@ -125,45 +126,45 @@ const dispatch = useDispatch();
           <DeleteIcon />
         </IconButton>
          */}
-      </div>,
-    }
-
+        </div>
+      ),
+    },
   ];
 
-
-  const handelSearch = (e)=>{
+  const handelSearch = (e) => {
     //console.log(e.target.value)
-    setSearch(e.target.value)
-  }
-
+    setSearch(e.target.value);
+  };
 
   function DataGridView() {
     return (
-      <div style={{ marginTop : '2%', height: 400, width: "100%" }}>
+      <div style={{ marginTop: "2%", height: 400, width: "100%" }}>
         <DataGrid
           filterModel={{
-            items: [{ columnField: 'SID', operatorValue: 'contains', value: `${search}` }],
+            items: [
+              {
+                columnField: "SID",
+                operatorValue: "contains",
+                value: `${search}`,
+              },
+            ],
           }}
           rows={Row}
           columns={columns}
-          
-          
           disableSelectionOnClick
 
-// components={{
-//   Pagination: CustomPagination,
-// }}
+          // components={{
+          //   Pagination: CustomPagination,
+          // }}
         />
       </div>
     );
   }
 
-
   return (
-    <Box  sx = {{pl:4,pr:4}}>
-
-      <Typography component={'span'} sx={{ display: "block" }} variant="h5">
-      Suppliers
+    <>
+      <Typography component={"span"} sx={{ display: "block" }} variant="h5">
+        Suppliers
       </Typography>
 
       <br></br>
@@ -185,7 +186,7 @@ const dispatch = useDispatch();
           <TextField
             fullWidth
             // autoComplete={false}
-            size = 'small'
+            size="small"
             id="demo-helper-text-aligned-no-helper"
             label="Search Suppliers"
             type="text"
@@ -193,11 +194,17 @@ const dispatch = useDispatch();
           />
         </Grid>
 
-
         <Grid xs={12} md={2.8}>
           <Button
             onClick={() => {
-              dispatch(setForm({ state: true, formType: "add_supplier", row : Row,setRow : setRows }));
+              dispatch(
+                setForm({
+                  state: true,
+                  formType: "add_supplier",
+                  row: Row,
+                  setRow: setRows,
+                })
+              );
             }}
             sx={{ width: "100%" }}
             color="primary"
@@ -216,13 +223,16 @@ const dispatch = useDispatch();
 
       <Grid container scaping={2} className="overviewContainer">
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography component={'span'} variant="h6"> Suppliers List</Typography>
+          <Typography component={"span"} variant="h6">
+            {" "}
+            Suppliers List
+          </Typography>
           <br></br>
           {DataGridView()}
         </Grid>
       </Grid>
 
       {/* data grid ends  */}
-    </Box>
+    </>
   );
 }
