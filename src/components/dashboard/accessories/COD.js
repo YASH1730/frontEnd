@@ -235,7 +235,7 @@ export default function Pincode() {
   return (
     <>
       <Typography component={"span"} sx={{ display: "block" }} variant="h5">
-        Pincode
+        COD
       </Typography>
 
       <br></br>
@@ -309,15 +309,74 @@ export default function Pincode() {
       <br></br>
       {/* data grid  */}
 
-      <Grid container scaping={2} className="overviewContainer">
-        <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
+      <Grid
+        container
+        scaping={2}
+        className="overviewContainer"
+        sx={{ justifyContent: "space-between" }}
+      >
+        <Grid item p={2} xs={5.9} sx={{ boxShadow: 2, borderRadius: 5 }}>
           <Typography component={"span"} variant="h6">
             {" "}
-            Pincode Code{" "}
+            PinCode{" "}
           </Typography>
-          <br></br>
-          <br></br>
           {DataGridView()}
+        </Grid>
+
+        {/* // COD Setting  */}
+        <Grid
+          item
+          p={2}
+          xs={5.9}
+          sx={{ boxShadow: 2, borderRadius: 5, height: "fit-content" }}
+        >
+          <Grid container sx={{ gap: "1rem" }}>
+            <Grid item xs={12} component={"form"} method={"post"}>
+              <Typography component={"span"} variant="h6">
+                {" "}
+                COD Settings
+              </Typography>
+            </Grid>
+            <Grid item xs={12} p={1}>
+              <Box>
+                <Typography mb={1}>COD limit for without advance?</Typography>
+                <TextField
+                  size="small"
+                  label="COD Limit"
+                  fullWidth
+                  variant="outlined"
+                  name="limit_without_advance"
+                />
+              </Box>
+              <br></br>
+              <Box>
+                <Typography mb={1}>
+                  How much advance should be charge above the limit?
+                </Typography>
+                <TextField
+                  size="small"
+                  fullWidth
+                  label="Advance Limit"
+                  variant="outlined"
+                  name="advance_limit"
+                />
+              </Box>
+              <Box
+                pt={2}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Button size="small" variant="contained">
+                  Change Limits
+                </Button>
+                <Button size="small" variant="outlined">
+                  Apply Limits
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
 
