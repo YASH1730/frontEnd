@@ -80,7 +80,9 @@ export default function EntryPoints(props) {
             isAuth: true,
             token: data.data.token,
             role: data.data.role,
+            name : data.data.name,
             email: data.data.email,
+            access: data.data.access,
             expireIn: data.data.expireIn,
           })
         );
