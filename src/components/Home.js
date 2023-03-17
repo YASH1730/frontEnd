@@ -66,12 +66,10 @@ import { useDispatch, useSelector } from "react-redux";
 // refresh component
 import RefreshToken from "./Utility/RefreshToken";
 
-const Home = (props) => {
+const Home = ({history}) => {
   const dispatch = useDispatch();
   const { auth, mode, tab } = useSelector((state) => state);
   const permission = auth.access || [] 
-
-  const history = props.history;
 
   // states
   const [anchor, setAnchor] = useState(null);
@@ -923,7 +921,8 @@ const Home = (props) => {
 
   // capitalize the first letter in word
   function titleCase(str) {
-    var splitStr = str.toLowerCase().split(" ");
+    var splitStr = str.toLowerCase().split(" ")[0].length >0 ?str.toLowerCase().split(" ") : ['Woodshala Admin'];
+    
     for (var i = 0; i < splitStr.length; i++) {
       // You do not need to check if i is larger than splitStr length, as your for does that for you
       // Assign it back to the array

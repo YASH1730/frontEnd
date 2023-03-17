@@ -30,6 +30,7 @@ export default function Wishlist() {
   const dispatch = useDispatch();
   const [pageState, setPageState] = useState({
     data: [],
+    mostLiked: [],
     isLoading: false,
     page: 1,
     limit: 10,
@@ -74,6 +75,14 @@ export default function Wishlist() {
               action: row._id,
             };
           }),
+          mostLiked: data.data.mostLiked.map((row, index) => {
+            return {
+              id: index + 1,
+              product_id: row._id,
+              product_title: row.product[0].product_title,
+              likes: row.count,
+            };
+          }),
           isLoading: false,
           total: data.data.total,
           filter: false,
@@ -88,24 +97,6 @@ export default function Wishlist() {
 
   const [status, setStatus] = useState({});
 
-  const statusCatalog = [
-    {
-      key: "processing",
-      value: "processing",
-      color: "blue",
-    },
-    {
-      key: "completed",
-      value: "completed",
-      color: "green",
-    },
-    {
-      key: "cancel",
-      value: "cancel",
-      color: "red",
-    },
-  ];
-
   const columns = [
     {
       field: "id",
@@ -116,6 +107,12 @@ export default function Wishlist() {
       field: "CID",
       headerName: "Customer ID",
       width: 150,
+    },
+    {
+      field: "product_id",
+      headerName: "Product Id",
+      width: 150,
+      align: "center",
     },
     {
       field: "username",
@@ -137,11 +134,11 @@ export default function Wishlist() {
       align: "center",
     },
 
-    {
-      field: "quantity",
-      headerName: "Product $ Quantity",
-      width: 200,
-    },
+    // {
+    //   field: "quantity",
+    //   headerName: "Product $ Quantity",
+    //   width: 200,
+    // },
     // {
     //   field: "action",
     //   headerName: "Actions",
@@ -185,6 +182,33 @@ export default function Wishlist() {
     // },
   ];
 
+  const MostLiked_columns = [
+    {
+      field: "id",
+      headerName: "ID",
+      width: 50,
+    },
+    {
+      field: "product_id",
+      headerName: "Product Id",
+      width: 100,
+      align: "center",
+    },
+    {
+      field: "product_title",
+      headerName: "Title",
+      width: 150,
+      align: "center",
+    },
+    {
+      field: "likes",
+      headerName: "Like",
+      width: 50,
+      // type: "number",
+      align: "center",
+    },
+  ];
+
   const clearFilter = () => {
     return setPageState((old) => ({
       ...old,
@@ -196,48 +220,13 @@ export default function Wishlist() {
       filter: !old.filter,
     }));
   };
-  // status update
-  const handleStatus = (e) => {
-    setStatus({ ...status, [e.target.name]: e.target.value });
-
-    //console.log(e.target.name);
-
-    const FD = new FormData();
-
-    FD.append("_id", e.target.name);
-    FD.append("status", e.target.value);
-
-    const res = changeOrderStatus(FD);
-
-    res
-      .then((data) => {
-        console.log(data);
-        dispatch(
-          setAlert({
-            open: true,
-            variant: "success",
-            message: " Order Status Updated Successfully !!!",
-          })
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-        dispatch(
-          setAlert({
-            open: true,
-            variant: "error",
-            message: "Something Went Wrong !!!",
-          })
-        );
-      });
-  };
 
   const handleSearch = (e) => {
     return setPageState((old) => ({ ...old, [e.target.name]: e.target.value }));
   };
 
   // data grid for data view
-  function DataGridView(columns, height) {
+  function DataGridView({ columns, height, showLiked }) {
     return (
       <div style={{ height: height, width: "100%" }}>
         <DataGrid
@@ -250,8 +239,8 @@ export default function Wishlist() {
               },
             ],
           }}
-          rows={pageState.data}
-          rowCount={pageState.total}
+          rows={showLiked ? pageState.mostLiked : pageState.data}
+          rowCount={showLiked ? pageState.mostLiked.length : pageState.total}
           loading={pageState.isLoading}
           rowsPerPageOptions={[10, 30, 50, 70, 100]}
           pagination
@@ -273,9 +262,11 @@ export default function Wishlist() {
 
   return (
     <Box sx={{ pl: 4, pr: 4 }}>
-      <Typography component={"span"} sx={{ display: "block" }} variant="h5">
-        Wishlist
-      </Typography>
+      <Box>
+        <Typography component={"span"} sx={{ display: "block" }} variant="h5">
+          Wishlist
+        </Typography>
+      </Box>
       <br></br>
 
       {/* Section 1  */}
@@ -355,32 +346,32 @@ export default function Wishlist() {
         <Grid
           item
           p={2}
-          xs={12}
+          xs={7.8}
           sx={{ boxShadow: 1, borderRadius: 5, maxHeight: 500 }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography component={"span"} variant="h6">
-              {" "}
-              Order List{" "}
-            </Typography>
-            {/* <Button
-              onClick={() => {
-               dispatch({type : OpenBox,payload : { state: true, formType: "add_order" }});
-              }}
-              color="primary"
-              variant="contained"
-            >
-              Show Custom Order
-            </Button> */}
-          </div>
-          <></>
+          <Typography component={"span"} variant="h6">
+            {" "}
+            Wishlist{" "}
+          </Typography>
           <br></br>
-          {DataGridView(columns, 400)}
+          <DataGridView columns={columns} height={400} showLiked={false} />
+        </Grid>
+        <Grid
+          item
+          p={2}
+          xs={4}
+          sx={{ boxShadow: 1, borderRadius: 5, maxHeight: 500 }}
+        >
+          <Typography component={"span"} variant="h6">
+            {" "}
+            Most Liked
+          </Typography>
+          <br></br>
+          <DataGridView
+            columns={MostLiked_columns}
+            height={400}
+            showLiked={true}
+          />
         </Grid>
       </Grid>
 

@@ -31,8 +31,8 @@ export default function EntryPoints(props) {
   const { auth } = useSelector((state) => state);
 
   useEffect(() => {
-    console.log("err");
-    if (auth.isAuth === true) history("/dashboard");
+    if (auth.isAuth) history("/dashboard");
+    else history('/')
   }, [auth.isAuth]);
 
   // context

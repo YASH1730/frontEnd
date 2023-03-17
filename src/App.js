@@ -72,9 +72,18 @@ function MyRoutes() {
   const dispatch = useDispatch();
   const location = useLocation();
   const permission = auth.access || [] 
+
+      
+  useEffect(() => {
+    if (auth.isAuth === false) 
+    {
+      return history("/");
+    }
+  }, [auth.isAuth]);
+
   useEffect(() => {
     // for check the expire time for the JWT
-    if (auth.isAuth === true) {
+    if (auth.isAuth) {
       const time = Date.now();
       const { exp } = decode(auth.token);
       // refresh the token from 1 minute prior
@@ -86,10 +95,7 @@ function MyRoutes() {
         );
       }
     }
-    else {
-      localStorage.clear()
-    }
-  }, [location, form.state, alert.open]);
+  }, [form.state, alert.open,location.pathname,auth.isAuth]);
 
   return (
     <>
@@ -193,6 +199,8 @@ function MyRoutes() {
 function App() {
   // store
   const { mode } = useSelector((state) => state);
+
+
 
   const light = createTheme({
     palette: {
