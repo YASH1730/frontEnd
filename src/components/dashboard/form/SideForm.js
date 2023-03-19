@@ -664,6 +664,8 @@ const SideForm = () => {
     },
   ];
 
+  const coupon_type = ["FLAT", "OFF(%)"];
+
   const modules = [
     "Order",
     "Product",
@@ -1782,7 +1784,27 @@ const SideForm = () => {
           action: form.payload.row.action,
         }));
         break;
+      case "add_coupon":
+        getDID();
+        break;
+      case "update_coupon":
+        getDID();
+        // console.log(form.payload.formattedValue.expiry);
+        setData((old) => ({
+          _id: form.payload.formattedValue._id,
+          customer_ids: form.payload.formattedValue.customer_ids,
+          coupon_code: form.payload.formattedValue.coupon_code,
+          coupon_type: form.payload.formattedValue.coupon_type,
+          flat_amount: form.payload.formattedValue.flat_amount,
+          times: form.payload.formattedValue.times,
+          off: form.payload.formattedValue.off,
+          valid_from: form.payload.formattedValue.valid_from.split("T")[0],
+          expiry: form.payload.formattedValue.expiry.split("T")[0],
+          coupon_description: form.payload.formattedValue.coupon_description,
+        }));
+        break;
       default:
+        break;
     }
   }, [form.formType, form.state]);
 
@@ -5604,6 +5626,143 @@ const SideForm = () => {
       });
   };
 
+  const handleUpdateCoupon = (e) => {
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append("DID", SKU);
+    FD.append("AID", changeData.coupon_code);
+    FD.append("type", "Coupon");
+    FD.append("operation", "updateCoupon");
+    FD.append("times", changeData.times);
+    FD.append("coupon_code", changeData.coupon_code);
+    FD.append("coupon_type", changeData.coupon_type);
+    changeData.coupon_type === "FLAT" &&
+      FD.append("flat_amount", changeData.flat_amount);
+    changeData.coupon_type === "OFF(%)" && FD.append("off", changeData.off);
+    FD.append("valid_from", changeData.valid_from);
+    FD.append("expiry", changeData.expiry);
+    FD.append("coupon_description", changeData.coupon_description);
+
+    // const res = addPolish(FD);
+    const res = addDraft(FD);
+
+    res
+      .then((data) => {
+        // //console.log(data.status);
+
+        if (data.status === 203) {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: data.data.message,
+            })
+          );
+        } else {
+          //   ...form.row,
+          //   {
+          //     id: form.row.length + 1,
+          //     polish_name: data.data.response.polish_name,
+          //     polish_type: data.data.response.polish_type,
+          //     polish_finish: data.data.response.polish_finish,
+          //     outDoor_image: data.data.response.outDoor_image,
+          //     inDoor_image: data.data.response.inDoor_image,
+          //     lock: data.data.response.lock,
+          //     price: data.data.response.price,
+          //     action: data.data.response,
+          //   },
+          // ]);
+          handleClose();
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: data.data.message,
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong !!!",
+          })
+        );
+      });
+  };
+  const handleCoupon = (e) => {
+    e.preventDefault();
+
+    const FD = new FormData();
+
+    FD.append("DID", SKU);
+    FD.append("AID", "Not Assigned " + SKU);
+    FD.append("type", "Coupon");
+    FD.append("operation", "addCoupon");
+    FD.append("times", changeData.times);
+    FD.append("coupon_code", changeData.coupon_code);
+    FD.append("coupon_type", changeData.coupon_type);
+    changeData.coupon_type === "FLAT" &&
+      FD.append("flat_amount", changeData.flat_amount);
+    changeData.coupon_type === "OFF(%)" && FD.append("off", changeData.off);
+    FD.append("valid_from", changeData.valid_from);
+    FD.append("expiry", changeData.expiry);
+    FD.append("coupon_description", changeData.coupon_description);
+
+    // const res = addPolish(FD);
+    const res = addDraft(FD);
+
+    res
+      .then((data) => {
+        // //console.log(data.status);
+
+        if (data.status === 203) {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: data.data.message,
+            })
+          );
+        } else {
+          //   ...form.row,
+          //   {
+          //     id: form.row.length + 1,
+          //     polish_name: data.data.response.polish_name,
+          //     polish_type: data.data.response.polish_type,
+          //     polish_finish: data.data.response.polish_finish,
+          //     outDoor_image: data.data.response.outDoor_image,
+          //     inDoor_image: data.data.response.inDoor_image,
+          //     lock: data.data.response.lock,
+          //     price: data.data.response.price,
+          //     action: data.data.response,
+          //   },
+          // ]);
+          handleClose();
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: data.data.message,
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong !!!",
+          })
+        );
+      });
+  };
+
   async function handleReview(e) {
     try {
       e.preventDefault();
@@ -6041,7 +6200,7 @@ const SideForm = () => {
           })
         );
       } else {
-        console.log(changeData.access)
+        console.log(changeData.access);
         form.setRow(
           form.row.map((set) => {
             if (set.action === form.payload.row.action) {
@@ -23031,7 +23190,7 @@ const SideForm = () => {
             )}
             {/* add User ends */}
 
-            {/* add User */}
+            {/* update User */}
             {form.formType === "update_user" && (
               <Grid container p={5}>
                 <Grid item xs={12}>
@@ -23145,7 +23304,376 @@ const SideForm = () => {
                 </Grid>
               </Grid>
             )}
-            {/* add User ends */}
+            {/* update User ends */}
+
+            {/* add coupon  */}
+            {form.formType === "add_coupon" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography component={"span"} variant="h5">
+                    Add Coupone
+                    <Typography
+                      component={"span"}
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add coupone and necessary information from here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form
+                    className="form"
+                    onSubmit={(e) => {
+                      confirmBox(e, handleCoupon);
+                    }}
+                    id="myForm"
+                    encType="multipart/form-data"
+                    method="post"
+                  >
+                    <TextField
+                      size="small"
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="coupon_code"
+                      inputProps={{ style: { textTransform: "uppercase" } }}
+                      label="Cupone Code"
+                      onChange={handleProductFields}
+                      value={changeData.coupon_code || ""}
+                      type="text"
+                      helperText="Please enter your coupon code must be unique."
+                    />
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      // required
+                      id="outlined-select"
+                      name="times"
+                      label="Useable Up To"
+                      value={changeData.times}
+                      onChange={handleProductFields}
+                      type="number"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            Times
+                          </InputAdornment>
+                        ),
+                      }}
+                      helperText="How many time we can apply this coupone?"
+                    />
+
+                    <TextField
+                      fullWidth
+                      id="outlined-select"
+                      required
+                      select
+                      size={"small"}
+                      helperText="Please select the coupone type."
+                      name="coupon_type"
+                      label="Select coupon..."
+                      value={changeData.coupon_type || ""}
+                      onChange={handleProductFields}
+                      multiple
+                    >
+                      {coupon_type.map((option) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
+                    {changeData.coupon_type === "FLAT" && (
+                      <TextField
+                        size="small"
+                        fullWidth
+                        // required
+                        id="outlined-select"
+                        name="flat_amount"
+                        label="Flat Amount"
+                        value={changeData.flat_amount}
+                        onChange={handleProductFields}
+                        type="number"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">₹</InputAdornment>
+                          ),
+                        }}
+                        helperText="Please enter amount for discount."
+                      />
+                    )}
+
+                    {changeData.coupon_type === "OFF(%)" && (
+                      <TextField
+                        size="small"
+                        fullWidth
+                        // required
+                        id="outlined-select"
+                        type="number"
+                        name="off"
+                        value={changeData.off < 100 ? changeData.off : 0}
+                        onChange={handleProductFields}
+                        inputProps={{ style: { textTransform: "uppercase" } }}
+                        label="OFF %"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">%</InputAdornment>
+                          ),
+                        }}
+                        helperText="Please enter % amount for discount."
+                      />
+                    )}
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      // required
+                      id="outlined-select"
+                      type="date"
+                      name="valid_from"
+                      value={changeData.valid_from}
+                      onChange={handleProductFields}
+                      label="Valid From"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">Date</InputAdornment>
+                        ),
+                      }}
+                    />
+                    <TextField
+                      sx={{ mt: 1 }}
+                      size="small"
+                      fullWidth
+                      // required
+                      id="outlined-select"
+                      type="date"
+                      name="expiry"
+                      value={changeData.expiry}
+                      onChange={handleProductFields}
+                      label="Expiry Date"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">Date</InputAdornment>
+                        ),
+                      }}
+                    />
+
+                    {/* product description  */}
+                    <FormLabel id="demo-radio-buttons-group-label">
+                      Coupon Description
+                    </FormLabel>
+
+                    <TextareaAutosize
+                      fullWidth
+                      minRows={5}
+                      id="outlined-select"
+                      name="coupon_description"
+                      onChange={handleProductFields}
+                      defaultValue={changeData.coupon_description}
+                      type="text"
+                      helperText="Please enter your coupon description."
+                    />
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Add Coupone
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* add coupon */}
+            {/* add coupon  */}
+            {form.formType === "update_coupon" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography component={"span"} variant="h5">
+                    Update Coupone
+                    <Typography
+                      component={"span"}
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update coupone and necessary information from here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={5}>
+                  <form
+                    className="form"
+                    onSubmit={(e) => {
+                      confirmBox(e, handleUpdateCoupon);
+                    }}
+                    id="myForm"
+                    encType="multipart/form-data"
+                    method="post"
+                  >
+                    <TextField
+                      size="small"
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="coupon_code"
+                      inputProps={{ style: { textTransform: "uppercase" } }}
+                      label="Cupone Code"
+                      onChange={handleProductFields}
+                      value={changeData.coupon_code || ""}
+                      type="text"
+                      helperText="Please enter your coupon code must be unique."
+                    />
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      // required
+                      id="outlined-select"
+                      name="times"
+                      label="Useable Up To"
+                      value={changeData.times}
+                      onChange={handleProductFields}
+                      type="number"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            Times
+                          </InputAdornment>
+                        ),
+                      }}
+                      helperText="How many time we can apply this coupone?"
+                    />
+
+                    <TextField
+                      fullWidth
+                      id="outlined-select"
+                      required
+                      select
+                      size={"small"}
+                      helperText="Please select the coupone type."
+                      name="coupon_type"
+                      label="Select coupon..."
+                      value={changeData.coupon_type || ""}
+                      onChange={handleProductFields}
+                      multiple
+                    >
+                      {coupon_type.map((option) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
+                    {changeData.coupon_type === "FLAT" && (
+                      <TextField
+                        size="small"
+                        fullWidth
+                        // required
+                        id="outlined-select"
+                        name="flat_amount"
+                        label="Flat Amount"
+                        value={changeData.flat_amount}
+                        onChange={handleProductFields}
+                        type="number"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">₹</InputAdornment>
+                          ),
+                        }}
+                        helperText="Please enter amount for discount."
+                      />
+                    )}
+
+                    {changeData.coupon_type === "OFF(%)" && (
+                      <TextField
+                        size="small"
+                        fullWidth
+                        // required
+                        id="outlined-select"
+                        type="number"
+                        name="off"
+                        value={changeData.off < 100 ? changeData.off : 0}
+                        onChange={handleProductFields}
+                        inputProps={{ style: { textTransform: "uppercase" } }}
+                        label="OFF %"
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">%</InputAdornment>
+                          ),
+                        }}
+                        helperText="Please enter % amount for discount."
+                      />
+                    )}
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      // required
+                      id="outlined-select"
+                      type="date"
+                      name="valid_from"
+                      value={changeData.valid_from}
+                      onChange={handleProductFields}
+                      label="Valid From"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">Date</InputAdornment>
+                        ),
+                      }}
+                    />
+                    <TextField
+                      sx={{ mt: 1 }}
+                      size="small"
+                      fullWidth
+                      // required
+                      id="outlined-select"
+                      type="date"
+                      name="expiry"
+                      value={changeData.expiry}
+                      onChange={handleProductFields}
+                      label="Expiry Date"
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">Date</InputAdornment>
+                        ),
+                      }}
+                    />
+
+                    {/* product description  */}
+                    <FormLabel id="demo-radio-buttons-group-label">
+                      Coupon Description
+                    </FormLabel>
+
+                    <TextareaAutosize
+                      fullWidth
+                      minRows={5}
+                      id="outlined-select"
+                      name="coupon_description"
+                      onChange={handleProductFields}
+                      defaultValue={changeData.coupon_description}
+                      type="text"
+                      helperText="Please enter your coupon description."
+                    />
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Update Coupone
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* update coupon */}
           </Box>
         </Backdrop>
       </Slide>
@@ -23157,6 +23685,7 @@ const SideForm = () => {
 
 export default SideForm;
 
+// outter components ++++++++++++++++++++==================================
 // banner dimension for web 1920*1080
 function WebBannerDimension(images, setWebBanner) {
   let result = images.map(async (image) => {

@@ -43,7 +43,7 @@ const Wishlist = lazy(() => import("./components/dashboard/order/Wishlist"));
 const CreateOrder = lazy(() =>
   import("./components/dashboard/order/CreateOrder")
 );
-const Coupons = lazy(() => import("./components/dashboard/other/Coupons"));
+const Reward = lazy(() => import("./components/dashboard/rewards/Reward"));
 const Profile = lazy(() => import("./components/dashboard/admin/Setting"));
 const Banner = lazy(() => import("./components/dashboard/banner/Banner"));
 const Action = lazy(() => import("./components/dashboard/inventory/Action"));
@@ -71,12 +71,10 @@ function MyRoutes() {
   const { auth, form, alert } = useSelector((state) => state);
   const dispatch = useDispatch();
   const location = useLocation();
-  const permission = auth.access || [] 
+  const permission = auth.access || [];
 
-      
   useEffect(() => {
-    if (auth.isAuth === false) 
-    {
+    if (auth.isAuth === false) {
       return history("/");
     }
   }, [auth.isAuth]);
@@ -95,7 +93,7 @@ function MyRoutes() {
         );
       }
     }
-  }, [form.state, alert.open,location.pathname,auth.isAuth]);
+  }, [form.state, alert.open, location.pathname, auth.isAuth]);
 
   return (
     <>
@@ -105,91 +103,133 @@ function MyRoutes() {
       <Routes>
         {/* All routes are in alphabetical order */}
         <Route exact path="/" element={<EntryPoints history={history} />} />
-        {permission.includes("Profile") &&
-        <Route exact path="/profile" element={<Profile history={history} />} />}
-       {permission.includes("Settings") &&
-        <Route
-          exact
-          path="/settings"
-          element={<Accessories history={history} />}
-        />}
-
-        {permission.includes("Blog") && <Route exact path="/blog" element={<BlogModule history={history} />} />}
+        {permission.includes("Profile") && (
+          <Route
+            exact
+            path="/profile"
+            element={<Profile history={history} />}
+          />
+        )}
+        {permission.includes("Settings") && (
+          <Route
+            exact
+            path="/settings"
+            element={<Accessories history={history} />}
+          />
+        )}
+        {permission.includes("Blog") && (
+          <Route
+            exact
+            path="/blog"
+            element={<BlogModule history={history} />}
+          />
+        )}
         {/* <Route exact path="/blog" element={<Blog />} /> */}
         {/* <Route exact path="/blogContent" element={<BlogContent />} /> */}
-        {permission.includes("Banner") &&<Route exact path="/banner" element={<Banner history={history} />} />}
-     {permission.includes("Customer") &&   <Route
-          exact
-          path="/customer"
-          element={<Customers history={history} />}
-        />}
-       {permission.includes("Order") && <Route
-          exact
-          path="/create_order"
-          element={<CreateOrder history={history} />}
-        />}
+        {permission.includes("Banner") && (
+          <Route exact path="/banner" element={<Banner history={history} />} />
+        )}
+        {permission.includes("Customer") && (
+          <Route
+            exact
+            path="/customer"
+            element={<Customers history={history} />}
+          />
+        )}
+        {permission.includes("Order") && (
+          <Route
+            exact
+            path="/create_order"
+            element={<CreateOrder history={history} />}
+          />
+        )}
         <Route
           exact
           path="/dashboard"
           element={<Dashboard history={history} />}
         />
-       { permission.includes("Action Center")  &&<Route exact path="/action" element={<Action history={history} />} />}
+        {permission.includes("Action Center") && (
+          <Route exact path="/action" element={<Action history={history} />} />
+        )}
         {/* <Route
           exact
           path="/suppliers"
           element={<Suppliers history={history} />}
         /> */}
-      {permission.includes("Hardware") &&   <Route
-          exact
-          path="/hardware"
-          element={<Hardware history={history} />}
-        />}
-       {permission.includes("Inventory") &&  <Route
-          exact
-          path="/inventory"
-          element={<Inventory history={history} />}
-        />}
-       {permission.includes("Product") &&  <Route exact path="/merge" element={<Merge history={history} />} />}
-        {permission.includes("Order") && <Route exact path="/order" element={<Orders history={history} />} />}
-        {permission.includes("Order") &&  <Route
-          exact
-          path="/abandoned_orders"
-          element={<AbandonedOrders history={history} />}
-        />}
-        {permission.includes("Order") && <Route
-          exact
-          path="/preview_order/:_id"
-          element={<PreviewOrder history={history} />}
-        />}
-        {permission.includes("Wishlist") && 
-        <Route
-          exact
-          path="/wishlist"
-          element={<Wishlist history={history} />}
-        />}
-        {permission.includes("Product") && <Route
-          exact
-          path="/products"
-          element={<Products history={history} />}
-        />}
-        {permission.includes("Product") && <Route
-          exact
-          path="/productDetails/:SKU"
-          element={<ProductDetails history={history} />}
-        />}
-       {permission.includes("Reward") &&  <Route exact path="/reward" element={<Coupons history={history} />} />}
+        {permission.includes("Hardware") && (
+          <Route
+            exact
+            path="/hardware"
+            element={<Hardware history={history} />}
+          />
+        )}
+        {permission.includes("Inventory") && (
+          <Route
+            exact
+            path="/inventory"
+            element={<Inventory history={history} />}
+          />
+        )}
+        {permission.includes("Product") && (
+          <Route exact path="/merge" element={<Merge history={history} />} />
+        )}
+        {permission.includes("Order") && (
+          <Route exact path="/order" element={<Orders history={history} />} />
+        )}
+        {permission.includes("Order") && (
+          <Route
+            exact
+            path="/abandoned_orders"
+            element={<AbandonedOrders history={history} />}
+          />
+        )}
+        {permission.includes("Order") && (
+          <Route
+            exact
+            path="/preview_order/:_id"
+            element={<PreviewOrder history={history} />}
+          />
+        )}
+        {permission.includes("Wishlist") && (
+          <Route
+            exact
+            path="/wishlist"
+            element={<Wishlist history={history} />}
+          />
+        )}
+        {permission.includes("Product") && (
+          <Route
+            exact
+            path="/products"
+            element={<Products history={history} />}
+          />
+        )}
+        {permission.includes("Product") && (
+          <Route
+            exact
+            path="/productDetails/:SKU"
+            element={<ProductDetails history={history} />}
+          />
+        )}
+        {permission.includes("Reward") && (
+          <Route exact path="/reward" element={<Reward history={history} />} />
+        )}
         {/* <Route
           exact
           path="/security"
           element={<Security history={history} />}
         />
         <Route exact path="/pincode" element={<Pincode history={history} />} /> */}
-       {permission.includes("Product") &&  <Route
-          exact
-          path="/variation"
-          element={<Variation history={history} />}
-        />}
-        {permission.includes("Review") && <Route exact path="/review" element={<Review history={history} />} />}{" "}
+        {permission.includes("Product") && (
+          <Route
+            exact
+            path="/variation"
+            element={<Variation history={history} />}
+          />
+        )}
+        {permission.includes("Review") && (
+          <Route exact path="/review" element={<Review history={history} />} />
+        )}{" "}
         <Route path="*" element={<Dashboard />} />
       </Routes>
     </>
@@ -199,8 +239,6 @@ function MyRoutes() {
 function App() {
   // store
   const { mode } = useSelector((state) => state);
-
-
 
   const light = createTheme({
     palette: {

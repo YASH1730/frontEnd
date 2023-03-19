@@ -32,6 +32,7 @@ import {
   getBlog,
   getLastOrder,
   getBannerDetails,
+  getCouponDetails,
 } from "../../../services/service";
 
 import {
@@ -316,7 +317,8 @@ export default function Action() {
                   display.data.O ||
                   display.data.CID ||
                   display.data.AID ||
-                  display.data._id;
+                  display.data._id ||
+                  display.data.coupon_code;
               }
               return item;
             }),
@@ -483,12 +485,36 @@ export default function Action() {
           case "applyCOD":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
-            display.data.limit = "CODLIMIT2023"
+            display.data.limit = "CODLIMIT2023";
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
             sendResponse(display.data);
-            break
-            default:
+            break;
+          case "addCoupon":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.AID = display.data.coupon_code;
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display.data);
+            break;
+          case "updateCoupon":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.AID = display.data.coupon_code;
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display.data);
+            break;
+          case "deleteCoupon":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display.data);
+            break;
+
+          default:
             console.log("no operation found");
             break;
         }
@@ -595,6 +621,15 @@ export default function Action() {
               if (res.data) setPeer(res.data);
             }
             break;
+          case "updateCoupon":
+            console.log(display.data.AID);
+            res = await getCouponDetails(display.data.AID);
+            if (res) {
+              // res.data = JSON.stringify(res.data);
+              // res.data = JSON.parse(res.data);
+              // console.log(res.data);
+              if (res.data) setPeer(res.data);
+            }
             break;
           default:
             setPeer([]);
@@ -841,6 +876,7 @@ export default function Action() {
               display.operation === "updatePolish" ||
               display.operation === "updateBlog" ||
               display.operation === "updateBanner" ||
+              display.operation === "updateCoupon" ||
               display.operation === "updateCategory") && (
               <Grid item xs={6} p={1}>
                 <Typography variant="h6" sx={{ textAlign: "center" }}>
@@ -891,6 +927,7 @@ export default function Action() {
                 display.operation === "updateBlog" ||
                 display.operation === "updateBanner" ||
                 display.operation === "updatePolish" ||
+                display.operation === "updateCoupon" ||
                 display.operation === "updateCategory"
                   ? 6
                   : 12
@@ -904,6 +941,7 @@ export default function Action() {
                 display.operation === "updateMaterial" ||
                 display.operation === "updateBlog" ||
                 display.operation === "updatePolish" ||
+                display.operation === "updateCoupon" ||
                 display.operation === "updateCategory"
                   ? "After"
                   : "Article Details"}
@@ -915,6 +953,7 @@ export default function Action() {
                 display.operation === "updateMaterial" ||
                 display.operation === "updateBanner" ||
                 display.operation === "updateBlog" ||
+                display.operation === "updateCoupon" ||
                 display.operation === "updatePolish" ||
                 display.operation === "updateCategory"
                   ? Object.keys(display.data).map(function (key) {
@@ -1195,7 +1234,7 @@ export default function Action() {
         <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
           <Typography variant="h6"> Notifications </Typography>
           {/* <br></br> */}
-          <DataGridView/>
+          <DataGridView />
         </Grid>
       </Grid>
       {/*    

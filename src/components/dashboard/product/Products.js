@@ -37,8 +37,8 @@ import {
 // import Pagination from '@mui/material/Pagination';
 import { useDispatch } from "react-redux";
 import { setForm } from "../../../store/action/action";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import CopyrightIcon from "@mui/icons-material/Copyright";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 // this is commented because needs a custom per page size
@@ -485,7 +485,7 @@ export default function Products(props) {
               Add Product
             </Button>
           </div>
-          <DataGridView/>
+          <DataGridView />
         </Grid>
       </Grid>
 

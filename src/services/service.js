@@ -25,13 +25,12 @@ export const listUser = async () => {
   });
 };
 export const updateUser = async (data) => {
-  return await axios.patch(`${API}/updateUser`,data, {
+  return await axios.patch(`${API}/updateUser`, data, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
 };
-
 
 // =========================== CURD FOR Cetagory ===========================
 
@@ -43,8 +42,6 @@ export const addCategory = async (data) => {
     },
   });
 };
-
-
 
 // for list of category
 export const categoryList = async (data) => {
@@ -1388,8 +1385,7 @@ export const getCOD = async () => {
   });
 };
 
-
-// upload image on the go 
+// upload image on the go
 export const uploadAllImage = async (data) => {
   return await axios.post(`${API}/uploadAllImage`, data, {
     headers: {
@@ -1398,7 +1394,7 @@ export const uploadAllImage = async (data) => {
   });
 };
 
-// upload image on the go 
+// upload image on the go
 export const getOrderDetails = async (data) => {
   return await axios.get(`${API}/getOrderDetails?_id=${data}`, {
     headers: {
@@ -1406,9 +1402,26 @@ export const getOrderDetails = async (data) => {
     },
   });
 };
-
+// upload image on the go
+export const listCoupon = async (data) => {
+  return await axios.get(`${API}/listCoupon?filter=${JSON.stringify(data)}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+// upload image on the go
+export const getCouponDetails = async (data) => {
+  return await axios.get(`${API}/getCouponDetails?code=${data}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
 
 // for get addres vai pincode
-export const getAddress =  async (data) => {
-  return await axios.get(`https://app.zipcodebase.com/api/v1/search?apikey=${apiKey}&codes=${data}`);
+export const getAddress = async (data) => {
+  return await axios.get(
+    `https://app.zipcodebase.com/api/v1/search?apikey=${apiKey}&codes=${data}`
+  );
 };
