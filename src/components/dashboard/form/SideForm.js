@@ -235,6 +235,8 @@ const SideForm = () => {
     5: "Excellent+",
   };
 
+  const customer_type = ["Interior", "Architect", "VIP", "VVIP"];
+
   // function for the filter the image to the basis of ratio 1:1
   function Dimension(images, setFiles) {
     let result = images.map(async (image) => {
@@ -679,6 +681,7 @@ const SideForm = () => {
     "Profile",
     "Banner",
     "Hardware",
+    "Review",
   ];
 
   const assemblyLevelCatalog = [
@@ -775,6 +778,8 @@ const SideForm = () => {
     wheel: [],
     ceramic_drawer: [],
     ceramic_tiles: [],
+    pincode: [],
+    city: [],
   });
 
   // ref
@@ -783,6 +788,7 @@ const SideForm = () => {
   // pres data
   const [changeData, setData] = useState({
     CVW: 0,
+    dial: false,
     ACIN: "",
     primary_material: [],
     product_articles: [],
@@ -924,6 +930,17 @@ const SideForm = () => {
     mobile_banner_status: false,
     marketing: false,
     sequence_no: "",
+    customer_mobile: "",
+    city: "",
+    state: "",
+    GST: "no",
+    has_GST: "",
+    billing: "",
+    classification: "",
+    customer_type: "",
+    country: "",
+    pincode: "",
+    note: "",
   });
 
   function getLabelText(value) {
@@ -1037,6 +1054,42 @@ const SideForm = () => {
 
   useMemo(() => {
     switch (form.formType) {
+      case "edit_order":
+        getDID();
+
+        console.log(form.payload);
+
+        let quantity = form.payload.order.quantity || {};
+
+        // for product qty
+        Object.keys(quantity).length > 0 &&
+          Object.keys(quantity).map((item) => {
+            setData((old) => ({
+              ...old,
+              [item]: quantity[item] || 1,
+            }));
+          });
+
+        setData((old) => ({
+          ...old,
+          customer_name: form.payload.order.customer_name,
+          customer_email: form.payload.order.customer_email,
+          customer_mobile: form.payload.order.customer_mobile,
+          city: form.payload.order.city,
+          state: form.payload.order.state,
+          shipping: form.payload.order.shipping,
+          GST: form.payload.order.GST,
+          has_GST: form.payload.order.has_GST,
+          billing: form.payload.order.billing,
+          classification: form.payload.order.classification,
+          customer_type: form.payload.order.customer_type,
+          country: form.payload.order.country || "India",
+          quantity: Object.keys(quantity) || [],
+          pincode: form.payload.order.pincode,
+          note: form.payload.order.note,
+        }));
+
+        break;
       case "hardware":
         getHKU();
         getDID();
@@ -1207,6 +1260,7 @@ const SideForm = () => {
           category_id: form.payload.row.action.category_id,
           sub_category_name: form.payload.row.action.sub_category_id,
           sub_category_id: form.payload.row.action.sub_category_id,
+          dial: form.payload.row.action.dial,
           product_description: form.payload.row.action.product_description,
           seo_title: form.payload.row.action.seo_title,
           seo_description: form.payload.row.action.seo_description,
@@ -1459,6 +1513,7 @@ const SideForm = () => {
           mannequin_image: form.payload.row.action.mannequin_image,
           specification_image: form.payload.row.action.specification_image,
           primary_material: form.payload.row.action.primary_material,
+          dial: form.payload.row.action.dial,
           primary_material_name: form.payload.row.action.primary_material_name,
           warehouse: form.payload.row.action.warehouse,
           warehouse_name: form.payload.row.action.warehouse_name,
@@ -1955,6 +2010,7 @@ const SideForm = () => {
     "lock",
     "customizations",
     "marketing",
+    "dial",
   ];
 
   //  for product felids
@@ -2150,6 +2206,8 @@ const SideForm = () => {
     FD.append("password", e.target.password.value);
     FD.append("shipping", JSON.stringify(address));
     FD.append("marketing", changeData.marketing);
+    FD.append("classification", changeData.classification);
+    FD.append("customer_type", changeData.customer_type);
 
     const res = addCustomer(FD);
 
@@ -2308,6 +2366,7 @@ const SideForm = () => {
       warehouse_to: "",
       sequence_no: "",
       marketing: false,
+      dial: false,
       primary_material: [],
       product_articles: [],
       hardware_articles: [],
@@ -2442,6 +2501,7 @@ const SideForm = () => {
       lock: false,
       price: 0,
       indoorSavedImage: [],
+      pincode: "",
     });
     document.getElementById("myForm").reset();
   };
@@ -2676,7 +2736,9 @@ const SideForm = () => {
 
     FD.append("top_size_length", changeData.top_size_length);
     FD.append("top_size_breadth", changeData.top_size_breadth);
-    FD.append("dial_size", changeData.dial_size);
+
+    FD.append("dial", changeData.dial);
+    changeData.dial && FD.append("dial_size", changeData.dial_size);
     FD.append(
       "seating_size_width",
       changeData.seating_size_width ? changeData.seating_size_width : 0
@@ -3044,7 +3106,8 @@ const SideForm = () => {
 
     FD.append("top_size_length", changeData.top_size_length);
     FD.append("top_size_breadth", changeData.top_size_breadth);
-    FD.append("dial_size", changeData.dial_size);
+    FD.append("dial", changeData.dial);
+    changeData.dial && FD.append("dial_size", changeData.dial_size);
     FD.append(
       "seating_size_width",
       changeData.seating_size_width ? changeData.seating_size_width : 0
@@ -3551,7 +3614,8 @@ const SideForm = () => {
 
     FD.append("top_size_length", changeData.top_size_length);
     FD.append("top_size_breadth", changeData.top_size_breadth);
-    FD.append("dial_size", changeData.dial_size);
+    FD.append("dial", changeData.dial);
+    changeData.dial && FD.append("dial_size", changeData.dial_size);
     FD.append(
       "seating_size_width",
       changeData.seating_size_width ? changeData.seating_size_width : 0
@@ -5049,64 +5113,74 @@ const SideForm = () => {
       });
   };
 
-  const handleOrder = (e) => {
+  const handleUpdateOrder = (e) => {
     e.preventDefault();
 
+    console.log(changeData.quantity);
+
     const FD = new FormData();
+    // editorRef.current.getContent() for note
+    let Product_SKU = {};
 
-    FD.append("products", changeData.product_array);
-    FD.append("OID", SKU);
-    FD.append("status", "processing");
+    if (changeData.quantity.length > 0)
+      changeData.quantity.map(
+        (SKU) => (Product_SKU = { ...Product_SKU, [SKU]: changeData[SKU] || 1 })
+      );
 
-    if (changeData.searchCustomer === "") {
-      FD.append("customer_name", e.target.customer_name.value);
-      FD.append("customer_email", e.target.customer_email.value);
-      FD.append("customer_mobile", e.target.customer_mobile.value);
-      FD.append("shipping", e.target.shipping.value);
-      FD.append("city", e.target.city.value);
-      FD.append("state", e.target.state.value);
-    } else FD.append("searchCustomer", changeData.searchCustomer);
+    FD.append("customer_name", changeData.customer_name);
+    FD.append("customer_name", changeData.customer_name);
+    FD.append("customer_email", changeData.customer_email);
+    FD.append("customer_mobile", changeData.customer_mobile);
+    FD.append("country", changeData.country);
+    FD.append("city", changeData.city);
+    FD.append("state", changeData.state);
+    FD.append("shipping", changeData.shipping);
+    FD.append("billing", changeData.billing);
+    FD.append("quantity", Product_SKU);
+    FD.append("pincode", changeData.pincode);
+    FD.append("GST", changeData.GST);
+    FD.append("has_GST", changeData.has_GST);
+    FD.append("note", changeData.note);
+    FD.append("classification", changeData.classification);
+    FD.append("customer_type", changeData.customer_type);
 
-    FD.append("paid_amount", e.target.paid_amount.value);
-    FD.append("total_amount", e.target.total_amount.value);
+    // const res = addOrder(FD);
 
-    const res = addOrder(FD);
-
-    res
-      .then((data) => {
-        if (data.status !== 200) {
-          // setImages([]);
-          dispatch(
-            setAlert({
-              open: true,
-              variant: "error",
-              message: data.data.message || "Something Went Wrong !!!",
-            })
-          );
-        } else {
-          // setImages([]);
-          // setUrl(data.data.url);
-          handleClose();
-          dispatch(
-            setAlert({
-              open: true,
-              variant: "success",
-              message: data.data.message,
-            })
-          );
-        }
-      })
-      .catch((err) => {
-        // //console.log(err);
-        setImages([]);
-        dispatch(
-          setAlert({
-            open: true,
-            variant: "error",
-            message: "Something Went Wrong !!!",
-          })
-        );
-      });
+    // res
+    //   .then((data) => {
+    //     if (data.status !== 200) {
+    //       // setImages([]);
+    //       dispatch(
+    //         setAlert({
+    //           open: true,
+    //           variant: "error",
+    //           message: data.data.message || "Something Went Wrong !!!",
+    //         })
+    //       );
+    //     } else {
+    //       // setImages([]);
+    //       // setUrl(data.data.url);
+    //       handleClose();
+    //       dispatch(
+    //         setAlert({
+    //           open: true,
+    //           variant: "success",
+    //           message: data.data.message,
+    //         })
+    //       );
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     // //console.log(err);
+    //     setImages([]);
+    //     dispatch(
+    //       setAlert({
+    //         open: true,
+    //         variant: "error",
+    //         message: "Something Went Wrong !!!",
+    //       })
+    //     );
+    //   });
   };
 
   const handleAddress = (e) => {
@@ -6235,6 +6309,40 @@ const SideForm = () => {
     }
   }
 
+  useEffect(() => {
+    handelPincode();
+  }, [changeData.pincode]);
+
+  async function handelPincode() {
+    // console.log(changeData.pincode);
+    if (changeData.pincode.toString().length === 6) {
+      let res = await getAddress(changeData.pincode);
+      if (res.status === 200) {
+        let pincode = res.data.results[changeData.pincode] || [];
+        setCatalog((old) => ({ ...old, city: pincode }));
+        setData((old) => ({
+          ...old,
+          state: pincode[0].state,
+        }));
+      }
+    } else {
+      setData((old) => ({ ...old, pincode: changeData.pincode }));
+    }
+  }
+
+  async function handlePincodeSearch(e) {
+    console.log(e.target.value);
+    let res = await listPincode({
+      page: 1,
+      limit: 10,
+      total: 10,
+      pincode: e.target.value,
+    });
+    if (res.status === 200) {
+      setCatalog((old) => ({ ...old, pincode: [...res.data.data] }));
+    }
+  }
+
   return (
     <>
       <Slide direction="left" in={form.state} mountOnEnter unmountOnExit>
@@ -7196,6 +7304,40 @@ const SideForm = () => {
                                 }
                                 label="Wall Hanging"
                               />
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.dial}
+                                    onChange={handleProductFields}
+                                    name="dial"
+                                  />
+                                }
+                                label="Dial"
+                              />
+
+                              {changeData.dial && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Dial Size (Only Applicable on Clock And Clock Containing Items )"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Inch
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.dial_size}
+                                    onChange={handleProductFields}
+                                    name="dial_size"
+                                  />
+                                </>
+                              )}
 
                               <FormControlLabel
                                 control={
@@ -8460,25 +8602,6 @@ const SideForm = () => {
                               name="top_size_breadth"
                               value={changeData.top_size_breadth}
                               onChange={handleProductFields}
-                            />
-                            <TextField
-                              size="small"
-                              fullWidth
-                              // autoComplete={false}
-                              id="fullWidth"
-                              label="Dial Size (Only Applicable on Clock And Clock Containing Items )"
-                              type="number"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    Inch
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="outlined"
-                              value={changeData.dial_size}
-                              onChange={handleProductFields}
-                              name="dial_size"
                             />
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
@@ -9954,6 +10077,41 @@ const SideForm = () => {
                               <FormControlLabel
                                 control={
                                   <Checkbox
+                                    checked={changeData.dial}
+                                    onChange={handleProductFields}
+                                    name="dial"
+                                  />
+                                }
+                                label="Dial"
+                              />
+
+                              {changeData.dial && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Dial Size (Only Applicable on Clock And Clock Containing Items )"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Inch
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.dial_size}
+                                    onChange={handleProductFields}
+                                    name="dial_size"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
                                     checked={changeData.ceramic_drawer_included}
                                     onChange={handleProductFields}
                                     name="ceramic_drawer_included"
@@ -11214,25 +11372,6 @@ const SideForm = () => {
                               name="top_size_breadth"
                               value={changeData.top_size_breadth}
                               onChange={handleProductFields}
-                            />
-                            <TextField
-                              size="small"
-                              fullWidth
-                              // autoComplete={false}
-                              id="fullWidth"
-                              label="Dial Size (Only Applicable on Clock And Clock Containing Items )"
-                              type="number"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    Inch
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="outlined"
-                              value={changeData.dial_size}
-                              onChange={handleProductFields}
-                              name="dial_size"
                             />
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
@@ -12762,6 +12901,7 @@ const SideForm = () => {
                                 }
                                 label="Knife Friendly Surface"
                               />
+
                               <FormControlLabel
                                 control={
                                   <Checkbox
@@ -12772,6 +12912,41 @@ const SideForm = () => {
                                 }
                                 label="Wall Hanging"
                               />
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.dial}
+                                    onChange={handleProductFields}
+                                    name="dial"
+                                  />
+                                }
+                                label="Dial"
+                              />
+
+                              {changeData.dial && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Dial Size (Only Applicable on Clock And Clock Containing Items )"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Inch
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.dial_size}
+                                    onChange={handleProductFields}
+                                    name="dial_size"
+                                  />
+                                </>
+                              )}
 
                               <FormControlLabel
                                 control={
@@ -14036,25 +14211,6 @@ const SideForm = () => {
                               name="top_size_breadth"
                               value={changeData.top_size_breadth}
                               onChange={handleProductFields}
-                            />
-                            <TextField
-                              size="small"
-                              fullWidth
-                              // autoComplete={false}
-                              id="fullWidth"
-                              label="Dial Size (Only Applicable on Clock And Clock Containing Items )"
-                              type="number"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    Inch
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="outlined"
-                              value={changeData.dial_size}
-                              onChange={handleProductFields}
-                              name="dial_size"
                             />
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
@@ -15643,7 +15799,7 @@ const SideForm = () => {
                                 return row.SKU;
                               })}
                               isOptionEqualToValue={(option, value) => {
-                                console.log(value);
+                                // console.log(value);
                                 return typeof value === "Array"
                                   ? value.isInclude(option)
                                   : value === option;
@@ -18103,6 +18259,52 @@ const SideForm = () => {
                       {" "}
                     </ImagePreviews>
 
+                    <FormControl>
+                      <FormLabel id="demo-radio-buttons-group-label">
+                        Classification
+                      </FormLabel>
+                      <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        name="classification"
+                        size="small"
+                        value={changeData.classification}
+                        onChange={handleProductFields}
+                      >
+                        <FormControlLabel
+                          value="personal"
+                          control={<Radio />}
+                          label="Personal"
+                          size="small"
+                        />
+                        <FormControlLabel
+                          size="small"
+                          value="business"
+                          control={<Radio />}
+                          label="Business"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      id="outlined-select"
+                      value={changeData.customer_type}
+                      onChange={handleProductFields}
+                      select
+                      sx={{ mb: 2, mt: 1 }}
+                      name="customer_type"
+                      label="Customer Type"
+                      multiple
+                      helperText="Please select customer type."
+                    >
+                      {customer_type.map((option) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
                     <TextField
                       size="small"
                       fullWidth
@@ -18344,206 +18546,354 @@ const SideForm = () => {
 
             {/* add order */}
 
-            {form.formType === "add_order" && (
+            {form.formType === "edit_order" && (
               <Grid container p={5}>
                 <Grid item xs={12}>
                   <Typography component={"span"} variant="h5">
-                    Add Order
+                    Edit Order
                     <Typography
                       component={"span"}
                       sx={{ display: "block !important" }}
                       variant="caption"
                     >
-                      Add order details and necessary information from here
+                      Edit order details and necessary information from here
                     </Typography>
                   </Typography>
                 </Grid>
 
-                <Grid item xs={12} mt={5}>
+                <Grid item xs={12} mt={2}>
                   <form
                     className="form"
                     onSubmit={(e) => {
-                      confirmBox(e, handleOrder);
+                      confirmBox(e, handleUpdateOrder);
                     }}
                     id="myForm"
                     encType="multipart/form-data"
                     method="post"
                   >
+                    <FormLabel id="demo-radio-buttons-group-label">
+                      Product Section
+                    </FormLabel>
+                    <Autocomplete
+                      disablePortal
+                      size="small"
+                      fullWidth
+                      multiple
+                      noOptionsText={"ex : P-01001"}
+                      autoHighlight
+                      id="combo-box-demo"
+                      options={productSKU.P_SKU.map((row) => {
+                        return row.SKU;
+                      })}
+                      isOptionEqualToValue={(option, value) => {
+                        // console.log(value);
+                        return typeof value === "Array"
+                          ? value.isInclude(option)
+                          : value === option;
+                      }}
+                      value={changeData.quantity}
+                      renderInput={(params) => (
+                        <TextField
+                          onKeyUpCapture={handleSearch}
+                          value={changeData.quantity}
+                          {...params}
+                          label="Product SKU"
+                        />
+                      )}
+                      onChange={(e, newMember) =>
+                        setData((old) => ({
+                          ...old,
+                          quantity: newMember,
+                        }))
+                      }
+                    />
+                    {changeData.quantity.length > 0 && (
+                      <Box mt={1}>
+                        <Typography component={"span"} variant="body1">
+                          Product Quantities
+                        </Typography>
+                        <Box
+                          p={1}
+                          sx={{
+                            display: "flex",
+                            gap: "5px",
+                            flexDirection: "column",
+                            maxHeight: 150,
+                            overflow: "scroll",
+                          }}
+                        >
+                          {changeData.quantity.map((item) => (
+                            <TextField
+                              name={item}
+                              fullWidth
+                              size="small"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    {item}
+                                  </InputAdornment>
+                                ),
+                              }}
+                              placeholder={item}
+                              onChange={handleProductFields}
+                              value={changeData[item] || 1}
+                            />
+                          ))}
+                        </Box>
+                      </Box>
+                    )}
+
+                    <FormLabel id="demo-radio-buttons-group-label">
+                      Customer Section
+                    </FormLabel>
+
+                    <FormControl sx={{ mt: 1 }}>
+                      <FormLabel id="demo-radio-buttons-group-label">
+                        Classification
+                      </FormLabel>
+                      <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        name="classification"
+                        size="small"
+                        value={changeData.classification}
+                        onChange={handleProductFields}
+                      >
+                        <FormControlLabel
+                          value="personal"
+                          control={<Radio />}
+                          label="Personal"
+                          size="small"
+                        />
+                        <FormControlLabel
+                          size="small"
+                          value="business"
+                          control={<Radio />}
+                          label="Business"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+
                     <TextField
+                      size="small"
+                      fullWidth
+                      id="outlined-select"
+                      value={changeData.customer_type}
+                      onChange={handleProductFields}
+                      select
+                      sx={{ mb: 2, mt: 1 }}
+                      name="customer_type"
+                      label="Customer Type"
+                      multiple
+                      helperText="Please select customer type."
+                    >
+                      {customer_type.map((option) => (
+                        <MenuItem key={option} value={option}>
+                          {option}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
+                    <TextField
+                      sx={{ pb: 2 }}
+                      size="small"
+                      fullWidth
+                      //required
+                      id="outlined-select"
+                      name="customer_name"
+                      value={changeData.customer_name || ""}
+                      onChange={handleProductFields}
+                      label="Customer Name"
+                      type="text"
+                    />
+
+                    <TextField
+                      sx={{ pb: 2 }}
+                      size="small"
+                      fullWidth
+                      //required
+                      id="outlined-select"
+                      value={changeData.customer_email || ""}
+                      onChange={handleProductFields}
+                      name="customer_email"
+                      label="Customer Email"
+                      type="email"
+                    />
+
+                    <TextField
+                      sx={{ pb: 2 }}
+                      size="small"
+                      fullWidth
+                      //required
+                      id="outlined-select"
+                      name="customer_mobile"
+                      value={changeData.customer_mobile || ""}
+                      onChange={handleProductFields}
+                      label="Contact Number"
+                      type="number"
+                    />
+
+                    <TextField
+                      sx={{ pb: 2 }}
                       size="small"
                       fullWidth
                       disabled
+                      //required
                       id="outlined-select"
-                      value={SKU || ""}
-                      name="OID"
-                      label="Order ID"
+                      name="country"
+                      value={changeData.country || ""}
+                      onChange={handleProductFields}
+                      label="Country"
                       type="text"
-                      helperText="Search the customer for details"
                     />
 
-                    <InputLabel id="demo-multiple-checkbox-label">
-                      Product
-                    </InputLabel>
-                    <Select
-                      multiple
+                    <Autocomplete
+                      freeSolo
+                      size="small"
                       fullWidth
-                      value={changeData.product_array}
-                      name="product_array"
+                      noOptionsText={"ex : 305001"}
+                      autoHighlight
+                      id="combo-box-demo"
+                      value={changeData.pincode || ""}
+                      options={catalog.pincode.map((row) => {
+                        return row.pincode;
+                      })}
+                      renderInput={(params) => (
+                        <TextField
+                          onKeyUpCapture={handlePincodeSearch}
+                          value={changeData.pincode || ""}
+                          {...params}
+                          label="Pincode"
+                        />
+                      )}
+                      onChange={(e, val) =>
+                        setData((old) => ({
+                          ...old,
+                          pincode: val,
+                        }))
+                      }
+                    />
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      id="outlined-select"
+                      value={changeData.city}
                       onChange={handleProductFields}
-                      renderValue={(selected) => selected.join(", ")}
+                      select
+                      sx={{ mb: 2, mt: 1 }}
+                      name="city"
+                      label="City"
+                      multiple
+                      helperText="Please select your city."
                     >
-                      {SKUCatalog.map((option) => (
-                        <MenuItem key={option._id} value={option.SKU}>
-                          <Checkbox
-                            checked={
-                              changeData.product_array.indexOf(option.SKU) > -1
-                            }
-                          />
-                          <ListItemText primary={option.SKU} />
+                      {catalog.city.map((option) => (
+                        <MenuItem key={option.city} value={option.city}>
+                          {option.city}
                         </MenuItem>
                       ))}
-                    </Select>
+                    </TextField>
 
-                    <Box>
+                    <TextField
+                      sx={{ pb: 2 }}
+                      size="small"
+                      fullWidth
+                      //required
+                      disabled
+                      id="outlined-select"
+                      name="state"
+                      value={changeData.state || ""}
+                      onChange={handleProductFields}
+                      label="State"
+                      type="text"
+                    />
+
+                    <FormControl>
+                      <FormLabel id="demo-radio-buttons-group-label">
+                        GST
+                      </FormLabel>
+                      <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        name="has_GST"
+                        size="small"
+                        value={changeData.has_GST}
+                        onChange={handleProductFields}
+                      >
+                        <FormControlLabel
+                          value="yes"
+                          control={<Radio />}
+                          label="Yes"
+                          size="small"
+                        />
+                        <FormControlLabel
+                          size="small"
+                          value="no"
+                          control={<Radio />}
+                          label="No"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+
+                    {changeData.has_GST === "yes" && (
                       <TextField
                         size="small"
                         fullWidth
-                        // required
-                        id="outlined-select"
+                        value={changeData.GST}
                         onChange={handleProductFields}
-                        value={changeData.searchCustomer || ""}
-                        name="searchCustomer"
-                        // onChange = {loadList}
-                        label="Customer mobile number..."
+                        minRows={5}
+                        maxRows={5}
+                        style={{ width: "100%", resize: "none" }}
+                        name="GST"
                         type="text"
-                        helperText="Search the customer for details"
+                        label="GST Number"
+                        variant="outlined"
                       />
-
-                      <Box
-                        sx={{
-                          boxShadow: 2,
-                          position: "fixed",
-                          bgcolor: "white",
-                          zIndex: 2,
-                          width: "88%",
-                          display:
-                            changeData.searchCustomer !== "" &&
-                            changeData.searchCustomer !== changeData.display
-                              ? "block"
-                              : "none",
-                        }}
-                      >
-                        {changeData.searchCustomer !== "" &&
-                          changeData.searchCustomer !== changeData.display &&
-                          customer.map((row) => {
-                            return row.mobile
-                              .toString()
-                              .includes(changeData.searchCustomer) ||
-                              row.username
-                                .toLowerCase()
-                                .includes(
-                                  changeData.searchCustomer.toLowerCase()
-                                ) ? (
-                              <MenuItem
-                                onClick={() => {
-                                  setData({
-                                    ...changeData,
-                                    searchCustomer: row.mobile,
-                                    display: row.mobile,
-                                  });
-                                }}
-                                key={row.mobile}
-                              >
-                                {row.username} ({row.mobile})
-                              </MenuItem>
-                            ) : (
-                              console.log()
-                            );
-                          })}
-                      </Box>
-                    </Box>
-
-                    <TextField
-                      size="small"
-                      fullWidth
-                      // required
-                      id="outlined-select"
-                      name="paid_amount"
-                      label="Paid Amount"
-                      type="number"
-                    />
-
-                    <TextField
-                      size="small"
-                      fullWidth
-                      // required
-                      id="outlined-select"
-                      name="total_amount"
-                      label="Total Amount"
-                      type="number"
-                    />
-
-                    {changeData.searchCustomer === "" && (
-                      <>
-                        {" "}
-                        <TextField
-                          size="small"
-                          fullWidth
-                          required
-                          id="outlined-select"
-                          name="customer_name"
-                          label="Customer Name"
-                          type="text"
-                        />
-                        <TextField
-                          size="small"
-                          fullWidth
-                          required
-                          id="outlined-select"
-                          name="customer_email"
-                          label="Customer Email"
-                          type="text"
-                        />
-                        <TextField
-                          size="small"
-                          fullWidth
-                          required
-                          id="outlined-select"
-                          name="customer_mobile"
-                          label="Contact Number"
-                          type="number"
-                        />
-                        <TextField
-                          size="small"
-                          fullWidth
-                          required
-                          id="outlined-select"
-                          name="city"
-                          label="City"
-                          type="text"
-                        />
-                        <TextField
-                          size="small"
-                          fullWidth
-                          required
-                          id="outlined-select"
-                          name="state"
-                          label="state"
-                          type="text"
-                        />
-                        <FormLabel id="demo-radio-buttons-group-label">
-                          Shipping Address
-                        </FormLabel>
-                        <TextareaAutosize
-                          fullWidth
-                          minRows={5}
-                          id="outlined-select"
-                          name="shipping"
-                          type="text"
-                          helperText="Please enter your primary material description"
-                        />
-                      </>
                     )}
+                    <FormLabel id="demo-radio-buttons-group-label">
+                      Shipping Address
+                    </FormLabel>
+                    <TextareaAutosize
+                      minRows={4}
+                      placeholder="Shipping Address..."
+                      style={{ mt: 1, width: "100%" }}
+                      size="small"
+                      fullWidth
+                      //required
+                      id="outlined-select"
+                      name="shipping"
+                      value={changeData.shipping || ""}
+                      onChange={handleProductFields}
+                      label="Shipping"
+                      type="text"
+                    />
+                    <FormLabel id="demo-radio-buttons-group-label">
+                      Billing Address
+                    </FormLabel>
+                    <TextareaAutosize
+                      minRows={4}
+                      placeholder="Billing Address..."
+                      style={{ marginTop: "10px", width: "100%" }}
+                      size="small"
+                      fullWidth
+                      //required
+                      id="outlined-select"
+                      name="billing"
+                      value={changeData.billing || ""}
+                      onChange={handleProductFields}
+                      label="Shipping"
+                      type="text"
+                    />
+
+                    <Editor
+                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                      initialValue={changeData.note}
+                      onInit={(event, editor) => (editorRef.current = editor)}
+                      init={{
+                        height: 400,
+                        menubar: true,
+                        plugins: "image code",
+                      }}
+                    />
 
                     <Button
                       color="primary"
@@ -18551,7 +18901,7 @@ const SideForm = () => {
                       fullWidth
                       variant="contained"
                     >
-                      Add Order
+                      Edit Order
                     </Button>
                   </form>
                 </Grid>
