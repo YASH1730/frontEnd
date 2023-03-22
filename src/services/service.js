@@ -1368,6 +1368,15 @@ export const deleteReview = async (data) => {
   });
 };
 
+// for  getReview
+export const getReviewDetails = async (data) => {
+  return await axios.get(`${API}/getReviewDetails?_id=${data}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+
 // for meta Review
 export const metaReview = async (data) => {
   return await axios.get(`${API}/metaReview?_id=${data}`, {

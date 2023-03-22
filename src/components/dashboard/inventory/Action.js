@@ -33,6 +33,7 @@ import {
   getLastOrder,
   getBannerDetails,
   getCouponDetails,
+  getReviewDetails,
 } from "../../../services/service";
 
 import {
@@ -513,7 +514,44 @@ export default function Action() {
             display.data.status = true;
             sendResponse(display.data);
             break;
-
+          case "addReview":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display.data);
+            break;
+          case "updateReview":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.AID = display.data._id;
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display.data);
+          break;
+          case "addReply":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.AID = display.data._id;
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display.data);
+          break;
+          case "deleteReview":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display.data);
+          break;
+          case "addCustomer":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.AID = display.data.CID;
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display.data);
+          break;
           default:
             console.log("no operation found");
             break;
@@ -546,7 +584,7 @@ export default function Action() {
             if (res) {
               res.data = JSON.stringify(res.data);
               res.data = JSON.parse(res.data);
-              // console.log(res.data);
+              
               if (res.data) setPeer(res.data);
             }
 
@@ -581,8 +619,6 @@ export default function Action() {
           case "updateMaterial":
             res = await getMaterialDetails(display.data.AID);
             if (res) {
-              // res.data = JSON.stringify(res.data);
-              // res.data = JSON.parse(res.data);
               console.log(res.data);
               if (res.data) setPeer(res.data);
             }
@@ -590,10 +626,7 @@ export default function Action() {
           case "updatePolish":
             console.log(display.data.AID);
             res = await getPolishDetails(display.data.AID);
-            if (res) {
-              // res.data = JSON.stringify(res.data);
-              // res.data = JSON.parse(res.data);
-              // console.log(res.data);
+            if (res) { 
               if (res.data) setPeer(res.data);
             }
 
@@ -601,10 +634,7 @@ export default function Action() {
           case "updateBlog":
             console.log(display.data.AID);
             res = await getBlog(display.data.AID);
-            if (res) {
-              // res.data = JSON.stringify(res.data);
-              // res.data = JSON.parse(res.data);
-              // console.log(res.data);
+            if (res) {  
               if (res.data) setPeer(res.data);
             }
             break;
@@ -615,9 +645,7 @@ export default function Action() {
             console.log(display.data.AID);
             res = await getBannerDetails(display.data.AID);
             if (res) {
-              // res.data = JSON.stringify(res.data);
-              // res.data = JSON.parse(res.data);
-              // console.log(res.data);
+
               if (res.data) setPeer(res.data);
             }
             break;
@@ -625,9 +653,14 @@ export default function Action() {
             console.log(display.data.AID);
             res = await getCouponDetails(display.data.AID);
             if (res) {
-              // res.data = JSON.stringify(res.data);
-              // res.data = JSON.parse(res.data);
-              // console.log(res.data);
+ 
+              if (res.data) setPeer(res.data);
+            }
+            break;
+          case "updateReview":
+            console.log(display.data.AID);
+            res = await getReviewDetails(display.data.AID);
+            if (res) {
               if (res.data) setPeer(res.data);
             }
             break;
@@ -637,227 +670,6 @@ export default function Action() {
         }
       }
 
-      // switch (display.type) {
-      //   case "Product":
-      //     return (
-      //       <>
-      //         <Grid container>
-      //           <Grid item xs={12}>
-      //             {" "}
-      //             <Typography variant="h5" sx={{ textAlign: "center", mb: 1 }}>
-      //               Data View
-      //             </Typography>
-      //           </Grid>
-
-      //           {/* // Before */}
-      //           {display.operation === "updateProduct" && (
-      //             <Grid item xs={6} p={1}>
-      //               <Typography variant="h6" sx={{ textAlign: "center" }}>
-      //                 Before
-      //               </Typography>
-      //               <Box sx={{ height: "300px", overflow: "scroll" }}>
-      //                 {Object.keys(peer).map(function (key) {
-      //                   return (
-      //                     <>
-      //                       <Divider />
-      //                       <Typography
-      //                         sx={{ fontWeight: "bold !important" }}
-      //                         variant="button"
-      //                       >
-      //                         {key + " :: "}
-      //                       </Typography>
-      //                       {peer[key] != display.data[key] ? (
-      //                         <Typography
-      //                           sx={{ color: "red !important" }}
-      //                           variant="button"
-      //                         >
-      //                           {peer[key]}
-      //                         </Typography>
-      //                       ) : (
-      //                         <Typography variant="button">
-      //                           {peer[key]}
-      //                         </Typography>
-      //                       )}
-      //                     </>
-      //                   );
-      //                 })}
-      //               </Box>
-      //             </Grid>
-      //           )}
-      //           {/* // Before Ends */}
-
-      //           {/* After and product details */}
-
-      //           <Grid
-      //             item
-      //             p={1}
-      //             xs={display.operation === "updateProduct" ? 6 : 12}
-      //           >
-      //             <Typography variant="h6" sx={{ textAlign: "center" }}>
-      //               {display.operation === "updateProduct"
-      //                 ? "After"
-      //                 : "Product Details"}
-      //             </Typography>
-      //             <Box sx={{ height: "300px", overflow: "scroll", p: 2 }}>
-      //               {display.operation === "updateProduct"
-      //                 ? Object.keys(display.data).map(function (key) {
-      //                     return (
-      //                       <>
-      //                         <Divider />
-      //                         <Typography
-      //                           sx={{ fontWeight: "bold !important" }}
-      //                           variant="button"
-      //                         >
-      //                           {key + " :: "}
-      //                         </Typography>
-      //                         {peer[key] !== display.data[key] ? (
-      //                           <Typography
-      //                             sx={{ color: "green !important" }}
-      //                             variant="button"
-      //                           >
-      //                             {display.data[key]}
-      //                           </Typography>
-      //                         ) : (
-      //                           <Typography variant="button">
-      //                             {display.data[key]}
-      //                           </Typography>
-      //                         )}
-      //                       </>
-      //                     );
-      //                   })
-      //                 : Object.keys(display.data).map(function (key) {
-      //                     return (
-      //                       <>
-      //                         <Divider />
-      //                         <Typography
-      //                           sx={{ fontWeight: "bold !important" }}
-      //                           variant="button"
-      //                         >
-      //                           {key + " :: "}
-      //                         </Typography>
-      //                         <Typography variant="button">
-      //                           {display.data[key]}
-      //                         </Typography>
-      //                       </>
-      //                     );
-      //                   })}
-      //             </Box>
-      //           </Grid>
-      //           {/* After and product details ends */}
-      //         </Grid>
-      //       </>
-      //     );
-      //   case "Hardware":
-      //     return (
-      //       <>
-      //         <Grid container>
-      //           <Grid item xs={12}>
-      //             {" "}
-      //             <Typography variant="h5" sx={{ textAlign: "center", mb: 1 }}>
-      //               Data View
-      //             </Typography>
-      //           </Grid>
-
-      //           {/* // Before */}
-      //           {display.operation === "updateHardware" && (
-      //             <Grid item xs={6} p={1}>
-      //               <Typography variant="h6" sx={{ textAlign: "center" }}>
-      //                 Before
-      //               </Typography>
-      //               <Box sx={{ height: "300px", overflow: "scroll" }}>
-      //                 {Object.keys(peer).map(function (key) {
-      //                   return (
-      //                     <>
-      //                       <Divider />
-      //                       <Typography
-      //                         sx={{ fontWeight: "bold !important" }}
-      //                         variant="button"
-      //                       >
-      //                         {key + " :: "}
-      //                       </Typography>
-      //                       {peer[key] !== display.data[key] ? (
-      //                         <Typography
-      //                           sx={{ color: "red !important" }}
-      //                           variant="button"
-      //                         >
-      //                           {peer[key]}
-      //                         </Typography>
-      //                       ) : (
-      //                         <Typography variant="button">
-      //                           {peer[key]}
-      //                         </Typography>
-      //                       )}
-      //                     </>
-      //                   );
-      //                 })}
-      //               </Box>
-      //             </Grid>
-      //           )}
-      //           {/* // Before Ends */}
-
-      //           {/* After and product details */}
-      //           <Grid
-      //             item
-      //             p={1}
-      //             xs={display.operation === "updateHardware" ? 6 : 12}
-      //           >
-      //             <Typography variant="h6" sx={{ textAlign: "center" }}>
-      //               {display.operation === "updateHardware"
-      //                 ? "After"
-      //                 : "Hardware Details"}
-      //             </Typography>
-      //             <Box sx={{ height: "300px", overflow: "scroll", p: 2 }}>
-      //               {display.operation === "updateHardware"
-      //                 ? Object.keys(display.data).map(function (key) {
-      //                     return (
-      //                       <>
-      //                         <Divider />
-      //                         <Typography
-      //                           sx={{ fontWeight: "bold !important" }}
-      //                           variant="button"
-      //                         >
-      //                           {key + " :: "}
-      //                         </Typography>
-      //                         {peer[key] !== display.data[key] ? (
-      //                           <Typography
-      //                             sx={{ color: "green !important" }}
-      //                             variant="button"
-      //                           >
-      //                             {display.data[key]}
-      //                           </Typography>
-      //                         ) : (
-      //                           <Typography variant="button">
-      //                             {display.data[key]}
-      //                           </Typography>
-      //                         )}
-      //                       </>
-      //                     );
-      //                   })
-      //                 : Object.keys(display.data).map(function (key) {
-      //                     return (
-      //                       <>
-      //                         <Divider />
-      //                         <Typography
-      //                           sx={{ fontWeight: "bold !important" }}
-      //                           variant="button"
-      //                         >
-      //                           {key + " :: "}
-      //                         </Typography>
-      //                         <Typography variant="button">
-      //                           {display.data[key]}
-      //                         </Typography>
-      //                       </>
-      //                     );
-      //                   })}
-      //             </Box>
-      //           </Grid>
-      //           {/* After and product details ends */}
-      //         </Grid>
-      //       </>
-      //     );
-      //   default:
-      //     return <Typography variant="h6">No type matched !!!</Typography>;
-      // }
       return (
         <>
           <Grid container>
@@ -877,6 +689,7 @@ export default function Action() {
               display.operation === "updateBlog" ||
               display.operation === "updateBanner" ||
               display.operation === "updateCoupon" ||
+              display.operation === "updateReview" ||
               display.operation === "updateCategory") && (
               <Grid item xs={6} p={1}>
                 <Typography variant="h6" sx={{ textAlign: "center" }}>
@@ -923,6 +736,7 @@ export default function Action() {
                 display.operation === "updateProduct" ||
                 display.operation === "updateHardware" ||
                 display.operation === "updateSubCategory" ||
+                display.operation === "updateReview" ||
                 display.operation === "updateMaterial" ||
                 display.operation === "updateBlog" ||
                 display.operation === "updateBanner" ||
@@ -937,6 +751,7 @@ export default function Action() {
                 {display.operation === "updateProduct" ||
                 display.operation === "updateHardware" ||
                 display.operation === "updateSubCategory" ||
+                display.operation === "updateReview" ||
                 display.operation === "updateBanner" ||
                 display.operation === "updateMaterial" ||
                 display.operation === "updateBlog" ||
@@ -949,6 +764,7 @@ export default function Action() {
               <Box sx={{ height: "300px", overflow: "scroll", p: 2 }}>
                 {display.operation === "updateProduct" ||
                 display.operation === "updateHardware" ||
+                display.operation === "updateReview" ||
                 display.operation === "updateSubCategory" ||
                 display.operation === "updateMaterial" ||
                 display.operation === "updateBanner" ||

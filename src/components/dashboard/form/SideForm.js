@@ -179,6 +179,7 @@ const SideForm = () => {
 
   // address object
   const [address, setAddress] = useState([]);
+  const [billing, setBillingAddress] = useState([]);
 
   function FeaturesPreviews(props) {
     const { getRootProps, getInputProps } = useDropzone({
@@ -237,106 +238,7 @@ const SideForm = () => {
 
   const customer_type = ["Interior", "Architect", "VIP", "VVIP"];
 
-  // function for the filter the image to the basis of ratio 1:1
-  function Dimension(images, setFiles) {
-    let result = images.map(async (image) => {
-      let { width, height } = await size(URL.createObjectURL(image));
-      // console.log(width,height)
-      Object.assign(image, {
-        preview: URL.createObjectURL(image),
-        validate: width === height ? true : false,
-      });
-      return image;
-    });
-    Promise.all(result).then((res) =>
-      setFiles((old) => {
-        return [...old, ...res];
-      })
-    );
-  }
-  function ProductsPreviews(props) {
-    const [acceptedFileItems, setAcceptedFileItems] = useState([]);
-    const [fileRejectionItems, setFileRejectionItems] = useState([]);
-
-    const { getRootProps, getInputProps } = useDropzone({
-      accept: "image/*",
-      multiple: true,
-      onDrop: (acceptedFiles) => {
-        Dimension(acceptedFiles, setFiles);
-      },
-    });
-
-    // for check the file state in done or
-    useMemo(() => {
-      if (files) {
-        // REJECTED FILES
-        setFileRejectionItems(
-          files.map((file) => {
-            return !file.validate ? (
-              <div style={thumb} key={file.name}>
-                <div style={thumbInner}>
-                  {/* {console.log(file.validate)} */}
-
-                  <img
-                    src={URL.createObjectURL(file)}
-                    style={img}
-                    alt="Images"
-                    // Revoke data uri after image is loaded
-                    onLoad={() => {
-                      URL.revokeObjectURL(file.preview);
-                    }}
-                  />
-                </div>
-              </div>
-            ) : null;
-          })
-        );
-
-        // accepted
-        setAcceptedFileItems(
-          files.map((file, index) => {
-            return file.validate ? (
-              <div style={thumb} key={file.name}>
-                <div style={thumbInner}>
-                  {/* {console.log(file.validate)} */}
-
-                  <img
-                    src={URL.createObjectURL(file)}
-                    style={img}
-                    alt="Images"
-                    // Revoke data uri after image is loaded
-                    onLoad={() => {
-                      URL.revokeObjectURL(file.preview);
-                    }}
-                  />
-                </div>
-              </div>
-            ) : null;
-          })
-        );
-      }
-    }, [files]);
-
-    useEffect(() => {
-      // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-      return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
-    }, []);
-
-    return (
-      <section className="container dorpContainer">
-        <div {...getRootProps({ className: "dropzone" })}>
-          <input {...getInputProps()} />
-          <p>{props.text}</p>
-        </div>
-        <aside>
-          <h4>Accepted files</h4>
-          <aside style={thumbsContainer}>{acceptedFileItems}</aside>
-          <h4>Rejected files</h4>
-          <aside style={thumbsContainer}>{fileRejectionItems}</aside>
-        </aside>
-      </section>
-    );
-  }
+  
   function ImagePreviews(props) {
     const { getRootProps, getInputProps } = useDropzone({
       accept: "image/*",
@@ -615,29 +517,27 @@ const SideForm = () => {
   ];
   const role = [
     {
+      value: "Admin",
+      label: "Admin",
+    },
+    {
       value: "Marketing",
       label: "Marketing",
     },
-
-    {
-      value: "Sales",
-      label: "Sales",
-    },
-
     {
       value: "Management & Accountant",
       label: "Management & Accountant",
     },
 
     {
-      value: "Admin",
-      label: "Admin",
-    },
-
+      value: "Sales",
+      label: "Sales",
+    }, 
     {
-      value: "Super Admin",
-      label: "Super Admin",
-    },
+      value: "Staff",
+      label: "Staff",
+    }, 
+
   ];
   const rangeCatalog = [
     {
@@ -719,12 +619,9 @@ const SideForm = () => {
   ];
 
   const purpose = [
-    "Manufacturing",
+    "Manufactured",
     "Repairing",
-    "Polish",
     "Packing",
-    "Shipping",
-    "Others",
   ];
   const level = [
     "Level 1",
@@ -780,6 +677,7 @@ const SideForm = () => {
     ceramic_tiles: [],
     pincode: [],
     city: [],
+    dial: [],
   });
 
   // ref
@@ -1054,6 +952,12 @@ const SideForm = () => {
 
   useMemo(() => {
     switch (form.formType) {
+      case "add_customer":
+        getDID();
+        break;
+      case "review":
+        getDID();
+        break;
       case "edit_order":
         getDID();
 
@@ -2198,18 +2102,23 @@ const SideForm = () => {
 
     const FD = new FormData();
 
-    FD.append("profile_image", Image[0]);
 
+    FD.append("DID", SKU);
+    FD.append("AID", "Not Assigned");
+    FD.append("type", "Customer");
+    FD.append("operation", "addCustomer");
+    FD.append("profile_image", Image[0]);
     FD.append("username", e.target.username.value);
     FD.append("mobile", e.target.mobile.value);
     FD.append("email", e.target.email.value);
     FD.append("password", e.target.password.value);
     FD.append("shipping", JSON.stringify(address));
+    FD.append("billing", JSON.stringify(billing));
     FD.append("marketing", changeData.marketing);
     FD.append("classification", changeData.classification);
     FD.append("customer_type", changeData.customer_type);
 
-    const res = addCustomer(FD);
+    const res = addDraft(FD);
 
     res
       .then((data) => {
@@ -2225,22 +2134,23 @@ const SideForm = () => {
             })
           );
         } else {
-          form.setRow([
-            ...form.row,
-            {
-              id: form.row.length + 1,
-              CID: data.data.response.CID,
-              register_time: data.data.response.register_time,
-              profile_image: data.data.response.profile_image,
-              username: data.data.response.username,
-              mobile: data.data.response.mobile,
-              email: data.data.response.email,
-              password: data.data.response.password,
-              shipping: data.data.response.shipping,
-              action: data.data.response,
-            },
-          ]);
+          // form.setRow([
+          //   ...form.row,
+          //   {
+          //     id: form.row.length + 1,
+          //     CID: data.data.response.CID,
+          //     register_time: data.data.response.register_time,
+          //     profile_image: data.data.response.profile_image,
+          //     username: data.data.response.username,
+          //     mobile: data.data.response.mobile,
+          //     email: data.data.response.email,
+          //     password: data.data.response.password,
+          //     shipping: data.data.response.shipping,
+          //     action: data.data.response,
+          //   },
+          // ]);
           setAddress([]);
+          setBillingAddress([]);
           setImages([]);
           handleClose();
           dispatch(
@@ -2739,6 +2649,7 @@ const SideForm = () => {
 
     FD.append("dial", changeData.dial);
     changeData.dial && FD.append("dial_size", changeData.dial_size);
+    changeData.dial && FD.append("dial_name", changeData.dial_name);
     FD.append(
       "seating_size_width",
       changeData.seating_size_width ? changeData.seating_size_width : 0
@@ -3108,6 +3019,8 @@ const SideForm = () => {
     FD.append("top_size_breadth", changeData.top_size_breadth);
     FD.append("dial", changeData.dial);
     changeData.dial && FD.append("dial_size", changeData.dial_size);
+    changeData.dial && FD.append("dial_name", changeData.dial_name);
+
     FD.append(
       "seating_size_width",
       changeData.seating_size_width ? changeData.seating_size_width : 0
@@ -3616,6 +3529,8 @@ const SideForm = () => {
     FD.append("top_size_breadth", changeData.top_size_breadth);
     FD.append("dial", changeData.dial);
     changeData.dial && FD.append("dial_size", changeData.dial_size);
+    changeData.dial && FD.append("dial_name", changeData.dial_name);
+
     FD.append(
       "seating_size_width",
       changeData.seating_size_width ? changeData.seating_size_width : 0
@@ -5190,7 +5105,23 @@ const SideForm = () => {
       {
         name: e.target.customer_name.value,
         mobile: e.target.mobile.value,
-        pincode: e.target.pincode.value,
+        pincode: changeData.pincode,
+        city: e.target.city.value,
+        state: e.target.state.value,
+        shipping: e.target.address.value,
+        type: e.target.type.value,
+      },
+    ]);
+    console.log(address);
+  };
+  const handleBillingAddress = (e) => {
+    e.preventDefault();
+    setBillingAddress([
+      ...billing,
+      {
+        name: e.target.customer_name.value,
+        mobile: e.target.mobile.value,
+        pincode: changeData.pincode,
         city: e.target.city.value,
         state: e.target.state.value,
         shipping: e.target.address.value,
@@ -5844,7 +5775,10 @@ const SideForm = () => {
       const FD = new FormData();
 
       console.log(changeData);
-
+      FD.append("DID", SKU);
+      FD.append("AID", "");
+      FD.append("type", "Review");
+      FD.append("operation", "addReview");
       FD.append("product_id", changeData.product_id);
       FD.append("rating", changeData.rating);
       FD.append("review", changeData.review);
@@ -5855,7 +5789,7 @@ const SideForm = () => {
       files.map((element) => {
         if (element.validate) return FD.append("review_images", element);
       });
-      const res = await addReview(FD);
+      const res = await addDraft(FD);
       if (res) {
         //console.log(data.status);
 
@@ -5868,30 +5802,30 @@ const SideForm = () => {
             })
           );
         } else {
-          form.setCheck((old) => [...old, true]);
-          form.setRow((old) => ({
-            ...old,
-            data: [
-              ...old.data,
-              {
-                id: old.data.length + 1,
-                CID: res.data.response.CID,
-                product_id: res.data.response.product_id,
-                rating: res.data.response.rating,
-                review: res.data.response.review,
-                admin_reply: res.data.response.admin_reply,
-                review_title: res.data.response.review_title,
-                review_images: res.data.response.review_images,
-                review_videos: res.data.response.review_videos,
-                yourTube_url: res.data.response.yourTube_url,
-                reviewer_name: res.data.response.reviewer_name,
-                reviewer_email: res.data.response.reviewer_email,
-                hide: res.data.response.hide,
-                date: res.data.response.date,
-                action: res.data.response,
-              },
-            ],
-          }));
+          // form.setCheck((old) => [...old, true]);
+          // form.setRow((old) => ({
+          //   ...old,
+          //   data: [
+          //     ...old.data,
+          //     {
+          //       id: old.data.length + 1,
+          //       CID: res.data.response.CID,
+          //       product_id: res.data.response.product_id,
+          //       rating: res.data.response.rating,
+          //       review: res.data.response.review,
+          //       admin_reply: res.data.response.admin_reply,
+          //       review_title: res.data.response.review_title,
+          //       review_images: res.data.response.review_images,
+          //       review_videos: res.data.response.review_videos,
+          //       yourTube_url: res.data.response.yourTube_url,
+          //       reviewer_name: res.data.response.reviewer_name,
+          //       reviewer_email: res.data.response.reviewer_email,
+          //       hide: res.data.response.hide,
+          //       date: res.data.response.date,
+          //       action: res.data.response,
+          //     },
+          //   ],
+          // }));
           handleClose();
           dispatch(
             setAlert({
@@ -5922,13 +5856,16 @@ const SideForm = () => {
       const FD = new FormData();
 
       console.log(changeData);
-
+      FD.append("DID", SKU);
+      FD.append("AID", changeData._id);
+      FD.append("type", "Review");
+      FD.append("operation", "updateReview");
       FD.append("_id", changeData._id);
       FD.append("rating", changeData.rating);
       FD.append("review", changeData.review);
       FD.append("review_title", changeData.review_title);
       FD.append("yourTube_url", changeData.yourTube_url);
-      const res = await updateReview(FD);
+      const res = await addDraft(FD);
       if (res) {
         //console.log(data.status);
 
@@ -6980,7 +6917,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews
+                            <ProductsPreviews files = {files} setFiles = {setFiles}
                               text={
                                 "Make Sure the picture ratio should be in 1:1."
                               }
@@ -7315,8 +7252,38 @@ const SideForm = () => {
                                 label="Dial"
                               />
 
+                              
+
                               {changeData.dial && (
                                 <>
+                                 <TextField
+                                    sx={{ mt: 2, mb: 1 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="dial_name"
+                                    label="Dail"
+                                    multiple
+                                    value={changeData.dial_name}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.dial.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
                                   <TextField
                                     size="small"
                                     fullWidth
@@ -7336,6 +7303,7 @@ const SideForm = () => {
                                     onChange={handleProductFields}
                                     name="dial_size"
                                   />
+
                                 </>
                               )}
 
@@ -9652,7 +9620,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews
+                            <ProductsPreviews files = {files} setFiles = {setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {/* // image selection  */}
@@ -10085,8 +10053,37 @@ const SideForm = () => {
                                 label="Dial"
                               />
 
-                              {changeData.dial && (
+                           
+{changeData.dial && (
                                 <>
+                                 <TextField
+                                    sx={{ mt: 2, mb: 1 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="dial_name"
+                                    label="Dail"
+                                    multiple
+                                    value={changeData.dial_name}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.dial.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
                                   <TextField
                                     size="small"
                                     fullWidth
@@ -10106,6 +10103,7 @@ const SideForm = () => {
                                     onChange={handleProductFields}
                                     name="dial_size"
                                   />
+
                                 </>
                               )}
 
@@ -12490,7 +12488,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews
+                            <ProductsPreviews files = {files} setFiles = {setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {/* // image selection  */}
@@ -12924,8 +12922,37 @@ const SideForm = () => {
                                 label="Dial"
                               />
 
-                              {changeData.dial && (
+                          
+{changeData.dial && (
                                 <>
+                                 <TextField
+                                    sx={{ mt: 2, mb: 1 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="dial_name"
+                                    label="Dail"
+                                    multiple
+                                    value={changeData.dial_name}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.dial.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
                                   <TextField
                                     size="small"
                                     fullWidth
@@ -12945,9 +12972,9 @@ const SideForm = () => {
                                     onChange={handleProductFields}
                                     name="dial_size"
                                   />
+
                                 </>
                               )}
-
                               <FormControlLabel
                                 control={
                                   <Checkbox
@@ -15073,7 +15100,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews
+                            <ProductsPreviews files = {files} setFiles = {setFiles}
                               text={
                                 "Make Sure the picture ratio should be in 1:1."
                               }
@@ -16090,7 +16117,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews
+                            <ProductsPreviews files = {files} setFiles = {setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {files.length > 0 && (
@@ -18238,9 +18265,10 @@ const SideForm = () => {
                 {/* addres form */}
                 <AddressForm
                   setOpen={setOpen}
-                  open={open}
+                  open={open.open}
+                  setOuter = {setData}
                   confirmBox={confirmBox}
-                  handleAddress={handleAddress}
+                  handleAddress={open.type === 'billing' ? handleBillingAddress: handleAddress}
                 />
                 {/* addres form */}
                 <Grid item xs={12} mt={5}>
@@ -18376,7 +18404,47 @@ const SideForm = () => {
                           variant="outlined"
                           sx={{ width: "20%" }}
                           onClick={() => {
-                            setOpen(true);
+                            setOpen({open : true, type :'shipping'});
+                          }}
+                        >
+                          <AddIcon />
+                        </Button>
+                      </Grid>
+                    </Grid>
+                    <FormLabel id="demo-radio-buttons-group-label">
+                      Billing Address
+                    </FormLabel>
+                    <Grid container>
+                      {billing &&
+                        billing.map((item) => {
+                          return (
+                            <Grid item xs={3}>
+                              <Box
+                                sx={{
+                                  overflowWrap: "break-word",
+                                  border: "2px solid #a52a2a80",
+                                  borderStyle: "dashed",
+                                  p: 1,
+                                  ml: 1,
+                                  mr: 1,
+                                  width: "130px",
+                                  height: "150px",
+                                  overflow: "hidden",
+                                }}
+                              >
+                                <Typography variant="caption">
+                                  {item.shipping}
+                                </Typography>
+                              </Box>
+                            </Grid>
+                          );
+                        })}
+                      <Grid item xs={3}>
+                        <Button
+                          variant="outlined"
+                          sx={{ width: "20%" }}
+                          onClick={() => {
+                            setOpen({open : true, type :'billing'});
                           }}
                         >
                           <AddIcon />
@@ -19239,7 +19307,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews
+                            <ProductsPreviews files = {files} setFiles = {setFiles}
                               text={
                                 "Make Sure the picture ratio should be in 1:1."
                               }
@@ -20453,7 +20521,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews
+                            <ProductsPreviews files = {files} setFiles = {setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {/* // image selection  */}
@@ -22284,7 +22352,7 @@ const SideForm = () => {
                     <FormLabel id="demo-radio-buttons-group-label">
                       Outdoor Images
                     </FormLabel>
-                    <ProductsPreviews
+                    <ProductsPreviews files = {files} setFiles = {setFiles}
                       text={"Please Drag and Drop the outdoor image"}
                     >
                       {" "}
@@ -22516,8 +22584,8 @@ const SideForm = () => {
 
                     <FormLabel id="demo-radio-buttons-group-label">
                       Outdoor Images
-                    </FormLabel>
-                    <ProductsPreviews
+                    </FormLabel> 
+                    <ProductsPreviews files = {files} setFiles = {setFiles}
                       text={"Please Drag and Drop the outdoor image"}
                     >
                       {" "}
@@ -22832,7 +22900,7 @@ const SideForm = () => {
                     <FormLabel id="demo-radio-buttons-group-label">
                       Review Images
                     </FormLabel>
-                    <ProductsPreviews
+                    <ProductsPreviews files = {files} setFiles = {setFiles}
                       text={"Please Drag and Drop the review image"}
                     >
                       {" "}
@@ -23661,13 +23729,13 @@ const SideForm = () => {
               <Grid container p={5}>
                 <Grid item xs={12}>
                   <Typography component={"span"} variant="h5">
-                    Add Coupone
+                    Add coupon
                     <Typography
                       component={"span"}
                       sx={{ display: "block !important" }}
                       variant="caption"
                     >
-                      Add coupone and necessary information from here
+                      Add coupon and necessary information from here
                     </Typography>
                   </Typography>
                 </Grid>
@@ -23689,7 +23757,7 @@ const SideForm = () => {
                       id="outlined-select"
                       name="coupon_code"
                       inputProps={{ style: { textTransform: "uppercase" } }}
-                      label="Cupone Code"
+                      label="Coupon Code"
                       onChange={handleProductFields}
                       value={changeData.coupon_code || ""}
                       type="text"
@@ -23713,7 +23781,7 @@ const SideForm = () => {
                           </InputAdornment>
                         ),
                       }}
-                      helperText="How many time we can apply this coupone?"
+                      helperText="How many time we can apply this coupon?"
                     />
 
                     <TextField
@@ -23722,7 +23790,7 @@ const SideForm = () => {
                       required
                       select
                       size={"small"}
-                      helperText="Please select the coupone type."
+                      helperText="Please select the coupon type."
                       name="coupon_type"
                       label="Select coupon..."
                       value={changeData.coupon_type || ""}
@@ -23832,7 +23900,7 @@ const SideForm = () => {
                       fullWidth
                       variant="contained"
                     >
-                      Add Coupone
+                      Add coupon
                     </Button>
                   </form>
                 </Grid>
@@ -23845,13 +23913,13 @@ const SideForm = () => {
               <Grid container p={5}>
                 <Grid item xs={12}>
                   <Typography component={"span"} variant="h5">
-                    Update Coupone
+                    Update coupon
                     <Typography
                       component={"span"}
                       sx={{ display: "block !important" }}
                       variant="caption"
                     >
-                      Update coupone and necessary information from here
+                      Update coupon and necessary information from here
                     </Typography>
                   </Typography>
                 </Grid>
@@ -23897,7 +23965,7 @@ const SideForm = () => {
                           </InputAdornment>
                         ),
                       }}
-                      helperText="How many time we can apply this coupone?"
+                      helperText="How many time we can apply this coupon?"
                     />
 
                     <TextField
@@ -23906,7 +23974,7 @@ const SideForm = () => {
                       required
                       select
                       size={"small"}
-                      helperText="Please select the coupone type."
+                      helperText="Please select the coupon type."
                       name="coupon_type"
                       label="Select coupon..."
                       value={changeData.coupon_type || ""}
@@ -24016,7 +24084,7 @@ const SideForm = () => {
                       fullWidth
                       variant="contained"
                     >
-                      Update Coupone
+                      Update coupon
                     </Button>
                   </form>
                 </Grid>
@@ -24232,7 +24300,7 @@ function MobileBannerPreviews({ text, mobileBanner, setMobileBanner }) {
   );
 }
 
-function AddressForm({ setOpen, open, confirmBox, handleAddress }) {
+function AddressForm({ setOpen, open, confirmBox, handleAddress,setOuter }) {
   const [data, setData] = useState({
     pincode: "",
     city: "",
@@ -24341,16 +24409,20 @@ function AddressForm({ setOpen, open, confirmBox, handleAddress }) {
               renderInput={(params) => (
                 <TextField
                   onKeyUpCapture={handleSearch}
+                  type = 'number'
                   value={data.pincode || ""}
                   {...params}
                   label="Pincode"
                 />
               )}
               onChange={(e, val) =>
-                setData((old) => ({
-                  ...old,
-                  pincode: val,
-                }))
+                {
+                  setOuter(old=>({...old,pincode : val}))
+                  setData((old) => ({
+                    ...old,
+                    pincode: val,
+                  }));
+                }
               }
             />
 
@@ -24429,5 +24501,106 @@ function AddressForm({ setOpen, open, confirmBox, handleAddress }) {
         </Box>
       </Fade>
     </Modal>
+  );
+}
+
+// function for the filter the image to the basis of ratio 1:1
+function Dimension(images, setFiles) {
+  let result = images.map(async (image) => {
+    let { width, height } = await size(URL.createObjectURL(image));
+    // console.log(width,height)
+    Object.assign(image, {
+      preview: URL.createObjectURL(image),
+      validate: width === height ? true : false,
+    });
+    return image;
+  });
+  Promise.all(result).then((res) =>
+    setFiles((old) => {
+      return [...old, ...res];
+    })
+  );
+}
+function ProductsPreviews({files,setFiles,text}) {
+  const [acceptedFileItems, setAcceptedFileItems] = useState([]);
+  const [fileRejectionItems, setFileRejectionItems] = useState([]);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: "image/*",
+    multiple: true,
+    onDrop: (acceptedFiles) => {
+      Dimension(acceptedFiles, setFiles);
+    },
+  });
+
+  // for check the file state in done or
+  useMemo(() => {
+    if (files) {
+      // REJECTED FILES
+      setFileRejectionItems(
+        files.map((file) => {
+          return !file.validate ? (
+            <div style={thumb} key={file.name}>
+              <div style={thumbInner}>
+                {/* {console.log(file.validate)} */}
+
+                <img
+                  src={URL.createObjectURL(file)}
+                  style={img}
+                  alt="Images"
+                  // Revoke data uri after image is loaded
+                  onLoad={() => {
+                    URL.revokeObjectURL(file.preview);
+                  }}
+                />
+              </div>
+            </div>
+          ) : null;
+        })
+      );
+
+      // accepted
+      setAcceptedFileItems(
+        files.map((file, index) => {
+          return file.validate ? (
+            <div style={thumb} key={file.name}>
+              <div style={thumbInner}>
+                {/* {console.log(file.validate)} */}
+
+                <img
+                  src={URL.createObjectURL(file)}
+                  style={img}
+                  alt="Images"
+                  // Revoke data uri after image is loaded
+                  onLoad={() => {
+                    URL.revokeObjectURL(file.preview);
+                  }}
+                />
+              </div>
+            </div>
+          ) : null;
+        })
+      );
+    }
+  }, [files]);
+
+  useEffect(() => {
+    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
+    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
+  }, []);
+
+  return (
+    <section className="container dorpContainer">
+      <div {...getRootProps({ className: "dropzone" })}>
+        <input {...getInputProps()} />
+        <p>{text}</p>
+      </div>
+      <aside>
+        <h4>Accepted files</h4>
+        <aside style={thumbsContainer}>{acceptedFileItems}</aside>
+        <h4>Rejected files</h4>
+        <aside style={thumbsContainer}>{fileRejectionItems}</aside>
+      </aside>
+    </section>
   );
 }

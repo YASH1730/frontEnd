@@ -23,6 +23,7 @@ import {
   statusReview,
   deleteReview,
   metaReview,
+  addDraft,
 } from "../../../services/service";
 // redux
 import { setAlert, setForm } from "../../../store/action/action";
@@ -98,18 +99,20 @@ const Review = () => {
         let res = await action(id);
 
         if (res) {
-          setPageState((old) => ({
-            ...old,
-            data: old.data.filter((row) => {
-              return row.action._id !== id;
-            }),
-            total: old.total - 1,
-          }));
           dispatch(
             setAlert({
               open: true,
               variant: "success",
               message: res.data.message,
+            })
+          );
+        }
+        else{
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: "Something went wrong !!!",
             })
           );
         }
@@ -284,12 +287,13 @@ const Review = () => {
           </Tooltip>
 
           {/* reply */}
-          {/* <Tooltip title="Reply">
+          <Tooltip title="Reply">
             <IconButton
               onClick={() => {
                 setReplyState((old) => ({
                   ...old,
                   open: true,
+                  product_id : params.formattedValue.product_id, 
                   customer: params.formattedValue.review,
                   admin: params.formattedValue.admin_reply,
                   ID: params.formattedValue._id,
@@ -299,13 +303,25 @@ const Review = () => {
             >
               <SendIcon />
             </IconButton>
-          </Tooltip> */}
+          </Tooltip>
 
           {/* // ============== delete product */}
           <Tooltip title="Delete">
             <IconButton
+
+            
+              // onClick={(e) => {
+              //   confirmBox(e, deleteReview, params.formattedValue._id);
+              // }}
+
               onClick={(e) => {
-                confirmBox(e, deleteReview, params.formattedValue._id);
+                confirmBox(e, addDraft, {
+                  DID: "",
+                  AID: params.formattedValue._id,
+                  type: "Review",
+                  operation: "deleteReview",
+                  _id: params.formattedValue._id,
+                })
               }}
             >
               <DeleteIcon />
@@ -563,6 +579,7 @@ function Conversation({ admin, customer }) {
 function ReplyModal({ state, setState }) {
   const handleClose = () => setState((old) => ({ ...old, open: false }));
 
+  const dispatch = useDispatch()
   // getting current data
   function getTime() {
     const currentDate = new Date();
@@ -594,19 +611,29 @@ function ReplyModal({ state, setState }) {
       };
 
       const FD = new FormData();
+      FD.append("DID", '');
+      FD.append("AID", state.product_id);
+      FD.append("type", "Review");
+      FD.append("operation", "addReply");
       FD.append("reply", JSON.stringify([data]));
       FD.append("_id", state.ID);
 
-      let res = await addReply(FD);
+      let res = await addDraft(FD);
 
       if (res.status === 200) {
-        setState((old) => ({
-          ...old,
-          admin: [...old.admin, data],
-        }));
+        dispatch(setAlert({
+          message : res.data.message,
+          variant : 'success',
+          open : true
+        }))
       }
     } catch (error) {
       console.log(error);
+      dispatch(setAlert({
+        message : 'Something went wrong.',
+        variant : 'success',
+        open : true
+      }))
     }
   }
 
@@ -637,8 +664,30 @@ function ReplyModal({ state, setState }) {
             >
               <Grid container className="innerMessageContainer">
                 <Grid xs={12}>
-                  <Conversation customer={state.customer} admin={state.admin} />
+                  <Typography variant = {'body1'}>
+                   Customer Review
+                  </Typography>
+                  <Box className = 'message'>
+                  <Typography variant = {'body2'}>
+                    {state.customer}
+                  </Typography>
+                  </Box>
                 </Grid>
+               {state.admin.length > 0 && <Grid xs={12}>
+                  <Typography variant = {'body1'}>
+                   Author Reply
+                  </Typography>
+                  {
+                    state.admin.map((row)=><Box className = 'message'>
+                    <Typography variant = {'body2'}>
+                      {row.message}
+                    </Typography>
+                    <Typography variant = {'caption'}>
+                      {row.time}
+                    </Typography>
+                    </Box>)
+                  }
+                </Grid>}
                 <Grid xs={9.5} className="messageField">
                   <TextField
                     fullWidth

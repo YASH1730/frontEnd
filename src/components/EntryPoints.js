@@ -49,10 +49,6 @@ export default function EntryPoints(props) {
       label: "Admin",
     },
     {
-      value: "Super Admin",
-      label: "Super Admin",
-    },
-    {
       value: "Management & Accountant",
       label: "Management & Accountant",
     },
@@ -65,6 +61,11 @@ export default function EntryPoints(props) {
       value: "Sales",
       label: "Sales",
     },
+    {
+      value: "Staff",
+      label: "Staff",
+    },
+
   ];
   const [currency, setCurrency] = React.useState("EUR");
 
