@@ -17,10 +17,10 @@ import {
 } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
-
+import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch } from "react-redux";
-import { setAlert } from "../../../store/action/action";
+import { setAlert, setForm } from "../../../store/action/action";
 import {
   getOrder,
   changeOrderStatus,
@@ -141,7 +141,7 @@ export default function Order({history}) {
               paid: row.paid,
               total: row.total,
               note: row.note || "",
-              action: row._id
+              action: row
             };
           }),
           isLoading: false,
@@ -158,21 +158,43 @@ export default function Order({history}) {
 
   const [status, setStatus] = useState({});
 
+
   const statusCatalog = [
     {
       key: "processing",
-      value: "processing",
-      color: "blue",
+      value: "Processing",
     },
     {
-      key: "completed",
-      value: "completed",
-      color: "green",
+      key: "packed &_shipped",
+      value: "Packed & Shipped",
     },
     {
-      key: "cancel",
-      value: "cancel",
-      color: "red",
+      key: "wating_for_approval",
+      value: "Waiting for Approval",
+    },
+    {
+      key: "final_touching",
+      value: " Final Touching,",
+    },
+    {
+      key: "manufacturing",
+      value: "Manufacturing",
+    },
+    {
+      key: "carving",
+      value: "Carving",
+    },
+    {
+      key: "polish",
+      value: "Polish",
+    },
+    {
+      key: "weaving",
+      value: "Weaving",
+    },
+    {
+      key: "brass_fitting",
+      value: "Brass fitting",
     },
   ];
 
@@ -188,32 +210,29 @@ export default function Order({history}) {
       headerName: "Status",
       width: 150,
       renderCell: (params) => (
-        <TextField
-          size="small"
-          fullWidth
-          id="outlined-select"
-          sx={{
-            background:
-              params.formattedValue === "completed"
-                ? "#52ffc9"
-                : params.formattedValue === "cancel"
-                  ? "#fdabab"
-                  : params.formattedValue === "processing"
-                    ? "#b9abfd"
-                    : "",
-          }}
-          value={status[params.row.action] || params.formattedValue}
-          select
-          name={params.row.action}
-          multiple
-          onChange={handleStatus}
-        >
-          {statusCatalog.map((option) => (
-            <MenuItem key={option.key} value={option.value}>
-              {option.value}
-            </MenuItem>
-          ))}
-        </TextField>
+        <Typography variant = 'button'>{params.formattedValue}</Typography>
+        // <TextField
+        //   size="small"
+        //   fullWidth
+        //   id="outlined-select"
+        //   sx={{
+        //     background:
+        //       params.formattedValue === "completed"
+        //         ? "#52ffc9"
+        //         : "#fdabab"
+        //   }}
+        //   value={status[params.row.action] || params.formattedValue}
+        //   select
+        //   name={params.row.action}
+        //   multiple
+        //   onChange={handleStatus}
+        // >
+        //   {statusCatalog.map((option) => (
+        //     <MenuItem key={option.key} value={option.key}>
+        //       {option.value}
+        //     </MenuItem>
+        //   ))}
+        // </TextField>
       ),
     },
     {
@@ -297,11 +316,10 @@ export default function Order({history}) {
       width: 200,
       renderCell: (params) => (
         <div className="categoryImage">
-          <Tooltip title='preview'>
-
+          <Tooltip title='Preview Order'>
             <IconButton
               onClick={() => {
-                history(`/preview_order/${params.formattedValue}`)
+                history(`/preview_order/${params.formattedValue._id}`)
               }}
               // onClick={() => {
               //   setPreview(old => ({ open: true, _id: params.formattedValue }))
@@ -312,20 +330,21 @@ export default function Order({history}) {
             </IconButton>
           </Tooltip>
 
-          {/* <IconButton
+          <Tooltip title='Cancel Order'>
+          <IconButton
             onClick={() => {
-              dispatch(setForm({
-                state: true,
-                formType: "update_order",
-                payload: params,
-                row: Row,
-                setRow: setRows
-              }));
+              // dispatch(setForm({
+              //   state: true,
+              //   formType: "cancel_order",
+              //   payload : params.formattedValue
+              // }));
             }}
             aria-label="delete"
           >
-            <CreateIcon />
-          </IconButton> */}
+            <CancelIcon />
+          </IconButton>
+          </Tooltip>
+
           {/* <IconButton onClick={() => {
             deleteOrder(params.formattedValue).then((res) => {
               setPageState(old => ({

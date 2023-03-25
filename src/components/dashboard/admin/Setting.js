@@ -9,6 +9,10 @@ import {
   Button,
 } from "@mui/material";
 
+import avatar from '../../../assets/img/avatar.svg'
+
+import {useSelector} from 'react-redux'
+
 export default function Setting() {
   const {
     acceptedFiles,
@@ -18,6 +22,8 @@ export default function Setting() {
   } = useDropzone({
     accept: "image/jpeg,image/png",
   });
+
+  const {auth} = useSelector(state=>state)
 
   const acceptedFileItems = acceptedFiles.map((file) => (
     <li key={file.path}>
@@ -88,31 +94,24 @@ export default function Setting() {
                 margin: "auto",
               }}
             >
-              <section className="dorpContainer">
-                <div {...getRootProps({ className: "dropzone" })}>
-                  <input {...getInputProps()} />
-                  <p>
-                    Drag & drop your staff image here, or click to select image
-                  </p>
-                  <em>(Only *.jpeg and *.png images will be accepted)</em>
-                </div>
-                <aside>
-                  <h5>File Name</h5>
-                  <ul>{acceptedFileItems}</ul>
-                </aside>
-              </section>
+              <Box sx = {{width : '200px',margin : 'auto'}}>
+                <img width={'100%'} src = {avatar} alt = 'ProfilePic'></img>
+              </Box>
+           
 
-              <TextField
+              <TextField disabled
                 fullWidth
                 // autoComplete={false}
                 id="fullWidth"
                 label="Name"
+                value = {auth.name}
                 type="text"
                 variant="outlined"
               />
 
-              <TextField
+              <TextField disabled
                 fullWidth
+                value = {auth.email}
                 // autoComplete={false}
                 id="fullWidth"
                 label="Email"
@@ -120,20 +119,21 @@ export default function Setting() {
                 variant="outlined"
               />
 
-              <TextField
+              <TextField disabled
                 fullWidth
                 id="fullWidth"
                 type="number"
+                value = {auth.mobile}
                 label="Contact Number"
                 variant="outlined"
               />
 
-              <TextField
+              <TextField disabled
                 fullWidth
                 id="outlined-select"
                 select
                 label="Staff Role"
-                value={cat}
+                value={auth.role}
                 multiple
                 onChange={handleChange}
                 helperText="Please select the staff role"

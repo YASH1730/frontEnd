@@ -238,7 +238,57 @@ const SideForm = () => {
 
   const customer_type = ["Interior", "Architect", "VIP", "VVIP"];
 
-  
+  const return_reason = [
+
+    'Product not as expected', 
+    'Size is too small', 
+    'Quality not as expected', 
+    'Damaged during transit',
+    'Different from Store',
+    'Wrong Polish',
+    'Others'
+  ]
+
+
+  const order_status = [
+    {
+      key: "processing",
+      value: "Processing",
+    },
+    {
+      key: "packed &_shipped",
+      value: "Packed & Shipped",
+    },
+    {
+      key: "wating_for_approval",
+      value: "Waiting for Approval",
+    },
+    {
+      key: "final_touching",
+      value: " Final Touching,",
+    },
+    {
+      key: "manufacturing",
+      value: "Manufacturing",
+    },
+    {
+      key: "carving",
+      value: "Carving",
+    },
+    {
+      key: "polish",
+      value: "Polish",
+    },
+    {
+      key: "weaving",
+      value: "Weaving",
+    },
+    {
+      key: "brass_fitting",
+      value: "Brass fitting",
+    },
+  ];
+
   function ImagePreviews(props) {
     const { getRootProps, getInputProps } = useDropzone({
       accept: "image/*",
@@ -532,11 +582,11 @@ const SideForm = () => {
     {
       value: "Sales",
       label: "Sales",
-    }, 
+    },
     {
       value: "Staff",
       label: "Staff",
-    }, 
+    },
 
   ];
   const rangeCatalog = [
@@ -688,6 +738,7 @@ const SideForm = () => {
     CVW: 0,
     dial: false,
     ACIN: "",
+    role: 'Staff',
     primary_material: [],
     product_articles: [],
     hardware_articles: [],
@@ -976,11 +1027,16 @@ const SideForm = () => {
 
         setData((old) => ({
           ...old,
+          O: form.payload.order.O,
+          discount: form.payload.order.discount,
+          paid: form.payload.order.paid,
+          total: form.payload.order.total,
           customer_name: form.payload.order.customer_name,
           customer_email: form.payload.order.customer_email,
           customer_mobile: form.payload.order.customer_mobile,
           city: form.payload.order.city,
           state: form.payload.order.state,
+          order_status: form.payload.order.status,
           shipping: form.payload.order.shipping,
           GST: form.payload.order.GST,
           has_GST: form.payload.order.has_GST,
@@ -993,6 +1049,8 @@ const SideForm = () => {
           note: form.payload.order.note,
         }));
 
+        break;
+      case "cancel_order":
         break;
       case "hardware":
         getHKU();
@@ -2412,6 +2470,8 @@ const SideForm = () => {
       price: 0,
       indoorSavedImage: [],
       pincode: "",
+      role: 'Staff',
+
     });
     document.getElementById("myForm").reset();
   };
@@ -5028,21 +5088,38 @@ const SideForm = () => {
       });
   };
 
-  const handleUpdateOrder = (e) => {
+  const handleUpdateOrder = async(e) => {
+    try{
     e.preventDefault();
 
     console.log(changeData.quantity);
-
+    
     const FD = new FormData();
-    // editorRef.current.getContent() for note
-    let Product_SKU = {};
 
+    // draft
+    FD.append("DID", SKU);
+    FD.append("AID", changeData.O);
+    FD.append("type", "Order");
+    FD.append("operation", "editOrder");
+    
+    // order     
+    console.log(editorRef.current.getContent())
+    FD.append("note", editorRef.current.getContent()  );
+    FD.append("status", changeData.order_status);
+    
+    // product
+    let Product_SKU = {};
     if (changeData.quantity.length > 0)
       changeData.quantity.map(
-        (SKU) => (Product_SKU = { ...Product_SKU, [SKU]: changeData[SKU] || 1 })
+        (SKU) => (Product_SKU = { ...Product_SKU, [SKU]: parseInt(changeData[SKU]) || 1 })
       );
 
-    FD.append("customer_name", changeData.customer_name);
+    FD.append("quantity", JSON.stringify(Product_SKU));
+    
+    // customer
+    FD.append("O", changeData.O);
+    FD.append("discount", changeData.discount);
+    FD.append("paid", changeData.paid);
     FD.append("customer_name", changeData.customer_name);
     FD.append("customer_email", changeData.customer_email);
     FD.append("customer_mobile", changeData.customer_mobile);
@@ -5051,51 +5128,47 @@ const SideForm = () => {
     FD.append("state", changeData.state);
     FD.append("shipping", changeData.shipping);
     FD.append("billing", changeData.billing);
-    FD.append("quantity", Product_SKU);
     FD.append("pincode", changeData.pincode);
     FD.append("GST", changeData.GST);
     FD.append("has_GST", changeData.has_GST);
-    FD.append("note", changeData.note);
     FD.append("classification", changeData.classification);
     FD.append("customer_type", changeData.customer_type);
 
-    // const res = addOrder(FD);
+    console.log(changeData,Product_SKU)
 
-    // res
-    //   .then((data) => {
-    //     if (data.status !== 200) {
-    //       // setImages([]);
-    //       dispatch(
-    //         setAlert({
-    //           open: true,
-    //           variant: "error",
-    //           message: data.data.message || "Something Went Wrong !!!",
-    //         })
-    //       );
-    //     } else {
-    //       // setImages([]);
-    //       // setUrl(data.data.url);
-    //       handleClose();
-    //       dispatch(
-    //         setAlert({
-    //           open: true,
-    //           variant: "success",
-    //           message: data.data.message,
-    //         })
-    //       );
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     // //console.log(err);
-    //     setImages([]);
-    //     dispatch(
-    //       setAlert({
-    //         open: true,
-    //         variant: "error",
-    //         message: "Something Went Wrong !!!",
-    //       })
-    //     );
-    //   });
+    const res = await addDraft(FD);
+
+    
+        if (res.status !== 200) {
+          // setImages([]);
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: res.data.message || "Something Went Wrong !!!",
+            })
+          );
+        } else {
+          handleClose();
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: res.data.message,
+            })
+          );
+        }
+    }catch(err){
+      console.log(err)
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        })
+      );
+
+    }
   };
 
   const handleAddress = (e) => {
@@ -6292,7 +6365,8 @@ const SideForm = () => {
               mode.type === true ? "mainDarkContainer" : "mainContainer"
             }
             sx={
-              form.formType === "product" || form.formType === "update_product"
+              form.formType === "product" || form.formType === "update_product" || form.formType === "variation"
+              || form.formType === "edit_order"
                 ? { width: "100vw !important", padding: "0 5% !important" }
                 : {}
             }
@@ -6423,7 +6497,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                    option.category_id && (
+                                  option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -6591,7 +6665,7 @@ const SideForm = () => {
                               name="primary_material"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                              // MenuProps={MenuProps}
+                            // MenuProps={MenuProps}
                             >
                               {materialCatalog.map((option) => (
                                 <MenuItem
@@ -6645,7 +6719,7 @@ const SideForm = () => {
                               name="polish"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                              // MenuProps={MenuProps}
+                            // MenuProps={MenuProps}
                             >
                               {catalog.polish.length > 0 &&
                                 catalog.polish.map((option, index) => (
@@ -6740,7 +6814,7 @@ const SideForm = () => {
                                   name="assembly_part"
                                   value={
                                     changeData.assembly_part > -1 &&
-                                    changeData.assembly_part < 3
+                                      changeData.assembly_part < 3
                                       ? changeData.assembly_part
                                       : 0
                                   }
@@ -6917,7 +6991,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files = {files} setFiles = {setFiles}
+                            <ProductsPreviews files={files} setFiles={setFiles}
                               text={
                                 "Make Sure the picture ratio should be in 1:1."
                               }
@@ -7252,11 +7326,11 @@ const SideForm = () => {
                                 label="Dial"
                               />
 
-                              
+
 
                               {changeData.dial && (
                                 <>
-                                 <TextField
+                                  <TextField
                                     sx={{ mt: 2, mb: 1 }}
                                     size="small"
                                     fullWidth
@@ -7543,17 +7617,17 @@ const SideForm = () => {
                             </FormControl>
                             {(changeData.drawer === "mechanical" ||
                               changeData.drawer === "wooden") && (
-                              <TextField
-                                size="small"
-                                fullWidth
-                                type="number"
-                                id="outlined-select"
-                                name="drawer_count"
-                                label="Drawer Count"
-                                value={changeData.drawer_count}
-                                onChange={handleProductFields}
-                              />
-                            )}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  type="number"
+                                  id="outlined-select"
+                                  name="drawer_count"
+                                  label="Drawer Count"
+                                  value={changeData.drawer_count}
+                                  onChange={handleProductFields}
+                                />
+                              )}
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Joints ((Useful in products where info about
@@ -9125,7 +9199,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                    option.category_id && (
+                                  option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -9293,7 +9367,7 @@ const SideForm = () => {
                               name="primary_material"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                              // MenuProps={MenuProps}
+                            // MenuProps={MenuProps}
                             >
                               {materialCatalog.map((option) => (
                                 <MenuItem
@@ -9347,7 +9421,7 @@ const SideForm = () => {
                               name="polish"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                              // MenuProps={MenuProps}
+                            // MenuProps={MenuProps}
                             >
                               {catalog.polish.length > 0 &&
                                 catalog.polish.map((option, index) => (
@@ -9443,7 +9517,7 @@ const SideForm = () => {
                                   name="assembly_part"
                                   value={
                                     changeData.assembly_part > -1 &&
-                                    changeData.assembly_part < 3
+                                      changeData.assembly_part < 3
                                       ? changeData.assembly_part
                                       : 0
                                   }
@@ -9620,7 +9694,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files = {files} setFiles = {setFiles}
+                            <ProductsPreviews files={files} setFiles={setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {/* // image selection  */}
@@ -10053,10 +10127,10 @@ const SideForm = () => {
                                 label="Dial"
                               />
 
-                           
-{changeData.dial && (
+
+                              {changeData.dial && (
                                 <>
-                                 <TextField
+                                  <TextField
                                     sx={{ mt: 2, mb: 1 }}
                                     size="small"
                                     fullWidth
@@ -10343,17 +10417,17 @@ const SideForm = () => {
                             </FormControl>
                             {(changeData.drawer === "mechanical" ||
                               changeData.drawer === "wooden") && (
-                              <TextField
-                                size="small"
-                                fullWidth
-                                type="number"
-                                id="outlined-select"
-                                name="drawer_count"
-                                label="Drawer Count"
-                                value={changeData.drawer_count}
-                                onChange={handleProductFields}
-                              />
-                            )}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  type="number"
+                                  id="outlined-select"
+                                  name="drawer_count"
+                                  label="Drawer Count"
+                                  value={changeData.drawer_count}
+                                  onChange={handleProductFields}
+                                />
+                              )}
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Joints ((Useful in products where info about
@@ -11993,7 +12067,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                    option.category_id && (
+                                  option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -12161,7 +12235,7 @@ const SideForm = () => {
                               name="primary_material"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                              // MenuProps={MenuProps}
+                            // MenuProps={MenuProps}
                             >
                               {materialCatalog.map((option) => (
                                 <MenuItem
@@ -12215,7 +12289,7 @@ const SideForm = () => {
                               name="polish"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                              // MenuProps={MenuProps}
+                            // MenuProps={MenuProps}
                             >
                               {catalog.polish.length > 0 &&
                                 catalog.polish.map((option, index) => (
@@ -12311,7 +12385,7 @@ const SideForm = () => {
                                   name="assembly_part"
                                   value={
                                     changeData.assembly_part > -1 &&
-                                    changeData.assembly_part < 3
+                                      changeData.assembly_part < 3
                                       ? changeData.assembly_part
                                       : 0
                                   }
@@ -12488,7 +12562,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files = {files} setFiles = {setFiles}
+                            <ProductsPreviews files={files} setFiles={setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {/* // image selection  */}
@@ -12922,10 +12996,10 @@ const SideForm = () => {
                                 label="Dial"
                               />
 
-                          
-{changeData.dial && (
+
+                              {changeData.dial && (
                                 <>
-                                 <TextField
+                                  <TextField
                                     sx={{ mt: 2, mb: 1 }}
                                     size="small"
                                     fullWidth
@@ -13211,17 +13285,17 @@ const SideForm = () => {
                             </FormControl>
                             {(changeData.drawer === "mechanical" ||
                               changeData.drawer === "wooden") && (
-                              <TextField
-                                size="small"
-                                fullWidth
-                                type="number"
-                                id="outlined-select"
-                                name="drawer_count"
-                                label="Drawer Count"
-                                value={changeData.drawer_count}
-                                onChange={handleProductFields}
-                              />
-                            )}
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  type="number"
+                                  id="outlined-select"
+                                  name="drawer_count"
+                                  label="Drawer Count"
+                                  value={changeData.drawer_count}
+                                  onChange={handleProductFields}
+                                />
+                              )}
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Joints ((Useful in products where info about
@@ -14910,7 +14984,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                    option.category_id && (
+                                  option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -15100,7 +15174,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files = {files} setFiles = {setFiles}
+                            <ProductsPreviews files={files} setFiles={setFiles}
                               text={
                                 "Make Sure the picture ratio should be in 1:1."
                               }
@@ -15927,7 +16001,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                    option.category_id && (
+                                  option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -16117,7 +16191,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files = {files} setFiles = {setFiles}
+                            <ProductsPreviews files={files} setFiles={setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {files.length > 0 && (
@@ -18266,9 +18340,9 @@ const SideForm = () => {
                 <AddressForm
                   setOpen={setOpen}
                   open={open.open}
-                  setOuter = {setData}
+                  setOuter={setData}
                   confirmBox={confirmBox}
-                  handleAddress={open.type === 'billing' ? handleBillingAddress: handleAddress}
+                  handleAddress={open.type === 'billing' ? handleBillingAddress : handleAddress}
                 />
                 {/* addres form */}
                 <Grid item xs={12} mt={5}>
@@ -18404,7 +18478,7 @@ const SideForm = () => {
                           variant="outlined"
                           sx={{ width: "20%" }}
                           onClick={() => {
-                            setOpen({open : true, type :'shipping'});
+                            setOpen({ open: true, type: 'shipping' });
                           }}
                         >
                           <AddIcon />
@@ -18444,7 +18518,7 @@ const SideForm = () => {
                           variant="outlined"
                           sx={{ width: "20%" }}
                           onClick={() => {
-                            setOpen({open : true, type :'billing'});
+                            setOpen({ open: true, type: 'billing' });
                           }}
                         >
                           <AddIcon />
@@ -18612,7 +18686,7 @@ const SideForm = () => {
             )}
             {/* update Customer Ends */}
 
-            {/* add order */}
+            {/* edit order */}
 
             {form.formType === "edit_order" && (
               <Grid container p={5}>
@@ -18629,339 +18703,530 @@ const SideForm = () => {
                   </Typography>
                 </Grid>
 
-                <Grid item xs={12} mt={2}>
+
+                <Grid item xs={12} mt={5}>
                   <form
                     className="form"
+                    id="myForm"
                     onSubmit={(e) => {
                       confirmBox(e, handleUpdateOrder);
                     }}
-                    id="myForm"
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <FormLabel id="demo-radio-buttons-group-label">
-                      Product Section
-                    </FormLabel>
-                    <Autocomplete
-                      disablePortal
-                      size="small"
-                      fullWidth
-                      multiple
-                      noOptionsText={"ex : P-01001"}
-                      autoHighlight
-                      id="combo-box-demo"
-                      options={productSKU.P_SKU.map((row) => {
-                        return row.SKU;
-                      })}
-                      isOptionEqualToValue={(option, value) => {
-                        // console.log(value);
-                        return typeof value === "Array"
-                          ? value.isInclude(option)
-                          : value === option;
-                      }}
-                      value={changeData.quantity}
-                      renderInput={(params) => (
-                        <TextField
-                          onKeyUpCapture={handleSearch}
-                          value={changeData.quantity}
-                          {...params}
-                          label="Product SKU"
-                        />
-                      )}
-                      onChange={(e, newMember) =>
-                        setData((old) => ({
-                          ...old,
-                          quantity: newMember,
-                        }))
-                      }
-                    />
-                    {changeData.quantity.length > 0 && (
-                      <Box mt={1}>
-                        <Typography component={"span"} variant="body1">
-                          Product Quantities
-                        </Typography>
-                        <Box
-                          p={1}
-                          sx={{
-                            display: "flex",
-                            gap: "5px",
-                            flexDirection: "column",
-                            maxHeight: 150,
-                            overflow: "scroll",
-                          }}
+                    <Stepper
+                      className="stepper"
+                      activeStep={activeStep}
+                      orientation="vertical"
+                    >
+                      {/* // Order Section */}
+                      <Step>
+                        <StepLabel
+                          sx={{ cursor: "pointer !important" }}
+                          onClick={() => setActiveStep(0)}
                         >
-                          {changeData.quantity.map((item) => (
+                          Order Section
+                        </StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            {" "}
+                            <Box className="stepAction">
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                disabled={activeStep === 0}
+                                onClick={handleBackStep}
+                              >
+                                Back
+                              </Button>
+                              <Button
+                                variant="contained"
+                                size="small"
+                                disabled={activeStep === 6}
+                                onClick={handleNextStep}
+                              >
+                                Continue
+                              </Button>
+                            </Box>
+
                             <TextField
-                              name={item}
-                              fullWidth
                               size="small"
-                              type="number"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    {item}
-                                  </InputAdornment>
-                                ),
-                              }}
-                              placeholder={item}
+                              fullWidth
+                              id="outlined-select"
+                              value={changeData.order_status || ''}
                               onChange={handleProductFields}
-                              value={changeData[item] || 1}
+                              select
+                              sx={{ mb: 2, mt: 1 }}
+                              name="order_status"
+                              label="Order Status"
+                              multiple
+                              helperText="Please select customer type."
+                            >
+                              {order_status.map((option) => (
+                                <MenuItem key={option.value} value={option.key}>
+                                  {option.value}
+                                </MenuItem>
+                              ))}
+                            </TextField>
+
+                            <TextField
+                              sx={{ pb: 2 }}
+                              size="small"
+                              fullWidth
+                              type = 'number'
+                              //required
+                              id="outlined-select"
+                              name="discount"
+                              value={(changeData.discount >= 1 && changeData.discount < 100 ) && changeData.discount }
+                              onChange={handleProductFields}
+                              label="Discount"
                             />
-                          ))}
-                        </Box>
-                      </Box>
-                    )}
+                            <TextField
+                              sx={{ pb: 2 }}
+                              size="small"
+                              fullWidth
+                              type = 'number'
+                              //required
+                              id="outlined-select"
+                              name="paid"
+                              value={(changeData.paid >= 1 && changeData.paid <= changeData.total ) && changeData.paid }
+                              onChange={handleProductFields}
+                              label="Paid"
+                            />
 
-                    <FormLabel id="demo-radio-buttons-group-label">
-                      Customer Section
-                    </FormLabel>
+                            <Editor
+                              apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
+                              defaultValue={changeData.note}
+                              initialValue={changeData.note}
+                              onInit={(event, editor) => (editorRef.current = editor)}
+                              init={{
+                                height: 400,
+                                menubar: true,
+                                plugins: "image code",
+                              }}
+                            />
+                          </Box>
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 6}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* // Order section Ends*/}
+                      {/* // Product Section */}
+                      <Step>
+                        <StepLabel
+                          sx={{ cursor: "pointer !important" }}
+                          onClick={() => setActiveStep(1)}
+                        >
+                          Product Section
+                        </StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            {" "}
+                            <Box className="stepAction">
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                disabled={activeStep === 0}
+                                onClick={handleBackStep}
+                              >
+                                Back
+                              </Button>
+                              <Button
+                                variant="contained"
+                                size="small"
+                                disabled={activeStep === 6}
+                                onClick={handleNextStep}
+                              >
+                                Continue
+                              </Button>
+                            </Box>
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Product Section
+                            </FormLabel>
+                            <Autocomplete
+                              disablePortal
+                              size="small"
+                              fullWidth
+                              multiple
+                              noOptionsText={"ex : P-01001"}
+                              autoHighlight
+                              id="combo-box-demo"
+                              options={productSKU.P_SKU.map((row) => {
+                                return row.SKU;
+                              })}
+                              isOptionEqualToValue={(option, value) => {
+                                // console.log(value);
+                                return typeof value === "Array"
+                                  ? value.isInclude(option)
+                                  : value === option;
+                              }}
+                              value={changeData.quantity}
+                              renderInput={(params) => (
+                                <TextField
+                                  onKeyUpCapture={handleSearch}
+                                  value={changeData.quantity}
+                                  {...params}
+                                  label="Product SKU"
+                                />
+                              )}
+                              onChange={(e, newMember) =>
+                                setData((old) => ({
+                                  ...old,
+                                  quantity: newMember,
+                                }))
+                              }
+                            />
+                            {changeData.quantity.length > 0 && (
+                              <Box mt={1}>
+                                <Typography component={"span"} variant="body1">
+                                  Product Quantities
+                                </Typography>
+                                <Box
+                                  p={1}
+                                  sx={{
+                                    display: "flex",
+                                    gap: "5px",
+                                    flexDirection: "column",
+                                    maxHeight: 150,
+                                    overflow: "scroll",
+                                  }}
+                                >
+                                  {changeData.quantity.map((item) => (
+                                    <TextField
+                                      name={item}
+                                      fullWidth
+                                      size="small"
+                                      type="number"
+                                      InputProps={{
+                                        startAdornment: (
+                                          <InputAdornment position="start">
+                                            {item}
+                                          </InputAdornment>
+                                        ),
+                                      }}
+                                      placeholder={item}
+                                      onChange={handleProductFields}
+                                      value={changeData[item] > 0 ? changeData[item] : 1}
+                                    />
+                                  ))}
+                                </Box>
+                              </Box>
+                            )}
+                          </Box>
+                          <Box className="stepAction">
+                            <Button
+                              variant="outlined"
+                              size="small"
+                              disabled={activeStep === 0}
+                              onClick={handleBackStep}
+                            >
+                              Back
+                            </Button>
+                            <Button
+                              variant="contained"
+                              size="small"
+                              disabled={activeStep === 6}
+                              onClick={handleNextStep}
+                            >
+                              Continue
+                            </Button>
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* // Product section Ends*/}
+                      {/* // Customer Section */}
+                      <Step>
+                        <StepLabel
+                          sx={{ cursor: "pointer !important" }}
+                          onClick={() => setActiveStep(2)}
+                        >
+                          Customer Section
+                        </StepLabel>
+                        <StepContent className="stepContent">
+                          <Box className="fields">
+                            {" "}
+                            <Box className="stepAction">
+                              <Button
+                                variant="outlined"
+                                size="small"
+                                disabled={activeStep === 0}
+                                onClick={handleBackStep}
+                              >
+                                Back
+                              </Button>
+                              <Button
+                                variant="contained"
+                                size="small"
+                                disabled={activeStep === 2}
+                                onClick={handleNextStep}
+                              >
+                                Continue
+                              </Button>
+                            </Box>
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Customer Section
+                            </FormLabel>
 
-                    <FormControl sx={{ mt: 1 }}>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        Classification
-                      </FormLabel>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        name="classification"
-                        size="small"
-                        value={changeData.classification}
-                        onChange={handleProductFields}
-                      >
-                        <FormControlLabel
-                          value="personal"
-                          control={<Radio />}
-                          label="Personal"
-                          size="small"
-                        />
-                        <FormControlLabel
-                          size="small"
-                          value="business"
-                          control={<Radio />}
-                          label="Business"
-                        />
-                      </RadioGroup>
-                    </FormControl>
+                            <FormControl sx={{ mt: 1 }}>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Classification
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="classification"
+                                size="small"
+                                value={changeData.classification}
+                                onChange={handleProductFields}
+                              >
+                                <FormControlLabel
+                                  value="personal"
+                                  control={<Radio />}
+                                  label="Personal"
+                                  size="small"
+                                />
+                                <FormControlLabel
+                                  size="small"
+                                  value="business"
+                                  control={<Radio />}
+                                  label="Business"
+                                />
+                              </RadioGroup>
+                            </FormControl>
 
-                    <TextField
-                      size="small"
-                      fullWidth
-                      id="outlined-select"
-                      value={changeData.customer_type}
-                      onChange={handleProductFields}
-                      select
-                      sx={{ mb: 2, mt: 1 }}
-                      name="customer_type"
-                      label="Customer Type"
-                      multiple
-                      helperText="Please select customer type."
-                    >
-                      {customer_type.map((option) => (
-                        <MenuItem key={option} value={option}>
-                          {option}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              value={changeData.customer_type}
+                              onChange={handleProductFields}
+                              select
+                              sx={{ mb: 2, mt: 1 }}
+                              name="customer_type"
+                              label="Customer Type"
+                              multiple
+                              helperText="Please select customer type."
+                            >
+                              {customer_type.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
+                            </TextField>
 
-                    <TextField
-                      sx={{ pb: 2 }}
-                      size="small"
-                      fullWidth
-                      //required
-                      id="outlined-select"
-                      name="customer_name"
-                      value={changeData.customer_name || ""}
-                      onChange={handleProductFields}
-                      label="Customer Name"
-                      type="text"
-                    />
+                            <TextField
+                              sx={{ pb: 2 }}
+                              size="small"
+                              fullWidth
+                              //required
+                              id="outlined-select"
+                              name="customer_name"
+                              value={changeData.customer_name || ""}
+                              onChange={handleProductFields}
+                              label="Customer Name"
+                              type="text"
+                            />
 
-                    <TextField
-                      sx={{ pb: 2 }}
-                      size="small"
-                      fullWidth
-                      //required
-                      id="outlined-select"
-                      value={changeData.customer_email || ""}
-                      onChange={handleProductFields}
-                      name="customer_email"
-                      label="Customer Email"
-                      type="email"
-                    />
+                            <TextField
+                              sx={{ pb: 2 }}
+                              size="small"
+                              fullWidth
+                              //required
+                              id="outlined-select"
+                              value={changeData.customer_email || ""}
+                              onChange={handleProductFields}
+                              name="customer_email"
+                              label="Customer Email"
+                              type="email"
+                            />
 
-                    <TextField
-                      sx={{ pb: 2 }}
-                      size="small"
-                      fullWidth
-                      //required
-                      id="outlined-select"
-                      name="customer_mobile"
-                      value={changeData.customer_mobile || ""}
-                      onChange={handleProductFields}
-                      label="Contact Number"
-                      type="number"
-                    />
+                            <TextField
+                              sx={{ pb: 2 }}
+                              size="small"
+                              fullWidth
+                              //required
+                              id="outlined-select"
+                              name="customer_mobile"
+                              value={changeData.customer_mobile || ""}
+                              onChange={handleProductFields}
+                              label="Contact Number"
+                              type="number"
+                            />
 
-                    <TextField
-                      sx={{ pb: 2 }}
-                      size="small"
-                      fullWidth
-                      disabled
-                      //required
-                      id="outlined-select"
-                      name="country"
-                      value={changeData.country || ""}
-                      onChange={handleProductFields}
-                      label="Country"
-                      type="text"
-                    />
+                            <TextField
+                              sx={{ pb: 2 }}
+                              size="small"
+                              fullWidth
+                              disabled
+                              //required
+                              id="outlined-select"
+                              name="country"
+                              value={changeData.country || ""}
+                              onChange={handleProductFields}
+                              label="Country"
+                              type="text"
+                            />
 
-                    <Autocomplete
-                      freeSolo
-                      size="small"
-                      fullWidth
-                      noOptionsText={"ex : 305001"}
-                      autoHighlight
-                      id="combo-box-demo"
-                      value={changeData.pincode || ""}
-                      options={catalog.pincode.map((row) => {
-                        return row.pincode;
-                      })}
-                      renderInput={(params) => (
-                        <TextField
-                          onKeyUpCapture={handlePincodeSearch}
-                          value={changeData.pincode || ""}
-                          {...params}
-                          label="Pincode"
-                        />
-                      )}
-                      onChange={(e, val) =>
-                        setData((old) => ({
-                          ...old,
-                          pincode: val,
-                        }))
-                      }
-                    />
+                            <Autocomplete
+                              freeSolo
+                              size="small"
+                              fullWidth
+                              noOptionsText={"ex : 305001"}
+                              autoHighlight
+                              id="combo-box-demo"
+                              value={changeData.pincode || ""}
+                              options={catalog.pincode.map((row) => {
+                                return row.pincode;
+                              })}
+                              renderInput={(params) => (
+                                <TextField
+                                  onKeyUpCapture={handlePincodeSearch}
+                                  value={changeData.pincode || ""}
+                                  {...params}
+                                  label="Pincode"
+                                />
+                              )}
+                              onChange={(e, val) =>
+                                setData((old) => ({
+                                  ...old,
+                                  pincode: val,
+                                }))
+                              }
+                            />
 
-                    <TextField
-                      size="small"
-                      fullWidth
-                      id="outlined-select"
-                      value={changeData.city}
-                      onChange={handleProductFields}
-                      select
-                      sx={{ mb: 2, mt: 1 }}
-                      name="city"
-                      label="City"
-                      multiple
-                      helperText="Please select your city."
-                    >
-                      {catalog.city.map((option) => (
-                        <MenuItem key={option.city} value={option.city}>
-                          {option.city}
-                        </MenuItem>
-                      ))}
-                    </TextField>
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              value={changeData.city}
+                              onChange={handleProductFields}
+                              select
+                              sx={{ mb: 2, mt: 1 }}
+                              name="city"
+                              label="City"
+                              multiple
+                              helperText="Please select your city."
+                            >
+                              {catalog.city.map((option) => (
+                                <MenuItem key={option.city} value={option.city}>
+                                  {option.city}
+                                </MenuItem>
+                              ))}
+                            </TextField>
 
-                    <TextField
-                      sx={{ pb: 2 }}
-                      size="small"
-                      fullWidth
-                      //required
-                      disabled
-                      id="outlined-select"
-                      name="state"
-                      value={changeData.state || ""}
-                      onChange={handleProductFields}
-                      label="State"
-                      type="text"
-                    />
+                            <TextField
+                              sx={{ pb: 2 }}
+                              size="small"
+                              fullWidth
+                              //required
+                              disabled
+                              id="outlined-select"
+                              name="state"
+                              value={changeData.state || ""}
+                              onChange={handleProductFields}
+                              label="State"
+                              type="text"
+                            />
 
-                    <FormControl>
-                      <FormLabel id="demo-radio-buttons-group-label">
-                        GST
-                      </FormLabel>
-                      <RadioGroup
-                        aria-labelledby="demo-radio-buttons-group-label"
-                        name="has_GST"
-                        size="small"
-                        value={changeData.has_GST}
-                        onChange={handleProductFields}
-                      >
-                        <FormControlLabel
-                          value="yes"
-                          control={<Radio />}
-                          label="Yes"
-                          size="small"
-                        />
-                        <FormControlLabel
-                          size="small"
-                          value="no"
-                          control={<Radio />}
-                          label="No"
-                        />
-                      </RadioGroup>
-                    </FormControl>
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                GST
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="has_GST"
+                                size="small"
+                                value={changeData.has_GST}
+                                onChange={handleProductFields}
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                  size="small"
+                                />
+                                <FormControlLabel
+                                  size="small"
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
 
-                    {changeData.has_GST === "yes" && (
-                      <TextField
-                        size="small"
-                        fullWidth
-                        value={changeData.GST}
-                        onChange={handleProductFields}
-                        minRows={5}
-                        maxRows={5}
-                        style={{ width: "100%", resize: "none" }}
-                        name="GST"
-                        type="text"
-                        label="GST Number"
-                        variant="outlined"
-                      />
-                    )}
-                    <FormLabel id="demo-radio-buttons-group-label">
-                      Shipping Address
-                    </FormLabel>
-                    <TextareaAutosize
-                      minRows={4}
-                      placeholder="Shipping Address..."
-                      style={{ mt: 1, width: "100%" }}
-                      size="small"
-                      fullWidth
-                      //required
-                      id="outlined-select"
-                      name="shipping"
-                      value={changeData.shipping || ""}
-                      onChange={handleProductFields}
-                      label="Shipping"
-                      type="text"
-                    />
-                    <FormLabel id="demo-radio-buttons-group-label">
-                      Billing Address
-                    </FormLabel>
-                    <TextareaAutosize
-                      minRows={4}
-                      placeholder="Billing Address..."
-                      style={{ marginTop: "10px", width: "100%" }}
-                      size="small"
-                      fullWidth
-                      //required
-                      id="outlined-select"
-                      name="billing"
-                      value={changeData.billing || ""}
-                      onChange={handleProductFields}
-                      label="Shipping"
-                      type="text"
-                    />
+                            {changeData.has_GST === "yes" && (
+                              <TextField
+                                size="small"
+                                fullWidth
+                                value={changeData.GST}
+                                onChange={handleProductFields}
+                                minRows={5}
+                                maxRows={5}
+                                style={{ width: "100%", resize: "none" }}
+                                name="GST"
+                                type="text"
+                                label="GST Number"
+                                variant="outlined"
+                              />
+                            )}
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Shipping Address
+                            </FormLabel>
+                            <TextareaAutosize
+                              minRows={4}
+                              placeholder="Shipping Address..."
+                              style={{ mt: 1, width: "100%" }}
+                              size="small"
+                              fullWidth
+                              //required
+                              id="outlined-select"
+                              name="shipping"
+                              value={changeData.shipping || ""}
+                              onChange={handleProductFields}
+                              label="Shipping"
+                              type="text"
+                            />
+                            <FormLabel id="demo-radio-buttons-group-label">
+                              Billing Address
+                            </FormLabel>
+                            <TextareaAutosize
+                              minRows={4}
+                              placeholder="Billing Address..."
+                              style={{ marginTop: "10px", width: "100%" }}
+                              size="small"
+                              fullWidth
+                              //required
+                              id="outlined-select"
+                              name="billing"
+                              value={changeData.billing || ""}
+                              onChange={handleProductFields}
+                              label="Shipping"
+                              type="text"
+                            />
 
-                    <Editor
-                      apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
-                      initialValue={changeData.note}
-                      onInit={(event, editor) => (editorRef.current = editor)}
-                      init={{
-                        height: 400,
-                        menubar: true,
-                        plugins: "image code",
-                      }}
-                    />
+                           
+                          </Box>
+                        </StepContent>
+                      </Step>
+                      {/* // Customer section Ends*/}
+
+
+                    </Stepper>
 
                     <Button
                       color="primary"
@@ -18969,12 +19234,261 @@ const SideForm = () => {
                       fullWidth
                       variant="contained"
                     >
-                      Edit Order
+                      Update Order
                     </Button>
                   </form>
                 </Grid>
               </Grid>
             )}
+
+            {/* {edit order} */}
+
+            {/* cancel_order  */}
+
+            {form.formType === "cancel_order" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography component={"span"} variant="h5">
+                    Cancel Order
+                    <Typography
+                      component={"span"}
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Cancel order details and necessary information from here
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+
+                <Grid item xs={12} mt={5}>
+                  <form
+                    className="form"
+                    id="myForm"
+                    onSubmit={(e) => {
+                      confirmBox(e, handleUpdateOrder);
+                    }}
+                    encType="multipart/form-data"
+                    method="post"
+                  >
+
+<FormGroup>
+
+  {/* /// restock */}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.restock}
+                                    onChange={handleProductFields}
+                                    name="restock"
+                                  />
+                                }
+                                label="Restocking"
+                              />
+   {changeData.restock && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    id="fullWidth"
+                                    label="AWB"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          AWB
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.AWB}
+                                    onChange={handleProductFields}
+                                    name="AWB"
+                                  />
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    id="fullWidth"
+                                    label="courier_company"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Courier Company Name
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.courier_company}
+                                    onChange={handleProductFields}
+                                    name="courier_company"
+                                  />
+
+                                </>
+                              )}
+
+{/* //  Return */}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.return}
+                                    onChange={handleProductFields}
+                                    name="return"
+                                  />
+                                }
+                                label="Return"
+                              />
+
+{changeData.return && (
+                                <>
+                                <TextField
+                                    sx={{ mt: 2, mb: 1 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="return_reason"
+                                    label="Return Reason"
+                                    multiple
+                                    value={changeData.return_reason}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Return Reason."
+                                  >
+                                    {return_reason.map(
+                                      (option) =><MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                    )}
+                                  </TextField>
+
+                                </>
+                              )}
+
+{/* refund */}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.refund}
+                                    onChange={handleProductFields}
+                                    name="refund"
+                                  />
+                                }
+                                label="Refund"
+                              />
+
+                      
+                              {changeData.refund && (
+                                <>
+                                  
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="How much needs to refund"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          ₹
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.refund_ammound}
+                                    onChange={handleProductFields}
+                                    name="refund_ammound"
+                                  />
+
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.ceramic_drawer_included}
+                                    onChange={handleProductFields}
+                                    name="ceramic_drawer_included"
+                                  />
+                                }
+                                label="Ceramic Drawers"
+                              />
+
+                              {changeData.ceramic_drawer_included && (
+                                <>
+                                  <TextField
+                                    sx={{ mt: 2, mb: 1 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="ceramic_drawer"
+                                    label="Ceramic Drawer"
+                                    multiple
+                                    value={changeData.ceramic_drawer}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.ceramic_drawer.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    value={changeData.ceramic_drawer_qty}
+                                    onChange={handleProductFields}
+                                    size={"small"}
+                                    fullWidth
+                                    label="Ceramic Drawer Quantity"
+                                    type="number"
+                                    helperText="Enter the number of ceramic drawer included."
+                                    name="ceramic_drawer_qty"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.ceramic_tiles_included}
+                                    onChange={handleProductFields}
+                                    name="ceramic_tiles_included"
+                                  />
+                                }
+                                label="Ceramic Tiles"
+                              />
+                            </FormGroup>
+
+
+          
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Cancel Order
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* cancel_order end  */}
 
             {/* add Hardware */}
 
@@ -19106,7 +19620,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                    option.category_id && (
+                                  option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -19129,7 +19643,7 @@ const SideForm = () => {
                               name="primary_material"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                              // MenuProps={MenuProps}
+                            // MenuProps={MenuProps}
                             >
                               {materialCatalog.map((option) => (
                                 <MenuItem
@@ -19307,7 +19821,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files = {files} setFiles = {setFiles}
+                            <ProductsPreviews files={files} setFiles={setFiles}
                               text={
                                 "Make Sure the picture ratio should be in 1:1."
                               }
@@ -20322,7 +20836,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                    option.category_id && (
+                                  option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -20345,7 +20859,7 @@ const SideForm = () => {
                               name="primary_material"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                              // MenuProps={MenuProps}
+                            // MenuProps={MenuProps}
                             >
                               {materialCatalog.map((option) => (
                                 <MenuItem
@@ -20521,7 +21035,7 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files = {files} setFiles = {setFiles}
+                            <ProductsPreviews files={files} setFiles={setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {/* // image selection  */}
@@ -22352,7 +22866,7 @@ const SideForm = () => {
                     <FormLabel id="demo-radio-buttons-group-label">
                       Outdoor Images
                     </FormLabel>
-                    <ProductsPreviews files = {files} setFiles = {setFiles}
+                    <ProductsPreviews files={files} setFiles={setFiles}
                       text={"Please Drag and Drop the outdoor image"}
                     >
                       {" "}
@@ -22584,8 +23098,8 @@ const SideForm = () => {
 
                     <FormLabel id="demo-radio-buttons-group-label">
                       Outdoor Images
-                    </FormLabel> 
-                    <ProductsPreviews files = {files} setFiles = {setFiles}
+                    </FormLabel>
+                    <ProductsPreviews files={files} setFiles={setFiles}
                       text={"Please Drag and Drop the outdoor image"}
                     >
                       {" "}
@@ -22900,7 +23414,7 @@ const SideForm = () => {
                     <FormLabel id="demo-radio-buttons-group-label">
                       Review Images
                     </FormLabel>
-                    <ProductsPreviews files = {files} setFiles = {setFiles}
+                    <ProductsPreviews files={files} setFiles={setFiles}
                       text={"Please Drag and Drop the review image"}
                     >
                       {" "}
@@ -23427,12 +23941,12 @@ const SideForm = () => {
                       required
                       error={
                         parseInt(changeData.old_sequence_no) !==
-                          parseInt(changeData.sequence_no) &&
+                        parseInt(changeData.sequence_no) &&
                         sequence.includes(parseInt(changeData.sequence_no))
                       }
                       helperText={
                         parseInt(changeData.old_sequence_no) !==
-                          parseInt(changeData.sequence_no) &&
+                        parseInt(changeData.sequence_no) &&
                         sequence.includes(parseInt(changeData.sequence_no)) &&
                         "Index is already in use."
                       }
@@ -24300,7 +24814,7 @@ function MobileBannerPreviews({ text, mobileBanner, setMobileBanner }) {
   );
 }
 
-function AddressForm({ setOpen, open, confirmBox, handleAddress,setOuter }) {
+function AddressForm({ setOpen, open, confirmBox, handleAddress, setOuter }) {
   const [data, setData] = useState({
     pincode: "",
     city: "",
@@ -24409,20 +24923,19 @@ function AddressForm({ setOpen, open, confirmBox, handleAddress,setOuter }) {
               renderInput={(params) => (
                 <TextField
                   onKeyUpCapture={handleSearch}
-                  type = 'number'
+                  type='number'
                   value={data.pincode || ""}
                   {...params}
                   label="Pincode"
                 />
               )}
-              onChange={(e, val) =>
-                {
-                  setOuter(old=>({...old,pincode : val}))
-                  setData((old) => ({
-                    ...old,
-                    pincode: val,
-                  }));
-                }
+              onChange={(e, val) => {
+                setOuter(old => ({ ...old, pincode: val }))
+                setData((old) => ({
+                  ...old,
+                  pincode: val,
+                }));
+              }
               }
             />
 
@@ -24521,7 +25034,7 @@ function Dimension(images, setFiles) {
     })
   );
 }
-function ProductsPreviews({files,setFiles,text}) {
+function ProductsPreviews({ files, setFiles, text }) {
   const [acceptedFileItems, setAcceptedFileItems] = useState([]);
   const [fileRejectionItems, setFileRejectionItems] = useState([]);
 

@@ -103,13 +103,11 @@ function MyRoutes() {
       <Routes>
         {/* All routes are in alphabetical order */}
         <Route exact path="/" element={<EntryPoints history={history} />} />
-        {permission.includes("Profile") && (
           <Route
             exact
             path="/profile"
             element={<Profile history={history} />}
           />
-        )}
         {permission.includes("Settings") && (
           <Route
             exact

@@ -94,6 +94,7 @@ export default function EntryPoints(props) {
             token: data.data.token,
             role: data.data.role,
             name: data.data.name,
+            mobile: data.data.mobile,
             email: data.data.email,
             access: data.data.access,
             expireIn: data.data.expireIn,
