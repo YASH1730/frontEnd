@@ -256,18 +256,6 @@ const SideForm = () => {
       value: "Processing",
     },
     {
-      key: "packed &_shipped",
-      value: "Packed & Shipped",
-    },
-    {
-      key: "wating_for_approval",
-      value: "Waiting for Approval",
-    },
-    {
-      key: "final_touching",
-      value: " Final Touching,",
-    },
-    {
       key: "manufacturing",
       value: "Manufacturing",
     },
@@ -275,6 +263,7 @@ const SideForm = () => {
       key: "carving",
       value: "Carving",
     },
+
     {
       key: "polish",
       value: "Polish",
@@ -283,10 +272,20 @@ const SideForm = () => {
       key: "weaving",
       value: "Weaving",
     },
+  
     {
       key: "brass_fitting",
       value: "Brass fitting",
     },
+    {
+      key: "wating_for_approval",
+      value: "Waiting for Approval",
+    },
+    {
+      key: "packed &_shipped",
+      value: "Packed & Shipped",
+    },
+
   ];
 
   function ImagePreviews(props) {
