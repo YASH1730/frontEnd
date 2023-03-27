@@ -3,12 +3,19 @@
     flex-direction: row;
     gap: 0.8rem;
     padding: 2%;
+    flex-wrap: wrap;
     align-items: normal;
 }
 
 .productCard>#title {
     flex: 1;
     text-overflow: clip;
+}
+
+.fullfilledBtn{
+    display: flex;
+    padding: 1%;
+    justify-content: right;
 }
 
 .customCard {

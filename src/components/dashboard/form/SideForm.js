@@ -240,9 +240,9 @@ const SideForm = () => {
 
   const return_reason = [
 
-    'Product not as expected', 
-    'Size is too small', 
-    'Quality not as expected', 
+    'Product not as expected',
+    'Size is too small',
+    'Quality not as expected',
     'Damaged during transit',
     'Different from Store',
     'Wrong Polish',
@@ -1029,6 +1029,7 @@ const SideForm = () => {
           ...old,
           O: form.payload.order.O,
           discount: form.payload.order.discount,
+          discount_type : form.payload.order.discount_type,
           paid: form.payload.order.paid,
           total: form.payload.order.total,
           customer_name: form.payload.order.customer_name,
@@ -1045,6 +1046,9 @@ const SideForm = () => {
           customer_type: form.payload.order.customer_type,
           country: form.payload.order.country || "India",
           quantity: Object.keys(quantity) || [],
+          items : form.payload.order.items,
+          product_price : form.payload.order.product_price || {},
+          discount_per_product : form.payload.order.discount_per_product,
           pincode: form.payload.order.pincode,
           note: form.payload.order.note,
         }));
@@ -5088,77 +5092,98 @@ const SideForm = () => {
       });
   };
 
-  const handleUpdateOrder = async(e) => {
-    try{
-    e.preventDefault();
+  const handleUpdateOrder = async (e) => {
+    try {
+      e.preventDefault();
 
-    console.log(changeData.quantity);
-    
-    const FD = new FormData();
+      console.log(changeData.quantity);
 
-    // draft
-    FD.append("DID", SKU);
-    FD.append("AID", changeData.O);
-    FD.append("type", "Order");
-    FD.append("operation", "editOrder");
-    
-    // order     
-    console.log(editorRef.current.getContent())
-    FD.append("note", editorRef.current.getContent()  );
-    FD.append("status", changeData.order_status);
-    
-    // product
-    let Product_SKU = {};
-    if (changeData.quantity.length > 0)
-      changeData.quantity.map(
-        (SKU) => (Product_SKU = { ...Product_SKU, [SKU]: parseInt(changeData[SKU]) || 1 })
-      );
+      const FD = new FormData();
 
-    FD.append("quantity", JSON.stringify(Product_SKU));
-    
-    // customer
-    FD.append("O", changeData.O);
-    FD.append("discount", changeData.discount);
-    FD.append("paid", changeData.paid);
-    FD.append("customer_name", changeData.customer_name);
-    FD.append("customer_email", changeData.customer_email);
-    FD.append("customer_mobile", changeData.customer_mobile);
-    FD.append("country", changeData.country);
-    FD.append("city", changeData.city);
-    FD.append("state", changeData.state);
-    FD.append("shipping", changeData.shipping);
-    FD.append("billing", changeData.billing);
-    FD.append("pincode", changeData.pincode);
-    FD.append("GST", changeData.GST);
-    FD.append("has_GST", changeData.has_GST);
-    FD.append("classification", changeData.classification);
-    FD.append("customer_type", changeData.customer_type);
+      // draft
+      FD.append("DID", SKU);
+      FD.append("AID", changeData.O);
+      FD.append("type", "Order");
+      FD.append("operation", "editOrder");
 
-    console.log(changeData,Product_SKU)
+      // order     
+      console.log(editorRef.current.getContent())
+      FD.append("note", editorRef.current.getContent());
+      FD.append("status", changeData.order_status);
 
-    const res = await addDraft(FD);
+//       items
+// product_price
+// discount_per_product
 
-    
-        if (res.status !== 200) {
-          // setImages([]);
-          dispatch(
-            setAlert({
-              open: true,
-              variant: "error",
-              message: res.data.message || "Something Went Wrong !!!",
+      // product
+      let Product_SKU = {};
+      let items = changeData.items;
+      
+      if (changeData.quantity.length > 0)
+      {
+        changeData.quantity.map(
+          (SKU)=>{
+            Product_SKU = { ...Product_SKU, [SKU]: parseInt(changeData[SKU]) || 1 }
+            if(!items.hasOwnProperty(SKU))
+            Object.assign(items,{[SKU] : {
+              fullfilled: false,shipping_carrier:"",trackingId: ""}
             })
-          );
-        } else {
-          handleClose();
-          dispatch(
-            setAlert({
-              open: true,
-              variant: "success",
-              message: res.data.message,
-            })
-          );
-        }
-    }catch(err){
+          }
+        );
+      }
+      
+
+
+ 
+      FD.append("quantity", JSON.stringify(Product_SKU));
+      FD.append("items", JSON.stringify(items));
+      FD.append("product_price", JSON.stringify(changeData.product_price));
+      FD.append("discount_per_product", JSON.stringify(changeData.discount_per_product));
+
+      // customer
+      FD.append("O", changeData.O);
+      FD.append("discount_type", changeData.discount_type);
+      FD.append("discount", changeData.discount);
+      FD.append("paid", changeData.paid);
+      FD.append("customer_name", changeData.customer_name);
+      FD.append("customer_email", changeData.customer_email);
+      FD.append("customer_mobile", changeData.customer_mobile);
+      FD.append("country", changeData.country);
+      FD.append("city", changeData.city);
+      FD.append("state", changeData.state);
+      FD.append("shipping", changeData.shipping);
+      FD.append("billing", changeData.billing);
+      FD.append("pincode", changeData.pincode);
+      FD.append("GST", changeData.GST);
+      FD.append("has_GST", changeData.has_GST);
+      FD.append("classification", changeData.classification);
+      FD.append("customer_type", changeData.customer_type);
+
+      console.log(changeData, Product_SKU)
+
+      const res = await addDraft(FD);
+
+
+      if (res.status !== 200) {
+        // setImages([]);
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: res.data.message || "Something Went Wrong !!!",
+          })
+        );
+      } else {
+        handleClose();
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: res.data.message,
+          })
+        );
+      }
+    } catch (err) {
       console.log(err)
       dispatch(
         setAlert({
@@ -6366,7 +6391,7 @@ const SideForm = () => {
             }
             sx={
               form.formType === "product" || form.formType === "update_product" || form.formType === "variation"
-              || form.formType === "edit_order"
+                || form.formType === "edit_order"
                 ? { width: "100vw !important", padding: "0 5% !important" }
                 : {}
             }
@@ -18769,27 +18794,75 @@ const SideForm = () => {
                               ))}
                             </TextField>
 
+                            <FormControl sx={{ mt: 1 }}>
+
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Discount Type
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="discount_type"
+                                size='small'
+                                value={changeData.discount_type}
+                                onChange={handleProductFields}
+                              >
+                                <FormControlLabel
+                                  value="percentage"
+                                  control={<Radio />}
+                                  label="Percentage"
+                                  size='small'
+
+                                />
+                                <FormControlLabel
+                                  size='small'
+                                  value="value"
+                                  control={<Radio />}
+                                  label="Value"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            {changeData.discount_type === 'percentage'
+                              ? <TextField
+                                sx={{ pb: 2 }}
+                                size="small"
+                                fullWidth
+                                type='number'
+                                InputProps={{
+                                  startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                                }}
+                                id="outlined-select"
+                                name="discount"
+                                value={(changeData.discount >= 1 && changeData.discount < 100) && changeData.discount}
+                                onChange={handleProductFields}
+                                label="Discount (%)"
+                              />:
+
+                              <TextField
+                                sx={{ pb: 2 }}
+                                size="small"
+                                fullWidth
+                                type='number'
+                                InputProps={{
+                                  startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                                }}
+                                id="outlined-select"
+                                name="discount"
+                                value={(changeData.discount >= 1 && changeData.discount < 100) && changeData.discount}
+                                onChange={handleProductFields}
+                                label="Discount (Value)"
+                              />
+
+                            }
+
                             <TextField
                               sx={{ pb: 2 }}
                               size="small"
                               fullWidth
-                              type = 'number'
-                              //required
-                              id="outlined-select"
-                              name="discount"
-                              value={(changeData.discount >= 1 && changeData.discount < 100 ) && changeData.discount }
-                              onChange={handleProductFields}
-                              label="Discount"
-                            />
-                            <TextField
-                              sx={{ pb: 2 }}
-                              size="small"
-                              fullWidth
-                              type = 'number'
+                              type='number'
                               //required
                               id="outlined-select"
                               name="paid"
-                              value={(changeData.paid >= 1 && changeData.paid <= changeData.total ) && changeData.paid }
+                              value={(changeData.paid >= 1 && changeData.paid <= changeData.total) && changeData.paid}
                               onChange={handleProductFields}
                               label="Paid"
                             />
@@ -19219,7 +19292,7 @@ const SideForm = () => {
                               type="text"
                             />
 
-                           
+
                           </Box>
                         </StepContent>
                       </Step>
@@ -19272,209 +19345,209 @@ const SideForm = () => {
                     method="post"
                   >
 
-<FormGroup>
+                    <FormGroup>
 
-  {/* /// restock */}
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={changeData.restock}
-                                    onChange={handleProductFields}
-                                    name="restock"
-                                  />
-                                }
-                                label="Restocking"
-                              />
-   {changeData.restock && (
-                                <>
-                                  <TextField
-                                    size="small"
-                                    fullWidth
-                                    id="fullWidth"
-                                    label="AWB"
-                                    type="number"
-                                    InputProps={{
-                                      startAdornment: (
-                                        <InputAdornment position="start">
-                                          AWB
-                                        </InputAdornment>
-                                      ),
-                                    }}
-                                    variant="outlined"
-                                    value={changeData.AWB}
-                                    onChange={handleProductFields}
-                                    name="AWB"
-                                  />
-                                  <TextField
-                                    size="small"
-                                    fullWidth
-                                    id="fullWidth"
-                                    label="courier_company"
-                                    type="number"
-                                    InputProps={{
-                                      startAdornment: (
-                                        <InputAdornment position="start">
-                                          Courier Company Name
-                                        </InputAdornment>
-                                      ),
-                                    }}
-                                    variant="outlined"
-                                    value={changeData.courier_company}
-                                    onChange={handleProductFields}
-                                    name="courier_company"
-                                  />
+                      {/* /// restock */}
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={changeData.restock}
+                            onChange={handleProductFields}
+                            name="restock"
+                          />
+                        }
+                        label="Restocking"
+                      />
+                      {changeData.restock && (
+                        <>
+                          <TextField
+                            size="small"
+                            fullWidth
+                            id="fullWidth"
+                            label="AWB"
+                            type="number"
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  AWB
+                                </InputAdornment>
+                              ),
+                            }}
+                            variant="outlined"
+                            value={changeData.AWB}
+                            onChange={handleProductFields}
+                            name="AWB"
+                          />
+                          <TextField
+                            size="small"
+                            fullWidth
+                            id="fullWidth"
+                            label="courier_company"
+                            type="number"
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  Courier Company Name
+                                </InputAdornment>
+                              ),
+                            }}
+                            variant="outlined"
+                            value={changeData.courier_company}
+                            onChange={handleProductFields}
+                            name="courier_company"
+                          />
 
-                                </>
-                              )}
+                        </>
+                      )}
 
-{/* //  Return */}
+                      {/* //  Return */}
 
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={changeData.return}
-                                    onChange={handleProductFields}
-                                    name="return"
-                                  />
-                                }
-                                label="Return"
-                              />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={changeData.return}
+                            onChange={handleProductFields}
+                            name="return"
+                          />
+                        }
+                        label="Return"
+                      />
 
-{changeData.return && (
-                                <>
-                                <TextField
-                                    sx={{ mt: 2, mb: 1 }}
-                                    size="small"
-                                    fullWidth
-                                    id="outlined-select"
-                                    select
-                                    name="return_reason"
-                                    label="Return Reason"
-                                    multiple
-                                    value={changeData.return_reason}
-                                    onChange={handleProductFields}
-                                    helperText="Please select your Return Reason."
+                      {changeData.return && (
+                        <>
+                          <TextField
+                            sx={{ mt: 2, mb: 1 }}
+                            size="small"
+                            fullWidth
+                            id="outlined-select"
+                            select
+                            name="return_reason"
+                            label="Return Reason"
+                            multiple
+                            value={changeData.return_reason}
+                            onChange={handleProductFields}
+                            helperText="Please select your Return Reason."
+                          >
+                            {return_reason.map(
+                              (option) => <MenuItem
+                                key={option.SKU}
+                                value={option.SKU}
+                              >
+                                {option.title}
+                              </MenuItem>
+                            )}
+                          </TextField>
+
+                        </>
+                      )}
+
+                      {/* refund */}
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={changeData.refund}
+                            onChange={handleProductFields}
+                            name="refund"
+                          />
+                        }
+                        label="Refund"
+                      />
+
+
+                      {changeData.refund && (
+                        <>
+
+                          <TextField
+                            size="small"
+                            fullWidth
+                            // autoComplete={false}
+                            id="fullWidth"
+                            label="How much needs to refund"
+                            type="number"
+                            InputProps={{
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  ₹
+                                </InputAdornment>
+                              ),
+                            }}
+                            variant="outlined"
+                            value={changeData.refund_ammound}
+                            onChange={handleProductFields}
+                            name="refund_ammound"
+                          />
+
+                        </>
+                      )}
+
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={changeData.ceramic_drawer_included}
+                            onChange={handleProductFields}
+                            name="ceramic_drawer_included"
+                          />
+                        }
+                        label="Ceramic Drawers"
+                      />
+
+                      {changeData.ceramic_drawer_included && (
+                        <>
+                          <TextField
+                            sx={{ mt: 2, mb: 1 }}
+                            size="small"
+                            fullWidth
+                            id="outlined-select"
+                            select
+                            name="ceramic_drawer"
+                            label="Ceramic Drawer"
+                            multiple
+                            value={changeData.ceramic_drawer}
+                            onChange={handleProductFields}
+                            helperText="Please select your Ceramic Tiles."
+                          >
+                            {catalog.ceramic_drawer.map(
+                              (option) =>
+                                option.status && (
+                                  <MenuItem
+                                    key={option.SKU}
+                                    value={option.SKU}
                                   >
-                                    {return_reason.map(
-                                      (option) =><MenuItem
-                                            key={option.SKU}
-                                            value={option.SKU}
-                                          >
-                                            {option.title}
-                                          </MenuItem>
-                                    )}
-                                  </TextField>
+                                    {option.title}
+                                  </MenuItem>
+                                )
+                            )}
+                            <MenuItem key={"none"} value="None">
+                              {"None"}
+                            </MenuItem>
+                          </TextField>
+                          <TextField
+                            value={changeData.ceramic_drawer_qty}
+                            onChange={handleProductFields}
+                            size={"small"}
+                            fullWidth
+                            label="Ceramic Drawer Quantity"
+                            type="number"
+                            helperText="Enter the number of ceramic drawer included."
+                            name="ceramic_drawer_qty"
+                          />
+                        </>
+                      )}
 
-                                </>
-                              )}
-
-{/* refund */}
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={changeData.refund}
-                                    onChange={handleProductFields}
-                                    name="refund"
-                                  />
-                                }
-                                label="Refund"
-                              />
-
-                      
-                              {changeData.refund && (
-                                <>
-                                  
-                                  <TextField
-                                    size="small"
-                                    fullWidth
-                                    // autoComplete={false}
-                                    id="fullWidth"
-                                    label="How much needs to refund"
-                                    type="number"
-                                    InputProps={{
-                                      startAdornment: (
-                                        <InputAdornment position="start">
-                                          ₹
-                                        </InputAdornment>
-                                      ),
-                                    }}
-                                    variant="outlined"
-                                    value={changeData.refund_ammound}
-                                    onChange={handleProductFields}
-                                    name="refund_ammound"
-                                  />
-
-                                </>
-                              )}
-
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={changeData.ceramic_drawer_included}
-                                    onChange={handleProductFields}
-                                    name="ceramic_drawer_included"
-                                  />
-                                }
-                                label="Ceramic Drawers"
-                              />
-
-                              {changeData.ceramic_drawer_included && (
-                                <>
-                                  <TextField
-                                    sx={{ mt: 2, mb: 1 }}
-                                    size="small"
-                                    fullWidth
-                                    id="outlined-select"
-                                    select
-                                    name="ceramic_drawer"
-                                    label="Ceramic Drawer"
-                                    multiple
-                                    value={changeData.ceramic_drawer}
-                                    onChange={handleProductFields}
-                                    helperText="Please select your Ceramic Tiles."
-                                  >
-                                    {catalog.ceramic_drawer.map(
-                                      (option) =>
-                                        option.status && (
-                                          <MenuItem
-                                            key={option.SKU}
-                                            value={option.SKU}
-                                          >
-                                            {option.title}
-                                          </MenuItem>
-                                        )
-                                    )}
-                                    <MenuItem key={"none"} value="None">
-                                      {"None"}
-                                    </MenuItem>
-                                  </TextField>
-                                  <TextField
-                                    value={changeData.ceramic_drawer_qty}
-                                    onChange={handleProductFields}
-                                    size={"small"}
-                                    fullWidth
-                                    label="Ceramic Drawer Quantity"
-                                    type="number"
-                                    helperText="Enter the number of ceramic drawer included."
-                                    name="ceramic_drawer_qty"
-                                  />
-                                </>
-                              )}
-
-                              <FormControlLabel
-                                control={
-                                  <Checkbox
-                                    checked={changeData.ceramic_tiles_included}
-                                    onChange={handleProductFields}
-                                    name="ceramic_tiles_included"
-                                  />
-                                }
-                                label="Ceramic Tiles"
-                              />
-                            </FormGroup>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={changeData.ceramic_tiles_included}
+                            onChange={handleProductFields}
+                            name="ceramic_tiles_included"
+                          />
+                        }
+                        label="Ceramic Tiles"
+                      />
+                    </FormGroup>
 
 
-          
+
                     <Button
                       color="primary"
                       type="submit"

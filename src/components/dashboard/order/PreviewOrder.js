@@ -1,16 +1,23 @@
 import { Create, CreateRounded, TurnLeftOutlined } from "@mui/icons-material";
 import {
+  Backdrop,
   Box,
+  Button,
+  Checkbox,
   Divider,
+  Fade,
+  FormControlLabel,
   Grid,
   IconButton,
+  Modal,
   Stack,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getOrderDetails } from "../../../services/service";
+import { addDraft, getOrderDetails } from "../../../services/service";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import default_image from "../../../assets/img/question.svg";
 import ReactHtmlParser from "react-html-parser";
@@ -18,14 +25,30 @@ import ReactHtmlParser from "react-html-parser";
 import "../../../assets/custom/css/orderPreview.css";
 
 // redux 
-import { useDispatch } from "react-redux"; 
-import {setForm} from '../../../store/action/action'
+import { useDispatch } from "react-redux";
+import { setForm, setAlert } from '../../../store/action/action'
+
+const style = {
+  position: 'absolute',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 2,
+};
 
 const PreviewOrder = ({ history }) => {
   let { _id } = useParams();
 
-  let dispatch = useDispatch(state=>state)
+  let dispatch = useDispatch()
   let [data, setData] = useState({ order: undefined, custom: [], product: [] });
+  let [open, setOpen] = useState({ open: false, product: null, items: data.order && data.order.items });
 
   useEffect(() => {
     if (_id) getData();
@@ -43,169 +66,107 @@ const PreviewOrder = ({ history }) => {
   }
 
   return (
-    <Box sx={{ pl: 4, pr: 4 }}>
-      {data.order && (
-        <Grid container sx={{ gap: "1rem", alignItems: "baseline" }}>
-          {/* top head  */}
-          <Grid
-            item
-            xs={12}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.5rem",
-              width: "100%",
-              flexWrap: "wrap",
-            }}
-          >
-            <IconButton color={"primary"} onClick={() => history("/order")}>
-              <ArrowCircleLeftIcon />
-            </IconButton>
-            <Typography variant="h5" sx={{ display: "inline" }}>
-              {data.order.O}
-            </Typography>
-            {/* Status  */}
-            <Box
-              pl={1}
-              pr={1}
+    <>
+      <SetFullfullForm data={open} setAlert={setAlert} dispatch={dispatch} setData={setOpen} order={data.order && data.order.O} />
+      <Box sx={{ pl: 4, pr: 4 }}>
+        {data.order && (
+          <Grid container sx={{ gap: "1rem", alignItems: "baseline" }}>
+            {/* top head  */}
+            <Grid
+              item
+              xs={12}
               sx={{
-                borderRadius: "15px",
-                backgroundColor:
-                  data.order.status === "completed"
-                    ? "#23d92387"
-                    : data.order.status === "processing"
-                    ? "#d9c25687"
-                    : "#d9565687",
-                color: "#545454cf",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                width: "100%",
+                flexWrap: "wrap",
               }}
             >
-              <Typography variant="caption">
-                {data.order.status.toUpperCase()}
-              </Typography>
-            </Box>
-            {/* full filed */}
-            <Box
-              pl={1}
-              pr={1}
-              sx={{
-                borderRadius: "15px",
-                backgroundColor: data.order.fulfilled
-                  ? "#23d92387"
-                  : "#d9c25687",
-                color: "#545454cf",
-              }}
-            >
-              <Typography variant="caption">
-                {data.order.fulfilled ? "Fulfilled" : "Unfulfilled"}
-              </Typography>
-            </Box>
-            {/* store  */}
-            <Box
-              pl={1}
-              pr={1}
-              sx={{
-                borderRadius: "15px",
-                backgroundColor: "#d9c25687",
-                color: "#545454cf",
-              }}
-            >
-              <Typography variant="caption">
-                {data.order.sale_channel}
-              </Typography>
-            </Box>
-            <Box sx={{ flex: 1, textAlign: "right", color: "grey" }}>
-              <Typography variant={"caption"}>
-                {new Date(data.order.order_time).toLocaleString()}
-              </Typography>
-            </Box>
-            <Box sx={{ textAlign: "right", color: "grey" }}>
-              <IconButton color="primary" onClick={()=>{
-                dispatch(setForm({
-                    formType : 'edit_order',
-                    payload : data,
-                    state : true
-                }))
-              }}>
-                <Tooltip title="Edit">
-                  <CreateRounded />
-                </Tooltip>
+              <IconButton color={"primary"} onClick={() => history("/order")}>
+                <ArrowCircleLeftIcon />
               </IconButton>
-            </Box>
-            {/* <Box sx={{ display: 'block', width: '100%', pl: 6 }}>
+              <Typography variant="h5" sx={{ display: "inline" }}>
+                {data.order.O}
+              </Typography>
+              {/* Status  */}
+              <Box
+                pl={1}
+                pr={1}
+                sx={{
+                  borderRadius: "15px",
+                  backgroundColor:
+                    data.order.status === "completed"
+                      ? "#23d92387"
+                      : data.order.status === "processing"
+                        ? "#d9c25687"
+                        : "#d9565687",
+                  color: "#545454cf",
+                }}
+              >
+                <Typography variant="caption">
+                  {data.order.status.toUpperCase()}
+                </Typography>
+              </Box>
+              {/* full filed */}
+              {/* <Box
+                pl={1}
+                pr={1}
+                sx={{
+                  borderRadius: "15px",
+                  backgroundColor: data.order.fulfilled
+                    ? "#23d92387"
+                    : "#d9c25687",
+                  color: "#545454cf",
+                }}
+              >
+                <Typography variant="caption">
+                  {data.order.fulfilled ? "Fulfilled" : "Unfulfilled"}
+                </Typography>
+              </Box> */}
+              {/* store  */}
+              <Box
+                pl={1}
+                pr={1}
+                sx={{
+                  borderRadius: "15px",
+                  backgroundColor: "#d9c25687",
+                  color: "#545454cf",
+                }}
+              >
+                <Typography variant="caption">
+                  {data.order.sale_channel}
+                </Typography>
+              </Box>
+              <Box sx={{ flex: 1, textAlign: "right", color: "grey" }}>
+                <Typography variant={"caption"}>
+                  {new Date(data.order.order_time).toLocaleString()}
+                </Typography>
+              </Box>
+              <Box sx={{ textAlign: "right", color: "grey" }}>
+                <IconButton color="primary" onClick={() => {
+                  dispatch(setForm({
+                    formType: 'edit_order',
+                    payload: data,
+                    state: true
+                  }))
+                }}>
+                  <Tooltip title="Edit">
+                    <CreateRounded />
+                  </Tooltip>
+                </IconButton>
+              </Box>
+              {/* <Box sx={{ display: 'block', width: '100%', pl: 6 }}>
                             <Typography variant={'caption'}>
                                 {new Date(data.order.order_time).toString()}
                             </Typography>
                         </Box> */}
-          </Grid>
-          {/* top head ends*/}
-          {/* leftWing */}
-          <Grid item xs={12} md={8} className="leftWing">
-            <Grid container sx={{ gap: "1rem", alignItems: "baseline" }}>
-              {/* Items */}
-              <Grid
-                item
-                xs={12}
-                p={2}
-                sx={{ boxShadow: 1, borderRadius: 3 }}
-                className="items"
-              >
-                <Typography variant="body1">Products</Typography>
-                <ProductCards
-                  product={data.product}
-                  custom={data.custom}
-                  quantity={data.order.quantity}
-                />
-              </Grid>
-              {/* Items ends */}
-              {/* Customizations */}
-              {data.order.customizations.length > 0 && (
-                <Grid
-                  item
-                  xs={12}
-                  p={2}
-                  sx={{ boxShadow: 1, borderRadius: 3 }}
-                  className="items"
-                >
-                  <Typography variant="body1">Customizations</Typography>
-                  <Customize custom={data.order.customizations || []} />
-                </Grid>
-              )}
-              {/* Customizations ends */}
-              {/* Payment */}
-              <Grid
-                item
-                xs={12}
-                p={2}
-                sx={{ boxShadow: 1, borderRadius: 3 }}
-                className="items"
-              >
-                <Typography variant="body1">Payment</Typography>
-                <Payment
-                  pay={{
-                    total: data.order.total,
-                    subTotal: data.order.subTotal,
-                    paid: data.order.paid,
-                    discount: data.order.discount,
-                    pay_method_remaining: data.order.pay_method_remaining,
-                    pay_method_advance: data.order.pay_method_advance,
-                    quantity:
-                      data.order.quantity &&
-                      Object.values(data.order.quantity).reduce(
-                        (row, num) => (row += parseInt(num)),
-                        0
-                      ),
-                  }}
-                />
-              </Grid>
-              {/* Customizations ends */}
             </Grid>
-          </Grid>
-          {/* leftWing end*/}
-          {/* right Wing */}
-          <Grid item xs={12} md={3.5}>
-            <Grid container sx={{ gap: "1rem", alignItems: "baseline" }}>
-              {/* note */}
-              {data.order.note !== "" && (
+            {/* top head ends*/}
+            {/* leftWing */}
+            <Grid item xs={12} md={8} className="leftWing">
+              <Grid container sx={{ gap: "1rem", alignItems: "baseline" }}>
+                {/* Items */}
                 <Grid
                   item
                   xs={12}
@@ -213,40 +174,32 @@ const PreviewOrder = ({ history }) => {
                   sx={{ boxShadow: 1, borderRadius: 3 }}
                   className="items"
                 >
-                  <Typography variant="body1">Note</Typography>
-                  <Box p={1}>{ReactHtmlParser(data.order.note)}</Box>
+                  <Typography variant="body1">Products</Typography>
+                  <ProductCards
+                    item={data.order.items}
+                    product={data.product}
+                    setOpen={setOpen}
+                    custom={data.custom}
+                    quantity={data.order.quantity}
+                    prdouctPrice={data.order.product_price}
+                  />
                 </Grid>
-              )}
-              {/* note ends */}
-              {/* customer */}
-              <Grid
-                item
-                xs={12}
-                p={2}
-                sx={{ boxShadow: 1, borderRadius: 3 }}
-                className="items"
-              >
-                <Typography variant="body1">Customer</Typography>
-                <Customer
-                  customer={{
-                    CID: data.order.CID,
-                    customer_name: data.order.customer_name,
-                    customer_email: data.order.customer_email,
-                    customer_mobile: data.order.customer_mobile,
-                    city: data.order.city,
-                    state: data.order.state,
-                    shipping: data.order.shipping,
-                    billing: data.order.billing,
-                    GST: data.order.GST,
-                    has_GST: data.order.has_GST,
-                    classification: data.order.classification,
-                    customer_type: data.order.customer_type,
-                  }}
-                />
-              </Grid>
-              {/* customer ends*/}
-              {/* fulfilled */}
-              {data.order.fulfilled && (
+                {/* Items ends */}
+                {/* Customizations */}
+                {data.order.customizations.length > 0 && (
+                  <Grid
+                    item
+                    xs={12}
+                    p={2}
+                    sx={{ boxShadow: 1, borderRadius: 3 }}
+                    className="items"
+                  >
+                    <Typography variant="body1">Customizations</Typography>
+                    <Customize custom={data.order.customizations || []} />
+                  </Grid>
+                )}
+                {/* Customizations ends */}
+                {/* Payment */}
                 <Grid
                   item
                   xs={12}
@@ -254,51 +207,127 @@ const PreviewOrder = ({ history }) => {
                   sx={{ boxShadow: 1, borderRadius: 3 }}
                   className="items"
                 >
-                  <Typography variant="body1">Fulfilled</Typography>
-                  <Fulfilled
-                    fulfilled={{
-                      AWB: data.order.AWB,
-                      pic_before_dispatch: data.order.pic_before_dispatch,
-                      courier_company: data.order.courier_company,
-                      inventory_location: data.order.inventory_location,
+                  <Typography variant="body1">Payment</Typography>
+                  <Payment
+                    pay={{
+                      total: data.order.total,
+                      subTotal: data.order.subTotal,
+                      paid: data.order.paid,
+                      discount: data.order.discount,
+                      pay_method_remaining: data.order.pay_method_remaining,
+                      pay_method_advance: data.order.pay_method_advance,
+                      quantity:
+                        data.order.quantity &&
+                        Object.values(data.order.quantity).reduce(
+                          (row, num) => (row += parseInt(num)),
+                          0
+                        ),
                     }}
                   />
                 </Grid>
-              )}
-              {/* Other ends*/}
-              {/* other */}
-              <Grid
-                item
-                xs={12}
-                p={2}
-                sx={{ boxShadow: 1, borderRadius: 3 }}
-                className="items"
-              >
-                <Typography variant="body1">Other Information</Typography>
-                <Other
-                  other={{
-                    sales_person: data.order.sales_person,
-                    pic_before_dispatch: data.order.pic_before_dispatch,
-                    PO: data.order.PO,
-                  }}
-                />
+                {/* Customizations ends */}
               </Grid>
-              {/* Other ends*/}
             </Grid>
+            {/* leftWing end*/}
+            {/* right Wing */}
+            <Grid item xs={12} md={3.5}>
+              <Grid container sx={{ gap: "1rem", alignItems: "baseline" }}>
+                {/* note */}
+                {data.order.note !== "" && (
+                  <Grid
+                    item
+                    xs={12}
+                    p={2}
+                    sx={{ boxShadow: 1, borderRadius: 3 }}
+                    className="items"
+                  >
+                    <Typography variant="body1">Note</Typography>
+                    <Box p={1}>{ReactHtmlParser(data.order.note)}</Box>
+                  </Grid>
+                )}
+                {/* note ends */}
+                {/* customer */}
+                <Grid
+                  item
+                  xs={12}
+                  p={2}
+                  sx={{ boxShadow: 1, borderRadius: 3 }}
+                  className="items"
+                >
+                  <Typography variant="body1">Customer</Typography>
+                  <Customer
+                    customer={{
+                      CID: data.order.CID,
+                      customer_name: data.order.customer_name,
+                      customer_email: data.order.customer_email,
+                      customer_mobile: data.order.customer_mobile,
+                      city: data.order.city,
+                      state: data.order.state,
+                      shipping: data.order.shipping,
+                      billing: data.order.billing,
+                      GST: data.order.GST,
+                      has_GST: data.order.has_GST,
+                      classification: data.order.classification,
+                      customer_type: data.order.customer_type,
+                    }}
+                  />
+                </Grid>
+                {/* customer ends*/}
+                {/* fulfilled */}
+                {data.order.fulfilled && (
+                  <Grid
+                    item
+                    xs={12}
+                    p={2}
+                    sx={{ boxShadow: 1, borderRadius: 3 }}
+                    className="items"
+                  >
+                    <Typography variant="body1">Fulfilled</Typography>
+                    <Fulfilled
+                      fulfilled={{
+                        AWB: data.order.AWB,
+                        pic_before_dispatch: data.order.pic_before_dispatch,
+                        courier_company: data.order.courier_company,
+                        inventory_location: data.order.inventory_location,
+                      }}
+                    />
+                  </Grid>
+                )}
+                {/* Other ends*/}
+                {/* other */}
+                <Grid
+                  item
+                  xs={12}
+                  p={2}
+                  sx={{ boxShadow: 1, borderRadius: 3 }}
+                  className="items"
+                >
+                  <Typography variant="body1">Other Information</Typography>
+                  <Other
+                    other={{
+                      sales_person: data.order.sales_person,
+                      pic_before_dispatch: data.order.pic_before_dispatch,
+                      PO: data.order.PO,
+                    }}
+                  />
+                </Grid>
+                {/* Other ends*/}
+              </Grid>
+            </Grid>
+            {/* right Wing end*/}
           </Grid>
-          {/* right Wing end*/}
-        </Grid>
-      )}
-    </Box>
+        )}
+      </Box>
+    </>
   );
 };
 
-function ProductCards({ product, custom, quantity }) {
+function ProductCards({ product, custom, quantity, setOpen, item, prdouctPrice }) {
   return (
     <>
       {product.length > 0 &&
-        product.map((row,key) => (
-          <Box key = {key}>
+        product.map((row, key) => (
+          <Box key={key}>
             {" "}
             <Box className="productCard">
               <img
@@ -312,11 +341,17 @@ function ProductCards({ product, custom, quantity }) {
                 <Typography variant="caption">{row.SKU}</Typography>
               </Typography>
               <Typography variant="body2">
-                ₹{row.selling_price} X {quantity[row.SKU]}
+                ₹{prdouctPrice[row.SKU]} X {quantity[row.SKU]}
               </Typography>
               <Typography variant="body2">
                 ₹{parseInt(row.selling_price) * parseInt(quantity[row.SKU])}
               </Typography>
+            </Box>
+            <Box className='fullfilledBtn' >
+              <Button variant="contained" size="small"
+                onClick={() => setOpen(old => ({ open: true, product: row, item: item[row.SKU], items: item }))} >
+                {item[row.SKU].fullfilled ?  "Fulfilled" : "Fullfill"}
+              </Button>
             </Box>
             <Divider />
           </Box>
@@ -343,6 +378,12 @@ function ProductCards({ product, custom, quantity }) {
                 ₹{parseInt(row.selling_price) * parseInt(quantity[row.CUS])}
               </Typography>
             </Box>
+            <Box className='fullfilledBtn' >
+            <Button variant="contained" size="small"
+                onClick={() => setOpen(old => ({ open: true, product: row, item: item[row.SKU], items: item }))} >
+                {item[row.SKU].fullfilled ?  "Fulfilled" : "Fullfill"}
+              </Button>
+            </Box>
             <Divider />
           </>
         ))}
@@ -350,12 +391,130 @@ function ProductCards({ product, custom, quantity }) {
   );
 }
 
+function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
+
+  function handleClose() {
+    setData({
+      product: null,
+      open: false,
+      item: null
+    })
+  }
+
+  function handleChange(e) {
+    console.log(e.target.value)
+    if (e.target.name === 'fullfilled') {
+      setData(old => ({
+        ...old,
+        item: { ...old.item, [e.target.name]: e.target.checked }
+      }))
+    }
+    else {
+      setData(old => ({
+        ...old,
+        item: { ...old.item, [e.target.name]: e.target.value }
+      }))
+    }
+  }
+
+  async function handleSubmit(e) {
+    try {
+      e.preventDefault();
+
+      const FD = new FormData()
+
+      FD.append("DID", '');
+      FD.append("AID", order);
+      FD.append("type", "Order");
+      FD.append("operation", "addOrderFulfilment");
+      FD.append('items', JSON.stringify({ ...data.items, [data.product['SKU']]: data.item }))
+
+      let res = await addDraft(FD)
+
+      if (res.status === 200) {
+        handleClose()
+        dispatch(setAlert({
+          open: true,
+          variant: 'success',
+          message: res.data.message
+        }))
+      }
+
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert(
+        {
+          open: true,
+          variant: 'error',
+          message: 'Something went wrong !!!'
+        }))
+    }
+  }
+
+  return (<>
+    {console.log(data)}
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      open={data.open}
+      onClose={handleClose}
+      closeAfterTransition
+      slots={{ backdrop: Backdrop }}
+      slotProps={{
+        backdrop: {
+          timeout: 500,
+        },
+      }}
+    >
+      <Fade in={data.open}>
+        <Box sx={style} onSubmit={handleSubmit} component='form' >
+          <Typography id="transition-modal-title" variant="body1" component="h2">
+            Fullfilled ({data.product && data.product['SKU']})
+          </Typography>
+          {data.item && <>
+            <TextField
+              variant='outlined'
+              size="small"
+              fullWidth
+              name='trackingId'
+              onChange={handleChange}
+              label='Tracking Id'
+              value={data.item.trackingId || ''}
+            />
+            <TextField
+              variant='outlined'
+              size="small"
+              fullWidth
+              onChange={handleChange}
+              name='shipping_carrier'
+              label='Shipping Carrier'
+              value={data.item.shipping_carrier || ''} />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={data.item.fullfilled || false}
+                  onChange={handleChange}
+                  name="fullfilled"
+                />
+              }
+              label="Fullfilled"
+            />
+            <Button type='submit' variant="contained" size='small'>Apply</Button>
+          </>}
+        </Box>
+
+      </Fade>
+    </Modal>
+  </>)
+
+}
+
 function Customize({ custom }) {
   return (
     <>
       {custom.length > 0 &&
-        custom.map((row,key) => (
-          <Box key= {key}>
+        custom.map((row, key) => (
+          <Box key={key}>
             {" "}
             <Box className="customCard">
               <Typography variant="subtitle1">SKU : {row.SKU}</Typography>
@@ -507,6 +666,9 @@ function Customer({ customer }) {
 }
 
 function Fulfilled({ fulfilled }) {
+
+
+
   return (
     <>
       <Box>
@@ -517,6 +679,7 @@ function Fulfilled({ fulfilled }) {
         <Typography variant="body2">
           Inventory Location : {fulfilled.inventory_location}
         </Typography>
+
       </Box>
     </>
   );

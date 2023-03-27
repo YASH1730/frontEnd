@@ -285,9 +285,11 @@ export default function CreateOrder() {
     shipping: "",
     billing: "",
     product_array: [],
+    product_price : {},
     customizations: [],
     quantity: [],
     subTotal: 0,
+    discount_per_product: {},
     discount: 0,
     total: 0,
     status: "processing",
@@ -331,27 +333,33 @@ export default function CreateOrder() {
     getCatalogs();
   }, [data.refresh]);
 
-  // for product data row
+  // for product data row updations 
   useEffect(() => {
+    // console.log(data.discount_per_product)
+
     const rows = catalogs.product.filter((row) => {
       return data.product_array.includes(row.SKU) && row;
     });
 
     setProductRows(
       rows.map((dataOBJ, index) => {
-        setData({ ...data, quantity: { ...data.quantity, [dataOBJ.SKU]: 1 } });
 
-        return {
+        // discount decided 
+        let discount =  dataOBJ.discount_limit < dataOBJ.category.discount_limit ? dataOBJ.category.discount_limit || 0 : dataOBJ.discount_limit
+       console.log(discount)
+// adding the quantity and order discount details
+        setData({ ...data, quantity: { ...data.quantity, [dataOBJ.SKU]: 1},product_price : {...data.product_price, [dataOBJ.SKU] : dataOBJ.selling_price  },
+           discount_per_product : {...data.discount_per_product, [dataOBJ.SKU] : discount || 0 }});
+       
+           return {
           id: index + 1,
           SKU: dataOBJ.SKU,
           product_title: dataOBJ.product_title,
           product_image: dataOBJ.featured_image,
-          dimension:
-            dataOBJ.length_main + "X" + dataOBJ.breadth + "X" + dataOBJ.height,
-          MRP: dataOBJ.MRP,
+          dimension: dataOBJ.length_main + "X" + dataOBJ.breadth + "X" + dataOBJ.height,
           qty: data.quantity[dataOBJ.SKU] ? data.quantity[dataOBJ.SKU] : 1,
           selling_price: dataOBJ.selling_price,
-          discount_limit: dataOBJ.discount_limit,
+          discount_limit: discount,
           range: dataOBJ.range,
           action: dataOBJ,
         };
@@ -371,6 +379,18 @@ export default function CreateOrder() {
         subTotal : val,
         total : val
       }))
+
+      let newQuantity = {} // for the check on removal product
+      let newDiscount = {} // for the check on removal product
+      let newProduct = {} // for the check on removal product
+  
+      productRow.map((row) => {
+        newQuantity = {...newQuantity, [row.SKU] : data.quantity[row.SKU]}
+        newDiscount = {...newDiscount, [row.SKU] : data.discount_per_product[row.SKU]}
+        newProduct = {...newProduct, [row.SKU] : data.product_price[row.SKU]}
+      });
+
+      setData(old=>({...old,quantity : newQuantity, discount_per_product : newDiscount,product_price : newProduct }))
     }
 
   },[activeStep])
@@ -414,13 +434,15 @@ export default function CreateOrder() {
   // for calculating subtotal
   function calSubtotal  ()  {
     let val = 0;
+
     productRow.map((row) => {
-      return (val += row.selling_price * data.quantity[row.SKU]);
+        return (val += (row.selling_price - (row.selling_price/100 * data.discount_per_product[row.SKU]) ) * data.quantity[row.SKU]);
     });
+
     return val;
   };
 
-  // create order  col
+  // create order data grid  columns
   const product_columns = [
     {
       field: "id",
@@ -486,6 +508,31 @@ export default function CreateOrder() {
       field: "dimension",
       headerName: "Dimension",
       width: 150,
+    },
+    {
+      field: "discount_limit",
+      headerName: "Discount",
+      width: 150,
+      renderCell: (params) => (
+        <Grid container className="qtyButtons">
+          <Grid item xs={12}>
+            <TextField
+              value={data.discount_per_product[params.row.SKU]}
+              type="number"
+              size="small"
+              onChange={(e) =>
+                setData({
+                  ...data,
+                  discount_per_product: {
+                    ...data.discount_per_product,
+                    [params.row.SKU]: parseInt(e.target.value) >= 0 && parseInt(e.target.value) <= 100 ? parseInt(e.target.value) : params.formattedValue,
+                  },
+                })
+              }
+            />
+          </Grid>
+        </Grid>
+      ),
     },
     {
       field: 'action',
@@ -773,6 +820,7 @@ export default function CreateOrder() {
     /// for adding the note
     try {
     console.log(data);
+    // return 1
     const res = await addDraft({
       ...data,
       note : editorRef.current.getContent(),
@@ -1476,7 +1524,6 @@ export default function CreateOrder() {
 
                     <Autocomplete
                       sx={{ mb: 2 }}
-                      disablePortal
                       size="small"
                       fullWidth
                       noOptionsText={"ex : P-01001"}
@@ -1486,6 +1533,7 @@ export default function CreateOrder() {
                       options={catalogs.product.map((row) => {
                         return row.SKU;
                       })}
+                      value={data.product_array}
                       renderInput={(params) => (
                         <TextField
                           onKeyUpCapture={handleSearch}

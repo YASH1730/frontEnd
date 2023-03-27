@@ -559,7 +559,14 @@ export default function Action() {
             display.data.draftStatus = e.target.action.value;
             sendResponse(display.data);
             break;
-          default:
+          case "addOrderFulfilment":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.AID = display.data.AID;
+            display.data.draftStatus = e.target.action.value;
+            sendResponse(display.data);
+            break         
+            default:
             console.log("no operation found");
             break;
         }
