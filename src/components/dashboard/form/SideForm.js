@@ -889,6 +889,9 @@ const SideForm = () => {
     country: "",
     pincode: "",
     note: "",
+    restock : false,
+    return : false,
+    refund : false,
   });
 
   function getLabelText(value) {
@@ -1976,6 +1979,9 @@ const SideForm = () => {
     "customizations",
     "marketing",
     "dial",
+    "restock",
+    "return",
+    "refund",
   ];
 
   //  for product felids
@@ -2330,6 +2336,9 @@ const SideForm = () => {
     setFiles([]);
     setActiveStep(0);
     setData({
+      restock : false,
+      return : false,
+      refund : false,
       CVW: 0,
       ACIN: "",
       web_banner_status: false,
@@ -5125,7 +5134,7 @@ const SideForm = () => {
             Product_SKU = { ...Product_SKU, [SKU]: parseInt(changeData[SKU]) || 1 }
             if(!items.hasOwnProperty(SKU))
             Object.assign(items,{[SKU] : {
-              fullfilled: false,shipping_carrier:"",trackingId: ""}
+              fullfilled: false,shipping_carrier:"",trackingId: "", qty : 0}
             })
           }
         );
@@ -19358,9 +19367,10 @@ const SideForm = () => {
                         label="Restocking"
                       />
                       {changeData.restock && (
-                        <>
+                        <Box mt = {1}>
                           <TextField
                             size="small"
+                            mt = {1}
                             fullWidth
                             id="fullWidth"
                             label="AWB"
@@ -19378,8 +19388,12 @@ const SideForm = () => {
                             name="AWB"
                           />
                           <TextField
+                            sx={{ mt: 2, mb: 1 }}
+
                             size="small"
                             fullWidth
+                            mt = {1}
+
                             id="fullWidth"
                             label="courier_company"
                             type="number"
@@ -19396,7 +19410,7 @@ const SideForm = () => {
                             name="courier_company"
                           />
 
-                        </>
+                        </Box>
                       )}
 
                       {/* //  Return */}
@@ -19413,7 +19427,7 @@ const SideForm = () => {
                       />
 
                       {changeData.return && (
-                        <>
+                        <Box>
                           <TextField
                             sx={{ mt: 2, mb: 1 }}
                             size="small"
@@ -19437,7 +19451,7 @@ const SideForm = () => {
                             )}
                           </TextField>
 
-                        </>
+                        </Box>
                       )}
 
                       {/* refund */}
@@ -19454,7 +19468,7 @@ const SideForm = () => {
 
 
                       {changeData.refund && (
-                        <>
+                        <Box mt = {1}>
 
                           <TextField
                             size="small"
@@ -19476,73 +19490,10 @@ const SideForm = () => {
                             name="refund_ammound"
                           />
 
-                        </>
+                        </Box>
                       )}
 
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={changeData.ceramic_drawer_included}
-                            onChange={handleProductFields}
-                            name="ceramic_drawer_included"
-                          />
-                        }
-                        label="Ceramic Drawers"
-                      />
-
-                      {changeData.ceramic_drawer_included && (
-                        <>
-                          <TextField
-                            sx={{ mt: 2, mb: 1 }}
-                            size="small"
-                            fullWidth
-                            id="outlined-select"
-                            select
-                            name="ceramic_drawer"
-                            label="Ceramic Drawer"
-                            multiple
-                            value={changeData.ceramic_drawer}
-                            onChange={handleProductFields}
-                            helperText="Please select your Ceramic Tiles."
-                          >
-                            {catalog.ceramic_drawer.map(
-                              (option) =>
-                                option.status && (
-                                  <MenuItem
-                                    key={option.SKU}
-                                    value={option.SKU}
-                                  >
-                                    {option.title}
-                                  </MenuItem>
-                                )
-                            )}
-                            <MenuItem key={"none"} value="None">
-                              {"None"}
-                            </MenuItem>
-                          </TextField>
-                          <TextField
-                            value={changeData.ceramic_drawer_qty}
-                            onChange={handleProductFields}
-                            size={"small"}
-                            fullWidth
-                            label="Ceramic Drawer Quantity"
-                            type="number"
-                            helperText="Enter the number of ceramic drawer included."
-                            name="ceramic_drawer_qty"
-                          />
-                        </>
-                      )}
-
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={changeData.ceramic_tiles_included}
-                            onChange={handleProductFields}
-                            name="ceramic_tiles_included"
-                          />
-                        }
-                        label="Ceramic Tiles"
-                      />
+                  
                     </FormGroup>
 
 

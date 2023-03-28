@@ -333,11 +333,11 @@ export default function Order({history}) {
           <Tooltip title='Cancel Order'>
           <IconButton
             onClick={() => {
-              // dispatch(setForm({
-              //   state: true,
-              //   formType: "cancel_order",
-              //   payload : params.formattedValue
-              // }));
+              dispatch(setForm({
+                state: true,
+                formType: "cancel_order",
+                payload : params.formattedValue
+              }));
             }}
             aria-label="delete"
           >

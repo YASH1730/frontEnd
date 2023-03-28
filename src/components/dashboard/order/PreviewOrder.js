@@ -9,6 +9,7 @@ import {
   FormControlLabel,
   Grid,
   IconButton,
+  MenuItem,
   Modal,
   Stack,
   TextField,
@@ -67,7 +68,7 @@ const PreviewOrder = ({ history }) => {
 
   return (
     <>
-      <SetFullfullForm data={open} setAlert={setAlert} dispatch={dispatch} setData={setOpen} order={data.order && data.order.O} />
+      <SetFullfullForm data={open} setAlert={setAlert} dispatch={dispatch} quantity = {data.order && data.order.quantity} setData={setOpen} order={data.order && data.order.O} />
       <Box sx={{ pl: 4, pr: 4 }}>
         {data.order && (
           <Grid container sx={{ gap: "1rem", alignItems: "baseline" }}>
@@ -349,8 +350,8 @@ function ProductCards({ product, custom, quantity, setOpen, item, prdouctPrice }
             </Box>
             <Box className='fullfilledBtn' >
               <Button variant="contained" size="small"
-                onClick={() => setOpen(old => ({ open: true, product: row, item: item[row.SKU], items: item }))} >
-                {item[row.SKU].fullfilled ?  "Fulfilled" : "Fullfill"}
+                onClick={() => setOpen(old => ({ open: true, product: row, item: item[row.SKU], qty : quantity[row.SKU] , items: item }))} >
+                {item[row.SKU].fullfilled ? "Fulfilled" : "Fullfill"}
               </Button>
             </Box>
             <Divider />
@@ -379,9 +380,9 @@ function ProductCards({ product, custom, quantity, setOpen, item, prdouctPrice }
               </Typography>
             </Box>
             <Box className='fullfilledBtn' >
-            <Button variant="contained" size="small"
+              <Button variant="contained" size="small"
                 onClick={() => setOpen(old => ({ open: true, product: row, item: item[row.SKU], items: item }))} >
-                {item[row.SKU].fullfilled ?  "Fulfilled" : "Fullfill"}
+                {item[row.SKU].fullfilled ? "Fulfilled" : "Fullfill"}
               </Button>
             </Box>
             <Divider />
@@ -392,6 +393,11 @@ function ProductCards({ product, custom, quantity, setOpen, item, prdouctPrice }
 }
 
 function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
+
+
+  const suppierCompany = [
+    "DTDC", "Bluedart", "Safexpress", "ATS", "Ekart", "XpressBees", "DEV(Direct Courier)", "Shree Maruti Courier"
+  ]
 
   function handleClose() {
     setData({
@@ -485,10 +491,28 @@ function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
               variant='outlined'
               size="small"
               fullWidth
+              name='qty'
+              type = 'number'
+              onChange={handleChange}
+              label='Quantity'
+              value={data.item.qty >= 0 && data.item.qty <= data.qty ? data.item.qty  : 0}
+            />
+           <TextField
+              variant='outlined'
+              size="small"
+              select
+              fullWidth
               onChange={handleChange}
               name='shipping_carrier'
               label='Shipping Carrier'
-              value={data.item.shipping_carrier || ''} />
+              value={data.item.shipping_carrier || ''} >
+              {
+                suppierCompany.map((row,i) =><MenuItem key = {i} value={row}>
+                    {row}
+                  </MenuItem>)
+              }
+
+            </TextField>
             <FormControlLabel
               control={
                 <Checkbox
