@@ -586,34 +586,36 @@ const SideForm = () => {
       value: "Staff",
       label: "Staff",
     },
-
   ];
-  const rangeCatalog = [
-    {
-      value: "Traditional",
-      label: "Traditional",
-    },
+  const suppierCompany = [
+    "DTDC", "Bluedart", "Safexpress", "ATS", "Ekart", "XpressBees", "DEV(Direct Courier)", "Shree Maruti Courier"
+  ]
+  // const rangeCatalog = [
+  //   {
+  //     value: "Traditional",
+  //     label: "Traditional",
+  //   },
 
-    {
-      value: "Distressed",
-      label: "Distressed",
-    },
+  //   {
+  //     value: "Distressed",
+  //     label: "Distressed",
+  //   },
 
-    {
-      value: "Crackle",
-      label: "Crackle",
-    },
+  //   {
+  //     value: "Crackle",
+  //     label: "Crackle",
+  //   },
 
-    {
-      value: "Painting",
-      label: "Painting",
-    },
+  //   {
+  //     value: "Painting",
+  //     label: "Painting",
+  //   },
 
-    {
-      value: "Antique",
-      label: "Antique",
-    },
-  ];
+  //   {
+  //     value: "Antique",
+  //     label: "Antique",
+  //   },
+  // ];
 
   const coupon_type = ["FLAT", "OFF(%)"];
 
@@ -19393,14 +19395,14 @@ const SideForm = () => {
                             size="small"
                             fullWidth
                             mt = {1}
-
+select
                             id="fullWidth"
                             label="courier_company"
-                            type="number"
+                            // type="number"
                             InputProps={{
                               startAdornment: (
                                 <InputAdornment position="start">
-                                  Courier Company Name
+                                  Courier Company 
                                 </InputAdornment>
                               ),
                             }}
@@ -19408,7 +19410,13 @@ const SideForm = () => {
                             value={changeData.courier_company}
                             onChange={handleProductFields}
                             name="courier_company"
-                          />
+                          >
+                               {
+                suppierCompany.map((row,i) =><MenuItem key = {i} value={row}>
+                    {row}
+                  </MenuItem>)
+              }
+                          </TextField>
 
                         </Box>
                       )}
@@ -19443,10 +19451,10 @@ const SideForm = () => {
                           >
                             {return_reason.map(
                               (option) => <MenuItem
-                                key={option.SKU}
-                                value={option.SKU}
+                                key={option}
+                                value={option}
                               >
-                                {option.title}
+                                {option}
                               </MenuItem>
                             )}
                           </TextField>
