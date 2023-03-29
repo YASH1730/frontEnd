@@ -1061,7 +1061,7 @@ const SideForm = () => {
       case "cancel_order":
         break;
       case "hardware":
-        getHKU();
+        // getHKU();
         getDID();
         getPrimaryMaterial().then((data) => {
           if (data.data === null) return setMaterialCatalog([]);
