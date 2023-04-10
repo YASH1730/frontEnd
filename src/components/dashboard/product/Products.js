@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -14,6 +14,7 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  Switch,
 } from "@mui/material";
 // import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -26,6 +27,7 @@ import {
   getListProduct,
   categoryList,
   getSubCatagories,
+  addDraft,
 } from "../../../services/service";
 import {
   DataGrid,
@@ -36,26 +38,14 @@ import {
 } from "@mui/x-data-grid";
 // import Pagination from '@mui/material/Pagination';
 import { useDispatch } from "react-redux";
-import { setForm } from "../../../store/action/action";
+import { setAlert, setForm } from "../../../store/action/action";
 import CopyrightIcon from "@mui/icons-material/Copyright";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
-// this is commented because needs a custom per page size
-// function CustomPagination() {
-//   const apiRef = useGridApiContext();
-//   const page = useGridSelector(apiRef, gridPageSelector);
-//   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+import { Message } from "@mui/icons-material";
+import { useConfirm } from "material-ui-confirm";
 
-//   return (
-//     <Pagination
-//       color="primary"
-//       count={pageCount}
-//       page={page + 1}
-//       onChange={(event, value) => apiRef.current.setPage(value - 1)}
-//     />
-//   );
-// }
 
 export default function Products(props) {
   // store
@@ -81,18 +71,72 @@ export default function Products(props) {
     setRow: setPageState,
   });
 
+  const confirm = useConfirm();
+
+  const option = {
+    labels: {
+      confirmable: "Proceed",
+      cancellable: "Cancel",
+    },
+  };
+
+  // confirmBox
+  const confirmBox = (e, action, id) => {
+    e.preventDefault();
+
+    confirm({ description: `This change will displayed in product listing !!!` }, option)
+      .then(async () => {
+        let res = await action(id);
+
+        if (res) {
+
+          setCheck(check.map((row, index) => {
+            // //console.log(parseInt(id[1]) === index)
+            if (parseInt(id[1]) === index)
+              return !row
+            else
+              return row
+          }))
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: res.data.message,
+            })
+          );
+        }
+        else{
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: "Something went wrong !!!",
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        console.log("Operation cancelled because. ", err);
+      });
+  };
+
+  const [check, setCheck] = useState([])
+
   // catalog State
   const [catalog, setCatalog] = useState({
     category: [],
     subCategory: [],
   });
 
-  const fetchData = async () => {
+  async function fetchData  ()  {
+
+    try {
     setPageState((lastState) => ({
       ...lastState,
       isLoading: true,
     }));
-    getListProduct({
+
+    let response = await getListProduct({
       page: pageState.page,
       limit: pageState.limit,
       total: pageState.total,
@@ -101,10 +145,17 @@ export default function Products(props) {
       SKU: pageState.SKU,
       subCategory: pageState.subCategory,
     })
-      .then((data) => {
+      if(response.status === 200)  {
+
+
+        // set status check
+        setCheck(response.data.data.map((row, index) => {
+          return row.status
+        }))
+
         setPageState((lastState) => ({
           ...lastState,
-          data: data.data.data.map((row, index) => {
+          data: response.data.data.map((row, index) => {
             return {
               id: index + 1,
               SKU: row.SKU,
@@ -113,39 +164,53 @@ export default function Products(props) {
               sub_category_name: row.sub_category_name,
               specification_image: row.specification_image,
               mannequin_image: row.mannequin_image,
-              status: row.status ? "Activated" : "Deactivated",
+              status: row.status,
               featured_image: row.featured_image,
               action: row,
             };
           }),
           isLoading: false,
-          total: data.data.total,
+          total: response.data.data.total,
           filter: false,
         }));
-      })
-      .catch((err) => {});
+      }}
+      catch(err) {
+        console.log(err)
+        dispatch(setAlert({
+          open : true,
+          message : "Problem in loading list.",
+          variant : 'error'
+      }))
+      };
   };
 
-  useMemo(() => {
+  useEffect(() => {
     fetchData();
+    fetchCategories();
   }, [pageState.page, pageState.limit, pageState.filter]);
 
-  useMemo(async () => {
-    let cat = await categoryList();
-    let subCat = await getSubCatagories();
+ 
+  async function fetchCategories(){
+    let cat =  await categoryList();
+    let subCat =  await getSubCatagories();
 
-    console.log(cat);
-    console.log(subCat);
+    if(cat.status === 200 && subCat.status === 200)
     setCatalog({
       category: cat.data,
       subCategory: subCat.data,
     });
-  }, []);
+  }
 
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
     { field: "SKU", headerName: "SKU", width: 100 },
-    { field: "status", headerName: "Status", width: 100 },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 200,
+      renderCell: (params) => <Switch onChange={handleSwitch} name={`${params.row.action._id + ' ' + (params.row.id - 1)}`} checked={check[params.row.id - 1]}></Switch>,
+
+    },
     {
       field: "featured_image",
       headerName: "Featured Image",
@@ -283,6 +348,27 @@ export default function Products(props) {
       ),
     },
   ];
+
+
+  const handleSwitch = (e) => {
+    // //console.log(e.target.name)
+    // //console.log(check)
+
+    const id = e.target.name.split(' ')[0]
+
+    console.log(id)
+
+    return confirmBox(e, addDraft, {
+      DID: "",
+      AID: id,
+      type: "Product",
+      operation: "updateProductStatus",
+      _id: id,
+      status : e.target.checked
+    })
+
+  
+  }
 
   function DataGridView() {
     return (

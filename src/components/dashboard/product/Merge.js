@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -7,6 +7,7 @@ import {
   Button,
   IconButton,
   Modal,
+  Switch,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CreateIcon from "@mui/icons-material/Create";
@@ -16,12 +17,14 @@ import {
   deleteProduct,
   getListMergeProduct,
   deleteMergeProduct,
+  addDraft,
 } from "../../../services/service";
 import MergeIcon from "@mui/icons-material/Merge";
 import question from "../../../assets/img/question.svg";
 import { DataGrid } from "@mui/x-data-grid";
 import { setAlert, setForm } from "../../../store/action/action";
 import { useDispatch } from "react-redux";
+import { useConfirm } from "material-ui-confirm";
 
 export default function Products(props) {
   // store
@@ -50,6 +53,56 @@ export default function Products(props) {
     P: "",
     MS: "",
   });
+  const [check, setCheck] = useState([])
+
+  const confirm = useConfirm();
+
+  const option = {
+    labels: {
+      confirmable: "Proceed",
+      cancellable: "Cancel",
+    },
+  };
+
+  // confirmBox
+  const confirmBox = (e, action, id) => {
+    e.preventDefault();
+
+    confirm({ description: `This change will displayed in product listing !!!` }, option)
+      .then(async () => {
+        let res = await action(id);
+
+        if (res) {
+
+          setCheck(check.map((row, index) => {
+            // //console.log(parseInt(id[1]) === index)
+            if (parseInt(id[1]) === index)
+              return !row
+            else
+              return row
+          }))
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: res.data.message,
+            })
+          );
+        }
+        else {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: "Something went wrong !!!",
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        console.log("Operation cancelled because. ", err);
+      });
+  };
 
   const fetchData = async () => {
     setPageState((lastState) => ({
@@ -66,12 +119,18 @@ export default function Products(props) {
       subCategory: pageState.subCategory,
     });
 
+    if(response.status === 200){
+       // set status check
+       setCheck(response.data.data.map((row, index) => {
+        return row.status
+      }))
     setPageState((lastState) => ({
       ...lastState,
       data: response.data.data.map((row, index) => {
         return {
           id: index + 1,
           M: row.M,
+          status: row.status,
           product_articles: row.product_articles,
           product_title: row.product_title,
           category_name: row.category_name,
@@ -111,21 +170,23 @@ export default function Products(props) {
       isLoading: false,
       total: response.data.total,
       filter: false,
-    }));
+    }));}
   };
 
-  useMemo(() => {
+  useEffect(() => {
     fetchData();
   }, [pageState.page, pageState.limit, pageState.filter]);
 
   const columns = [
     { field: "id", headerName: "ID", width: 50 },
     { field: "M", headerName: "M (Product Id)", width: 100 },
-    // {
-    //   field: "product_article",
-    //   headerName: "Merged Products",
-    //   width: 160,
-    // },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 100,
+      renderCell: (params) => <Switch onChange={handleSwitch} name={`${params.row.action + ' ' + (params.row.id - 1)}`} checked={check[params.row.id - 1]}></Switch>,
+
+    },
     {
       field: "featured_image",
       headerName: "Featured Image",
@@ -225,6 +286,26 @@ export default function Products(props) {
       ),
     },
   ];
+
+  const handleSwitch = (e) => {
+    // //console.log(e.target.name)
+    // //console.log(check)
+
+    const id = e.target.name.split(' ')[0]
+
+    console.log(id)
+
+    return confirmBox(e, addDraft, {
+      DID: "",
+      AID: id,
+      type: "Merge Product",
+      operation: "updateMergeProductStatus",
+      _id: id,
+      status: e.target.checked
+    })
+
+
+  }
 
   // data grid for table data
 
@@ -452,7 +533,7 @@ export default function Products(props) {
               Merge Product
             </Button>
           </Box>
-          <DataGridView/>
+          <DataGridView />
         </Grid>
       </Grid>
 

@@ -566,6 +566,18 @@ export default function Action() {
             display.data.draftStatus = e.target.action.value;
             sendResponse(display.data);
             break         
+          case "updateProductStatus":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.draftStatus = e.target.action.value;
+            sendResponse(display.data);
+            break         
+          case "updateMergeProductStatus":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.draftStatus = e.target.action.value;
+            sendResponse(display.data);
+            break         
             default:
             console.log("no operation found");
             break;
@@ -1015,47 +1027,6 @@ export default function Action() {
         </Grid>
       </Grid>
 
-      {/* Section 1  */}
-
-      {/* <Grid
-        container
-        p={3}
-        sx={{
-          boxShadow: 1,
-          borderRadius: 2,
-          justifyContent: "center !important",
-          alignItems: "center !important",
-          gap: "15px",
-        }}
-      >
-        <Grid xs={12} >
-          <TextField
-            fullWidth
-            autoComplete={false}
-            id="demo-helper-text-aligned-no-helper"
-            label="Search by SKU"
-            onChange={handleSearch}
-            name="seachQuery"
-            size='small'
-            type="search"
-          />
-        </Grid>
-
-        <Grid xs={12} md={2.8}>
-          <Button
-            sx={{ width: "100%" }}
-            color="primary"
-            startIcon={<AddIcon />}
-            variant="contained"
-            onClick={() => {
-              dispatch({type : OpenBox,payload : { state: true, formType: "product",row : Row,setRow : setRows} });
-            }}
-          >
-            Add Product
-          </Button>
-        </Grid>
-      </Grid> */}
-
       {/* Section 1 ends  */}
       <br></br>
       {/* data grid  */}
@@ -1067,16 +1038,9 @@ export default function Action() {
           <DataGridView />
         </Grid>
       </Grid>
-      {/*    
-      <Grid sx = {{mt:3}} container scaping={2} className="overviewContainer">
-        <Grid item p={2} xs={12} sx={{ boxShadow: 2, borderRadius: 5 }}>
-          <Typography variant="h6"> Product List </Typography>
-          <br></br>
-          {DataGridView(productRow,productCol)}
-        </Grid>
-      </Grid> */}
+ 
 
-      {display.status && SpringModal()}
+      {display.status && <SpringModal/>}
 
       {/* data grid ends  */}
     </Box>

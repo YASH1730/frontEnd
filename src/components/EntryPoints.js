@@ -16,9 +16,11 @@ import FacebookLogin from "react-facebook-login";
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import { Link } from "react-router-dom";
 import { login } from "../services/service";
+import config from "../config.json"
 
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setAuth, setRefreshBox } from "../store/action/action";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function EntryPoints(props) {
   // history var for location and jumping throw path
@@ -38,7 +40,8 @@ export default function EntryPoints(props) {
   // context
 
   const [postVal, setPostVal] = useState("");
-
+  const client_key = config.client_side_recaptcha
+  const [ready,setReady] = useState(true)
   const handleChangePost = (event) => {
     setPostVal(event.target.value);
   };
@@ -124,6 +127,23 @@ export default function EntryPoints(props) {
     });
   };
 
+  function  handleVerification(e) {
+    // console.log(e)
+    // // let res = await  verifyRecaptcha(e)
+  if(e)
+  {
+    setReady(false)
+  }
+  else{
+    dispatch(setAlert({
+        open : true,
+        variant : 'error',
+        message : "Captacha error !!!"
+    }))
+  }
+}
+
+
   return (
     <>
       {/* // login module */}
@@ -194,10 +214,20 @@ export default function EntryPoints(props) {
                       ))}
                     </TextField>
 
+                    <Box p = {1} sx = {{display : 'flex',justifyContent : 'center'}}>
+
+                                        <ReCAPTCHA
+                                        small = {"compact"}
+                                            sitekey={client_key}
+                                            onChange={handleVerification}
+                                            />
+                                            </Box>
+
                     <Button
                       variant="contained"
                       color="primary"
                       type="submit"
+                      disabled = {ready}
                       sx={{
                         width: "100%",
                         marginTop: "5%",
@@ -237,7 +267,7 @@ export default function EntryPoints(props) {
                   cookiePolicy={"single_host_origin"}
                   className="goggleButton"
                 /> */}
-
+{/* 
                 <Typography
                   component={"span"}
                   variant="caption"
@@ -245,7 +275,7 @@ export default function EntryPoints(props) {
                   sx={{ display: "block", marginTop: "8%" }}
                 >
                   Forgot Password?
-                </Typography>
+                </Typography> */}
                 {/* 
                 <Typography component={'span'} variant="caption" color="primary">
                   <Link className="links" to="/register">
