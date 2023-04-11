@@ -207,7 +207,7 @@ export default function Products(props) {
     {
       field: "status",
       headerName: "Status",
-      width: 200,
+      width: 100,
       renderCell: (params) => <Switch onChange={handleSwitch} name={`${params.row.action._id + ' ' + (params.row.id - 1)}`} checked={check[params.row.id - 1]}></Switch>,
 
     },

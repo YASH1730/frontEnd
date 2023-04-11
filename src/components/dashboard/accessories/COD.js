@@ -296,7 +296,7 @@ export default function Pincode() {
   return (
     <>
       <Typography component={"span"} sx={{ display: "block" }} variant="h5">
-        COD
+        Pin Code
       </Typography>
 
       <br></br>
