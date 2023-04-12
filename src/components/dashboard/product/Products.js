@@ -170,7 +170,7 @@ export default function Products(props) {
             };
           }),
           isLoading: false,
-          total: response.data.data.total,
+          total: response.data.total,
           filter: false,
         }));
       }}

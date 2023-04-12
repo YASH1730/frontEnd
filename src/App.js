@@ -8,6 +8,8 @@ import {
   useLocation,
 } from "react-router-dom";
 
+// error boundaries for handling error 
+import ErrorBound from "./components/Utility/ErrorBound";
 import { CssBaseline } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Buffer } from "buffer";
@@ -267,6 +269,7 @@ function App() {
       <ThemeProvider theme={mode.type === true ? dark : light}>
         <CssBaseline enableColorScheme />
         <Suspense fallback={<div>Loading...</div>}>
+        <ErrorBound fallback = {'Sorry for the inconvenience !!! '}>
           <BrowserRouter>
             <ConfirmProvider>
               <MyRoutes />
@@ -274,6 +277,7 @@ function App() {
               <SnackBar />
             </ConfirmProvider>
           </BrowserRouter>
+        </ErrorBound>
         </Suspense>
       </ThemeProvider>
     </>

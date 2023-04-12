@@ -25,21 +25,21 @@ import ReactHtmlParser from "react-html-parser";
 
 import "../../../assets/custom/css/orderPreview.css";
 
-// redux 
+// redux
 import { useDispatch } from "react-redux";
-import { setForm, setAlert } from '../../../store/action/action'
+import { setForm, setAlert } from "../../../store/action/action";
 
 const style = {
-  position: 'absolute',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '1rem',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 2,
 };
@@ -47,9 +47,13 @@ const style = {
 const PreviewOrder = ({ history }) => {
   let { _id } = useParams();
 
-  let dispatch = useDispatch()
+  let dispatch = useDispatch();
   let [data, setData] = useState({ order: undefined, custom: [], product: [] });
-  let [open, setOpen] = useState({ open: false, product: null, items: data.order && data.order.items });
+  let [open, setOpen] = useState({
+    open: false,
+    product: null,
+    items: data.order && data.order.items,
+  });
 
   useEffect(() => {
     if (_id) getData();
@@ -68,7 +72,14 @@ const PreviewOrder = ({ history }) => {
 
   return (
     <>
-      <SetFullfullForm data={open} setAlert={setAlert} dispatch={dispatch} quantity = {data.order && data.order.quantity} setData={setOpen} order={data.order && data.order.O} />
+      <SetFullfullForm
+        data={open}
+        setAlert={setAlert}
+        dispatch={dispatch}
+        quantity={data.order && data.order.quantity}
+        setData={setOpen}
+        order={data.order && data.order.O}
+      />
       <Box sx={{ pl: 4, pr: 4 }}>
         {data.order && (
           <Grid container sx={{ gap: "1rem", alignItems: "baseline" }}>
@@ -100,8 +111,8 @@ const PreviewOrder = ({ history }) => {
                     data.order.status === "completed"
                       ? "#23d92387"
                       : data.order.status === "processing"
-                        ? "#d9c25687"
-                        : "#d9565687",
+                      ? "#d9c25687"
+                      : "#d9565687",
                   color: "#545454cf",
                 }}
               >
@@ -145,13 +156,18 @@ const PreviewOrder = ({ history }) => {
                 </Typography>
               </Box>
               <Box sx={{ textAlign: "right", color: "grey" }}>
-                <IconButton color="primary" onClick={() => {
-                  dispatch(setForm({
-                    formType: 'edit_order',
-                    payload: data,
-                    state: true
-                  }))
-                }}>
+                <IconButton
+                  color="primary"
+                  onClick={() => {
+                    dispatch(
+                      setForm({
+                        formType: "edit_order",
+                        payload: data,
+                        state: true,
+                      })
+                    );
+                  }}
+                >
                   <Tooltip title="Edit">
                     <CreateRounded />
                   </Tooltip>
@@ -323,7 +339,14 @@ const PreviewOrder = ({ history }) => {
   );
 };
 
-function ProductCards({ product, custom, quantity, setOpen, item, prdouctPrice }) {
+function ProductCards({
+  product,
+  custom,
+  quantity,
+  setOpen,
+  item,
+  prdouctPrice,
+}) {
   return (
     <>
       {product.length > 0 &&
@@ -348,9 +371,20 @@ function ProductCards({ product, custom, quantity, setOpen, item, prdouctPrice }
                 ₹{parseInt(row.selling_price) * parseInt(quantity[row.SKU])}
               </Typography>
             </Box>
-            <Box className='fullfilledBtn' >
-              <Button variant="contained" size="small"
-                onClick={() => setOpen(old => ({ open: true, product: row, item: item[row.SKU], qty : quantity[row.SKU] , items: item }))} >
+            <Box className="fullfilledBtn">
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() =>
+                  setOpen((old) => ({
+                    open: true,
+                    product: row,
+                    item: item[row.SKU],
+                    qty: quantity[row.SKU],
+                    items: item,
+                  }))
+                }
+              >
                 {item[row.SKU].fullfilled ? "Fulfilled" : "Fullfill"}
               </Button>
             </Box>
@@ -379,9 +413,19 @@ function ProductCards({ product, custom, quantity, setOpen, item, prdouctPrice }
                 ₹{parseInt(row.selling_price) * parseInt(quantity[row.CUS])}
               </Typography>
             </Box>
-            <Box className='fullfilledBtn' >
-              <Button variant="contained" size="small"
-                onClick={() => setOpen(old => ({ open: true, product: row, item: item[row.SKU], items: item }))} >
+            <Box className="fullfilledBtn">
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() =>
+                  setOpen((old) => ({
+                    open: true,
+                    product: row,
+                    item: item[row.SKU],
+                    items: item,
+                  }))
+                }
+              >
                 {item[row.SKU].fullfilled ? "Fulfilled" : "Fullfill"}
               </Button>
             </Box>
@@ -393,33 +437,37 @@ function ProductCards({ product, custom, quantity, setOpen, item, prdouctPrice }
 }
 
 function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
-
-
   const suppierCompany = [
-    "DTDC", "Bluedart", "Safexpress", "ATS", "Ekart", "XpressBees", "DEV(Direct Courier)", "Shree Maruti Courier"
-  ]
+    "DTDC",
+    "Bluedart",
+    "Safexpress",
+    "ATS",
+    "Ekart",
+    "XpressBees",
+    "DEV(Direct Courier)",
+    "Shree Maruti Courier",
+  ];
 
   function handleClose() {
     setData({
       product: null,
       open: false,
-      item: null
-    })
+      item: null,
+    });
   }
 
   function handleChange(e) {
-    console.log(e.target.value)
-    if (e.target.name === 'fullfilled') {
-      setData(old => ({
+    console.log(e.target.value);
+    if (e.target.name === "fullfilled") {
+      setData((old) => ({
         ...old,
-        item: { ...old.item, [e.target.name]: e.target.checked }
-      }))
-    }
-    else {
-      setData(old => ({
+        item: { ...old.item, [e.target.name]: e.target.checked },
+      }));
+    } else {
+      setData((old) => ({
         ...old,
-        item: { ...old.item, [e.target.name]: e.target.value }
-      }))
+        item: { ...old.item, [e.target.name]: e.target.value },
+      }));
     }
   }
 
@@ -427,110 +475,127 @@ function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
     try {
       e.preventDefault();
 
-      const FD = new FormData()
+      const FD = new FormData();
 
-      FD.append("DID", '');
+      FD.append("DID", "");
       FD.append("AID", order);
       FD.append("type", "Order");
       FD.append("operation", "addOrderFulfilment");
-      FD.append('items', JSON.stringify({ ...data.items, [data.product['SKU']]: data.item }))
+      FD.append(
+        "items",
+        JSON.stringify({ ...data.items, [data.product["SKU"]]: data.item })
+      );
 
-      let res = await addDraft(FD)
+      let res = await addDraft(FD);
 
       if (res.status === 200) {
-        handleClose()
-        dispatch(setAlert({
-          open: true,
-          variant: 'success',
-          message: res.data.message
-        }))
+        handleClose();
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: res.data.message,
+          })
+        );
       }
-
     } catch (error) {
-      console.log(error)
-      dispatch(setAlert(
-        {
+      console.log(error);
+      dispatch(
+        setAlert({
           open: true,
-          variant: 'error',
-          message: 'Something went wrong !!!'
-        }))
+          variant: "error",
+          message: "Something went wrong !!!",
+        })
+      );
     }
   }
 
-  return (<>
-    {console.log(data)}
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={data.open}
-      onClose={handleClose}
-      closeAfterTransition
-      slots={{ backdrop: Backdrop }}
-      slotProps={{
-        backdrop: {
-          timeout: 500,
-        },
-      }}
-    >
-      <Fade in={data.open}>
-        <Box sx={style} onSubmit={handleSubmit} component='form' >
-          <Typography id="transition-modal-title" variant="body1" component="h2">
-            Fullfilled ({data.product && data.product['SKU']})
-          </Typography>
-          {data.item && <>
-            <TextField
-              variant='outlined'
-              size="small"
-              fullWidth
-              name='trackingId'
-              onChange={handleChange}
-              label='Tracking Id'
-              value={data.item.trackingId || ''}
-            />
-            <TextField
-              variant='outlined'
-              size="small"
-              fullWidth
-              name='qty'
-              type = 'number'
-              onChange={handleChange}
-              label='Quantity'
-              value={data.item.qty >= 0 && data.item.qty <= data.qty ? data.item.qty  : 0}
-            />
-           <TextField
-              variant='outlined'
-              size="small"
-              select
-              fullWidth
-              onChange={handleChange}
-              name='shipping_carrier'
-              label='Shipping Carrier'
-              value={data.item.shipping_carrier || ''} >
-              {
-                suppierCompany.map((row,i) =><MenuItem key = {i} value={row}>
-                    {row}
-                  </MenuItem>)
-              }
-
-            </TextField>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={data.item.fullfilled || false}
+  return (
+    <>
+      {console.log(data)}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={data.open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={data.open}>
+          <Box sx={style} onSubmit={handleSubmit} component="form">
+            <Typography
+              id="transition-modal-title"
+              variant="body1"
+              component="h2"
+            >
+              Fullfilled ({data.product && data.product["SKU"]})
+            </Typography>
+            {data.item && (
+              <>
+                <TextField
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  name="trackingId"
                   onChange={handleChange}
-                  name="fullfilled"
+                  label="Tracking Id"
+                  value={data.item.trackingId || ""}
                 />
-              }
-              label="Fullfilled"
-            />
-            <Button type='submit' variant="contained" size='small'>Apply</Button>
-          </>}
-        </Box>
-
-      </Fade>
-    </Modal>
-  </>)
-
+                <TextField
+                  variant="outlined"
+                  size="small"
+                  fullWidth
+                  name="qty"
+                  type="number"
+                  onChange={handleChange}
+                  label="Quantity"
+                  value={
+                    data.item.qty >= 0 && data.item.qty <= data.qty
+                      ? data.item.qty
+                      : 0
+                  }
+                />
+                <TextField
+                  variant="outlined"
+                  size="small"
+                  select
+                  fullWidth
+                  onChange={handleChange}
+                  name="shipping_carrier"
+                  label="Shipping Carrier"
+                  value={data.item.shipping_carrier || ""}
+                >
+                  {suppierCompany.map((row, i) => (
+                    <MenuItem key={i} value={row}>
+                      {row}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={data.item.fullfilled || false}
+                      onChange={handleChange}
+                      name="fullfilled"
+                    />
+                  }
+                  label="Fullfilled"
+                />
+                <Button type="submit" variant="contained" size="small">
+                  Apply
+                </Button>
+              </>
+            )}
+          </Box>
+        </Fade>
+      </Modal>
+    </>
+  );
 }
 
 function Customize({ custom }) {
@@ -690,9 +755,6 @@ function Customer({ customer }) {
 }
 
 function Fulfilled({ fulfilled }) {
-
-
-
   return (
     <>
       <Box>
@@ -703,7 +765,6 @@ function Fulfilled({ fulfilled }) {
         <Typography variant="body2">
           Inventory Location : {fulfilled.inventory_location}
         </Typography>
-
       </Box>
     </>
   );

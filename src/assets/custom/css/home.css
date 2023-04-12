@@ -73,6 +73,10 @@
     }
 } */
 
+li{
+    cursor: pointer;
+}
+
 @media (max-width: 600px) {
     .hamIcon {
         display: block !important;
