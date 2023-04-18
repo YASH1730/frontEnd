@@ -1434,3 +1434,14 @@ export const getAddress = async (data) => {
     `https://app.zipcodebase.com/api/v1/search?apikey=${apiKey}&codes=${data}`
   );
 };
+
+// ============================= Shipway =====================
+
+export const pushOrder = async (data)=>{
+  return await axios.post(`https://shipway.in/api/PushOrderData`,data,{headers: {
+    "Content-Type": "application/json",
+    Accept: "*/*",
+    "Access-Control-Allow-Origin": "*",
+  }})
+
+}

@@ -18,11 +18,11 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { addDraft, getOrderDetails } from "../../../services/service";
+import { addDraft, getOrderDetails, pushOrder } from "../../../services/service";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import default_image from "../../../assets/img/question.svg";
 import ReactHtmlParser from "react-html-parser";
-
+import config from '../../../config.json'
 import "../../../assets/custom/css/orderPreview.css";
 
 // redux
@@ -67,6 +67,7 @@ const PreviewOrder = ({ history }) => {
         custom: res.data.custom_product,
         product: res.data.product,
       });
+
     }
   }
 
@@ -195,6 +196,7 @@ const PreviewOrder = ({ history }) => {
                   <ProductCards
                     item={data.order.items}
                     product={data.product}
+                    data = {data}
                     setOpen={setOpen}
                     custom={data.custom}
                     quantity={data.order.quantity}
@@ -346,6 +348,7 @@ function ProductCards({
   setOpen,
   item,
   prdouctPrice,
+  data
 }) {
   return (
     <>
@@ -368,7 +371,7 @@ function ProductCards({
                 ₹{prdouctPrice[row.SKU]} X {quantity[row.SKU]}
               </Typography>
               <Typography variant="body2">
-                ₹{parseInt(row.selling_price) * parseInt(quantity[row.SKU])}
+                ₹{parseInt(prdouctPrice[row.SKU]) * parseInt(quantity[row.SKU])}
               </Typography>
             </Box>
             <Box className="fullfilledBtn">
@@ -382,6 +385,10 @@ function ProductCards({
                     item: item[row.SKU],
                     qty: quantity[row.SKU],
                     items: item,
+                    customer_name :  data.order.customer_name, 
+                    customer_email :  data.order.customer_email, 
+                    customer_mobile :  data.order.customer_mobile, 
+                    order_id :  data.order.O,  
                   }))
                 }
               >
@@ -423,6 +430,10 @@ function ProductCards({
                     product: row,
                     item: item[row.SKU],
                     items: item,
+                    customer_name :  data.order.customer_name, 
+                    customer_email :  data.order.customer_email, 
+                    customer_mobile :  data.order.customer_mobile, 
+                    order_id :  data.order.O, 
                   }))
                 }
               >
@@ -457,7 +468,7 @@ function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
   }
 
   function handleChange(e) {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     if (e.target.name === "fullfilled") {
       setData((old) => ({
         ...old,
@@ -486,10 +497,29 @@ function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
         JSON.stringify({ ...data.items, [data.product["SKU"]]: data.item })
       );
 
+      console.log(data)
+      const shipwayData = {
+       "username": config.shipwayUser
+      ,"password": config.shipwayKey
+      ,"carrier_id": "1"
+      ,"awb": data.trackingId
+      ,"order_id":`${data.order_id +'-'+ data.product.SKU}`
+      ,"first_name": data.customer_name
+      ,"last_name": data.customer_name
+      ,"email": data.customer_email
+      ,"phone": data.customer_mobile
+      ,"products": "N/A"
+      ,"company": "Woodshala"
+      }
+
       let res = await addDraft(FD);
+      // let shipWayRes = await pushOrder(shipwayData);
+
+      // console.log(shipWayRes)
 
       if (res.status === 200) {
         handleClose();
+
         dispatch(
           setAlert({
             open: true,
@@ -512,7 +542,7 @@ function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
 
   return (
     <>
-      {console.log(data)}
+      {/* {console.log(data)} */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -785,5 +815,6 @@ function Other({ other }) {
     </>
   );
 }
+
 
 export default PreviewOrder;

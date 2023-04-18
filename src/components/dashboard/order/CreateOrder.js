@@ -286,6 +286,7 @@ export default function CreateOrder() {
     billing: "",
     product_array: [],
     product_price : {},
+    product_parts : {},
     customizations: [],
     quantity: [],
     subTotal: 0,
@@ -308,7 +309,7 @@ export default function CreateOrder() {
 
   //  State for stepper
   const [activeStep, setActiveStep] = useState(0);
-
+  const alphabets = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
   // tab
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -333,7 +334,7 @@ export default function CreateOrder() {
     getCatalogs();
   }, [data.refresh]);
 
-  // for product data row updations 
+  // for product data row updating 
   useEffect(() => {
     // console.log(data.discount_per_product)
 
@@ -344,12 +345,15 @@ export default function CreateOrder() {
     setProductRows(
       rows.map((dataOBJ, index) => {
 
+        console.log(dataOBJ)
         // discount decided 
         let discount =  dataOBJ.discount_limit < dataOBJ.category.discount_limit ? dataOBJ.category.discount_limit || 0 : dataOBJ.discount_limit
        console.log(discount)
 // adding the quantity and order discount details
         setData({ ...data, quantity: { ...data.quantity, [dataOBJ.SKU]: 1},product_price : {...data.product_price, [dataOBJ.SKU] : dataOBJ.selling_price  },
-           discount_per_product : {...data.discount_per_product, [dataOBJ.SKU] : discount || 0 }});
+           discount_per_product : {...data.discount_per_product, [dataOBJ.SKU] : discount || 0 },
+           product_parts : {...data.product_parts, [dataOBJ.SKU] : dataOBJ.assembly_part || 1 }
+          });
        
            return {
           id: index + 1,
@@ -360,6 +364,7 @@ export default function CreateOrder() {
           qty: data.quantity[dataOBJ.SKU] ? data.quantity[dataOBJ.SKU] : 1,
           selling_price: dataOBJ.selling_price,
           discount_limit: discount,
+          parts: dataOBJ.assembly_part || 1,
           range: dataOBJ.range,
           action: dataOBJ,
         };
@@ -385,10 +390,23 @@ export default function CreateOrder() {
       let newProduct = {} // for the check on removal product
   
       productRow.map((row) => {
-        newQuantity = {...newQuantity, [row.SKU] : data.quantity[row.SKU]}
-        newDiscount = {...newDiscount, [row.SKU] : data.discount_per_product[row.SKU]}
-        newProduct = {...newProduct, [row.SKU] : data.product_price[row.SKU]}
-      });
+
+        if(row.assembly_part < 2)
+        {
+          newProduct = {...newProduct, [row.SKU] : data.product_price[row.SKU]}
+          newQuantity = {...newQuantity, [row.SKU] : data.quantity[row.SKU]}
+          newDiscount = {...newDiscount, [row.SKU] : data.discount_per_product[row.SKU]}
+        }
+        else{
+          let eachProductPrice = data.product_price[row.SKU]/data.product_parts[row.SKU]
+          let SKU = row.SKU
+           Array.from({length : data.product_parts[SKU]},(row,i)=>{
+          console.log(i)
+          newProduct = {...newProduct, [SKU+`(${alphabets[i]})`] : eachProductPrice }
+          newQuantity = {...newQuantity, [SKU+`(${alphabets[i]})`] : data.quantity[SKU]}
+          newDiscount = {...newDiscount, [SKU+`(${alphabets[i]})`] : 0 }})
+        }
+        });
 
       setData(old=>({...old,quantity : newQuantity, discount_per_product : newDiscount,product_price : newProduct }))
     }
