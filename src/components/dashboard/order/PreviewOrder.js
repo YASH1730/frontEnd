@@ -73,7 +73,7 @@ const PreviewOrder = ({ history }) => {
 
   return (
     <>
-      <SetFullfullForm
+      <SetFullfilForm
         data={open}
         setAlert={setAlert}
         dispatch={dispatch}
@@ -447,8 +447,8 @@ function ProductCards({
   );
 }
 
-function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
-  const suppierCompany = [
+function SetFullfilForm({ data, setData, dispatch, setAlert, order }) {
+  const supplierCompany = [
     "DTDC",
     "Bluedart",
     "Safexpress",
@@ -497,20 +497,20 @@ function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
         JSON.stringify({ ...data.items, [data.product["SKU"]]: data.item })
       );
 
-      console.log(data)
-      const shipwayData = {
-       "username": config.shipwayUser
-      ,"password": config.shipwayKey
-      ,"carrier_id": "1"
-      ,"awb": data.trackingId
-      ,"order_id":`${data.order_id +'-'+ data.product.SKU}`
-      ,"first_name": data.customer_name
-      ,"last_name": data.customer_name
-      ,"email": data.customer_email
-      ,"phone": data.customer_mobile
-      ,"products": "N/A"
-      ,"company": "Woodshala"
-      }
+      // for SHIPWAY INTEGRATION 
+      // const shipwayData = {
+      //  "username": config.shipwayUser
+      // ,"password": config.shipwayKey
+      // ,"carrier_id": "1"
+      // ,"awb": data.trackingId
+      // ,"order_id":`${data.order_id +'-'+ data.product.SKU}`
+      // ,"first_name": data.customer_name
+      // ,"last_name": data.customer_name
+      // ,"email": data.customer_email
+      // ,"phone": data.customer_mobile
+      // ,"products": "N/A"
+      // ,"company": "Woodshala"
+      // }
 
       let res = await addDraft(FD);
       // let shipWayRes = await pushOrder(shipwayData);
@@ -563,7 +563,7 @@ function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
               variant="body1"
               component="h2"
             >
-              Fullfilled ({data.product && data.product["SKU"]})
+              Fulfilled ({data.product && data.product["SKU"]})
             </Typography>
             {data.item && (
               <>
@@ -600,7 +600,7 @@ function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
                   label="Shipping Carrier"
                   value={data.item.shipping_carrier || ""}
                 >
-                  {suppierCompany.map((row, i) => (
+                  {supplierCompany.map((row, i) => (
                     <MenuItem key={i} value={row}>
                       {row}
                     </MenuItem>
@@ -628,6 +628,7 @@ function SetFullfullForm({ data, setData, dispatch, setAlert, order }) {
   );
 }
 
+// FULFILLMENT ENDS 
 function Customize({ custom }) {
   return (
     <>

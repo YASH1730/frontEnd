@@ -38,7 +38,7 @@ import "../../../assets/custom/css/category.css";
 import { useDropzone } from "react-dropzone";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../../store/action/action";
-import defaultIMg from "../../../assets/img/question.svg"
+import defaultIMg from "../../../assets/img/question.svg";
 import {
   DataGrid,
   // gridPageCountSelector,
@@ -170,15 +170,15 @@ export default function CreateOrder() {
 
   // context
   const dispatch = useDispatch();
-  const { auth } = useSelector(state => state)
+  const { auth } = useSelector((state) => state);
   const [pageSize, setPageSize] = useState(50);
 
   // multiple images
   const [files, setFiles] = useState([]);
   const [polish, setPolish] = useState([]);
   const [cusProductData, setCustomProduct] = useState({
-    cusPolish: 'no',
-    product_title: '',
+    cusPolish: "no",
+    product_title: "",
     product_image: [],
     polish_image: [],
     length: 0,
@@ -189,22 +189,20 @@ export default function CreateOrder() {
     quantity: 1,
     discount: 0,
     polish_time: 0,
-    note: '',
-    polish: '',
-    polish_note: '',
-  })
+    note: "",
+    polish: "",
+    polish_note: "",
+  });
 
   const [catalogs, setCatalogs] = useState({
     customer: [],
     product: [],
     address: [],
     polish: [],
-    pincode : [],
+    pincode: [],
     city: [],
-    customer_type: [
-      'Interior', 'Architect', 'VIP', 'VVIP'
-    ],
-    warehouse: ['Jodhpur', 'Bangalore'],
+    customer_type: ["Interior", "Architect", "VIP", "VVIP"],
+    warehouse: ["Jodhpur", "Bangalore"],
     channel: [
       {
         key: "3rd Party Vendor",
@@ -247,7 +245,7 @@ export default function CreateOrder() {
         value: "Others",
       },
     ],
-    pay: ['Razorpay', "PayTM", 'Bank Transfer', 'COD']
+    pay: ["Razorpay", "PayTM", "Bank Transfer", "COD"],
   });
 
   // for dynamic product SKUs
@@ -261,6 +259,17 @@ export default function CreateOrder() {
     });
   };
 
+  const warehouse = [
+    {
+      value: "Bangalore (Karnataka)",
+      label: "Bangalore (Karnataka)",
+    },
+    {
+      value: "Jodhpur (Rajasthan)",
+      label: "Jodhpur (Rajasthan)",
+    },
+  ];
+
   // state for data
   const [data, setData] = useState({
     O: "",
@@ -269,24 +278,24 @@ export default function CreateOrder() {
     GST: null,
     open: false,
     payload: {},
-    classification: 'personal',
-    customer_type: '',
-    has_GST: 'no',
+    classification: "personal",
+    customer_type: "",
+    has_GST: "no",
     fulfilled: false,
     advance_received: false,
-    pay_method_remaining: '',
-    pay_method_advance: '',
-    inventory_location: '',
-    courier_company: '',
-    AWB: '',
+    pay_method_remaining: "",
+    pay_method_advance: "",
+    inventory_location: "",
+    courier_company: "",
+    AWB: "",
     customer_email: "",
     customer_mobile: "",
     customer_name: "",
     shipping: "",
     billing: "",
     product_array: [],
-    product_price : {},
-    product_parts : {},
+    product_price: {},
+    product_parts: {},
     customizations: [],
     quantity: [],
     subTotal: 0,
@@ -303,18 +312,46 @@ export default function CreateOrder() {
     sale_channel: "Online",
     PO: "",
     refresh: 0,
-    sales_person: auth.role === 'Sales Person' ? auth.name : '',
-    pincode : ''
+    sales_person: auth.role === "Sales Person" ? auth.name : "",
+    pincode: "",
+    apartment : "",
+    landmark : "",
   });
 
   //  State for stepper
   const [activeStep, setActiveStep] = useState(0);
-  const alphabets = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+  const alphabets = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+  ];
   // tab
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
 
   // stepper button
   const handleNextStep = () => {
@@ -334,7 +371,7 @@ export default function CreateOrder() {
     getCatalogs();
   }, [data.refresh]);
 
-  // for product data row updating 
+  // for product data row updating
   useEffect(() => {
     // console.log(data.discount_per_product)
 
@@ -344,23 +381,38 @@ export default function CreateOrder() {
 
     setProductRows(
       rows.map((dataOBJ, index) => {
+        console.log(dataOBJ);
+        // discount decided
+        let discount =
+          dataOBJ.discount_limit < dataOBJ.category.discount_limit
+            ? dataOBJ.category.discount_limit || 0
+            : dataOBJ.discount_limit;
+        console.log(discount);
+        // adding the quantity and order discount details
+        setData({
+          ...data,
+          quantity: { ...data.quantity, [dataOBJ.SKU]: 1 },
+          product_price: {
+            ...data.product_price,
+            [dataOBJ.SKU]: dataOBJ.selling_price,
+          },
+          discount_per_product: {
+            ...data.discount_per_product,
+            [dataOBJ.SKU]: discount || 0,
+          },
+          product_parts: {
+            ...data.product_parts,
+            [dataOBJ.SKU]: dataOBJ.assembly_part || 1,
+          },
+        });
 
-        console.log(dataOBJ)
-        // discount decided 
-        let discount =  dataOBJ.discount_limit < dataOBJ.category.discount_limit ? dataOBJ.category.discount_limit || 0 : dataOBJ.discount_limit
-       console.log(discount)
-// adding the quantity and order discount details
-        setData({ ...data, quantity: { ...data.quantity, [dataOBJ.SKU]: 1},product_price : {...data.product_price, [dataOBJ.SKU] : dataOBJ.selling_price  },
-           discount_per_product : {...data.discount_per_product, [dataOBJ.SKU] : discount || 0 },
-           product_parts : {...data.product_parts, [dataOBJ.SKU] : dataOBJ.assembly_part || 1 }
-          });
-       
-           return {
+        return {
           id: index + 1,
           SKU: dataOBJ.SKU,
           product_title: dataOBJ.product_title,
           product_image: dataOBJ.featured_image,
-          dimension: dataOBJ.length_main + "X" + dataOBJ.breadth + "X" + dataOBJ.height,
+          dimension:
+            dataOBJ.length_main + "X" + dataOBJ.breadth + "X" + dataOBJ.height,
           qty: data.quantity[dataOBJ.SKU] ? data.quantity[dataOBJ.SKU] : 1,
           selling_price: dataOBJ.selling_price,
           discount_limit: discount,
@@ -372,66 +424,80 @@ export default function CreateOrder() {
     );
   }, [data.product_array]);
 
-  useEffect(()=>{handelPincode()},[data.pincode])
+  useEffect(() => {
+    handelPincode();
+  }, [data.pincode]);
 
-  useEffect(()=>{
-
-    if(activeStep === 3)
-    {
+  useEffect(() => {
+    if (activeStep === 3) {
       let val = calSubtotal();
-      setData(old=>({
+      setData((old) => ({
         ...old,
-        subTotal : val,
-        total : val
-      }))
+        subTotal: val,
+        total: val,
+      }));
 
-      let newQuantity = {} // for the check on removal product
-      let newDiscount = {} // for the check on removal product
-      let newProduct = {} // for the check on removal product
-  
+      let newQuantity = {}; // for the check on removal product
+      let newDiscount = {}; // for the check on removal product
+      let newProduct = {}; // for the check on removal product
+
       productRow.map((row) => {
-
-        if(row.assembly_part < 2)
-        {
-          newProduct = {...newProduct, [row.SKU] : data.product_price[row.SKU]}
-          newQuantity = {...newQuantity, [row.SKU] : data.quantity[row.SKU]}
-          newDiscount = {...newDiscount, [row.SKU] : data.discount_per_product[row.SKU]}
+        if (row.assembly_part < 2) {
+          newProduct = {
+            ...newProduct,
+            [row.SKU]: data.product_price[row.SKU],
+          };
+          newQuantity = { ...newQuantity, [row.SKU]: data.quantity[row.SKU] };
+          newDiscount = {
+            ...newDiscount,
+            [row.SKU]: data.discount_per_product[row.SKU],
+          };
+        } else {
+          let eachProductPrice =
+            data.product_price[row.SKU] / data.product_parts[row.SKU];
+          let SKU = row.SKU;
+          Array.from({ length: data.product_parts[SKU] }, (row, i) => {
+            console.log(i);
+            newProduct = {
+              ...newProduct,
+              [SKU + `(${alphabets[i]})`]: eachProductPrice,
+            };
+            newQuantity = {
+              ...newQuantity,
+              [SKU + `(${alphabets[i]})`]: data.quantity[SKU],
+            };
+            newDiscount = { ...newDiscount, [SKU + `(${alphabets[i]})`]: 0 };
+          });
         }
-        else{
-          let eachProductPrice = data.product_price[row.SKU]/data.product_parts[row.SKU]
-          let SKU = row.SKU
-           Array.from({length : data.product_parts[SKU]},(row,i)=>{
-          console.log(i)
-          newProduct = {...newProduct, [SKU+`(${alphabets[i]})`] : eachProductPrice }
-          newQuantity = {...newQuantity, [SKU+`(${alphabets[i]})`] : data.quantity[SKU]}
-          newDiscount = {...newDiscount, [SKU+`(${alphabets[i]})`] : 0 }})
-        }
-        });
+      });
 
-      setData(old=>({...old,quantity : newQuantity, discount_per_product : newDiscount,product_price : newProduct }))
+      setData((old) => ({
+        ...old,
+        quantity: newQuantity,
+        discount_per_product: newDiscount,
+        product_price: newProduct,
+      }));
     }
-
-  },[activeStep])
+  }, [activeStep]);
   // for fetching pin address
   async function handelPincode() {
-
     if (data.pincode.toString().length === 6) {
-      let res = await getAddress(data.pincode)
+      let res = await getAddress(data.pincode);
       if (res.status === 200) {
-        let pincode = res.data.results[data.pincode] || []
-        setCatalogs(old => ({ ...old, city: pincode }))
-        setData(old => ({ ...old, state: pincode[0].state }));
+        let pincode = res.data.results[data.pincode] || [];
+        setCatalogs((old) => ({ ...old, city: pincode }));
+        setData((old) => ({ ...old, state: pincode[0].state }));
       }
     }
   }
 
-  // polish 
+  // polish
   async function getCatalogs() {
-    let polish = await getHardwareDropdown()
-    let cus = await customerCatalog()
-    let DID = await getDraftID()
+    let polish = await getHardwareDropdown();
+    let cus = await customerCatalog();
+    let DID = await getDraftID();
 
-    // draft 
+    // draft
     if (DID.status === 200) {
       if (DID.data.length > 0) {
         let index = parseInt(DID.data[0].DID.split("-")[1]) + 1;
@@ -442,23 +508,25 @@ export default function CreateOrder() {
     }
     // customer
     if (cus.status === 200)
-      setCatalogs(old => ({ ...old, customer: cus.data, }));
+      setCatalogs((old) => ({ ...old, customer: cus.data }));
     // for polish
     if (polish.status === 200)
-      setCatalogs(old => ({ ...old, polish: [...polish.data.polish] }))
-
+      setCatalogs((old) => ({ ...old, polish: [...polish.data.polish] }));
   }
 
   // for calculating subtotal
-  function calSubtotal  ()  {
+  function calSubtotal() {
     let val = 0;
-
+    console.log(productRow)
     productRow.map((row) => {
-        return (val += (row.selling_price - (row.selling_price/100 * data.discount_per_product[row.SKU]) ) * data.quantity[row.SKU]);
+      return (val +=
+        (row.selling_price -
+          (row.selling_price / 100) * data.discount_per_product[row.SKU]) *
+        (data.quantity[row.SKU]) || 1);
     });
 
     return val;
-  };
+  }
 
   // create order data grid  columns
   const product_columns = [
@@ -483,7 +551,10 @@ export default function CreateOrder() {
                   ...data,
                   quantity: {
                     ...data.quantity,
-                    [params.row.SKU]: parseInt(e.target.value) > 0 ? parseInt(e.target.value) : 1,
+                    [params.row.SKU]:
+                      parseInt(e.target.value) > 0
+                        ? parseInt(e.target.value)
+                        : 1,
                   },
                 })
               }
@@ -543,7 +614,11 @@ export default function CreateOrder() {
                   ...data,
                   discount_per_product: {
                     ...data.discount_per_product,
-                    [params.row.SKU]: parseInt(e.target.value) >= 0 && parseInt(e.target.value) <= 100 ? parseInt(e.target.value) : params.formattedValue,
+                    [params.row.SKU]:
+                      parseInt(e.target.value) >= 0 &&
+                      parseInt(e.target.value) <= 100
+                        ? parseInt(e.target.value)
+                        : params.formattedValue,
                   },
                 })
               }
@@ -553,19 +628,28 @@ export default function CreateOrder() {
       ),
     },
     {
-      field: 'action',
-      headerName: 'Action',
+      field: "action",
+      headerName: "Action",
       width: 100,
       renderCell: (params) => (
         <>
-          <Tooltip title='customization'>
-            <IconButton disabled={!params.formattedValue.SKU && true} onClick={() => setData(old => ({ ...old, open: !data.open, payload: params.formattedValue }))} >
+          <Tooltip title="customization">
+            <IconButton
+              disabled={!params.formattedValue.SKU && true}
+              onClick={() =>
+                setData((old) => ({
+                  ...old,
+                  open: !data.open,
+                  payload: params.formattedValue,
+                }))
+              }
+            >
               <Edit />
             </IconButton>
           </Tooltip>
         </>
       ),
-    }
+    },
   ];
 
   const resetValue = () => {
@@ -576,16 +660,16 @@ export default function CreateOrder() {
       GST: null,
       open: false,
       payload: {},
-      classification: 'personal',
-      customer_type: '',
-      has_GST: 'no',
+      classification: "personal",
+      customer_type: "",
+      has_GST: "no",
       fulfilled: false,
       advance_received: false,
-      pay_method_remaining: '',
-      pay_method_advance: '',
-      inventory_location: '',
-      courier_company: '',
-      AWB: '',
+      pay_method_remaining: "",
+      pay_method_advance: "",
+      inventory_location: "",
+      courier_company: "",
+      AWB: "",
       customer_email: "",
       customer_mobile: "",
       customer_name: "",
@@ -607,13 +691,13 @@ export default function CreateOrder() {
       sale_channel: "Online",
       PO: "",
       refresh: 0,
-      sales_person: auth.role === 'Sales Person' ? auth.name : '',
-      pincode : ''
+      sales_person: auth.role === "Sales Person" ? auth.name : "",
+      pincode: "",
     });
     setActiveStep(0);
     setValue(0);
 
-    setSKU('');
+    setSKU("");
   };
 
   // data grid for data view
@@ -650,22 +734,30 @@ export default function CreateOrder() {
         city: row[0].city,
         state: row[0].state,
       });
-    }
-    else if (e.target.name === 'pic_before_dispatch')
+    } else if (e.target.name === "pic_before_dispatch")
       setData({ ...data, [e.target.name]: e.target.checked });
-    else if (e.target.name === 'advance_received') {
+    else if (e.target.name === "advance_received") {
       if (e.target.checked)
         setData({ ...data, [e.target.name]: e.target.checked });
       else
-        setData({ ...data, [e.target.name]: e.target.checked, pay_method_advance: '', pay_method_remaining: "" });
-    }
-    else if (e.target.name === 'fulfilled') {
+        setData({
+          ...data,
+          [e.target.name]: e.target.checked,
+          pay_method_advance: "",
+          pay_method_remaining: "",
+        });
+    } else if (e.target.name === "fulfilled") {
       if (e.target.checked)
         setData({ ...data, [e.target.name]: e.target.checked });
       else
-        setData({ ...data, [e.target.name]: e.target.checked, inventory_location: '', AWB: "", courier_company: '' });
-    }
-    else if (e.target.name !== "discount")
+        setData({
+          ...data,
+          [e.target.name]: e.target.checked,
+          inventory_location: "",
+          AWB: "",
+          courier_company: "",
+        });
+    } else if (e.target.name !== "discount")
       setData({ ...data, [e.target.name]: e.target.value });
     else {
       setData({
@@ -707,8 +799,8 @@ export default function CreateOrder() {
     setFiles([]);
     setPolish([]);
     setCustomProduct({
-      cusPolish: 'no',
-      product_title: '',
+      cusPolish: "no",
+      product_title: "",
       product_image: [],
       polish_image: [],
       length: 0,
@@ -719,23 +811,23 @@ export default function CreateOrder() {
       discount: 0,
       quantity: 1,
       polish_time: 0,
-      note: '',
-      polish: '',
-      polish_note: ''
+      note: "",
+      polish: "",
+      polish_note: "",
     });
     setOpen(false);
   };
 
   // customer id
   const getCUS = async () => {
-    let res = await getLastCp()
+    let res = await getLastCp();
     if (res.status === 200) {
       if (res.data.length > 0) {
         let index = parseInt(res.data[0].CUS.split("-")[1]) + 1;
 
-        setCustomProduct(old => ({ ...old, CUS: `CUS-0${index}` }));
+        setCustomProduct((old) => ({ ...old, CUS: `CUS-0${index}` }));
       } else {
-        setCustomProduct(old => ({ ...old, CUS: "CUS-01001" }));
+        setCustomProduct((old) => ({ ...old, CUS: "CUS-01001" }));
       }
     }
   };
@@ -750,12 +842,11 @@ export default function CreateOrder() {
       return FD.append("product_image", element);
     });
 
-    if (cusProductData.cusPolish === 'yes') {
+    if (cusProductData.cusPolish === "yes") {
       polish.map((element) => {
         return FD.append("polish_image", element);
       });
       FD.append("polish_note", cusProductData.polish_note);
-
     }
 
     FD.append("CUS", cusProductData.CUS);
@@ -771,7 +862,7 @@ export default function CreateOrder() {
     FD.append("polish", cusProductData.polish);
     FD.append("cusPolish", cusProductData.cusPolish);
 
-    console.log(cusProductData)
+    console.log(cusProductData);
     // return 1
 
     let response = await addCustomProduct(FD);
@@ -806,14 +897,14 @@ export default function CreateOrder() {
             response.data.data.MRP -
             (response.data.data.MRP / 100) * response.data.data.discount,
           discount_limit: response.data.data.discount,
-          action: response.data.data
+          action: response.data.data,
         },
       ]);
       setFiles([]);
       setPolish([]);
       setCustomProduct({
-        cusPolish: 'no',
-        product_title: '',
+        cusPolish: "no",
+        product_title: "",
         product_image: [],
         polish_image: [],
         length: 0,
@@ -824,30 +915,28 @@ export default function CreateOrder() {
         discount: 0,
         quantity: 1,
         polish_time: 0,
-        note: '',
-        polish: '',
-        polish_note: ''
+        note: "",
+        polish: "",
+        polish_note: "",
       });
       handleClose();
     }
-
-
   };
 
   async function handleSubmit(e) {
     /// for adding the note
     try {
-    console.log(data);
-    // return 1
-    const res = await addDraft({
-      ...data,
-      note : editorRef.current.getContent(),
-      DID: SKU,
-      AID: "Not Assigned " + SKU,
-      type: "Order",
-      operation: "createOrder",
-    });
-  
+      console.log(data);
+      // return 1
+      const res = await addDraft({
+        ...data,
+        note: editorRef.current.getContent(),
+        DID: SKU,
+        AID: "Not Assigned " + SKU,
+        type: "Order",
+        operation: "createOrder",
+      });
+
       if (res.status !== 200) {
         dispatch(
           setAlert({
@@ -879,7 +968,7 @@ export default function CreateOrder() {
   }
 
   async function handlePincodeSearch(e) {
-    console.log(e.target.value)
+    console.log(e.target.value);
     let res = await listPincode({
       page: 1,
       limit: 10,
@@ -887,7 +976,16 @@ export default function CreateOrder() {
       pincode: e.target.value,
     });
     if (res.status === 200) {
-      setCatalogs(old => ({ ...old, pincode: [...res.data.data] }))
+      setCatalogs((old) => ({ ...old, pincode: [...res.data.data] }));
+    }
+  }
+
+  // this function will copy the shipping address to billing
+  function copyToBilling(e) {
+    if (e.target.checked) {
+      setData((old) => ({ ...old, billing: old.shipping }));
+    } else {
+      setData((old) => ({ ...old, billing: "" }));
     }
   }
 
@@ -897,8 +995,12 @@ export default function CreateOrder() {
         Create Order
       </Typography>
       {/* // modal for adding custom product */}
-      <CustomProduct cusProductData={cusProductData} setCustomProduct={setCustomProduct}
-        open={open} getCUS={getCUS} handleCustomProduct={handleCustomProduct}
+      <CustomProduct
+        cusProductData={cusProductData}
+        setCustomProduct={setCustomProduct}
+        open={open}
+        getCUS={getCUS}
+        handleCustomProduct={handleCustomProduct}
         ProductsPreviews={ProductsPreviews}
         PolishPreviews={PolishPreviews}
         data={data}
@@ -911,12 +1013,7 @@ export default function CreateOrder() {
       />
 
       {/* MOdal for adding customization in existing products */}
-      <Customization
-        data={data}
-        setData={setData}
-        catalogs={catalogs}
-
-      />
+      <Customization data={data} setData={setData} catalogs={catalogs} />
 
       {/* data grid & create order  */}
 
@@ -995,14 +1092,13 @@ export default function CreateOrder() {
                         </Typography>
 
                         <FormControl sx={{ mt: 1 }}>
-
                           <FormLabel id="demo-radio-buttons-group-label">
                             Classification
                           </FormLabel>
                           <RadioGroup
                             aria-labelledby="demo-radio-buttons-group-label"
                             name="classification"
-                            size='small'
+                            size="small"
                             value={data.classification}
                             onChange={handelData}
                           >
@@ -1010,11 +1106,10 @@ export default function CreateOrder() {
                               value="personal"
                               control={<Radio />}
                               label="Personal"
-                              size='small'
-
+                              size="small"
                             />
                             <FormControlLabel
-                              size='small'
+                              size="small"
                               value="business"
                               control={<Radio />}
                               label="Business"
@@ -1022,30 +1117,25 @@ export default function CreateOrder() {
                           </RadioGroup>
                         </FormControl>
 
-                          <TextField
-                            size="small"
-                            fullWidth
-                            id="outlined-select"
-                            value={data.customer_type}
-                            onChange={handelData}
-                            select
-                            sx={{ mb: 2, mt: 1 }}
-                            name="customer_type"
-                            label="Customer Type"
-                            multiple
-                            helperText="Please select customer type."
-                          >
-                            {catalogs.customer_type.map(
-                              (option) =>
-                                <MenuItem
-                                  key={option}
-                                  value={option}
-                                >
-                                  {option}
-                                </MenuItem>
-                            )}
-                          </TextField>
-
+                        <TextField
+                          size="small"
+                          fullWidth
+                          id="outlined-select"
+                          value={data.customer_type}
+                          onChange={handelData}
+                          select
+                          sx={{ mb: 2, mt: 1 }}
+                          name="customer_type"
+                          label="Customer Type"
+                          multiple
+                          helperText="Please select customer type."
+                        >
+                          {catalogs.customer_type.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </TextField>
 
                         <TextField
                           sx={{ pb: 2 }}
@@ -1126,8 +1216,6 @@ export default function CreateOrder() {
                           }
                         />
 
-                      
-
                         <TextField
                           size="small"
                           fullWidth
@@ -1141,17 +1229,12 @@ export default function CreateOrder() {
                           multiple
                           helperText="Please select your city."
                         >
-                          {catalogs.city.map(
-                            (option) =>
-                              <MenuItem
-                                key={option.city}
-                                value={option.city}
-                              >
-                                {option.city}
-                              </MenuItem>
-                          )}
+                          {catalogs.city.map((option) => (
+                            <MenuItem key={option.city} value={option.city}>
+                              {option.city}
+                            </MenuItem>
+                          ))}
                         </TextField>
-
 
                         <TextField
                           sx={{ pb: 2 }}
@@ -1174,7 +1257,7 @@ export default function CreateOrder() {
                           <RadioGroup
                             aria-labelledby="demo-radio-buttons-group-label"
                             name="has_GST"
-                            size='small'
+                            size="small"
                             value={data.has_GST}
                             onChange={handelData}
                           >
@@ -1182,11 +1265,10 @@ export default function CreateOrder() {
                               value="yes"
                               control={<Radio />}
                               label="Yes"
-                              size='small'
-
+                              size="small"
                             />
                             <FormControlLabel
-                              size='small'
+                              size="small"
                               value="no"
                               control={<Radio />}
                               label="No"
@@ -1194,7 +1276,7 @@ export default function CreateOrder() {
                           </RadioGroup>
                         </FormControl>
 
-                        {data.has_GST === "yes" &&
+                        {data.has_GST === "yes" && (
                           <TextField
                             size="small"
                             sx={{ mb: 2 }}
@@ -1203,21 +1285,56 @@ export default function CreateOrder() {
                             onChange={handelData}
                             minRows={5}
                             maxRows={5}
-                            style={{ width: "100%", resize: 'none' }}
+                            style={{ width: "100%", resize: "none" }}
                             name="GST"
                             type="text"
                             label="GST Number"
                             variant="outlined"
                           />
-
-                        }
+                        )}
+                         <br />
+                        <FormLabel id="demo-radio-buttons-group-label">
+                        Flat/Apartment
+                            </FormLabel>
+                        <TextareaAutosize
+                              minRows={7}
+                              placeholder="Flat/Apartment..."
+                              style={{ marginTop: "10px", width: "100%" }}
+                              size="small"
+                              fullWidth
+                              //required
+                              id="outlined-select"
+                              name="apartment"
+                              value={data.apartment || ""}
+                              onChange={handelData}
+                              label="Flat/Apartment"
+                              type="text"
+                            />
+                        <br />
+                        <FormLabel id="demo-radio-buttons-group-label">
+                        Landmark
+                            </FormLabel>
+                        <TextareaAutosize
+                              minRows={7}
+                              placeholder="Landmark..."
+                              style={{ marginTop: "10px", width: "100%" }}
+                              size="small"
+                              fullWidth
+                              //required
+                              id="outlined-select"
+                              name="landmark"
+                              value={data.landmark || ""}
+                              onChange={handelData}
+                              label="Landmark"
+                              type="text"
+                            />
                         <br />
 
                         <FormLabel id="demo-radio-buttons-group-label">
                           Shipping Address
                         </FormLabel>
                         <TextareaAutosize
-                          minRows={4}
+                          minRows={7}
                           placeholder="Shipping Address..."
                           style={{ marginTop: "10px", width: "100%" }}
                           size="small"
@@ -1230,11 +1347,22 @@ export default function CreateOrder() {
                           label="Shipping"
                           type="text"
                         />
+
+                        {data.shipping && (
+                          <FormControlLabel
+                            onChange={copyToBilling}
+                            required
+                            control={<Checkbox name="sameAsShipping" />}
+                            label="Copy to Billing Address"
+                          />
+                        )}
+
+                        <br />
                         <FormLabel id="demo-radio-buttons-group-label">
                           Billing Address
                         </FormLabel>
                         <TextareaAutosize
-                          minRows={4}
+                          minRows={7}
                           placeholder="Billing Address..."
                           style={{ marginTop: "10px", width: "100%" }}
                           size="small"
@@ -1272,14 +1400,13 @@ export default function CreateOrder() {
                         </Typography>
 
                         <FormControl sx={{ mt: 1 }}>
-
                           <FormLabel id="demo-radio-buttons-group-label">
                             Classification
                           </FormLabel>
                           <RadioGroup
                             aria-labelledby="demo-radio-buttons-group-label"
                             name="classification"
-                            size='small'
+                            size="small"
                             value={data.classification}
                             onChange={handelData}
                           >
@@ -1287,11 +1414,10 @@ export default function CreateOrder() {
                               value="personal"
                               control={<Radio />}
                               label="Personal"
-                              size='small'
-
+                              size="small"
                             />
                             <FormControlLabel
-                              size='small'
+                              size="small"
                               value="business"
                               control={<Radio />}
                               label="Business"
@@ -1299,30 +1425,25 @@ export default function CreateOrder() {
                           </RadioGroup>
                         </FormControl>
                         <br></br>
-                          <TextField
-                            size="small"
-                            fullWidth
-                            id="outlined-select"
-                            value={data.customer_type}
-                            onChange={handelData}
-                            select
-                            sx={{ mb: 2, mt: 1 }}
-                            name="customer_type"
-                            label="Customer Type"
-                            multiple
-                            helperText="Please select customer type."
-                          >
-                            {catalogs.customer_type.map(
-                              (option) =>
-                                <MenuItem
-                                  key={option}
-                                  value={option}
-                                >
-                                  {option}
-                                </MenuItem>
-                            )}
-                          </TextField>
-
+                        <TextField
+                          size="small"
+                          fullWidth
+                          id="outlined-select"
+                          value={data.customer_type}
+                          onChange={handelData}
+                          select
+                          sx={{ mb: 2, mt: 1 }}
+                          name="customer_type"
+                          label="Customer Type"
+                          multiple
+                          helperText="Please select customer type."
+                        >
+                          {catalogs.customer_type.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </TextField>
 
                         <Autocomplete
                           id="free-solo-demo"
@@ -1414,7 +1535,7 @@ export default function CreateOrder() {
                           <RadioGroup
                             aria-labelledby="demo-radio-buttons-group-label"
                             name="has_GST"
-                            size='small'
+                            size="small"
                             value={data.has_GST}
                             onChange={handelData}
                           >
@@ -1422,11 +1543,10 @@ export default function CreateOrder() {
                               value="yes"
                               control={<Radio />}
                               label="Yes"
-                              size='small'
-
+                              size="small"
                             />
                             <FormControlLabel
-                              size='small'
+                              size="small"
                               value="no"
                               control={<Radio />}
                               label="No"
@@ -1434,7 +1554,7 @@ export default function CreateOrder() {
                           </RadioGroup>
                         </FormControl>
 
-                        {data.has_GST === "yes" &&
+                        {data.has_GST === "yes" && (
                           <TextField
                             size="small"
                             sx={{ mb: 2 }}
@@ -1443,17 +1563,51 @@ export default function CreateOrder() {
                             onChange={handelData}
                             minRows={5}
                             maxRows={5}
-                            style={{ width: "100%", resize: 'none' }}
+                            style={{ width: "100%", resize: "none" }}
                             name="GST"
                             type="text"
                             label="GST Number"
                             variant="outlined"
                           />
+                        )}
 
-                        }
                         <br />
-
-
+                        <FormLabel id="demo-radio-buttons-group-label">
+                        Flat/Apartment
+                            </FormLabel>
+                        <TextareaAutosize
+                              minRows={7}
+                              placeholder="Flat/Apartment..."
+                              style={{ marginTop: "10px", width: "100%" }}
+                              size="small"
+                              fullWidth
+                              //required
+                              id="outlined-select"
+                              name="apartment"
+                              value={data.apartment || ""}
+                              onChange={handelData}
+                              label="Flat/Apartment"
+                              type="text"
+                            />
+                        <br />
+                        <FormLabel id="demo-radio-buttons-group-label">
+                        Landmark
+                            </FormLabel>
+                        <TextareaAutosize
+                              minRows={7}
+                              placeholder="Landmark..."
+                              style={{ marginTop: "10px", width: "100%" }}
+                              size="small"
+                              fullWidth
+                              //required
+                              id="outlined-select"
+                              name="landmark"
+                              value={data.landmark || ""}
+                              onChange={handelData}
+                              label="Landmark"
+                              type="text"
+                            />
+                        <br />
 
                         {catalogs.address.length > 0 ? (
                           <TextField
@@ -1487,7 +1641,7 @@ export default function CreateOrder() {
                               Shipping Address
                             </FormLabel>
                             <TextareaAutosize
-                              minRows={4}
+                              minRows={7}
                               placeholder="Shipping Address..."
                               style={{ marginTop: "10px", width: "100%" }}
                               size="small"
@@ -1503,11 +1657,21 @@ export default function CreateOrder() {
                           </>
                         )}
 
+                        {data.shipping && (
+                          <FormControlLabel
+                            onChange={copyToBilling}
+                            required
+                            control={<Checkbox name="sameAsShipping" />}
+                            label="Copy to Billing Address"
+                          />
+                        )}
+
+                        <br />
                         <FormLabel id="demo-radio-buttons-group-label">
                           Billing Address
                         </FormLabel>
                         <TextareaAutosize
-                          minRows={4}
+                          minRows={7}
                           placeholder="Billing Address..."
                           style={{ marginTop: "10px", width: "100%" }}
                           size="small"
@@ -1540,30 +1704,50 @@ export default function CreateOrder() {
                       Select Product
                     </InputLabel>
 
-                    <Autocomplete
-                      sx={{ mb: 2 }}
-                      size="small"
-                      fullWidth
-                      noOptionsText={"ex : P-01001"}
-                      multiple
-                      autoHighlight
-                      id="combo-box-demo"
-                      options={catalogs.product.map((row) => {
-                        return row.SKU;
-                      })}
-                      value={data.product_array}
-                      renderInput={(params) => (
-                        <TextField
-                          onKeyUpCapture={handleSearch}
-                          value={data.product_array || ""}
-                          {...params}
-                          label="Product SKU"
-                        />
-                      )}
-                      onChange={(e, newMember) =>
-                        setData((old) => ({ ...old, product_array: newMember }))
-                      }
-                    />
+                    <Box sx={{ display: "flex", gap: "1rem" }}>
+                      <Autocomplete
+                        sx={{ mb: 2 }}
+                        size="small"
+                        fullWidth
+                        noOptionsText={"ex : P-01001"}
+                        multiple
+                        autoHighlight
+                        id="combo-box-demo"
+                        options={catalogs.product.map((row) => {
+                          return row.SKU;
+                        })}
+                        value={data.product_array}
+                        renderInput={(params) => (
+                          <TextField
+                            onKeyUpCapture={handleSearch}
+                            value={data.product_array || ""}
+                            {...params}
+                            label="Product SKU"
+                          />
+                        )}
+                        onChange={(e, newMember) =>
+                          setData((old) => ({
+                            ...old,
+                            product_array: newMember,
+                          }))
+                        }
+                      />
+                      {/* <TextField
+                        select
+                        size="small"
+                        fullWidth
+                        label='Select Warehouse'
+                        name='warehouse'>
+                        {warehouse.map((option) => <MenuItem
+                          key={value}
+                          value={value}
+                        >
+                          {option.value}
+                        </MenuItem>
+                        )}
+                      </TextField> */}
+                    </Box>
+
                     <div
                       style={{
                         display: "flex",
@@ -1599,13 +1783,18 @@ export default function CreateOrder() {
                       p: 2.5,
                     }}
                   >
-                    <FormControl
-                      sx={{ mb: 2 }}
-                    >
-                      <FormControlLabel label='Pictures Before Dispatch'
-                        control={<Checkbox name='pic_before_dispatch' onChange={handelData} size={'small'}
-                          checked={data.pic_before_dispatch} />}
-                      // labelPlacement="start"
+                    <FormControl sx={{ mb: 2 }}>
+                      <FormControlLabel
+                        label="Pictures Before Dispatch"
+                        control={
+                          <Checkbox
+                            name="pic_before_dispatch"
+                            onChange={handelData}
+                            size={"small"}
+                            checked={data.pic_before_dispatch}
+                          />
+                        }
+                        // labelPlacement="start"
                       />
                     </FormControl>
                     {/* <FormControl
@@ -1618,69 +1807,70 @@ export default function CreateOrder() {
                       />
                     </FormControl> */}
 
-
                     <br />
 
-                    <FormControl
-                      sx={{ mb: 2 }}
-                    >
-                      <FormControlLabel label='Is Fulfilled'
-                        control={<Checkbox name='fulfilled' onChange={handelData} size={'small'} checked={data.fulfilled} />}
-                      // labelPlacement="start"
+                    <FormControl sx={{ mb: 2 }}>
+                      <FormControlLabel
+                        label="Is Fulfilled"
+                        control={
+                          <Checkbox
+                            name="fulfilled"
+                            onChange={handelData}
+                            size={"small"}
+                            checked={data.fulfilled}
+                          />
+                        }
+                        // labelPlacement="start"
                       />
                     </FormControl>
 
-                    {data.fulfilled && <>
-                      <TextField
-                        sx={{ mb: 2, mt: 2 }}
-                        size="small"
-                        fullWidth
-                        id="outlined-select"
-                        select
-                        name="inventory_location"
-                        label="Inventory Location"
-                        multiple
-                        value={data.inventory_location}
-                        onChange={handelData}
-                      >
-                        {catalogs.warehouse.map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                      <TextField
-                        sx={{ mb: 2 }}
-                        size="small"
-                        fullWidth
-                        id="outlined-select"
-                        type="text"
-                        name="courier_company"
-                        label="Courier Company"
-                        value={data.courier_company}
-                        onChange={handelData}
-                      />
-                      <TextField
-                        sx={{ mb: 2 }}
-                        size="small"
-                        fullWidth
-                        id="outlined-select"
-                        type="text"
-                        name="AWB"
-                        label="AWB"
-                        value={data.AWB}
-                        onChange={handelData}
-                      />
-
-                    </>
-
-                    }
-
-
+                    {data.fulfilled && (
+                      <>
+                        <TextField
+                          sx={{ mb: 2, mt: 2 }}
+                          size="small"
+                          fullWidth
+                          id="outlined-select"
+                          select
+                          name="inventory_location"
+                          label="Inventory Location"
+                          multiple
+                          value={data.inventory_location}
+                          onChange={handelData}
+                        >
+                          {catalogs.warehouse.map((option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                        <TextField
+                          sx={{ mb: 2 }}
+                          size="small"
+                          fullWidth
+                          id="outlined-select"
+                          type="text"
+                          name="courier_company"
+                          label="Courier Company"
+                          value={data.courier_company}
+                          onChange={handelData}
+                        />
+                        <TextField
+                          sx={{ mb: 2 }}
+                          size="small"
+                          fullWidth
+                          id="outlined-select"
+                          type="text"
+                          name="AWB"
+                          label="AWB"
+                          value={data.AWB}
+                          onChange={handelData}
+                        />
+                      </>
+                    )}
                   </Box>
                 )}
                 {/* // Full Filament ends */}
-
 
                 {/* // Preview receipt */}
                 {activeStep === 3 && (
@@ -1695,7 +1885,11 @@ export default function CreateOrder() {
                       fullWidth
                       id="outlined-select"
                       type="text"
-                      disabled = {auth.role === 'Super Admin' || auth.role === 'Admin' ? false : true }
+                      disabled={
+                        auth.role === "Super Admin" || auth.role === "Admin"
+                          ? false
+                          : true
+                      }
                       name="sales_person"
                       label="Sales Person"
                       value={data.sales_person || ""}
@@ -1723,7 +1917,6 @@ export default function CreateOrder() {
                       multiple
                       value={data.sale_channel || "Online"}
                       onChange={handelData}
-
                     >
                       {catalogs.channel.map((option) => (
                         <MenuItem key={option.key} value={option.value}>
@@ -1770,7 +1963,11 @@ export default function CreateOrder() {
                           disabled
                           label="CID"
                           InputProps={{
-                            startAdornment: <InputAdornment position="start">CID</InputAdornment>,
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                CID
+                              </InputAdornment>
+                            ),
                           }}
                           value={data.CID}
                         ></TextField>
@@ -1783,11 +1980,15 @@ export default function CreateOrder() {
                           size="small"
                           disabled
                           InputProps={{
-                            startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                ₹
+                              </InputAdornment>
+                            ),
                           }}
                           label="Subtotal"
                           onChange={handelData}
-                          name='subTotal'
+                          name="subTotal"
                           value={data.subTotal}
                         ></TextField>
                       </Grid>
@@ -1800,9 +2001,17 @@ export default function CreateOrder() {
                           type="number"
                           size="small"
                           InputProps={{
-                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                %
+                              </InputAdornment>
+                            ),
                           }}
-                          value={(100 >= data.discount && data.discount > -1) ? data.discount : setData(old => ({ ...old, discount: 0 }))}
+                          value={
+                            100 >= data.discount && data.discount > -1
+                              ? data.discount
+                              : setData((old) => ({ ...old, discount: 0 }))
+                          }
                           name="discount"
                           onChange={handelData}
                         />
@@ -1817,16 +2026,22 @@ export default function CreateOrder() {
                           size="small"
                           name="paid"
                           onChange={handelData}
-                          value={data.paid >= 0 ? data.paid : setData(old => ({ ...old, paid: 0 }))}
+                          value={
+                            data.paid >= 0
+                              ? data.paid
+                              : setData((old) => ({ ...old, paid: 0 }))
+                          }
                           InputProps={{
-                            startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                ₹
+                              </InputAdornment>
+                            ),
                           }}
                         />
                       </Grid>
 
-
-                      {
-                        data.paid > 0 &&
+                      {data.paid > 0 && (
                         <>
                           <TextField
                             sx={{ mb: 2 }}
@@ -1865,17 +2080,21 @@ export default function CreateOrder() {
                             ))}
                           </TextField>
                         </>
-                      }
+                      )}
 
                       <Grid item xs={12}>
                         <TextField
                           disabled
                           fullWidth
-                          name='total'
+                          name="total"
                           label="Total"
                           onChange={handelData}
                           InputProps={{
-                            startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                ₹
+                              </InputAdornment>
+                            ),
                           }}
                           type="number"
                           size="small"
@@ -1930,15 +2149,14 @@ function ProductsPreviews({ files, setFiles, text }) {
     accept: "image/*",
     multiple: true,
     onDrop: (acceptedFiles) => {
-      setFiles(old => ([
+      setFiles((old) => [
         ...old,
         ...acceptedFiles.map((file) =>
           Object.assign(file, {
             preview: URL.createObjectURL(file),
           })
-        )
-      ])
-      );
+        ),
+      ]);
     },
   });
 
@@ -1979,13 +2197,14 @@ function PolishPreviews({ polish, setPolish, text }) {
     accept: "image/*",
     multiple: true,
     onDrop: (acceptedFiles) => {
-      setPolish(old => ([...old,
-      ...acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        })
-      )])
-      );
+      setPolish((old) => [
+        ...old,
+        ...acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        ),
+      ]);
     },
   });
 
@@ -2022,10 +2241,23 @@ function PolishPreviews({ polish, setPolish, text }) {
 }
 
 // custom product model
-function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open, getCUS, handleCustomProduct, ProductsPreviews, catalogs, handleClose, files, setFiles, polish, setPolish }) {
-
+function CustomProduct({
+  PolishPreviews,
+  cusProductData,
+  setCustomProduct,
+  open,
+  getCUS,
+  handleCustomProduct,
+  ProductsPreviews,
+  catalogs,
+  handleClose,
+  files,
+  setFiles,
+  polish,
+  setPolish,
+}) {
   function handleCusProduct(e) {
-    setCustomProduct(old => ({ ...old, [e.target.name]: e.target.value }))
+    setCustomProduct((old) => ({ ...old, [e.target.name]: e.target.value }));
   }
 
   useEffect(() => {
@@ -2058,20 +2290,23 @@ function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open,
                 </Typography>
               </Grid>
               <Grid item xs={12} sx={{ pb: 2 }}>
-                <Grid container component='form'
+                <Grid
+                  container
+                  component="form"
                   sx={{
-                    gap: '1rem',
+                    gap: "1rem",
                   }}
                   enctype="multipart/form-data"
                   method="post"
                   onSubmit={handleCustomProduct}
                 >
                   <Grid item xs={5.8}>
-
                     {/* <FormLabel id="demo-radio-buttons-group-label">
                             Product Images
                           </FormLabel> */}
-                    <ProductsPreviews files={files} setFiles={setFiles}
+                    <ProductsPreviews
+                      files={files}
+                      setFiles={setFiles}
                       text={"Please Drag and Drop the product images"}
                     ></ProductsPreviews>
 
@@ -2177,13 +2412,9 @@ function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open,
                       label="Discount"
                       variant="outlined"
                     />
-
                   </Grid>
 
                   <Grid item xs={5.8}>
-
-
-
                     <FormControl>
                       <FormLabel id="demo-radio-buttons-group-label">
                         Customize Polish
@@ -2191,7 +2422,7 @@ function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open,
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
                         name="cusPolish"
-                        size='small'
+                        size="small"
                         value={cusProductData.cusPolish}
                         onChange={handleCusProduct}
                       >
@@ -2199,12 +2430,10 @@ function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open,
                           value="yes"
                           control={<Radio />}
                           label="Yes"
-                          size='small'
-
+                          size="small"
                         />
                         <FormControlLabel
-                          size='small'
-
+                          size="small"
                           value="no"
                           control={<Radio />}
                           label="No"
@@ -2212,9 +2441,13 @@ function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open,
                       </RadioGroup>
                     </FormControl>
 
-                    {cusProductData.cusPolish === 'yes' ?
+                    {cusProductData.cusPolish === "yes" ? (
                       <>
-                        <PolishPreviews polish={polish} setPolish={setPolish} text={"Please Drag and Drop the polish images"} />
+                        <PolishPreviews
+                          polish={polish}
+                          setPolish={setPolish}
+                          text={"Please Drag and Drop the polish images"}
+                        />
                         <TextareaAutosize
                           size="small"
                           sx={{ mb: 2 }}
@@ -2223,14 +2456,15 @@ function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open,
                           onChange={handleCusProduct}
                           minRows={5}
                           maxRows={5}
-                          style={{ width: "100%", resize: 'none' }}
+                          style={{ width: "100%", resize: "none" }}
                           name="polish_note"
                           placeholder="Polish Note..."
                           type="text"
                           label="Note"
                           variant="outlined"
                         />
-                      </> :
+                      </>
+                    ) : (
                       <TextField
                         size="small"
                         fullWidth
@@ -2244,18 +2478,16 @@ function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open,
                         multiple
                         helperText="Please select your polish."
                       >
-                        {catalogs.polish.map(
-                          (option) =>
-                            <MenuItem
-                              key={option.polish_name}
-                              value={option.polish_name}
-                            >
-                              {option.polish_name}
-                            </MenuItem>
-                        )}
+                        {catalogs.polish.map((option) => (
+                          <MenuItem
+                            key={option.polish_name}
+                            value={option.polish_name}
+                          >
+                            {option.polish_name}
+                          </MenuItem>
+                        ))}
                       </TextField>
-
-                    }
+                    )}
 
                     <TextField
                       size="small"
@@ -2278,7 +2510,7 @@ function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open,
                       minRows={5}
                       maxRows={5}
                       sx={{ mb: 2 }}
-                      style={{ width: "100%", resize: 'none' }}
+                      style={{ width: "100%", resize: "none" }}
                       name="note"
                       placeholder="Product Note..."
                       type="text"
@@ -2288,8 +2520,6 @@ function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open,
                   </Grid>
 
                   <Grid item xs={12}>
-
-
                     <Button
                       size="small"
                       fullWidth
@@ -2310,267 +2540,305 @@ function CustomProduct({ PolishPreviews, cusProductData, setCustomProduct, open,
 }
 // customizations
 function Customization({ data, setData, catalogs }) {
-
   const [custom, setCustom] = useState({
     polish_images: [],
     design_images: [],
-    cusPolish: 'no',
-    design: 'no'
-  })
-  const [design, setDesign] = useState([])
-  const [polish, setPolish] = useState([])
+    cusPolish: "no",
+    design: "no",
+  });
+  const [design, setDesign] = useState([]);
+  const [polish, setPolish] = useState([]);
 
   function handleData(e) {
-    setCustom(old => ({ ...old, [e.target.name]: e.target.value }))
+    setCustom((old) => ({ ...old, [e.target.name]: e.target.value }));
   }
 
   // while edit the customization
   useEffect(() => {
     // console.log(data.customizations.filter(row => row.SKU === data.payload.SKU))
 
-    if (data.customizations.filter(row => row.SKU === data.payload.SKU).length > 0) {
+    if (
+      data.customizations.filter((row) => row.SKU === data.payload.SKU).length >
+      0
+    ) {
       // console.log('i am in')
-      let finalData = data.customizations.filter(row => row.SKU === data.payload.SKU)[0]
-      setCustom(finalData)
-    }
-    else setCustom({
-      SKU: data.payload.SKU, cusPolish: 'no',
-      design: 'no'
-    })
-  }, [data.open])
+      let finalData = data.customizations.filter(
+        (row) => row.SKU === data.payload.SKU
+      )[0];
+      setCustom(finalData);
+    } else
+      setCustom({
+        SKU: data.payload.SKU,
+        cusPolish: "no",
+        design: "no",
+      });
+  }, [data.open]);
 
   function handleClose() {
-    setData(old => ({ ...old, open: false }))
-    setPolish([])
-    setDesign([])
+    setData((old) => ({ ...old, open: false }));
+    setPolish([]);
+    setDesign([]);
   }
 
   async function handleCustomValue(e) {
     e.preventDefault();
 
-    const FD = new FormData()
+    const FD = new FormData();
     if (polish.length > 0) {
       polish.map((row) => {
-        return FD.append('polish_image', row)
-      })
+        return FD.append("polish_image", row);
+      });
     }
     if (design.length > 0) {
       design.map((row) => {
-        return FD.append('design_image', row)
-      })
+        return FD.append("design_image", row);
+      });
     }
 
-    let res = await uploadAllImage(FD)
+    let res = await uploadAllImage(FD);
 
     if (res.status === 200) {
-      console.log(data.customizations.filter(row => row.SKU === custom.SKU))
-      setData(old => ({
+      console.log(data.customizations.filter((row) => row.SKU === custom.SKU));
+      setData((old) => ({
         ...old,
-        customizations: old.customizations.filter(row => row.SKU === custom.SKU).length > 0 ? old.customizations.map(row => {
-          console.log(row)
-          if (row.SKU === custom.SKU) {
-            console.log(custom)
-            row = {
-              ...custom, polish_images: [...row.polish_images, ...res.data.polish],
-              design_images: [...row.design_images, ...res.data.design]
-            }
+        customizations:
+          old.customizations.filter((row) => row.SKU === custom.SKU).length > 0
+            ? old.customizations.map((row) => {
+                console.log(row);
+                if (row.SKU === custom.SKU) {
+                  console.log(custom);
+                  row = {
+                    ...custom,
+                    polish_images: [...row.polish_images, ...res.data.polish],
+                    design_images: [...row.design_images, ...res.data.design],
+                  };
 
-            return row
-          }
-          else return row
-        }) : [...old.customizations, {
-          ...custom,
-          polish_images: [...res.data.polish],
-          design_images: [...res.data.design]
-        }]
-      }))
+                  return row;
+                } else return row;
+              })
+            : [
+                ...old.customizations,
+                {
+                  ...custom,
+                  polish_images: [...res.data.polish],
+                  design_images: [...res.data.design],
+                },
+              ],
+      }));
 
       handleClose();
     }
-
-
-
   }
 
-  return (<>
-    <Modal
-      aria-labelledby="transition-modal-title"
-      aria-describedby="transition-modal-description"
-      open={data.open}
-      onClose={handleClose}
-      closeAfterTransition
-      BackdropComponent={Backdrop}
-      BackdropProps={{
-        timeout: 500,
-      }}
-    >
-      <Fade in={data.open}>
-        <Box sx={style}>
-          <Grid container component='form' method='post' onSubmit={handleCustomValue} >
-            <Grid item xs={12}>
-              <Typography variant={'h6'}>Product Customization </Typography>
-              <Typography variant={'caption'}>SKU {custom.SKU}</Typography>
-            </Grid>
-            {/* // for polish  */}
-            <Grid item xs={5.8} p={1}>
-              <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">
-                  Customize Polish
-                </FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  name="cusPolish"
-                  size='small'
-                  value={custom.cusPolish || 'no'}
-                  onChange={handleData}
-                >
-                  <FormControlLabel
-                    value="yes"
-                    control={<Radio />}
-                    label="Yes"
-                    size='small'
-
-                  />
-                  <FormControlLabel
-                    size='small'
-
-                    value="no"
-                    control={<Radio />}
-                    label="No"
-                  />
-                </RadioGroup>
-              </FormControl>
-
-              {custom.cusPolish === 'yes' ?
-                <>
-                  <PolishPreviews polish={polish} setPolish={setPolish} text={"Please Drag and Drop the polish images"} />
-                  {custom.polish_images && <>
-                    <Typography variant='caption'>Uploaded Image</Typography>
-                    <Box sx={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      alignItems: 'center',
-                      gap: '1rem',
-                      width: '100%'
-                    }}>
-                      {custom.polish_images.map(row => {
-                        // console.log(row)
-                        return <img width='70px' src={row} alt={'p_image'} />
-                      })}
-                    </Box>
-                  </>}
-                  <TextareaAutosize
+  return (
+    <>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={data.open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={data.open}>
+          <Box sx={style}>
+            <Grid
+              container
+              component="form"
+              method="post"
+              onSubmit={handleCustomValue}
+            >
+              <Grid item xs={12}>
+                <Typography variant={"h6"}>Product Customization </Typography>
+                <Typography variant={"caption"}>SKU {custom.SKU}</Typography>
+              </Grid>
+              {/* // for polish  */}
+              <Grid item xs={5.8} p={1}>
+                <FormControl>
+                  <FormLabel id="demo-radio-buttons-group-label">
+                    Customize Polish
+                  </FormLabel>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    name="cusPolish"
                     size="small"
-                    sx={{ mb: 2 }}
-                    fullWidth
-                    value={custom.polish_note || ''}
+                    value={custom.cusPolish || "no"}
                     onChange={handleData}
-                    minRows={5}
-                    maxRows={5}
-                    style={{ width: "100%", resize: 'none' }}
-                    name="polish_note"
-                    placeholder="Polish Note..."
-                    type="text"
-                    label="Note"
-                    variant="outlined"
-                  />
-                </> :
-                <TextField
-                  size="small"
-                  fullWidth
-                  id="outlined-select"
-                  value={custom.polish || ''}
-                  onChange={handleData}
-                  select
-                  sx={{ mb: 2 }}
-                  name="polish"
-                  label="Polish"
-                  multiple
-                  helperText="Please select your polish."
-                >
-                  {catalogs.polish.map(
-                    (option) =>
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                      size="small"
+                    />
+                    <FormControlLabel
+                      size="small"
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+
+                {custom.cusPolish === "yes" ? (
+                  <>
+                    <PolishPreviews
+                      polish={polish}
+                      setPolish={setPolish}
+                      text={"Please Drag and Drop the polish images"}
+                    />
+                    {custom.polish_images && (
+                      <>
+                        <Typography variant="caption">
+                          Uploaded Image
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            alignItems: "center",
+                            gap: "1rem",
+                            width: "100%",
+                          }}
+                        >
+                          {custom.polish_images.map((row) => {
+                            // console.log(row)
+                            return (
+                              <img width="70px" src={row} alt={"p_image"} />
+                            );
+                          })}
+                        </Box>
+                      </>
+                    )}
+                    <TextareaAutosize
+                      size="small"
+                      sx={{ mb: 2 }}
+                      fullWidth
+                      value={custom.polish_note || ""}
+                      onChange={handleData}
+                      minRows={5}
+                      maxRows={5}
+                      style={{ width: "100%", resize: "none" }}
+                      name="polish_note"
+                      placeholder="Polish Note..."
+                      type="text"
+                      label="Note"
+                      variant="outlined"
+                    />
+                  </>
+                ) : (
+                  <TextField
+                    size="small"
+                    fullWidth
+                    id="outlined-select"
+                    value={custom.polish || ""}
+                    onChange={handleData}
+                    select
+                    sx={{ mb: 2 }}
+                    name="polish"
+                    label="Polish"
+                    multiple
+                    helperText="Please select your polish."
+                  >
+                    {catalogs.polish.map((option) => (
                       <MenuItem
                         key={option.polish_name}
                         value={option.polish_name}
                       >
                         {option.polish_name}
                       </MenuItem>
-                  )}
-                </TextField>
-
-              }
-            </Grid>
-            {/* // for design  */}
-            <Grid item xs={5.8} p={1}>
-              <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">
-                  Customize Design
-                </FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  name="design"
-                  size='small'
-                  value={custom.design || 'no'}
-                  onChange={handleData}
-                >
-                  <FormControlLabel
-                    value="yes"
-                    control={<Radio />}
-                    label="Yes"
-                    size='small'
-
-                  />
-                  <FormControlLabel
-                    size='small'
-
-                    value="no"
-                    control={<Radio />}
-                    label="No"
-                  />
-                </RadioGroup>
-              </FormControl>
-
-              {custom.design === 'yes' &&
-                <>
-                  <ProductsPreviews files={design} setFiles={setDesign} text={"Please Drag and Drop the design images"} />
-                  {custom.design_images && <>
-                    <Typography variant='caption'>Uploaded Image</Typography>
-                    <Box sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      flexWrap: 'wrap',
-                      gap: '1rem',
-                      width: '100%'
-                    }}>
-                      {custom.design_images.map(row => {
-                        // console.log(row)
-                        return <img width='70px' src={row} alt={'p_image'} />
-                      })}
-                    </Box>
-                  </>}
-                  <TextareaAutosize
+                    ))}
+                  </TextField>
+                )}
+              </Grid>
+              {/* // for design  */}
+              <Grid item xs={5.8} p={1}>
+                <FormControl>
+                  <FormLabel id="demo-radio-buttons-group-label">
+                    Customize Design
+                  </FormLabel>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    name="design"
                     size="small"
-                    sx={{ mb: 2 }}
-                    fullWidth
-                    value={custom.design_note || ''}
+                    value={custom.design || "no"}
                     onChange={handleData}
-                    minRows={5}
-                    maxRows={5}
-                    style={{ width: "100%", resize: 'none' }}
-                    name="design_note"
-                    placeholder="Design Note..."
-                    type="text"
-                    label="Note"
-                    variant="outlined"
-                  />
-                </>
-              }
+                  >
+                    <FormControlLabel
+                      value="yes"
+                      control={<Radio />}
+                      label="Yes"
+                      size="small"
+                    />
+                    <FormControlLabel
+                      size="small"
+                      value="no"
+                      control={<Radio />}
+                      label="No"
+                    />
+                  </RadioGroup>
+                </FormControl>
+
+                {custom.design === "yes" && (
+                  <>
+                    <ProductsPreviews
+                      files={design}
+                      setFiles={setDesign}
+                      text={"Please Drag and Drop the design images"}
+                    />
+                    {custom.design_images && (
+                      <>
+                        <Typography variant="caption">
+                          Uploaded Image
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                            gap: "1rem",
+                            width: "100%",
+                          }}
+                        >
+                          {custom.design_images.map((row) => {
+                            // console.log(row)
+                            return (
+                              <img width="70px" src={row} alt={"p_image"} />
+                            );
+                          })}
+                        </Box>
+                      </>
+                    )}
+                    <TextareaAutosize
+                      size="small"
+                      sx={{ mb: 2 }}
+                      fullWidth
+                      value={custom.design_note || ""}
+                      onChange={handleData}
+                      minRows={5}
+                      maxRows={5}
+                      style={{ width: "100%", resize: "none" }}
+                      name="design_note"
+                      placeholder="Design Note..."
+                      type="text"
+                      label="Note"
+                      variant="outlined"
+                    />
+                  </>
+                )}
+              </Grid>
+              <Grid item xs={12}>
+                <Button type="submit" variant="contained">
+                  Apply
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12}><Button type='submit' variant='contained'>Apply</Button></Grid>
-          </Grid>
-        </Box>
-      </Fade>
-    </Modal>
-  </>)
+          </Box>
+        </Fade>
+      </Modal>
+    </>
+  );
 }

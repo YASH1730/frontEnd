@@ -58,3 +58,7 @@ code {
     margin-top: 2%;
     padding: 1%;
 }
+
+textarea {
+    resize:vertical !important;
+}
