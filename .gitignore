@@ -25,3 +25,5 @@ yarn-error.log*
 # // local service
 
 /src/services/service.js
+
+/src/config.json
