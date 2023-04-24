@@ -84,6 +84,7 @@ import {
   listPincode,
   addUser,
   updateUser,
+  changeKnobStatus,
 } from "../../../services/service.js";
 import { useConfirm } from "material-ui-confirm";
 
@@ -239,16 +240,14 @@ const SideForm = () => {
   const customer_type = ["Interior", "Architect", "VIP", "VVIP"];
 
   const return_reason = [
-
-    'Product not as expected',
-    'Size is too small',
-    'Quality not as expected',
-    'Damaged during transit',
-    'Different from Store',
-    'Wrong Polish',
-    'Others'
-  ]
-
+    "Product not as expected",
+    "Size is too small",
+    "Quality not as expected",
+    "Damaged during transit",
+    "Different from Store",
+    "Wrong Polish",
+    "Others",
+  ];
 
   const order_status = [
     {
@@ -272,7 +271,7 @@ const SideForm = () => {
       key: "weaving",
       value: "Weaving",
     },
-  
+
     {
       key: "brass_fitting",
       value: "Brass fitting",
@@ -285,7 +284,6 @@ const SideForm = () => {
       key: "packed &_shipped",
       value: "Packed & Shipped",
     },
-
   ];
 
   function ImagePreviews(props) {
@@ -588,8 +586,15 @@ const SideForm = () => {
     },
   ];
   const suppierCompany = [
-    "DTDC", "Bluedart", "Safexpress", "ATS", "Ekart", "XpressBees", "DEV(Direct Courier)", "Shree Maruti Courier"
-  ]
+    "DTDC",
+    "Bluedart",
+    "Safexpress",
+    "ATS",
+    "Ekart",
+    "XpressBees",
+    "DEV(Direct Courier)",
+    "Shree Maruti Courier",
+  ];
   // const rangeCatalog = [
   //   {
   //     value: "Traditional",
@@ -669,11 +674,7 @@ const SideForm = () => {
     },
   ];
 
-  const purpose = [
-    "Manufactured",
-    "Repairing",
-    "Packing",
-  ];
+  const purpose = ["Manufactured", "Repairing", "Packing"];
   const level = [
     "Level 1",
     "Level 2",
@@ -706,8 +707,8 @@ const SideForm = () => {
   const [materialCatalog, setMaterialCatalog] = useState([]);
   // const [textileCatalog, setTextileCatalog] = useState([]);
   // const [fabricCatalog, setFabricCatalog] = useState([]);
-  const [SKUCatalog, setSKUCatalog] = useState([]);
-  const [customer, setCustomerCatalog] = useState([]);
+  // const [SKUCatalog, setSKUCatalog] = useState([]);
+  // const [customer, setCustomerCatalog] = useState([]);
   const [productSKU, setProductSKU] = useState({
     P_SKU: [],
     H_SKU: [],
@@ -729,6 +730,8 @@ const SideForm = () => {
     pincode: [],
     city: [],
     dial: [],
+    cane: [],
+    hook: [],
   });
 
   // ref
@@ -737,9 +740,8 @@ const SideForm = () => {
   // pres data
   const [changeData, setData] = useState({
     CVW: 0,
-    dial: false,
     ACIN: "",
-    role: 'Staff',
+    role: "Staff",
     primary_material: [],
     product_articles: [],
     hardware_articles: [],
@@ -781,10 +783,9 @@ const SideForm = () => {
     assembly_leg: "",
     assembly_part: 2,
     fitting: "None",
-    silver: "",
+    silver: false,
     weight: 0,
     selling_point: "",
-    mirror: "",
     joints: "",
     tax_rate: 18,
     seat_width: 0,
@@ -793,8 +794,6 @@ const SideForm = () => {
     seat_depth: 0,
     seat_height: 0,
     wheel: "None",
-    wheel_included: "no",
-    trolly: "",
     returnable: false,
     returnDays: 0,
     trolly_mater: "",
@@ -891,9 +890,31 @@ const SideForm = () => {
     country: "",
     pincode: "",
     note: "",
-    restock : false,
-    return : false,
-    refund : false,
+    restock: false,
+    return: false,
+    refund: false,
+    dial: false,
+    dial_qty: 0,
+    cane: false,
+    cane_name: "",
+    cane_qty: 0,
+    hook: false,
+    hook_name: "",
+    hook_qty: 0,
+    glass: false,
+    glass_size: 0,
+    green_glass: false,
+    green_glass_size: 0,
+    yellow_glass: false,
+    yellow_glass_size: 0,
+    red_glass: false,
+    red_glass_size: 0,
+    fitting_size: 0,
+    mirror_size: 0,
+    wheel_included: false,
+    trolley: false,
+    mirror: false,
+    upholstery: false,
   });
 
   function getLabelText(value) {
@@ -938,38 +959,38 @@ const SideForm = () => {
   };
   // function for generating hardware  ID
 
-  const getHKU = () => {
-    getLastHardware()
-      .then((res) => {
-        if (res.data.length > 0) {
-          let index = parseInt(res.data[0].SKU.split("-")[1]) + 1;
+  // const getHKU = () => {
+  //   getLastHardware()
+  //     .then((res) => {
+  //       if (res.data.length > 0) {
+  //         let index = parseInt(res.data[0].SKU.split("-")[1]) + 1;
 
-          setSKU(`H-0${index}`);
-        } else {
-          setSKU("H-01001");
-        }
-      })
-      .catch((err) => {
-        // //console.log(err);
-      });
-  };
+  //         setSKU(`H-0${index}`);
+  //       } else {
+  //         setSKU("H-01001");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       // //console.log(err);
+  //     });
+  // };
   // function for generating product OID ID
 
-  const getOID = () => {
-    getLastOrder()
-      .then((res) => {
-        if (res.data.length > 0) {
-          let index = parseInt(res.data[0].OID.split("-")[1]) + 1;
+  // const getOID = () => {
+  //   getLastOrder()
+  //     .then((res) => {
+  //       if (res.data.length > 0) {
+  //         let index = parseInt(res.data[0].OID.split("-")[1]) + 1;
 
-          setSKU(`OID-0${index}`);
-        } else {
-          setSKU("OID-01001");
-        }
-      })
-      .catch((err) => {
-        // //console.log(err);
-      });
-  };
+  //         setSKU(`OID-0${index}`);
+  //       } else {
+  //         setSKU("OID-01001");
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       // //console.log(err);
+  //     });
+  // };
   // function for generating product DID ID
 
   const getSID = () => {
@@ -1033,7 +1054,7 @@ const SideForm = () => {
           ...old,
           O: form.payload.order.O,
           discount: form.payload.order.discount,
-          discount_type : form.payload.order.discount_type,
+          discount_type: form.payload.order.discount_type,
           paid: form.payload.order.paid,
           total: form.payload.order.total,
           customer_name: form.payload.order.customer_name,
@@ -1050,9 +1071,9 @@ const SideForm = () => {
           customer_type: form.payload.order.customer_type,
           country: form.payload.order.country || "India",
           quantity: Object.keys(quantity) || [],
-          items : form.payload.order.items,
-          product_price : form.payload.order.product_price || {},
-          discount_per_product : form.payload.order.discount_per_product,
+          items: form.payload.order.items,
+          product_price: form.payload.order.product_price || {},
+          discount_per_product: form.payload.order.discount_per_product,
           pincode: form.payload.order.pincode,
           note: form.payload.order.note,
         }));
@@ -1279,10 +1300,8 @@ const SideForm = () => {
           assembly_required: form.payload.row.action.assembly_required,
           assembly_part: form.payload.row.action.assembly_part,
           legs: form.payload.row.action.legs,
-          mirror: form.payload.row.action.mirror,
           mirror_length: form.payload.row.action.mirror_length,
           mirror_width: form.payload.row.action.mirror_width,
-          silver: form.payload.row.action.silver,
           silver_weight: form.payload.row.action.silver_weight,
           joints: form.payload.row.action.joints,
           upholstery: form.payload.row.action.upholstery,
@@ -1351,25 +1370,28 @@ const SideForm = () => {
           wood_weight: form.payload.row.action.wood_weight,
           package_weight: form.payload.row.action.package_weight,
           metal_weight: form.payload.row.action.metal_weight,
+          dial_qty : form.payload.row.action.dial_qty,
+          cane : form.payload.row.action.cane,
+          cane_name : form.payload.row.action.cane_name,
+          cane_qty : form.payload.row.action.cane_qty,
+          hook : form.payload.row.action.hook,
+          hook_name : form.payload.row.action.hook_name,
+          hook_qty : form.payload.row.action.hook_qty,
+          glass : form.payload.row.action.glass,
+          glass_size : form.payload.row.action.glass_size,
+          green_glass : form.payload.row.action.green_glass,
+          green_glass_size : form.payload.row.action.green_glass_size,
+          yellow_glass : form.payload.row.action.yellow_glass,
+          yellow_glass_size : form.payload.row.action.yellow_glass_size,
+          red_glass : form.payload.row.action.red_glass,
+          red_glass_size : form.payload.row.action.red_glass_size,
+          fitting_size : form.payload.row.action.fitting_size,
+          mirror_size : form.payload.row.action.mirror_size,
+          silver : form.payload.row.action.silver,
+          mirror : form.payload.row.action.mirror,
         });
 
         setCat(form.payload.row.action.category_id);
-        break;
-      case "add_order":
-        getOID();
-        getPresentSKUs().then((data) => {
-          if (data.data === null) return setSKUCatalog([]);
-
-          return setSKUCatalog(data.data);
-        });
-
-        customerCatalog().then((data) => {
-          //console.log(data);
-          if (data.data === null) return setCustomerCatalog([]);
-
-          return setCustomerCatalog(data.data);
-        });
-
         break;
       case "category":
         getDID();
@@ -1522,10 +1544,8 @@ const SideForm = () => {
           assembly_required: form.payload.row.action.assembly_required,
           assembly_part: form.payload.row.action.assembly_part,
           legs: form.payload.row.action.legs,
-          mirror: form.payload.row.action.mirror,
           mirror_length: form.payload.row.action.mirror_length,
           mirror_width: form.payload.row.action.mirror_width,
-          silver: form.payload.row.action.silver,
           silver_weight: form.payload.row.action.silver_weight,
           joints: form.payload.row.action.joints,
           upholstery: form.payload.row.action.upholstery,
@@ -1594,6 +1614,25 @@ const SideForm = () => {
           wood_weight: form.payload.row.action.wood_weight,
           package_weight: form.payload.row.action.package_weight,
           metal_weight: form.payload.row.action.metal_weight,
+          dial_qty : form.payload.row.action.dial_qty,
+          cane : form.payload.row.action.cane,
+          cane_name : form.payload.row.action.cane_name,
+          cane_qty : form.payload.row.action.cane_qty,
+          hook : form.payload.row.action.hook,
+          hook_name : form.payload.row.action.hook_name,
+          hook_qty : form.payload.row.action.hook_qty,
+          glass : form.payload.row.action.glass,
+          glass_size : form.payload.row.action.glass_size,
+          green_glass : form.payload.row.action.green_glass,
+          green_glass_size : form.payload.row.action.green_glass_size,
+          yellow_glass : form.payload.row.action.yellow_glass,
+          yellow_glass_size : form.payload.row.action.yellow_glass_size,
+          red_glass : form.payload.row.action.red_glass,
+          red_glass_size : form.payload.row.action.red_glass_size,
+          fitting_size : form.payload.row.action.fitting_size,
+          mirror_size : form.payload.row.action.mirror_size,
+          silver : form.payload.row.action.silver,
+          mirror : form.payload.row.action.mirror,
         });
 
         setCat(form.payload.row.action.category_id);
@@ -1984,6 +2023,17 @@ const SideForm = () => {
     "restock",
     "return",
     "refund",
+    "cane",
+    "hook",
+    "glass",
+    "green_glass",
+    "yellow_glass",
+    "red_glass",
+    "silver",
+    "wheel_included",
+    "trolley",
+    "mirror",
+    "upholstery"
   ];
 
   //  for product felids
@@ -2171,7 +2221,6 @@ const SideForm = () => {
 
     const FD = new FormData();
 
-
     FD.append("DID", SKU);
     FD.append("AID", "Not Assigned");
     FD.append("type", "Customer");
@@ -2338,9 +2387,10 @@ const SideForm = () => {
     setFiles([]);
     setActiveStep(0);
     setData({
-      restock : false,
-      return : false,
-      refund : false,
+      mirror: false,
+      restock: false,
+      return: false,
+      refund: false,
       CVW: 0,
       ACIN: "",
       web_banner_status: false,
@@ -2394,9 +2444,7 @@ const SideForm = () => {
       assembly_leg: "",
       assembly_part: 2,
       fitting: "None",
-      silver: "",
       selling_point: "",
-      mirror: "",
       joints: "",
       tax_rate: 18,
       seat_width: 0,
@@ -2405,8 +2453,6 @@ const SideForm = () => {
       seat_depth: 0,
       seat_height: 0,
       wheel: "None",
-      wheel_included: "no",
-      trolly: "",
       returnable: false,
       returnDays: 0,
       trolly_mater: "",
@@ -2484,7 +2530,28 @@ const SideForm = () => {
       price: 0,
       indoorSavedImage: [],
       pincode: "",
-      role: 'Staff',
+      role: "Staff",
+      dial_qty: 0,
+      cane: false,
+      cane_name: "",
+      cane_qty: 0,
+      hook: false,
+      hook_name: "",
+      hook_qty: 0,
+      glass: false,
+      glass_size: 0,
+      green_glass: false,
+      green_glass_size: 0,
+      yellow_glass: false,
+      yellow_glass_size: 0,
+      red_glass: false,
+      red_glass_size: 0,
+      fitting_size: 0,
+      mirror_size: 0,
+      wheel_included: false,
+      trolley: false,
+      upholstery: false,
+      silver: false,
 
     });
     document.getElementById("myForm").reset();
@@ -2607,6 +2674,7 @@ const SideForm = () => {
     FD.append("metal_weight", changeData.metal_weight);
     FD.append("package_weight", changeData.package_weight);
 
+
     FD.append("cradle_bed", changeData.cradle_bed);
     if (changeData.cradle_bed) {
       FD.append("cradle_bed_depth", changeData.cradle_bed_depth);
@@ -2676,7 +2744,7 @@ const SideForm = () => {
     FD.append("selling_price", changeData.selling_price);
     FD.append("warehouse", changeData.warehouse);
     // FD.append("polish", changeData.polish);
-    FD.append("fabric", changeData.fabric);
+    // FD.append("fabric", changeData.fabric);
 
     FD.append("drawer", changeData.drawer);
 
@@ -2722,6 +2790,7 @@ const SideForm = () => {
     FD.append("top_size_breadth", changeData.top_size_breadth);
 
     FD.append("dial", changeData.dial);
+    changeData.dial && FD.append("dial_qty",changeData.dial_qty)
     changeData.dial && FD.append("dial_size", changeData.dial_size);
     changeData.dial && FD.append("dial_name", changeData.dial_name);
     FD.append(
@@ -2750,36 +2819,37 @@ const SideForm = () => {
     if (changeData.assembly_required === "yes")
       FD.append("legs", changeData.legs);
 
-    if (changeData.silver === "yes")
+    changeData.silver &&
       FD.append(
         "silver_weight",
         changeData.silver_weight ? changeData.silver_weight : 0
-      );
+      )
 
-    if (changeData.trolley === "yes")
+    changeData.trolley &&
       FD.append("trolley_material", changeData.trolley_material);
 
-    if (changeData.upholstery === "Yes") FD.append("fabric", changeData.fabric);
+    // changeData.upholstery &&  FD.append("fabric", changeData.fabric);
 
     FD.append("mirror", changeData.mirror);
 
-    if (changeData.mirror === "yes") {
+    changeData.mirror && 
       FD.append(
         "mirror_length",
         changeData.mirror_length ? changeData.mirror_length : 0
       );
+    changeData.mirror && 
       FD.append(
         "mirror_width",
         changeData.mirror_width ? changeData.mirror_width : 0
       );
-    }
+    
     FD.append("joints", changeData.joints ? changeData.joints : "");
     FD.append(
       "upholstery",
-      changeData.upholstery ? changeData.upholstery : "no"
+      changeData.upholstery
     );
-    FD.append("trolley", changeData.trolley ? changeData.trolley : "no");
-    FD.append("silver", changeData.silver ? changeData.silver : "no");
+    FD.append("trolley", changeData.trolley);
+    FD.append("silver", changeData.silver);
     FD.append(
       "rotating_seats",
       changeData.rotating_seats ? changeData.rotating_seats : false
@@ -2826,6 +2896,26 @@ const SideForm = () => {
     );
     FD.append("stackable", changeData.stackable ? changeData.stackable : false);
     FD.append("tax_rate", changeData.tax_rate);
+
+
+
+    FD.append("cane",changeData.cane)
+    changeData.cane && FD.append("cane_name",changeData.cane_name)
+    changeData.cane && FD.append("cane_qty",changeData.cane_qty)
+    FD.append("hook",changeData.hook)
+    changeData.hook && FD.append("hook_name",changeData.hook_name)
+    changeData.hook && FD.append("hook_qty",changeData.hook_qty)
+    FD.append("glass",changeData.glass)
+    changeData.glass && FD.append("glass_size",changeData.glass_size)
+    FD.append("green_glass",changeData.green_glass)
+    changeData.green_glass && FD.append("green_glass_size",changeData.green_glass_size)
+    FD.append("yellow_glass",changeData.yellow_glass)
+    changeData.yellow_glass && FD.append("yellow_glass_size",changeData.yellow_glass_size)
+    FD.append("red_glass",changeData.red_glass)
+    changeData.red_glass && FD.append("red_glass_size",changeData.red_glass_size)
+    changeData.fitting && FD.append("fitting_size",changeData.fitting_size)
+    changeData.mirror && FD.append("mirror_size",changeData.mirror_size)
+
 
     const res = addDraft(FD);
 
@@ -3556,7 +3646,7 @@ const SideForm = () => {
     FD.append("primary_material", changeData.primary_material);
     FD.append("warehouse", changeData.warehouse);
     // FD.append("polish", changeData.polish);
-    FD.append("fabric", changeData.fabric);
+    // FD.append("fabric", changeData.fabric);
     FD.append("CVW", changeData.CVW);
 
     FD.append("drawer", changeData.drawer);
@@ -3602,6 +3692,7 @@ const SideForm = () => {
     FD.append("top_size_length", changeData.top_size_length);
     FD.append("top_size_breadth", changeData.top_size_breadth);
     FD.append("dial", changeData.dial);
+    changeData.dial && FD.append("dial_qty", changeData.dial_qty);
     changeData.dial && FD.append("dial_size", changeData.dial_size);
     changeData.dial && FD.append("dial_name", changeData.dial_name);
 
@@ -3631,36 +3722,38 @@ const SideForm = () => {
     if (changeData.assembly_required === "yes")
       FD.append("legs", changeData.legs);
 
-    if (changeData.silver === "yes")
+    changeData.silver &&
       FD.append(
         "silver_weight",
         changeData.silver_weight ? changeData.silver_weight : 0
       );
 
-    if (changeData.trolley === "yes")
+    changeData.trolley &&
       FD.append("trolley_material", changeData.trolley_material);
 
-    if (changeData.upholstery === "Yes") FD.append("fabric", changeData.fabric);
+    changeData.upholstery && FD.append("fabric", changeData.fabric);
 
     FD.append("mirror", changeData.mirror);
 
-    if (changeData.mirror === "yes") {
+    changeData.mirror &&
       FD.append(
         "mirror_length",
         changeData.mirror_length ? changeData.mirror_length : 0
       );
+      changeData.mirror &&
       FD.append(
         "mirror_width",
         changeData.mirror_width ? changeData.mirror_width : 0
       );
-    }
+      
+    
     FD.append("joints", changeData.joints ? changeData.joints : "");
     FD.append(
       "upholstery",
       changeData.upholstery ? changeData.upholstery : "no"
     );
-    FD.append("trolley", changeData.trolley ? changeData.trolley : "no");
-    FD.append("silver", changeData.silver ? changeData.silver : "no");
+    FD.append("trolley", changeData.trolley );
+    FD.append("silver", changeData.silver );
     FD.append(
       "rotating_seats",
       changeData.rotating_seats ? changeData.rotating_seats : false
@@ -3707,6 +3800,24 @@ const SideForm = () => {
     );
     FD.append("stackable", changeData.stackable ? changeData.stackable : false);
     FD.append("tax_rate", changeData.tax_rate);
+
+
+    FD.append("cane",changeData.cane)
+    changeData.cane && FD.append("cane_name",changeData.cane_name)
+    changeData.cane && FD.append("cane_qty",changeData.cane_qty)
+    FD.append("hook",changeData.hook)
+    changeData.hook && FD.append("hook_name",changeData.hook_name)
+    changeData.hook && FD.append("hook_qty",changeData.hook_qty)
+    FD.append("glass",changeData.glass)
+    changeData.glass && FD.append("glass_size",changeData.glass_size)
+    FD.append("green_glass",changeData.green_glass)
+    changeData.green_glass && FD.append("green_glass_size",changeData.green_glass_size)
+    FD.append("yellow_glass",changeData.yellow_glass)
+    changeData.yellow_glass && FD.append("yellow_glass_size",changeData.yellow_glass_size)
+    FD.append("red_glass",changeData.red_glass)
+    changeData.red_glass && FD.append("red_glass_size",changeData.red_glass_size)
+    changeData.fitting && FD.append("fitting_size",changeData.fitting_size)
+    changeData.mirror && FD.append("mirror_size",changeData.mirror_size)
 
     const res = addDraft(FD);
 
@@ -5116,39 +5227,44 @@ const SideForm = () => {
       FD.append("type", "Order");
       FD.append("operation", "editOrder");
 
-      // order     
-      console.log(editorRef.current.getContent())
+      // order
+      console.log(editorRef.current.getContent());
       FD.append("note", editorRef.current.getContent());
       FD.append("status", changeData.order_status);
 
-//       items
-// product_price
-// discount_per_product
+      //       items
+      // product_price
+      // discount_per_product
 
       // product
       let Product_SKU = {};
       let items = changeData.items;
-      
-      if (changeData.quantity.length > 0)
-      {
-        changeData.quantity.map(
-          (SKU)=>{
-            Product_SKU = { ...Product_SKU, [SKU]: parseInt(changeData[SKU]) || 1 }
-            if(!items.hasOwnProperty(SKU))
-            Object.assign(items,{[SKU] : {
-              fullfilled: false,shipping_carrier:"",trackingId: "", qty : 0}
-            })
-          }
-        );
+
+      if (changeData.quantity.length > 0) {
+        changeData.quantity.map((SKU) => {
+          Product_SKU = {
+            ...Product_SKU,
+            [SKU]: parseInt(changeData[SKU]) || 1,
+          };
+          if (!items.hasOwnProperty(SKU))
+            Object.assign(items, {
+              [SKU]: {
+                fullfilled: false,
+                shipping_carrier: "",
+                trackingId: "",
+                qty: 0,
+              },
+            });
+        });
       }
-      
 
-
- 
       FD.append("quantity", JSON.stringify(Product_SKU));
       FD.append("items", JSON.stringify(items));
       FD.append("product_price", JSON.stringify(changeData.product_price));
-      FD.append("discount_per_product", JSON.stringify(changeData.discount_per_product));
+      FD.append(
+        "discount_per_product",
+        JSON.stringify(changeData.discount_per_product)
+      );
 
       // customer
       FD.append("O", changeData.O);
@@ -5169,10 +5285,9 @@ const SideForm = () => {
       FD.append("classification", changeData.classification);
       FD.append("customer_type", changeData.customer_type);
 
-      console.log(changeData, Product_SKU)
+      console.log(changeData, Product_SKU);
 
       const res = await addDraft(FD);
-
 
       if (res.status !== 200) {
         // setImages([]);
@@ -5194,7 +5309,7 @@ const SideForm = () => {
         );
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
       dispatch(
         setAlert({
           open: true,
@@ -5202,7 +5317,6 @@ const SideForm = () => {
           message: "Something Went Wrong !!!",
         })
       );
-
     }
   };
 
@@ -6400,8 +6514,10 @@ const SideForm = () => {
               mode.type === true ? "mainDarkContainer" : "mainContainer"
             }
             sx={
-              form.formType === "product" || form.formType === "update_product" || form.formType === "variation"
-                || form.formType === "edit_order"
+              form.formType === "product" ||
+              form.formType === "update_product" ||
+              form.formType === "variation" ||
+              form.formType === "edit_order"
                 ? { width: "100vw !important", padding: "0 5% !important" }
                 : {}
             }
@@ -6532,7 +6648,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                  option.category_id && (
+                                    option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -6700,7 +6816,7 @@ const SideForm = () => {
                               name="primary_material"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                            // MenuProps={MenuProps}
+                              // MenuProps={MenuProps}
                             >
                               {materialCatalog.map((option) => (
                                 <MenuItem
@@ -6754,7 +6870,7 @@ const SideForm = () => {
                               name="polish"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                            // MenuProps={MenuProps}
+                              // MenuProps={MenuProps}
                             >
                               {catalog.polish.length > 0 &&
                                 catalog.polish.map((option, index) => (
@@ -6849,7 +6965,7 @@ const SideForm = () => {
                                   name="assembly_part"
                                   value={
                                     changeData.assembly_part > -1 &&
-                                      changeData.assembly_part < 3
+                                    changeData.assembly_part < 3
                                       ? changeData.assembly_part
                                       : 0
                                   }
@@ -7026,7 +7142,9 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files={files} setFiles={setFiles}
+                            <ProductsPreviews
+                              files={files}
+                              setFiles={setFiles}
                               text={
                                 "Make Sure the picture ratio should be in 1:1."
                               }
@@ -7350,6 +7468,126 @@ const SideForm = () => {
                                 }
                                 label="Wall Hanging"
                               />
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.cane}
+                                    onChange={handleProductFields}
+                                    name="cane"
+                                  />
+                                }
+                                label="Cane"
+                              />
+
+                              {changeData.cane && (
+                                <>
+                                  <TextField
+                                    sx={{ mt: 2, mb: 2 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="cane_name"
+                                    label="Cane"
+                                    multiple
+                                    value={changeData.cane_name}
+                                    onChange={handleProductFields}
+                                    // helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.cane.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Cane Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.cane_size}
+                                    onChange={handleProductFields}
+                                    name="cane_size"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.hook}
+                                    onChange={handleProductFields}
+                                    name="hook"
+                                  />
+                                }
+                                label="Hook"
+                              />
+
+                              {changeData.hook && (
+                                <>
+                                  <TextField
+                                    sx={{ mt: 2, mb: 2 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="hook_name"
+                                    label="Hook"
+                                    multiple
+                                    value={changeData.hook_name}
+                                    onChange={handleProductFields}
+                                    // helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.hook.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Hook Quantity"
+                                    type="number"
+                                    variant="outlined"
+                                    value={changeData.hook_qty}
+                                    onChange={handleProductFields}
+                                    name="hook_qty"
+                                  />
+                                </>
+                              )}
+
                               <FormControlLabel
                                 control={
                                   <Checkbox
@@ -7361,22 +7599,20 @@ const SideForm = () => {
                                 label="Dial"
                               />
 
-
-
                               {changeData.dial && (
                                 <>
                                   <TextField
-                                    sx={{ mt: 2, mb: 1 }}
+                                    sx={{ mt: 2, mb: 2 }}
                                     size="small"
                                     fullWidth
                                     id="outlined-select"
                                     select
                                     name="dial_name"
-                                    label="Dail"
+                                    label="Dial"
                                     multiple
                                     value={changeData.dial_name}
                                     onChange={handleProductFields}
-                                    helperText="Please select your Ceramic Tiles."
+                                    // helperText="Please select your Ceramic Tiles."
                                   >
                                     {catalog.dial.map(
                                       (option) =>
@@ -7412,7 +7648,151 @@ const SideForm = () => {
                                     onChange={handleProductFields}
                                     name="dial_size"
                                   />
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    sx={{ mt: 2, mb: 2 }}
+                                    id="fullWidth"
+                                    label="Dial Quantity"
+                                    type="number"
+                                    variant="outlined"
+                                    value={changeData.dial_qty || 0}
+                                    onChange={handleProductFields}
+                                    name="dial_qty"
+                                  />
+                                </>
+                              )}
 
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.glass}
+                                    onChange={handleProductFields}
+                                    name="glass"
+                                  />
+                                }
+                                label="Glass (Plain)"
+                              />
+                              {changeData.glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.glass_size}
+                                    onChange={handleProductFields}
+                                    name="glass_size"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.green_glass}
+                                    onChange={handleProductFields}
+                                    name="green_glass"
+                                  />
+                                }
+                                label="Green Glass"
+                              />
+                              {changeData.green_glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Green Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.green_glass_size}
+                                    onChange={handleProductFields}
+                                    name="green_glass_size"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.red_glass}
+                                    onChange={handleProductFields}
+                                    name="red_glass"
+                                  />
+                                }
+                                label="Red Glass"
+                              />
+                              {changeData.red_glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Red Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.red_glass_size}
+                                    onChange={handleProductFields}
+                                    name="red_glass_size"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.yellow_glass}
+                                    onChange={handleProductFields}
+                                    name="yellow_glass"
+                                  />
+                                }
+                                label="Yellow Glass"
+                              />
+                              {changeData.yellow_glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Yellow Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.yellow_glass_size}
+                                    onChange={handleProductFields}
+                                    name="yellow_glass_size"
+                                  />
                                 </>
                               )}
 
@@ -7480,50 +7860,518 @@ const SideForm = () => {
                                 }
                                 label="Ceramic Tiles"
                               />
-                            </FormGroup>
-                            {changeData.ceramic_tiles_included && (
-                              <>
+                              {changeData.ceramic_tiles_included && (
+                                <>
+                                  <TextField
+                                    sx={{ mt: 2, mb: 1 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="ceramic_tiles"
+                                    label="Ceramic Tiles"
+                                    multiple
+                                    value={changeData.ceramic_tiles}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.ceramic_tiles.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    value={changeData.ceramic_tiles_qty}
+                                    onChange={handleProductFields}
+                                    size={"small"}
+                                    fullWidth
+                                    label="Ceramic Tiles Quantity"
+                                    type="number"
+                                    helperText="Enter the number of ceramic tiles included."
+                                    name="ceramic_tiles_qty"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.silver}
+                                    onChange={handleProductFields}
+                                    name="silver"
+                                  />
+                                }
+                                label="Silver"
+                              />
+                              {changeData.silver && (
                                 <TextField
-                                  sx={{ mt: 2, mb: 1 }}
                                   size="small"
                                   fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="ceramic_tiles"
-                                  label="Ceramic Tiles"
-                                  multiple
-                                  value={changeData.ceramic_tiles}
+                                  sx={{ mt: 2, mb: 1 }}
+                                  // autoComplete={false}
+                                  id="fullWidth"
+                                  label="Sliver Weight"
+                                  type="text"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        Gram
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  variant="outlined"
+                                  name="silver_weight"
+                                  value={changeData.silver_weight}
                                   onChange={handleProductFields}
-                                  helperText="Please select your Ceramic Tiles."
-                                >
-                                  {catalog.ceramic_tiles.map(
-                                    (option) =>
-                                      option.status && (
-                                        <MenuItem
-                                          key={option.SKU}
-                                          value={option.SKU}
-                                        >
-                                          {option.title}
-                                        </MenuItem>
-                                      )
-                                  )}
-                                  <MenuItem key={"none"} value="None">
-                                    {"None"}
-                                  </MenuItem>
-                                </TextField>
-                                <TextField
-                                  value={changeData.ceramic_tiles_qty}
-                                  onChange={handleProductFields}
-                                  size={"small"}
-                                  fullWidth
-                                  label="Ceramic Tiles Quantity"
-                                  type="number"
-                                  helperText="Enter the number of ceramic tiles included."
-                                  name="ceramic_tiles_qty"
                                 />
-                              </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.wheel_included}
+                                    onChange={handleProductFields}
+                                    name="wheel_included"
+                                  />
+                                }
+                                label="Wheels"
+                              />
+                              {changeData.wheel_included && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    sx={{ mt: 2, mb: 1 }}
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="wheel"
+                                    label="Wheel"
+                                    multiple
+                                    value={changeData.wheel}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your wheel."
+                                  >
+                                    {catalog.wheel.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    value={changeData.wheel_qty}
+                                    onChange={handleProductFields}
+                                    size={"small"}
+                                    fullWidth
+                                    label="Wheel Quantity"
+                                    type="number"
+                                    helperText="Enter the number of wheel included."
+                                    name="wheel_qty"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.trolley}
+                                    onChange={handleProductFields}
+                                    name="trolley"
+                                  />
+                                }
+                                label="Trolley"
+                              />
+                              {changeData.trolley && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="trolley_material"
+                                    label="Trolly Material"
+                                    multiple
+                                    value={changeData.trolley_material}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Trolly Material "
+                                  >
+                                    {trollyMaterial.map((option) => (
+                                      <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                      >
+                                        {option.label}
+                                      </MenuItem>
+                                    ))}
+                                  </TextField>
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.upholstery}
+                                    onChange={handleProductFields}
+                                    name="upholstery"
+                                  />
+                                }
+                                label="Upholstery"
+                              />
+                              {changeData.upholstery && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    sx={{ mt: 2 }}
+                                    name="fabric"
+                                    label="Upholstery"
+                                    multiple
+                                    value={changeData.fabric}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your fabric."
+                                  >
+                                    {catalog.fabric.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+
+                                  <TextField
+                                    value={changeData.fabric_qty}
+                                    onChange={handleProductFields}
+                                    size={"small"}
+                                    sx={{ mt: 2 }}
+                                    fullWidth
+                                    label="Upholstery Quantity "
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Meter (m)
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    type="number"
+                                    // helperText="Enter the fabric quantity in meter."
+                                    name="fabric_qty"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.mirror}
+                                    onChange={handleProductFields}
+                                    name="mirror"
+                                  />
+                                }
+                                label="Mirror"
+                              />
+
+                              {changeData.mirror && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    sx={{ mt: 2}}
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Mirror Length"
+                                    type="text"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Inch
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.mirror_length}
+                                    onChange={handleProductFields}
+                                    name="mirror_length"
+                                  />
+
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    sx={{ mt: 2}}
+                                    id="fullWidth"
+                                    label="Mirror Width"
+                                    type="text"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Inch
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    name="mirror_width"
+                                    value={changeData.mirror_width}
+                                    onChange={handleProductFields}
+                                  />
+
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    sx={{ mt: 2}}
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Mirror Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.mirror_size}
+                                    onChange={handleProductFields}
+                                    name="mirror_size"
+                                  />
+                                </>
+                              )}
+                            </FormGroup>
+                            {/* checkbox ends here  */}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="hinge"
+                              label="Hinge"
+                              multiple
+                              value={changeData.hinge}
+                              onChange={handleProductFields}
+                              helperText="Please select your hinge."
+                            >
+                              {catalog.hinge.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.hinge !== "None" && (
+                              <TextField
+                                value={changeData.hinge_qty}
+                                size={"small"}
+                                helperText="Enter the number of hinges pieces ."
+                                fullWidth
+                                onChange={handleProductFields}
+                                label="Hinge Quantity"
+                                type="number"
+                                name="hinge_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="knob"
+                              label="Knob"
+                              multiple
+                              value={changeData.knob}
+                              onChange={handleProductFields}
+                              helperText="Please select your knob."
+                            >
+                              {console.log(catalog)}
+                              {catalog.knob.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.knob !== "None" && (
+                              <TextField
+                                size={"small"}
+                                fullWidth
+                                helperText="Enter the number of knob pieces ."
+                                value={changeData.knob_qty}
+                                onChange={handleProductFields}
+                                label="Knob Quantity"
+                                type="number"
+                                name="knob_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="door"
+                              label="Door"
+                              multiple
+                              value={changeData.door}
+                              onChange={handleProductFields}
+                              helperText="Please select your door."
+                            >
+                              {catalog.door.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.door !== "None" && (
+                              <TextField
+                                value={changeData.door_qty}
+                                helperText="Enter the number of doors."
+                                size={"small"}
+                                fullWidth
+                                onChange={handleProductFields}
+                                label="Door Quantity"
+                                type="number"
+                                name="door_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="handle"
+                              label="Handle"
+                              multiple
+                              value={changeData.handle}
+                              onChange={handleProductFields}
+                              helperText="Please select your handle."
+                            >
+                              {catalog.handle.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.handle !== "None" && (
+                              <TextField
+                                value={changeData.handle_qty}
+                                helperText="Enter the number of handles."
+                                onChange={handleProductFields}
+                                size={"small"}
+                                fullWidth
+                                label="Handle Quantity"
+                                type="number"
+                                name="handle_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              label="Fitting"
+                              name="fitting"
+                              multiple
+                              value={changeData.fitting}
+                              onChange={handleProductFields}
+                              helperText="Please select your fitting."
+                            >
+                              {catalog.fitting.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.fitting !== "None" && (
+                              <TextField
+                                size="small"
+                                fullWidth
+                                // autoComplete={false}
+                                id="fullWidth"
+                                label="Fitting Size"
+                                type="number"
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      Sq. ft
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                variant="outlined"
+                                value={changeData.fitting_size}
+                                onChange={handleProductFields}
+                                name="fitting_size"
+                              />
                             )}
                           </Box>
+
                           <Box className="stepAction">
                             <Button
                               variant="outlined"
@@ -7652,17 +8500,17 @@ const SideForm = () => {
                             </FormControl>
                             {(changeData.drawer === "mechanical" ||
                               changeData.drawer === "wooden") && (
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  type="number"
-                                  id="outlined-select"
-                                  name="drawer_count"
-                                  label="Drawer Count"
-                                  value={changeData.drawer_count}
-                                  onChange={handleProductFields}
-                                />
-                              )}
+                              <TextField
+                                size="small"
+                                fullWidth
+                                type="number"
+                                id="outlined-select"
+                                name="drawer_count"
+                                label="Drawer Count"
+                                value={changeData.drawer_count}
+                                onChange={handleProductFields}
+                              />
+                            )}
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Joints ((Useful in products where info about
@@ -7820,6 +8668,7 @@ const SideForm = () => {
                             </InputLabel>
                             <Select
                               multiple
+                              size="small"
                               fullWidth
                               value={changeData.warehouse}
                               name="warehouse"
@@ -7920,6 +8769,25 @@ const SideForm = () => {
                               value={changeData.package_height}
                               onChange={handleProductFields}
                               helperText="From bottom to top"
+                            />
+                            <TextField
+                              size="small"
+                              fullWidth
+                              // autoComplete={false}
+                              id="fullWidth"
+                              label="Packaging Weight"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Kg
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="package_weight"
+                              value={changeData.package_weight}
+                              onChange={handleProductFields}
                             />
                             <Box sx={{ display: "flex", mb: 1 }}>
                               <TextField
@@ -8286,7 +9154,7 @@ const SideForm = () => {
                               fullWidth
                               // autoComplete={false}
                               id="fullWidth"
-                              label=" Metallic Weight"
+                              label=" Metal Weight"
                               type="number"
                               InputProps={{
                                 startAdornment: (
@@ -8298,25 +9166,6 @@ const SideForm = () => {
                               variant="outlined"
                               name="metal_weight"
                               value={changeData.metal_weight}
-                              onChange={handleProductFields}
-                            />
-                            <TextField
-                              size="small"
-                              fullWidth
-                              // autoComplete={false}
-                              id="fullWidth"
-                              label="Packaging Weight"
-                              type="number"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    Kg
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="outlined"
-                              name="package_weight"
-                              value={changeData.package_weight}
                               onChange={handleProductFields}
                             />
                             <TextField
@@ -8350,298 +9199,6 @@ const SideForm = () => {
                                 {"None"}
                               </MenuItem>
                             </TextField>
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Silver
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                value={changeData.silver || "no"}
-                                onChange={handleProductFields}
-                                name="silver"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.silver === "yes" && (
-                              <TextField
-                                size="small"
-                                fullWidth
-                                // autoComplete={false}
-                                id="fullWidth"
-                                label="Sliver Weight"
-                                type="text"
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      Gram
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                variant="outlined"
-                                name="silver_weight"
-                                value={changeData.silver_weight}
-                                onChange={handleProductFields}
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="hinge"
-                              label="Hinge"
-                              multiple
-                              value={changeData.hinge}
-                              onChange={handleProductFields}
-                              helperText="Please select your hinge."
-                            >
-                              {catalog.hinge.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.hinge !== "None" && (
-                              <TextField
-                                value={changeData.hinge_qty}
-                                size={"small"}
-                                helperText="Enter the number of hinges pieces ."
-                                fullWidth
-                                onChange={handleProductFields}
-                                label="Hinge Quantity"
-                                type="number"
-                                name="hinge_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="knob"
-                              label="Knob"
-                              multiple
-                              value={changeData.knob}
-                              onChange={handleProductFields}
-                              helperText="Please select your knob."
-                            >
-                              {console.log(catalog)}
-                              {catalog.knob.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.knob !== "None" && (
-                              <TextField
-                                size={"small"}
-                                fullWidth
-                                helperText="Enter the number of knob pieces ."
-                                value={changeData.knob_qty}
-                                onChange={handleProductFields}
-                                label="Knob Quantity"
-                                type="number"
-                                name="knob_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="door"
-                              label="Door"
-                              multiple
-                              value={changeData.door}
-                              onChange={handleProductFields}
-                              helperText="Please select your door."
-                            >
-                              {catalog.door.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.door !== "None" && (
-                              <TextField
-                                value={changeData.door_qty}
-                                helperText="Enter the number of doors."
-                                size={"small"}
-                                fullWidth
-                                onChange={handleProductFields}
-                                label="Door Quantity"
-                                type="number"
-                                name="door_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="handle"
-                              label="Handle"
-                              multiple
-                              value={changeData.handle}
-                              onChange={handleProductFields}
-                              helperText="Please select your handle."
-                            >
-                              {catalog.handle.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.handle !== "None" && (
-                              <TextField
-                                value={changeData.handle_qty}
-                                helperText="Enter the number of handles."
-                                onChange={handleProductFields}
-                                size={"small"}
-                                fullWidth
-                                label="Handle Quantity"
-                                type="number"
-                                name="handle_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              label="Fitting"
-                              name="fitting"
-                              multiple
-                              value={changeData.fitting}
-                              onChange={handleProductFields}
-                              helperText="Please select your fitting."
-                            >
-                              {catalog.fitting.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Mirror
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="mirror"
-                                value={changeData.mirror || "no"}
-                                onChange={handleProductFields}
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.mirror === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  // autoComplete={false}
-                                  id="fullWidth"
-                                  label="Mirror Length"
-                                  type="text"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        Inch
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  variant="outlined"
-                                  value={changeData.mirror_length}
-                                  onChange={handleProductFields}
-                                  name="mirror_length"
-                                />
-
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  // autoComplete={false}
-                                  id="fullWidth"
-                                  label="Mirror Width"
-                                  type="text"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        Inch
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  variant="outlined"
-                                  name="mirror_width"
-                                  value={changeData.mirror_width}
-                                  onChange={handleProductFields}
-                                />
-                              </>
-                            )}
                             <TextField
                               size="small"
                               fullWidth
@@ -8680,116 +9237,6 @@ const SideForm = () => {
                               value={changeData.top_size_breadth}
                               onChange={handleProductFields}
                             />
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Wheel Included
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="wheel_included"
-                                value={changeData.wheel_included || "no"}
-                                onChange={handleProductFields}
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.wheel_included === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="wheel"
-                                  label="Wheel"
-                                  multiple
-                                  value={changeData.wheel}
-                                  onChange={handleProductFields}
-                                  helperText="Please select your wheel."
-                                >
-                                  {catalog.wheel.map(
-                                    (option) =>
-                                      option.status && (
-                                        <MenuItem
-                                          key={option.SKU}
-                                          value={option.SKU}
-                                        >
-                                          {option.title}
-                                        </MenuItem>
-                                      )
-                                  )}
-                                  <MenuItem key={"none"} value="None">
-                                    {"None"}
-                                  </MenuItem>
-                                </TextField>
-                                <TextField
-                                  value={changeData.wheel_qty}
-                                  onChange={handleProductFields}
-                                  size={"small"}
-                                  fullWidth
-                                  label="Wheel Quantity"
-                                  type="number"
-                                  helperText="Enter the number of wheel included."
-                                  name="wheel_qty"
-                                />
-                              </>
-                            )}
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Trolley
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="trolley"
-                                value={changeData.trolley || "no"}
-                                onChange={handleProductFields}
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.trolley === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="trolley_material"
-                                  label="Trolly Material"
-                                  multiple
-                                  value={changeData.trolley_material}
-                                  onChange={handleProductFields}
-                                  helperText="Please select your Trolly Material "
-                                >
-                                  {trollyMaterial.map((option) => (
-                                    <MenuItem
-                                      key={option.value}
-                                      value={option.value}
-                                    >
-                                      {option.label}
-                                    </MenuItem>
-                                  ))}
-                                </TextField>
-                              </>
-                            )}
                             <TextField
                               size="small"
                               fullWidth
@@ -8900,6 +9347,13 @@ const SideForm = () => {
                                   id="outlined-select"
                                   name="mattress_length"
                                   label="Mattress Length"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
                                   value={changeData.mattress_length}
                                   onChange={handleProductFields}
                                 />
@@ -8910,6 +9364,13 @@ const SideForm = () => {
                                   id="outlined-select"
                                   name="mattress_breadth"
                                   label="Mattress Breadth"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
                                   value={changeData.mattress_breadth}
                                   onChange={handleProductFields}
                                 />
@@ -8968,75 +9429,6 @@ const SideForm = () => {
                                   label="Cradle Bed Depth"
                                   value={changeData.cradle_bed_depth}
                                   onChange={handleProductFields}
-                                />
-                              </>
-                            )}
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Upholstery
-                              </FormLabel>
-                              <RadioGroup
-                                defaultValue="no"
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                // onChange={(e) => {
-                                //   setShowFabric(e.target.value);
-                                // }}
-
-                                value={changeData.upholstery || "no"}
-                                onChange={handleProductFields}
-                                name="upholstery"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.upholstery === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="fabric"
-                                  label="Fabric"
-                                  multiple
-                                  value={changeData.fabric}
-                                  onChange={handleProductFields}
-                                  helperText="Please select your fabric."
-                                >
-                                  {catalog.fabric.map(
-                                    (option) =>
-                                      option.status && (
-                                        <MenuItem
-                                          key={option.SKU}
-                                          value={option.SKU}
-                                        >
-                                          {option.title}
-                                        </MenuItem>
-                                      )
-                                  )}
-                                  <MenuItem key={"none"} value="None">
-                                    {"None"}
-                                  </MenuItem>
-                                </TextField>
-
-                                <TextField
-                                  value={changeData.fabric_qty}
-                                  onChange={handleProductFields}
-                                  size={"small"}
-                                  fullWidth
-                                  label="Fabric Quantity"
-                                  type="number"
-                                  helperText="Enter the fabric quantity in meter."
-                                  name="fabric_qty"
                                 />
                               </>
                             )}
@@ -9234,7 +9626,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                  option.category_id && (
+                                    option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -9402,7 +9794,7 @@ const SideForm = () => {
                               name="primary_material"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                            // MenuProps={MenuProps}
+                              // MenuProps={MenuProps}
                             >
                               {materialCatalog.map((option) => (
                                 <MenuItem
@@ -9456,7 +9848,7 @@ const SideForm = () => {
                               name="polish"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                            // MenuProps={MenuProps}
+                              // MenuProps={MenuProps}
                             >
                               {catalog.polish.length > 0 &&
                                 catalog.polish.map((option, index) => (
@@ -9552,7 +9944,7 @@ const SideForm = () => {
                                   name="assembly_part"
                                   value={
                                     changeData.assembly_part > -1 &&
-                                      changeData.assembly_part < 3
+                                    changeData.assembly_part < 3
                                       ? changeData.assembly_part
                                       : 0
                                   }
@@ -9729,7 +10121,9 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files={files} setFiles={setFiles}
+                            <ProductsPreviews
+                              files={files}
+                              setFiles={setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {/* // image selection  */}
@@ -10154,6 +10548,125 @@ const SideForm = () => {
                               <FormControlLabel
                                 control={
                                   <Checkbox
+                                    checked={changeData.cane}
+                                    onChange={handleProductFields}
+                                    name="cane"
+                                  />
+                                }
+                                label="Cane"
+                              />
+
+                              {changeData.cane && (
+                                <>
+                                  <TextField
+                                    sx={{ mt: 2, mb: 2 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="cane_name"
+                                    label="Cane"
+                                    multiple
+                                    value={changeData.cane_name}
+                                    onChange={handleProductFields}
+                                    // helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.cane.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Cane Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.cane_size}
+                                    onChange={handleProductFields}
+                                    name="cane_size"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.hook}
+                                    onChange={handleProductFields}
+                                    name="hook"
+                                  />
+                                }
+                                label="Hook"
+                              />
+
+                              {changeData.hook && (
+                                <>
+                                  <TextField
+                                    sx={{ mt: 2, mb: 2 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="hook_name"
+                                    label="Hook"
+                                    multiple
+                                    value={changeData.hook_name}
+                                    onChange={handleProductFields}
+                                    // helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.hook.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Hook Quantity"
+                                    type="number"
+                                    variant="outlined"
+                                    value={changeData.hook_qty}
+                                    onChange={handleProductFields}
+                                    name="hook_qty"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
                                     checked={changeData.dial}
                                     onChange={handleProductFields}
                                     name="dial"
@@ -10162,21 +10675,20 @@ const SideForm = () => {
                                 label="Dial"
                               />
 
-
                               {changeData.dial && (
                                 <>
                                   <TextField
-                                    sx={{ mt: 2, mb: 1 }}
+                                    sx={{ mt: 2, mb: 2 }}
                                     size="small"
                                     fullWidth
                                     id="outlined-select"
                                     select
                                     name="dial_name"
-                                    label="Dail"
+                                    label="Dial"
                                     multiple
                                     value={changeData.dial_name}
                                     onChange={handleProductFields}
-                                    helperText="Please select your Ceramic Tiles."
+                                    // helperText="Please select your Ceramic Tiles."
                                   >
                                     {catalog.dial.map(
                                       (option) =>
@@ -10212,7 +10724,151 @@ const SideForm = () => {
                                     onChange={handleProductFields}
                                     name="dial_size"
                                   />
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    sx={{ mt: 2, mb: 2 }}
+                                    id="fullWidth"
+                                    label="Dial Quantity"
+                                    type="number"
+                                    variant="outlined"
+                                    value={changeData.dial_qty || 0}
+                                    onChange={handleProductFields}
+                                    name="dial_qty"
+                                  />
+                                </>
+                              )}
 
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.glass}
+                                    onChange={handleProductFields}
+                                    name="glass"
+                                  />
+                                }
+                                label="Glass (Plain)"
+                              />
+                              {changeData.glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.glass_size}
+                                    onChange={handleProductFields}
+                                    name="glass_size"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.green_glass}
+                                    onChange={handleProductFields}
+                                    name="green_glass"
+                                  />
+                                }
+                                label="Green Glass"
+                              />
+                              {changeData.green_glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Green Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.green_glass_size}
+                                    onChange={handleProductFields}
+                                    name="green_glass_size"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.red_glass}
+                                    onChange={handleProductFields}
+                                    name="red_glass"
+                                  />
+                                }
+                                label="Red Glass"
+                              />
+                              {changeData.red_glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Red Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.red_glass_size}
+                                    onChange={handleProductFields}
+                                    name="red_glass_size"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.yellow_glass}
+                                    onChange={handleProductFields}
+                                    name="yellow_glass"
+                                  />
+                                }
+                                label="Yellow Glass"
+                              />
+                              {changeData.yellow_glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Yellow Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.yellow_glass_size}
+                                    onChange={handleProductFields}
+                                    name="yellow_glass_size"
+                                  />
                                 </>
                               )}
 
@@ -10280,50 +10936,518 @@ const SideForm = () => {
                                 }
                                 label="Ceramic Tiles"
                               />
-                            </FormGroup>
-                            {changeData.ceramic_tiles_included && (
-                              <>
+                              {changeData.ceramic_tiles_included && (
+                                <>
+                                  <TextField
+                                    sx={{ mt: 2, mb: 1 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="ceramic_tiles"
+                                    label="Ceramic Tiles"
+                                    multiple
+                                    value={changeData.ceramic_tiles}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.ceramic_tiles.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    value={changeData.ceramic_tiles_qty}
+                                    onChange={handleProductFields}
+                                    size={"small"}
+                                    fullWidth
+                                    label="Ceramic Tiles Quantity"
+                                    type="number"
+                                    helperText="Enter the number of ceramic tiles included."
+                                    name="ceramic_tiles_qty"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.silver}
+                                    onChange={handleProductFields}
+                                    name="silver"
+                                  />
+                                }
+                                label="Silver"
+                              />
+                              {changeData.silver && (
                                 <TextField
-                                  sx={{ mt: 2, mb: 1 }}
                                   size="small"
                                   fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="ceramic_tiles"
-                                  label="Ceramic Tiles"
-                                  multiple
-                                  value={changeData.ceramic_tiles}
+                                  sx={{ mt: 2, mb: 1 }}
+                                  // autoComplete={false}
+                                  id="fullWidth"
+                                  label="Sliver Weight"
+                                  type="text"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        Gram
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  variant="outlined"
+                                  name="silver_weight"
+                                  value={changeData.silver_weight}
                                   onChange={handleProductFields}
-                                  helperText="Please select your Ceramic Tiles."
-                                >
-                                  {catalog.ceramic_tiles.map(
-                                    (option) =>
-                                      option.status && (
-                                        <MenuItem
-                                          key={option.SKU}
-                                          value={option.SKU}
-                                        >
-                                          {option.title}
-                                        </MenuItem>
-                                      )
-                                  )}
-                                  <MenuItem key={"none"} value="None">
-                                    {"None"}
-                                  </MenuItem>
-                                </TextField>
-                                <TextField
-                                  value={changeData.ceramic_tiles_qty}
-                                  onChange={handleProductFields}
-                                  size={"small"}
-                                  fullWidth
-                                  label="Ceramic Tiles Quantity"
-                                  type="number"
-                                  helperText="Enter the number of ceramic tiles included."
-                                  name="ceramic_tiles_qty"
                                 />
-                              </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.wheel_included}
+                                    onChange={handleProductFields}
+                                    name="wheel_included"
+                                  />
+                                }
+                                label="Wheels"
+                              />
+                              {changeData.wheel_included && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    sx={{ mt: 2, mb: 1 }}
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="wheel"
+                                    label="Wheel"
+                                    multiple
+                                    value={changeData.wheel}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your wheel."
+                                  >
+                                    {catalog.wheel.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    value={changeData.wheel_qty}
+                                    onChange={handleProductFields}
+                                    size={"small"}
+                                    fullWidth
+                                    label="Wheel Quantity"
+                                    type="number"
+                                    helperText="Enter the number of wheel included."
+                                    name="wheel_qty"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.trolley}
+                                    onChange={handleProductFields}
+                                    name="trolley"
+                                  />
+                                }
+                                label="Trolley"
+                              />
+                              {changeData.trolley && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="trolley_material"
+                                    label="Trolly Material"
+                                    multiple
+                                    value={changeData.trolley_material}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Trolly Material "
+                                  >
+                                    {trollyMaterial.map((option) => (
+                                      <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                      >
+                                        {option.label}
+                                      </MenuItem>
+                                    ))}
+                                  </TextField>
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.upholstery}
+                                    onChange={handleProductFields}
+                                    name="upholstery"
+                                  />
+                                }
+                                label="Upholstery"
+                              />
+                              {changeData.upholstery && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    sx={{ mt: 2 }}
+                                    name="fabric"
+                                    label="Upholstery"
+                                    multiple
+                                    value={changeData.fabric}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your fabric."
+                                  >
+                                    {catalog.fabric.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+
+                                  <TextField
+                                    value={changeData.fabric_qty}
+                                    onChange={handleProductFields}
+                                    size={"small"}
+                                    sx={{ mt: 2 }}
+                                    fullWidth
+                                    label="Upholstery Quantity "
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Meter (m)
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    type="number"
+                                    // helperText="Enter the fabric quantity in meter."
+                                    name="fabric_qty"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.mirror}
+                                    onChange={handleProductFields}
+                                    name="mirror"
+                                  />
+                                }
+                                label="Mirror"
+                              />
+
+                              {changeData.mirror && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    sx={{ mt: 2}}
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Mirror Length"
+                                    type="text"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Inch
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.mirror_length}
+                                    onChange={handleProductFields}
+                                    name="mirror_length"
+                                  />
+
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    sx={{ mt: 2}}
+                                    id="fullWidth"
+                                    label="Mirror Width"
+                                    type="text"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Inch
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    name="mirror_width"
+                                    value={changeData.mirror_width}
+                                    onChange={handleProductFields}
+                                  />
+
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    sx={{ mt: 2}}
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Mirror Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.mirror_size}
+                                    onChange={handleProductFields}
+                                    name="mirror_size"
+                                  />
+                                </>
+                              )}
+                            </FormGroup>
+                            {/* checkbox ends here  */}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="hinge"
+                              label="Hinge"
+                              multiple
+                              value={changeData.hinge}
+                              onChange={handleProductFields}
+                              helperText="Please select your hinge."
+                            >
+                              {catalog.hinge.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.hinge !== "None" && (
+                              <TextField
+                                value={changeData.hinge_qty}
+                                size={"small"}
+                                helperText="Enter the number of hinges pieces ."
+                                fullWidth
+                                onChange={handleProductFields}
+                                label="Hinge Quantity"
+                                type="number"
+                                name="hinge_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="knob"
+                              label="Knob"
+                              multiple
+                              value={changeData.knob}
+                              onChange={handleProductFields}
+                              helperText="Please select your knob."
+                            >
+                              {console.log(catalog)}
+                              {catalog.knob.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.knob !== "None" && (
+                              <TextField
+                                size={"small"}
+                                fullWidth
+                                helperText="Enter the number of knob pieces ."
+                                value={changeData.knob_qty}
+                                onChange={handleProductFields}
+                                label="Knob Quantity"
+                                type="number"
+                                name="knob_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="door"
+                              label="Door"
+                              multiple
+                              value={changeData.door}
+                              onChange={handleProductFields}
+                              helperText="Please select your door."
+                            >
+                              {catalog.door.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.door !== "None" && (
+                              <TextField
+                                value={changeData.door_qty}
+                                helperText="Enter the number of doors."
+                                size={"small"}
+                                fullWidth
+                                onChange={handleProductFields}
+                                label="Door Quantity"
+                                type="number"
+                                name="door_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="handle"
+                              label="Handle"
+                              multiple
+                              value={changeData.handle}
+                              onChange={handleProductFields}
+                              helperText="Please select your handle."
+                            >
+                              {catalog.handle.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.handle !== "None" && (
+                              <TextField
+                                value={changeData.handle_qty}
+                                helperText="Enter the number of handles."
+                                onChange={handleProductFields}
+                                size={"small"}
+                                fullWidth
+                                label="Handle Quantity"
+                                type="number"
+                                name="handle_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              label="Fitting"
+                              name="fitting"
+                              multiple
+                              value={changeData.fitting}
+                              onChange={handleProductFields}
+                              helperText="Please select your fitting."
+                            >
+                              {catalog.fitting.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.fitting !== "None" && (
+                              <TextField
+                                size="small"
+                                fullWidth
+                                // autoComplete={false}
+                                id="fullWidth"
+                                label="Fitting Size"
+                                type="number"
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      Sq. ft
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                variant="outlined"
+                                value={changeData.fitting_size}
+                                onChange={handleProductFields}
+                                name="fitting_size"
+                              />
                             )}
                           </Box>
+
                           <Box className="stepAction">
                             <Button
                               variant="outlined"
@@ -10452,17 +11576,17 @@ const SideForm = () => {
                             </FormControl>
                             {(changeData.drawer === "mechanical" ||
                               changeData.drawer === "wooden") && (
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  type="number"
-                                  id="outlined-select"
-                                  name="drawer_count"
-                                  label="Drawer Count"
-                                  value={changeData.drawer_count}
-                                  onChange={handleProductFields}
-                                />
-                              )}
+                              <TextField
+                                size="small"
+                                fullWidth
+                                type="number"
+                                id="outlined-select"
+                                name="drawer_count"
+                                label="Drawer Count"
+                                value={changeData.drawer_count}
+                                onChange={handleProductFields}
+                              />
+                            )}
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Joints ((Useful in products where info about
@@ -10509,8 +11633,8 @@ const SideForm = () => {
                       </Step>
                       {/* Miscellaneous ends */}
 
-                      {/* Inventory & Shipping */}
-                      <Step>
+                       {/* Inventory & Shipping */}
+                       <Step>
                         <StepLabel
                           sx={{ cursor: "pointer !important" }}
                           onClick={() => setActiveStep(4)}
@@ -10620,6 +11744,7 @@ const SideForm = () => {
                             </InputLabel>
                             <Select
                               multiple
+                              size="small"
                               fullWidth
                               value={changeData.warehouse}
                               name="warehouse"
@@ -10720,6 +11845,25 @@ const SideForm = () => {
                               value={changeData.package_height}
                               onChange={handleProductFields}
                               helperText="From bottom to top"
+                            />
+                            <TextField
+                              size="small"
+                              fullWidth
+                              // autoComplete={false}
+                              id="fullWidth"
+                              label="Packaging Weight"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Kg
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="package_weight"
+                              value={changeData.package_weight}
+                              onChange={handleProductFields}
                             />
                             <Box sx={{ display: "flex", mb: 1 }}>
                               <TextField
@@ -11086,7 +12230,7 @@ const SideForm = () => {
                               fullWidth
                               // autoComplete={false}
                               id="fullWidth"
-                              label=" Metallic Weight"
+                              label=" Metal Weight"
                               type="number"
                               InputProps={{
                                 startAdornment: (
@@ -11098,25 +12242,6 @@ const SideForm = () => {
                               variant="outlined"
                               name="metal_weight"
                               value={changeData.metal_weight}
-                              onChange={handleProductFields}
-                            />
-                            <TextField
-                              size="small"
-                              fullWidth
-                              // autoComplete={false}
-                              id="fullWidth"
-                              label="Packaging Weight"
-                              type="number"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    Kg
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="outlined"
-                              name="package_weight"
-                              value={changeData.package_weight}
                               onChange={handleProductFields}
                             />
                             <TextField
@@ -11150,298 +12275,6 @@ const SideForm = () => {
                                 {"None"}
                               </MenuItem>
                             </TextField>
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Silver
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                value={changeData.silver || "no"}
-                                onChange={handleProductFields}
-                                name="silver"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.silver === "yes" && (
-                              <TextField
-                                size="small"
-                                fullWidth
-                                // autoComplete={false}
-                                id="fullWidth"
-                                label="Sliver Weight"
-                                type="text"
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      Gram
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                variant="outlined"
-                                name="silver_weight"
-                                value={changeData.silver_weight}
-                                onChange={handleProductFields}
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="hinge"
-                              label="Hinge"
-                              multiple
-                              value={changeData.hinge}
-                              onChange={handleProductFields}
-                              helperText="Please select your hinge."
-                            >
-                              {catalog.hinge.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.hinge !== "None" && (
-                              <TextField
-                                value={changeData.hinge_qty}
-                                size={"small"}
-                                helperText="Enter the number of hinges pieces ."
-                                fullWidth
-                                onChange={handleProductFields}
-                                label="Hinge Quantity"
-                                type="number"
-                                name="hinge_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="knob"
-                              label="Knob"
-                              multiple
-                              value={changeData.knob}
-                              onChange={handleProductFields}
-                              helperText="Please select your knob."
-                            >
-                              {console.log(catalog)}
-                              {catalog.knob.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.knob !== "None" && (
-                              <TextField
-                                size={"small"}
-                                fullWidth
-                                helperText="Enter the number of knob pieces ."
-                                value={changeData.knob_qty}
-                                onChange={handleProductFields}
-                                label="Knob Quantity"
-                                type="number"
-                                name="knob_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="door"
-                              label="Door"
-                              multiple
-                              value={changeData.door}
-                              onChange={handleProductFields}
-                              helperText="Please select your door."
-                            >
-                              {catalog.door.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.door !== "None" && (
-                              <TextField
-                                value={changeData.door_qty}
-                                helperText="Enter the number of doors."
-                                size={"small"}
-                                fullWidth
-                                onChange={handleProductFields}
-                                label="Door Quantity"
-                                type="number"
-                                name="door_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="handle"
-                              label="Handle"
-                              multiple
-                              value={changeData.handle}
-                              onChange={handleProductFields}
-                              helperText="Please select your handle."
-                            >
-                              {catalog.handle.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.handle !== "None" && (
-                              <TextField
-                                value={changeData.handle_qty}
-                                helperText="Enter the number of handles."
-                                onChange={handleProductFields}
-                                size={"small"}
-                                fullWidth
-                                label="Handle Quantity"
-                                type="number"
-                                name="handle_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              label="Fitting"
-                              name="fitting"
-                              multiple
-                              value={changeData.fitting}
-                              onChange={handleProductFields}
-                              helperText="Please select your fitting."
-                            >
-                              {catalog.fitting.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Mirror
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="mirror"
-                                value={changeData.mirror || "no"}
-                                onChange={handleProductFields}
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.mirror === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  // autoComplete={false}
-                                  id="fullWidth"
-                                  label="Mirror Length"
-                                  type="text"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        Inch
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  variant="outlined"
-                                  value={changeData.mirror_length}
-                                  onChange={handleProductFields}
-                                  name="mirror_length"
-                                />
-
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  // autoComplete={false}
-                                  id="fullWidth"
-                                  label="Mirror Width"
-                                  type="text"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        Inch
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  variant="outlined"
-                                  name="mirror_width"
-                                  value={changeData.mirror_width}
-                                  onChange={handleProductFields}
-                                />
-                              </>
-                            )}
                             <TextField
                               size="small"
                               fullWidth
@@ -11480,116 +12313,6 @@ const SideForm = () => {
                               value={changeData.top_size_breadth}
                               onChange={handleProductFields}
                             />
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Wheel Included
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="wheel_included"
-                                value={changeData.wheel_included || "no"}
-                                onChange={handleProductFields}
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.wheel_included === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="wheel"
-                                  label="Wheel"
-                                  multiple
-                                  value={changeData.wheel}
-                                  onChange={handleProductFields}
-                                  helperText="Please select your wheel."
-                                >
-                                  {catalog.wheel.map(
-                                    (option) =>
-                                      option.status && (
-                                        <MenuItem
-                                          key={option.SKU}
-                                          value={option.SKU}
-                                        >
-                                          {option.title}
-                                        </MenuItem>
-                                      )
-                                  )}
-                                  <MenuItem key={"none"} value="None">
-                                    {"None"}
-                                  </MenuItem>
-                                </TextField>
-                                <TextField
-                                  value={changeData.wheel_qty}
-                                  onChange={handleProductFields}
-                                  size={"small"}
-                                  fullWidth
-                                  label="Wheel Quantity"
-                                  type="number"
-                                  helperText="Enter the number of wheel included."
-                                  name="wheel_qty"
-                                />
-                              </>
-                            )}
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Trolley
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="trolley"
-                                value={changeData.trolley || "no"}
-                                onChange={handleProductFields}
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.trolley === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="trolley_material"
-                                  label="Trolly Material"
-                                  multiple
-                                  value={changeData.trolley_material}
-                                  onChange={handleProductFields}
-                                  helperText="Please select your Trolly Material "
-                                >
-                                  {trollyMaterial.map((option) => (
-                                    <MenuItem
-                                      key={option.value}
-                                      value={option.value}
-                                    >
-                                      {option.label}
-                                    </MenuItem>
-                                  ))}
-                                </TextField>
-                              </>
-                            )}
                             <TextField
                               size="small"
                               fullWidth
@@ -11647,61 +12370,6 @@ const SideForm = () => {
                               value={changeData.seating_size_height}
                               onChange={handleProductFields}
                             />
-                            {/* 
-                          <FormControl>
-                            <FormLabel id="demo-radio-buttons-group-label">
-                              Textile
-                            </FormLabel>
-                            <RadioGroup
-                              sx={{ mb : 1 }}
-
-                              aria-labelledby="demo-radio-buttons-group-label"
-                              value={changeData.textile || "no"}
-                              onChange={handleProductFields}
-                              name="textile"
-                            >
-                              <FormControlLabel
-                                value="yes"
-                                control={<Radio />}
-                                label="Yes"
-                              />
-                              <FormControlLabel
-                                value="no"
-                                control={<Radio />}
-                                label="No"
-                              />
-                            </RadioGroup>
-                          </FormControl>
-
-
-                          {changeData.textile === "yes" && (
-                            <TextField sx={{ mb : 1 }}
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="textile_type"
-                              label="Textile"
-                              value={changeData.textile_type}
-                              onChange={handleProductFields}
-                              multiple
-                              helperText="Please select your textile."
-                            >
-                              {catalog.textile.map(
-                                (option) => option.status && <MenuItem
-                                  key={option.SKU}
-                                  value={option.SKU}
-                                >
-                                  {option.title}
-                                </MenuItem>
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                          )}
-
-                            */}
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Plywood Included
@@ -11755,6 +12423,13 @@ const SideForm = () => {
                                   id="outlined-select"
                                   name="mattress_length"
                                   label="Mattress Length"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
                                   value={changeData.mattress_length}
                                   onChange={handleProductFields}
                                 />
@@ -11765,6 +12440,13 @@ const SideForm = () => {
                                   id="outlined-select"
                                   name="mattress_breadth"
                                   label="Mattress Breadth"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
                                   value={changeData.mattress_breadth}
                                   onChange={handleProductFields}
                                 />
@@ -11828,75 +12510,6 @@ const SideForm = () => {
                             )}
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
-                                Upholstery
-                              </FormLabel>
-                              <RadioGroup
-                                defaultValue="no"
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                // onChange={(e) => {
-                                //   setShowFabric(e.target.value);
-                                // }}
-
-                                value={changeData.upholstery || "no"}
-                                onChange={handleProductFields}
-                                name="upholstery"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.upholstery === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="fabric"
-                                  label="Fabric"
-                                  multiple
-                                  value={changeData.fabric}
-                                  onChange={handleProductFields}
-                                  helperText="Please select your fabric."
-                                >
-                                  {catalog.fabric.map(
-                                    (option) =>
-                                      option.status && (
-                                        <MenuItem
-                                          key={option.SKU}
-                                          value={option.SKU}
-                                        >
-                                          {option.title}
-                                        </MenuItem>
-                                      )
-                                  )}
-                                  <MenuItem key={"none"} value="None">
-                                    {"None"}
-                                  </MenuItem>
-                                </TextField>
-
-                                <TextField
-                                  value={changeData.fabric_qty}
-                                  onChange={handleProductFields}
-                                  size={"small"}
-                                  fullWidth
-                                  label="Fabric Quantity"
-                                  type="number"
-                                  helperText="Enter the fabric quantity in meter."
-                                  name="fabric_qty"
-                                />
-                              </>
-                            )}
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
                                 Vendor URLs
                               </FormLabel>
                             </FormControl>
@@ -11907,7 +12520,7 @@ const SideForm = () => {
                               name="amazon_url"
                               label="Amazon"
                               onChange={handleProductFields}
-                              value={changeData.amazon_url || ""}
+                              value={changeData.amazon_url}
                               placeholder="https://example.com"
                               pattern="https://.*"
                             />
@@ -11920,7 +12533,7 @@ const SideForm = () => {
                               name="flipkart_url"
                               label="Flipkart"
                               onChange={handleProductFields}
-                              value={changeData.flipkart_url || ""}
+                              value={changeData.flipkart_url}
                             />
                             <TextField
                               type="url"
@@ -11931,7 +12544,7 @@ const SideForm = () => {
                               name="jiomart_url"
                               label="Jio Mart"
                               onChange={handleProductFields}
-                              value={changeData.jiomart_url || ""}
+                              value={changeData.jiomart_url}
                             />
                             <Box className="stepAction">
                               <Button
@@ -12102,7 +12715,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                  option.category_id && (
+                                    option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -12270,7 +12883,7 @@ const SideForm = () => {
                               name="primary_material"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                            // MenuProps={MenuProps}
+                              // MenuProps={MenuProps}
                             >
                               {materialCatalog.map((option) => (
                                 <MenuItem
@@ -12324,7 +12937,7 @@ const SideForm = () => {
                               name="polish"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                            // MenuProps={MenuProps}
+                              // MenuProps={MenuProps}
                             >
                               {catalog.polish.length > 0 &&
                                 catalog.polish.map((option, index) => (
@@ -12420,7 +13033,7 @@ const SideForm = () => {
                                   name="assembly_part"
                                   value={
                                     changeData.assembly_part > -1 &&
-                                      changeData.assembly_part < 3
+                                    changeData.assembly_part < 3
                                       ? changeData.assembly_part
                                       : 0
                                   }
@@ -12597,7 +13210,9 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files={files} setFiles={setFiles}
+                            <ProductsPreviews
+                              files={files}
+                              setFiles={setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {/* // image selection  */}
@@ -12885,6 +13500,7 @@ const SideForm = () => {
                       </Step>
                       {/* Images End */}
 
+                 
                       {/* Features */}
                       <Step>
                         <StepLabel
@@ -13008,7 +13624,6 @@ const SideForm = () => {
                                 }
                                 label="Knife Friendly Surface"
                               />
-
                               <FormControlLabel
                                 control={
                                   <Checkbox
@@ -13023,6 +13638,125 @@ const SideForm = () => {
                               <FormControlLabel
                                 control={
                                   <Checkbox
+                                    checked={changeData.cane}
+                                    onChange={handleProductFields}
+                                    name="cane"
+                                  />
+                                }
+                                label="Cane"
+                              />
+
+                              {changeData.cane && (
+                                <>
+                                  <TextField
+                                    sx={{ mt: 2, mb: 2 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="cane_name"
+                                    label="Cane"
+                                    multiple
+                                    value={changeData.cane_name}
+                                    onChange={handleProductFields}
+                                    // helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.cane.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Cane Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.cane_size}
+                                    onChange={handleProductFields}
+                                    name="cane_size"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.hook}
+                                    onChange={handleProductFields}
+                                    name="hook"
+                                  />
+                                }
+                                label="Hook"
+                              />
+
+                              {changeData.hook && (
+                                <>
+                                  <TextField
+                                    sx={{ mt: 2, mb: 2 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="hook_name"
+                                    label="Hook"
+                                    multiple
+                                    value={changeData.hook_name}
+                                    onChange={handleProductFields}
+                                    // helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.hook.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Hook Quantity"
+                                    type="number"
+                                    variant="outlined"
+                                    value={changeData.hook_qty}
+                                    onChange={handleProductFields}
+                                    name="hook_qty"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
                                     checked={changeData.dial}
                                     onChange={handleProductFields}
                                     name="dial"
@@ -13031,21 +13765,20 @@ const SideForm = () => {
                                 label="Dial"
                               />
 
-
                               {changeData.dial && (
                                 <>
                                   <TextField
-                                    sx={{ mt: 2, mb: 1 }}
+                                    sx={{ mt: 2, mb: 2 }}
                                     size="small"
                                     fullWidth
                                     id="outlined-select"
                                     select
                                     name="dial_name"
-                                    label="Dail"
+                                    label="Dial"
                                     multiple
                                     value={changeData.dial_name}
                                     onChange={handleProductFields}
-                                    helperText="Please select your Ceramic Tiles."
+                                    // helperText="Please select your Ceramic Tiles."
                                   >
                                     {catalog.dial.map(
                                       (option) =>
@@ -13081,9 +13814,154 @@ const SideForm = () => {
                                     onChange={handleProductFields}
                                     name="dial_size"
                                   />
-
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    sx={{ mt: 2, mb: 2 }}
+                                    id="fullWidth"
+                                    label="Dial Quantity"
+                                    type="number"
+                                    variant="outlined"
+                                    value={changeData.dial_qty || 0}
+                                    onChange={handleProductFields}
+                                    name="dial_qty"
+                                  />
                                 </>
                               )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.glass}
+                                    onChange={handleProductFields}
+                                    name="glass"
+                                  />
+                                }
+                                label="Glass (Plain)"
+                              />
+                              {changeData.glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.glass_size}
+                                    onChange={handleProductFields}
+                                    name="glass_size"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.green_glass}
+                                    onChange={handleProductFields}
+                                    name="green_glass"
+                                  />
+                                }
+                                label="Green Glass"
+                              />
+                              {changeData.green_glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Green Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.green_glass_size}
+                                    onChange={handleProductFields}
+                                    name="green_glass_size"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.red_glass}
+                                    onChange={handleProductFields}
+                                    name="red_glass"
+                                  />
+                                }
+                                label="Red Glass"
+                              />
+                              {changeData.red_glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Red Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.red_glass_size}
+                                    onChange={handleProductFields}
+                                    name="red_glass_size"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.yellow_glass}
+                                    onChange={handleProductFields}
+                                    name="yellow_glass"
+                                  />
+                                }
+                                label="Yellow Glass"
+                              />
+                              {changeData.yellow_glass && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Yellow Glass Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.yellow_glass_size}
+                                    onChange={handleProductFields}
+                                    name="yellow_glass_size"
+                                  />
+                                </>
+                              )}
+
                               <FormControlLabel
                                 control={
                                   <Checkbox
@@ -13148,50 +14026,518 @@ const SideForm = () => {
                                 }
                                 label="Ceramic Tiles"
                               />
-                            </FormGroup>
-                            {changeData.ceramic_tiles_included && (
-                              <>
+                              {changeData.ceramic_tiles_included && (
+                                <>
+                                  <TextField
+                                    sx={{ mt: 2, mb: 1 }}
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="ceramic_tiles"
+                                    label="Ceramic Tiles"
+                                    multiple
+                                    value={changeData.ceramic_tiles}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Ceramic Tiles."
+                                  >
+                                    {catalog.ceramic_tiles.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    value={changeData.ceramic_tiles_qty}
+                                    onChange={handleProductFields}
+                                    size={"small"}
+                                    fullWidth
+                                    label="Ceramic Tiles Quantity"
+                                    type="number"
+                                    helperText="Enter the number of ceramic tiles included."
+                                    name="ceramic_tiles_qty"
+                                  />
+                                </>
+                              )}
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.silver}
+                                    onChange={handleProductFields}
+                                    name="silver"
+                                  />
+                                }
+                                label="Silver"
+                              />
+                              {changeData.silver && (
                                 <TextField
-                                  sx={{ mt: 2, mb: 1 }}
                                   size="small"
                                   fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="ceramic_tiles"
-                                  label="Ceramic Tiles"
-                                  multiple
-                                  value={changeData.ceramic_tiles}
+                                  sx={{ mt: 2, mb: 1 }}
+                                  // autoComplete={false}
+                                  id="fullWidth"
+                                  label="Sliver Weight"
+                                  type="text"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        Gram
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  variant="outlined"
+                                  name="silver_weight"
+                                  value={changeData.silver_weight}
                                   onChange={handleProductFields}
-                                  helperText="Please select your Ceramic Tiles."
-                                >
-                                  {catalog.ceramic_tiles.map(
-                                    (option) =>
-                                      option.status && (
-                                        <MenuItem
-                                          key={option.SKU}
-                                          value={option.SKU}
-                                        >
-                                          {option.title}
-                                        </MenuItem>
-                                      )
-                                  )}
-                                  <MenuItem key={"none"} value="None">
-                                    {"None"}
-                                  </MenuItem>
-                                </TextField>
-                                <TextField
-                                  value={changeData.ceramic_tiles_qty}
-                                  onChange={handleProductFields}
-                                  size={"small"}
-                                  fullWidth
-                                  label="Ceramic Tiles Quantity"
-                                  type="number"
-                                  helperText="Enter the number of ceramic tiles included."
-                                  name="ceramic_tiles_qty"
                                 />
-                              </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.wheel_included}
+                                    onChange={handleProductFields}
+                                    name="wheel_included"
+                                  />
+                                }
+                                label="Wheels"
+                              />
+                              {changeData.wheel_included && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    sx={{ mt: 2, mb: 1 }}
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="wheel"
+                                    label="Wheel"
+                                    multiple
+                                    value={changeData.wheel}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your wheel."
+                                  >
+                                    {catalog.wheel.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+                                  <TextField
+                                    value={changeData.wheel_qty}
+                                    onChange={handleProductFields}
+                                    size={"small"}
+                                    fullWidth
+                                    label="Wheel Quantity"
+                                    type="number"
+                                    helperText="Enter the number of wheel included."
+                                    name="wheel_qty"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.trolley}
+                                    onChange={handleProductFields}
+                                    name="trolley"
+                                  />
+                                }
+                                label="Trolley"
+                              />
+                              {changeData.trolley && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    name="trolley_material"
+                                    label="Trolly Material"
+                                    multiple
+                                    value={changeData.trolley_material}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your Trolly Material "
+                                  >
+                                    {trollyMaterial.map((option) => (
+                                      <MenuItem
+                                        key={option.value}
+                                        value={option.value}
+                                      >
+                                        {option.label}
+                                      </MenuItem>
+                                    ))}
+                                  </TextField>
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.upholstery}
+                                    onChange={handleProductFields}
+                                    name="upholstery"
+                                  />
+                                }
+                                label="Upholstery"
+                              />
+                              {changeData.upholstery && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    id="outlined-select"
+                                    select
+                                    sx={{ mt: 2 }}
+                                    name="fabric"
+                                    label="Upholstery"
+                                    multiple
+                                    value={changeData.fabric}
+                                    onChange={handleProductFields}
+                                    helperText="Please select your fabric."
+                                  >
+                                    {catalog.fabric.map(
+                                      (option) =>
+                                        option.status && (
+                                          <MenuItem
+                                            key={option.SKU}
+                                            value={option.SKU}
+                                          >
+                                            {option.title}
+                                          </MenuItem>
+                                        )
+                                    )}
+                                    <MenuItem key={"none"} value="None">
+                                      {"None"}
+                                    </MenuItem>
+                                  </TextField>
+
+                                  <TextField
+                                    value={changeData.fabric_qty}
+                                    onChange={handleProductFields}
+                                    size={"small"}
+                                    sx={{ mt: 2 }}
+                                    fullWidth
+                                    label="Upholstery Quantity "
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Meter (m)
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    type="number"
+                                    // helperText="Enter the fabric quantity in meter."
+                                    name="fabric_qty"
+                                  />
+                                </>
+                              )}
+
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    checked={changeData.mirror}
+                                    onChange={handleProductFields}
+                                    name="mirror"
+                                  />
+                                }
+                                label="Mirror"
+                              />
+
+                              {changeData.mirror && (
+                                <>
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    sx={{ mt: 2}}
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Mirror Length"
+                                    type="text"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Inch
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.mirror_length}
+                                    onChange={handleProductFields}
+                                    name="mirror_length"
+                                  />
+
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    // autoComplete={false}
+                                    sx={{ mt: 2}}
+                                    id="fullWidth"
+                                    label="Mirror Width"
+                                    type="text"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Inch
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    name="mirror_width"
+                                    value={changeData.mirror_width}
+                                    onChange={handleProductFields}
+                                  />
+
+                                  <TextField
+                                    size="small"
+                                    fullWidth
+                                    sx={{ mt: 2}}
+                                    // autoComplete={false}
+                                    id="fullWidth"
+                                    label="Mirror Size"
+                                    type="number"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          Sq. ft
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    variant="outlined"
+                                    value={changeData.mirror_size}
+                                    onChange={handleProductFields}
+                                    name="mirror_size"
+                                  />
+                                </>
+                              )}
+                            </FormGroup>
+                            {/* checkbox ends here  */}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="hinge"
+                              label="Hinge"
+                              multiple
+                              value={changeData.hinge}
+                              onChange={handleProductFields}
+                              helperText="Please select your hinge."
+                            >
+                              {catalog.hinge.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.hinge !== "None" && (
+                              <TextField
+                                value={changeData.hinge_qty}
+                                size={"small"}
+                                helperText="Enter the number of hinges pieces ."
+                                fullWidth
+                                onChange={handleProductFields}
+                                label="Hinge Quantity"
+                                type="number"
+                                name="hinge_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="knob"
+                              label="Knob"
+                              multiple
+                              value={changeData.knob}
+                              onChange={handleProductFields}
+                              helperText="Please select your knob."
+                            >
+                              {console.log(catalog)}
+                              {catalog.knob.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.knob !== "None" && (
+                              <TextField
+                                size={"small"}
+                                fullWidth
+                                helperText="Enter the number of knob pieces ."
+                                value={changeData.knob_qty}
+                                onChange={handleProductFields}
+                                label="Knob Quantity"
+                                type="number"
+                                name="knob_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="door"
+                              label="Door"
+                              multiple
+                              value={changeData.door}
+                              onChange={handleProductFields}
+                              helperText="Please select your door."
+                            >
+                              {catalog.door.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.door !== "None" && (
+                              <TextField
+                                value={changeData.door_qty}
+                                helperText="Enter the number of doors."
+                                size={"small"}
+                                fullWidth
+                                onChange={handleProductFields}
+                                label="Door Quantity"
+                                type="number"
+                                name="door_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="handle"
+                              label="Handle"
+                              multiple
+                              value={changeData.handle}
+                              onChange={handleProductFields}
+                              helperText="Please select your handle."
+                            >
+                              {catalog.handle.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.handle !== "None" && (
+                              <TextField
+                                value={changeData.handle_qty}
+                                helperText="Enter the number of handles."
+                                onChange={handleProductFields}
+                                size={"small"}
+                                fullWidth
+                                label="Handle Quantity"
+                                type="number"
+                                name="handle_qty"
+                              />
+                            )}
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              label="Fitting"
+                              name="fitting"
+                              multiple
+                              value={changeData.fitting}
+                              onChange={handleProductFields}
+                              helperText="Please select your fitting."
+                            >
+                              {catalog.fitting.map(
+                                (option) =>
+                                  option.status && (
+                                    <MenuItem
+                                      key={option.SKU}
+                                      value={option.SKU}
+                                    >
+                                      {option.title}
+                                    </MenuItem>
+                                  )
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            {changeData.fitting !== "None" && (
+                              <TextField
+                                size="small"
+                                fullWidth
+                                // autoComplete={false}
+                                id="fullWidth"
+                                label="Fitting Size"
+                                type="number"
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      Sq. ft
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                variant="outlined"
+                                value={changeData.fitting_size}
+                                onChange={handleProductFields}
+                                name="fitting_size"
+                              />
                             )}
                           </Box>
+
                           <Box className="stepAction">
                             <Button
                               variant="outlined"
@@ -13213,6 +14559,7 @@ const SideForm = () => {
                         </StepContent>
                       </Step>
                       {/* Features ends */}
+
 
                       {/* Miscellaneous */}
                       <Step>
@@ -13320,17 +14667,17 @@ const SideForm = () => {
                             </FormControl>
                             {(changeData.drawer === "mechanical" ||
                               changeData.drawer === "wooden") && (
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  type="number"
-                                  id="outlined-select"
-                                  name="drawer_count"
-                                  label="Drawer Count"
-                                  value={changeData.drawer_count}
-                                  onChange={handleProductFields}
-                                />
-                              )}
+                              <TextField
+                                size="small"
+                                fullWidth
+                                type="number"
+                                id="outlined-select"
+                                name="drawer_count"
+                                label="Drawer Count"
+                                value={changeData.drawer_count}
+                                onChange={handleProductFields}
+                              />
+                            )}
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Joints ((Useful in products where info about
@@ -13377,8 +14724,9 @@ const SideForm = () => {
                       </Step>
                       {/* Miscellaneous ends */}
 
-                      {/* Inventory & Shipping */}
-                      <Step>
+             
+                       {/* Inventory & Shipping */}
+                       <Step>
                         <StepLabel
                           sx={{ cursor: "pointer !important" }}
                           onClick={() => setActiveStep(4)}
@@ -13488,6 +14836,7 @@ const SideForm = () => {
                             </InputLabel>
                             <Select
                               multiple
+                              size="small"
                               fullWidth
                               value={changeData.warehouse}
                               name="warehouse"
@@ -13589,6 +14938,25 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               helperText="From bottom to top"
                             />
+                            <TextField
+                              size="small"
+                              fullWidth
+                              // autoComplete={false}
+                              id="fullWidth"
+                              label="Packaging Weight"
+                              type="number"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    Kg
+                                  </InputAdornment>
+                                ),
+                              }}
+                              variant="outlined"
+                              name="package_weight"
+                              value={changeData.package_weight}
+                              onChange={handleProductFields}
+                            />
                             <Box sx={{ display: "flex", mb: 1 }}>
                               <TextField
                                 size="small"
@@ -13644,7 +15012,6 @@ const SideForm = () => {
                         </StepContent>
                       </Step>
                       {/* Inventory & Shipping End */}
-
                       {/* SEO */}
                       <Step>
                         <StepLabel
@@ -13891,6 +15258,7 @@ const SideForm = () => {
                       </Step>
                       {/* SEO End */}
 
+                  
                       {/* Extra-details */}
                       <Step>
                         <StepLabel
@@ -13954,7 +15322,7 @@ const SideForm = () => {
                               fullWidth
                               // autoComplete={false}
                               id="fullWidth"
-                              label=" Metallic Weight"
+                              label=" Metal Weight"
                               type="number"
                               InputProps={{
                                 startAdornment: (
@@ -13966,25 +15334,6 @@ const SideForm = () => {
                               variant="outlined"
                               name="metal_weight"
                               value={changeData.metal_weight}
-                              onChange={handleProductFields}
-                            />
-                            <TextField
-                              size="small"
-                              fullWidth
-                              // autoComplete={false}
-                              id="fullWidth"
-                              label="Packaging Weight"
-                              type="number"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    Kg
-                                  </InputAdornment>
-                                ),
-                              }}
-                              variant="outlined"
-                              name="package_weight"
-                              value={changeData.package_weight}
                               onChange={handleProductFields}
                             />
                             <TextField
@@ -14018,298 +15367,6 @@ const SideForm = () => {
                                 {"None"}
                               </MenuItem>
                             </TextField>
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Silver
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                value={changeData.silver || "no"}
-                                onChange={handleProductFields}
-                                name="silver"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.silver === "yes" && (
-                              <TextField
-                                size="small"
-                                fullWidth
-                                // autoComplete={false}
-                                id="fullWidth"
-                                label="Sliver Weight"
-                                type="text"
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      Gram
-                                    </InputAdornment>
-                                  ),
-                                }}
-                                variant="outlined"
-                                name="silver_weight"
-                                value={changeData.silver_weight}
-                                onChange={handleProductFields}
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="hinge"
-                              label="Hinge"
-                              multiple
-                              value={changeData.hinge}
-                              onChange={handleProductFields}
-                              helperText="Please select your hinge."
-                            >
-                              {catalog.hinge.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.hinge !== "None" && (
-                              <TextField
-                                value={changeData.hinge_qty}
-                                size={"small"}
-                                helperText="Enter the number of hinges pieces ."
-                                fullWidth
-                                onChange={handleProductFields}
-                                label="Hinge Quantity"
-                                type="number"
-                                name="hinge_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="knob"
-                              label="Knob"
-                              multiple
-                              value={changeData.knob}
-                              onChange={handleProductFields}
-                              helperText="Please select your knob."
-                            >
-                              {console.log(catalog)}
-                              {catalog.knob.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.knob !== "None" && (
-                              <TextField
-                                size={"small"}
-                                fullWidth
-                                helperText="Enter the number of knob pieces ."
-                                value={changeData.knob_qty}
-                                onChange={handleProductFields}
-                                label="Knob Quantity"
-                                type="number"
-                                name="knob_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="door"
-                              label="Door"
-                              multiple
-                              value={changeData.door}
-                              onChange={handleProductFields}
-                              helperText="Please select your door."
-                            >
-                              {catalog.door.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.door !== "None" && (
-                              <TextField
-                                value={changeData.door_qty}
-                                helperText="Enter the number of doors."
-                                size={"small"}
-                                fullWidth
-                                onChange={handleProductFields}
-                                label="Door Quantity"
-                                type="number"
-                                name="door_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="handle"
-                              label="Handle"
-                              multiple
-                              value={changeData.handle}
-                              onChange={handleProductFields}
-                              helperText="Please select your handle."
-                            >
-                              {catalog.handle.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            {changeData.handle !== "None" && (
-                              <TextField
-                                value={changeData.handle_qty}
-                                helperText="Enter the number of handles."
-                                onChange={handleProductFields}
-                                size={"small"}
-                                fullWidth
-                                label="Handle Quantity"
-                                type="number"
-                                name="handle_qty"
-                              />
-                            )}
-                            <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              label="Fitting"
-                              name="fitting"
-                              multiple
-                              value={changeData.fitting}
-                              onChange={handleProductFields}
-                              helperText="Please select your fitting."
-                            >
-                              {catalog.fitting.map(
-                                (option) =>
-                                  option.status && (
-                                    <MenuItem
-                                      key={option.SKU}
-                                      value={option.SKU}
-                                    >
-                                      {option.title}
-                                    </MenuItem>
-                                  )
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Mirror
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="mirror"
-                                value={changeData.mirror || "no"}
-                                onChange={handleProductFields}
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.mirror === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  // autoComplete={false}
-                                  id="fullWidth"
-                                  label="Mirror Length"
-                                  type="text"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        Inch
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  variant="outlined"
-                                  value={changeData.mirror_length}
-                                  onChange={handleProductFields}
-                                  name="mirror_length"
-                                />
-
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  // autoComplete={false}
-                                  id="fullWidth"
-                                  label="Mirror Width"
-                                  type="text"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        Inch
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  variant="outlined"
-                                  name="mirror_width"
-                                  value={changeData.mirror_width}
-                                  onChange={handleProductFields}
-                                />
-                              </>
-                            )}
                             <TextField
                               size="small"
                               fullWidth
@@ -14348,116 +15405,6 @@ const SideForm = () => {
                               value={changeData.top_size_breadth}
                               onChange={handleProductFields}
                             />
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Wheel Included
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="wheel_included"
-                                value={changeData.wheel_included || "no"}
-                                onChange={handleProductFields}
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.wheel_included === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="wheel"
-                                  label="Wheel"
-                                  multiple
-                                  value={changeData.wheel}
-                                  onChange={handleProductFields}
-                                  helperText="Please select your wheel."
-                                >
-                                  {catalog.wheel.map(
-                                    (option) =>
-                                      option.status && (
-                                        <MenuItem
-                                          key={option.SKU}
-                                          value={option.SKU}
-                                        >
-                                          {option.title}
-                                        </MenuItem>
-                                      )
-                                  )}
-                                  <MenuItem key={"none"} value="None">
-                                    {"None"}
-                                  </MenuItem>
-                                </TextField>
-                                <TextField
-                                  value={changeData.wheel_qty}
-                                  onChange={handleProductFields}
-                                  size={"small"}
-                                  fullWidth
-                                  label="Wheel Quantity"
-                                  type="number"
-                                  helperText="Enter the number of wheel included."
-                                  name="wheel_qty"
-                                />
-                              </>
-                            )}
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Trolley
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="trolley"
-                                value={changeData.trolley || "no"}
-                                onChange={handleProductFields}
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.trolley === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="trolley_material"
-                                  label="Trolly Material"
-                                  multiple
-                                  value={changeData.trolley_material}
-                                  onChange={handleProductFields}
-                                  helperText="Please select your Trolly Material "
-                                >
-                                  {trollyMaterial.map((option) => (
-                                    <MenuItem
-                                      key={option.value}
-                                      value={option.value}
-                                    >
-                                      {option.label}
-                                    </MenuItem>
-                                  ))}
-                                </TextField>
-                              </>
-                            )}
                             <TextField
                               size="small"
                               fullWidth
@@ -14515,61 +15462,6 @@ const SideForm = () => {
                               value={changeData.seating_size_height}
                               onChange={handleProductFields}
                             />
-                            {/* 
-                          <FormControl>
-                            <FormLabel id="demo-radio-buttons-group-label">
-                              Textile
-                            </FormLabel>
-                            <RadioGroup
-                              sx={{ mb : 1 }}
-
-                              aria-labelledby="demo-radio-buttons-group-label"
-                              value={changeData.textile || "no"}
-                              onChange={handleProductFields}
-                              name="textile"
-                            >
-                              <FormControlLabel
-                                value="yes"
-                                control={<Radio />}
-                                label="Yes"
-                              />
-                              <FormControlLabel
-                                value="no"
-                                control={<Radio />}
-                                label="No"
-                              />
-                            </RadioGroup>
-                          </FormControl>
-
-
-                          {changeData.textile === "yes" && (
-                            <TextField sx={{ mb : 1 }}
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              select
-                              name="textile_type"
-                              label="Textile"
-                              value={changeData.textile_type}
-                              onChange={handleProductFields}
-                              multiple
-                              helperText="Please select your textile."
-                            >
-                              {catalog.textile.map(
-                                (option) => option.status && <MenuItem
-                                  key={option.SKU}
-                                  value={option.SKU}
-                                >
-                                  {option.title}
-                                </MenuItem>
-                              )}
-                              <MenuItem key={"none"} value="None">
-                                {"None"}
-                              </MenuItem>
-                            </TextField>
-                          )}
-
-                            */}
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Plywood Included
@@ -14623,6 +15515,13 @@ const SideForm = () => {
                                   id="outlined-select"
                                   name="mattress_length"
                                   label="Mattress Length"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
                                   value={changeData.mattress_length}
                                   onChange={handleProductFields}
                                 />
@@ -14633,6 +15532,13 @@ const SideForm = () => {
                                   id="outlined-select"
                                   name="mattress_breadth"
                                   label="Mattress Breadth"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
                                   value={changeData.mattress_breadth}
                                   onChange={handleProductFields}
                                 />
@@ -14691,75 +15597,6 @@ const SideForm = () => {
                                   label="Cradle Bed Depth"
                                   value={changeData.cradle_bed_depth}
                                   onChange={handleProductFields}
-                                />
-                              </>
-                            )}
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Upholstery
-                              </FormLabel>
-                              <RadioGroup
-                                defaultValue="no"
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                // onChange={(e) => {
-                                //   setShowFabric(e.target.value);
-                                // }}
-
-                                value={changeData.upholstery || "no"}
-                                onChange={handleProductFields}
-                                name="upholstery"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.upholstery === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  id="outlined-select"
-                                  select
-                                  name="fabric"
-                                  label="Fabric"
-                                  multiple
-                                  value={changeData.fabric}
-                                  onChange={handleProductFields}
-                                  helperText="Please select your fabric."
-                                >
-                                  {catalog.fabric.map(
-                                    (option) =>
-                                      option.status && (
-                                        <MenuItem
-                                          key={option.SKU}
-                                          value={option.SKU}
-                                        >
-                                          {option.title}
-                                        </MenuItem>
-                                      )
-                                  )}
-                                  <MenuItem key={"none"} value="None">
-                                    {"None"}
-                                  </MenuItem>
-                                </TextField>
-
-                                <TextField
-                                  value={changeData.fabric_qty}
-                                  onChange={handleProductFields}
-                                  size={"small"}
-                                  fullWidth
-                                  label="Fabric Quantity"
-                                  type="number"
-                                  helperText="Enter the fabric quantity in meter."
-                                  name="fabric_qty"
                                 />
                               </>
                             )}
@@ -15019,7 +15856,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                  option.category_id && (
+                                    option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -15209,7 +16046,9 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files={files} setFiles={setFiles}
+                            <ProductsPreviews
+                              files={files}
+                              setFiles={setFiles}
                               text={
                                 "Make Sure the picture ratio should be in 1:1."
                               }
@@ -16036,7 +16875,7 @@ const SideForm = () => {
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                  option.category_id && (
+                                    option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -16226,7 +17065,9 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files={files} setFiles={setFiles}
+                            <ProductsPreviews
+                              files={files}
+                              setFiles={setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {files.length > 0 && (
@@ -18377,7 +19218,11 @@ const SideForm = () => {
                   open={open.open}
                   setOuter={setData}
                   confirmBox={confirmBox}
-                  handleAddress={open.type === 'billing' ? handleBillingAddress : handleAddress}
+                  handleAddress={
+                    open.type === "billing"
+                      ? handleBillingAddress
+                      : handleAddress
+                  }
                 />
                 {/* addres form */}
                 <Grid item xs={12} mt={5}>
@@ -18513,7 +19358,7 @@ const SideForm = () => {
                           variant="outlined"
                           sx={{ width: "20%" }}
                           onClick={() => {
-                            setOpen({ open: true, type: 'shipping' });
+                            setOpen({ open: true, type: "shipping" });
                           }}
                         >
                           <AddIcon />
@@ -18553,7 +19398,7 @@ const SideForm = () => {
                           variant="outlined"
                           sx={{ width: "20%" }}
                           onClick={() => {
-                            setOpen({ open: true, type: 'billing' });
+                            setOpen({ open: true, type: "billing" });
                           }}
                         >
                           <AddIcon />
@@ -18738,7 +19583,6 @@ const SideForm = () => {
                   </Typography>
                 </Grid>
 
-
                 <Grid item xs={12} mt={5}>
                   <form
                     className="form"
@@ -18783,12 +19627,11 @@ const SideForm = () => {
                                 Continue
                               </Button>
                             </Box>
-
                             <TextField
                               size="small"
                               fullWidth
                               id="outlined-select"
-                              value={changeData.order_status || ''}
+                              value={changeData.order_status || ""}
                               onChange={handleProductFields}
                               select
                               sx={{ mb: 2, mt: 1 }}
@@ -18803,16 +19646,14 @@ const SideForm = () => {
                                 </MenuItem>
                               ))}
                             </TextField>
-
                             <FormControl sx={{ mt: 1 }}>
-
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Discount Type
                               </FormLabel>
                               <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
                                 name="discount_type"
-                                size='small'
+                                size="small"
                                 value={changeData.discount_type}
                                 onChange={handleProductFields}
                               >
@@ -18820,68 +19661,86 @@ const SideForm = () => {
                                   value="percentage"
                                   control={<Radio />}
                                   label="Percentage"
-                                  size='small'
-
+                                  size="small"
                                 />
                                 <FormControlLabel
-                                  size='small'
+                                  size="small"
                                   value="value"
                                   control={<Radio />}
                                   label="Value"
                                 />
                               </RadioGroup>
                             </FormControl>
-                            {changeData.discount_type === 'percentage'
-                              ? <TextField
-                                sx={{ pb: 2 }}
-                                size="small"
-                                fullWidth
-                                type='number'
-                                InputProps={{
-                                  startAdornment: <InputAdornment position="start">%</InputAdornment>,
-                                }}
-                                id="outlined-select"
-                                name="discount"
-                                value={(changeData.discount >= 1 && changeData.discount < 100) && changeData.discount}
-                                onChange={handleProductFields}
-                                label="Discount (%)"
-                              />:
-
+                            {changeData.discount_type === "percentage" ? (
                               <TextField
                                 sx={{ pb: 2 }}
                                 size="small"
                                 fullWidth
-                                type='number'
+                                type="number"
                                 InputProps={{
-                                  startAdornment: <InputAdornment position="start">₹</InputAdornment>,
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      %
+                                    </InputAdornment>
+                                  ),
                                 }}
                                 id="outlined-select"
                                 name="discount"
-                                value={(changeData.discount >= 1 && changeData.discount < 100) && changeData.discount}
+                                value={
+                                  changeData.discount >= 1 &&
+                                  changeData.discount < 100 &&
+                                  changeData.discount
+                                }
+                                onChange={handleProductFields}
+                                label="Discount (%)"
+                              />
+                            ) : (
+                              <TextField
+                                sx={{ pb: 2 }}
+                                size="small"
+                                fullWidth
+                                type="number"
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      ₹
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                id="outlined-select"
+                                name="discount"
+                                value={
+                                  changeData.discount >= 1 &&
+                                  changeData.discount < 100 &&
+                                  changeData.discount
+                                }
                                 onChange={handleProductFields}
                                 label="Discount (Value)"
                               />
-
-                            }
-
+                            )}
                             <TextField
                               sx={{ pb: 2 }}
                               size="small"
                               fullWidth
-                              type='number'
+                              type="number"
                               //required
                               id="outlined-select"
                               name="paid"
-                              value={(changeData.paid >= 1 && changeData.paid <= changeData.total) && changeData.paid}
+                              value={
+                                changeData.paid >= 1 &&
+                                changeData.paid <= changeData.total &&
+                                changeData.paid
+                              }
                               onChange={handleProductFields}
                               label="Paid"
                             />
-
                             <Editor
                               apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
                               defaultValue={changeData.note}
                               initialValue={changeData.note}
-                              onInit={(event, editor) => (editorRef.current = editor)}
+                              onInit={(event, editor) =>
+                                (editorRef.current = editor)
+                              }
                               init={{
                                 height: 400,
                                 menubar: true,
@@ -19005,7 +19864,11 @@ const SideForm = () => {
                                       }}
                                       placeholder={item}
                                       onChange={handleProductFields}
-                                      value={changeData[item] > 0 ? changeData[item] : 1}
+                                      value={
+                                        changeData[item] > 0
+                                          ? changeData[item]
+                                          : 1
+                                      }
                                     />
                                   ))}
                                 </Box>
@@ -19065,7 +19928,6 @@ const SideForm = () => {
                             <FormLabel id="demo-radio-buttons-group-label">
                               Customer Section
                             </FormLabel>
-
                             <FormControl sx={{ mt: 1 }}>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Classification
@@ -19091,7 +19953,6 @@ const SideForm = () => {
                                 />
                               </RadioGroup>
                             </FormControl>
-
                             <TextField
                               size="small"
                               fullWidth
@@ -19111,7 +19972,6 @@ const SideForm = () => {
                                 </MenuItem>
                               ))}
                             </TextField>
-
                             <TextField
                               sx={{ pb: 2 }}
                               size="small"
@@ -19124,7 +19984,6 @@ const SideForm = () => {
                               label="Customer Name"
                               type="text"
                             />
-
                             <TextField
                               sx={{ pb: 2 }}
                               size="small"
@@ -19137,7 +19996,6 @@ const SideForm = () => {
                               label="Customer Email"
                               type="email"
                             />
-
                             <TextField
                               sx={{ pb: 2 }}
                               size="small"
@@ -19150,7 +20008,6 @@ const SideForm = () => {
                               label="Contact Number"
                               type="number"
                             />
-
                             <TextField
                               sx={{ pb: 2 }}
                               size="small"
@@ -19164,7 +20021,6 @@ const SideForm = () => {
                               label="Country"
                               type="text"
                             />
-
                             <Autocomplete
                               freeSolo
                               size="small"
@@ -19191,7 +20047,6 @@ const SideForm = () => {
                                 }))
                               }
                             />
-
                             <TextField
                               size="small"
                               fullWidth
@@ -19211,7 +20066,6 @@ const SideForm = () => {
                                 </MenuItem>
                               ))}
                             </TextField>
-
                             <TextField
                               sx={{ pb: 2 }}
                               size="small"
@@ -19225,7 +20079,6 @@ const SideForm = () => {
                               label="State"
                               type="text"
                             />
-
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 GST
@@ -19251,7 +20104,6 @@ const SideForm = () => {
                                 />
                               </RadioGroup>
                             </FormControl>
-
                             {changeData.has_GST === "yes" && (
                               <TextField
                                 size="small"
@@ -19301,14 +20153,10 @@ const SideForm = () => {
                               label="Shipping"
                               type="text"
                             />
-
-
                           </Box>
                         </StepContent>
                       </Step>
                       {/* // Customer section Ends*/}
-
-
                     </Stepper>
 
                     <Button
@@ -19343,7 +20191,6 @@ const SideForm = () => {
                   </Typography>
                 </Grid>
 
-
                 <Grid item xs={12} mt={5}>
                   <form
                     className="form"
@@ -19354,9 +20201,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-
                     <FormGroup>
-
                       {/* /// restock */}
                       <FormControlLabel
                         control={
@@ -19369,10 +20214,10 @@ const SideForm = () => {
                         label="Restocking"
                       />
                       {changeData.restock && (
-                        <Box mt = {1}>
+                        <Box mt={1}>
                           <TextField
                             size="small"
-                            mt = {1}
+                            mt={1}
                             fullWidth
                             id="fullWidth"
                             label="AWB"
@@ -19391,18 +20236,17 @@ const SideForm = () => {
                           />
                           <TextField
                             sx={{ mt: 2, mb: 1 }}
-
                             size="small"
                             fullWidth
-                            mt = {1}
-select
+                            mt={1}
+                            select
                             id="fullWidth"
                             label="courier_company"
                             // type="number"
                             InputProps={{
                               startAdornment: (
                                 <InputAdornment position="start">
-                                  Courier Company 
+                                  Courier Company
                                 </InputAdornment>
                               ),
                             }}
@@ -19411,13 +20255,12 @@ select
                             onChange={handleProductFields}
                             name="courier_company"
                           >
-                               {
-                suppierCompany.map((row,i) =><MenuItem key = {i} value={row}>
-                    {row}
-                  </MenuItem>)
-              }
+                            {suppierCompany.map((row, i) => (
+                              <MenuItem key={i} value={row}>
+                                {row}
+                              </MenuItem>
+                            ))}
                           </TextField>
-
                         </Box>
                       )}
 
@@ -19449,16 +20292,12 @@ select
                             onChange={handleProductFields}
                             helperText="Please select your Return Reason."
                           >
-                            {return_reason.map(
-                              (option) => <MenuItem
-                                key={option}
-                                value={option}
-                              >
+                            {return_reason.map((option) => (
+                              <MenuItem key={option} value={option}>
                                 {option}
                               </MenuItem>
-                            )}
+                            ))}
                           </TextField>
-
                         </Box>
                       )}
 
@@ -19474,10 +20313,8 @@ select
                         label="Refund"
                       />
 
-
                       {changeData.refund && (
-                        <Box mt = {1}>
-
+                        <Box mt={1}>
                           <TextField
                             size="small"
                             fullWidth
@@ -19497,14 +20334,9 @@ select
                             onChange={handleProductFields}
                             name="refund_ammound"
                           />
-
                         </Box>
                       )}
-
-                  
                     </FormGroup>
-
-
 
                     <Button
                       color="primary"
@@ -19651,7 +20483,7 @@ select
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                  option.category_id && (
+                                    option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -19674,7 +20506,7 @@ select
                               name="primary_material"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                            // MenuProps={MenuProps}
+                              // MenuProps={MenuProps}
                             >
                               {materialCatalog.map((option) => (
                                 <MenuItem
@@ -19852,7 +20684,9 @@ select
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files={files} setFiles={setFiles}
+                            <ProductsPreviews
+                              files={files}
+                              setFiles={setFiles}
                               text={
                                 "Make Sure the picture ratio should be in 1:1."
                               }
@@ -20867,7 +21701,7 @@ select
                               {subCategory.map(
                                 (option) =>
                                   changeData.category_name ===
-                                  option.category_id && (
+                                    option.category_id && (
                                     <MenuItem
                                       key={option.value}
                                       value={option._id}
@@ -20890,7 +21724,7 @@ select
                               name="primary_material"
                               onChange={handleProductFields}
                               renderValue={(selected) => selected.join(", ")}
-                            // MenuProps={MenuProps}
+                              // MenuProps={MenuProps}
                             >
                               {materialCatalog.map((option) => (
                                 <MenuItem
@@ -21066,7 +21900,9 @@ select
                             <FormLabel id="demo-radio-buttons-group-label">
                               Product Images
                             </FormLabel>
-                            <ProductsPreviews files={files} setFiles={setFiles}
+                            <ProductsPreviews
+                              files={files}
+                              setFiles={setFiles}
                               text={"Please Drag and Drop the product images"}
                             ></ProductsPreviews>
                             {/* // image selection  */}
@@ -22897,7 +23733,9 @@ select
                     <FormLabel id="demo-radio-buttons-group-label">
                       Outdoor Images
                     </FormLabel>
-                    <ProductsPreviews files={files} setFiles={setFiles}
+                    <ProductsPreviews
+                      files={files}
+                      setFiles={setFiles}
                       text={"Please Drag and Drop the outdoor image"}
                     >
                       {" "}
@@ -23130,7 +23968,9 @@ select
                     <FormLabel id="demo-radio-buttons-group-label">
                       Outdoor Images
                     </FormLabel>
-                    <ProductsPreviews files={files} setFiles={setFiles}
+                    <ProductsPreviews
+                      files={files}
+                      setFiles={setFiles}
                       text={"Please Drag and Drop the outdoor image"}
                     >
                       {" "}
@@ -23445,7 +24285,9 @@ select
                     <FormLabel id="demo-radio-buttons-group-label">
                       Review Images
                     </FormLabel>
-                    <ProductsPreviews files={files} setFiles={setFiles}
+                    <ProductsPreviews
+                      files={files}
+                      setFiles={setFiles}
                       text={"Please Drag and Drop the review image"}
                     >
                       {" "}
@@ -23972,12 +24814,12 @@ select
                       required
                       error={
                         parseInt(changeData.old_sequence_no) !==
-                        parseInt(changeData.sequence_no) &&
+                          parseInt(changeData.sequence_no) &&
                         sequence.includes(parseInt(changeData.sequence_no))
                       }
                       helperText={
                         parseInt(changeData.old_sequence_no) !==
-                        parseInt(changeData.sequence_no) &&
+                          parseInt(changeData.sequence_no) &&
                         sequence.includes(parseInt(changeData.sequence_no)) &&
                         "Index is already in use."
                       }
@@ -24954,20 +25796,19 @@ function AddressForm({ setOpen, open, confirmBox, handleAddress, setOuter }) {
               renderInput={(params) => (
                 <TextField
                   onKeyUpCapture={handleSearch}
-                  type='number'
+                  type="number"
                   value={data.pincode || ""}
                   {...params}
                   label="Pincode"
                 />
               )}
               onChange={(e, val) => {
-                setOuter(old => ({ ...old, pincode: val }))
+                setOuter((old) => ({ ...old, pincode: val }));
                 setData((old) => ({
                   ...old,
                   pincode: val,
                 }));
-              }
-              }
+              }}
             />
 
             <TextField

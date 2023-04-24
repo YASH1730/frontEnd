@@ -1,13 +1,11 @@
 {
-    "Official_API": "http://localhost:8000/api",
-    "Official_API2": "https://admin.woodshala.in/api",
+    "Official_API2": "http://localhost:8000/api",
+    "Official_API": "https://admin.woodshala.in/api",
     "Local_API": "http://localhost:8000/api",
     "Official_API_Image": "https://admin.woodshala.in",
     "PINCODE": "b7b058e0-c221-11ed-a20a-178215b14d9b",
-    "client_side_recaptcha_test" : "6Lc0g3UlAAAAAMPXvYD0TTk0QMTet9PiFV3jpCCx",
-    "client_side_recaptcha" : "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
-    "server_side_recaptcha" : "6LeLW20lAAAAAGgcyq7CC-RMSM77HHiPm_X7HBR8",
-    "server_side_recaptcha_test" : "6LdYFW0lAAAAAMfDAZwGN-ANRZJgRGzOJwWlxRn6",
+    "client_side_recaptcha" : "6Lc0g3UlAAAAAMPXvYD0TTk0QMTet9PiFV3jpCCx",
+    "client_side_recaptcha_test" : "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
     "shipwayUser" : "Woodshala",
     "shipwayKey" : "35b650348cabf39fdf80698863566bf7"
 }
