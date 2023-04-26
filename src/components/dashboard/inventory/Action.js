@@ -578,6 +578,13 @@ export default function Action() {
             display.data.draftStatus = e.target.action.value;
             sendResponse(display.data);
             break         
+          case "deletePinCode":
+              display.data.operation = display.operation;
+              display.data.DID = display.DID;
+              display.data.draftStatus = e.target.action.value;
+              display.data.status = true;
+              sendResponse(display.data);
+            break;  
             default:
             console.log("no operation found");
             break;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 import {
   Typography,
@@ -164,7 +164,7 @@ export default function CreateOrder() {
     confirm({ description: `Data will listed in Database !!!` })
       .then(() => handleSubmit(e))
       .catch((err) => {
-        console.log("Operation cancelled.");
+        //console.log("Operation cancelled.");
       });
   };
 
@@ -252,7 +252,7 @@ export default function CreateOrder() {
   const handleSearch = async (e) => {
     const delayDebounceFn = setTimeout(() => {
       getPresentSKUs(e.target.value).then((res) => {
-        // console.log(res.data);
+        // //console.log(res.data);
         setCatalogs((old) => ({ ...old, product: res.data }));
       }, 1000);
       return () => clearTimeout(delayDebounceFn);
@@ -298,8 +298,10 @@ export default function CreateOrder() {
     product_parts: {},
     customizations: [],
     quantity: [],
+    display_quantity: [],
     subTotal: 0,
     discount_per_product: {},
+    display_discount_per_product: {},
     discount: 0,
     total: 0,
     status: "processing",
@@ -373,28 +375,37 @@ export default function CreateOrder() {
 
   // for product data row updating
   useEffect(() => {
-    // console.log(data.discount_per_product)
+    let existingRow = productRow.map(row=>row.SKU)
+    if(existingRow.length <  data.product_array.length)
+    {
 
-    const rows = catalogs.product.filter((row) => {
-      return data.product_array.includes(row.SKU) && row;
+      console.log(data.product_array)
+      const rows = catalogs.product.filter((row) => {
+      return (data.product_array.includes(row.SKU) && !existingRow.includes(row.SKU)) && row ;
     });
 
-    setProductRows(
-      rows.map((dataOBJ, index) => {
-        console.log(dataOBJ);
+    //console.log("ProductRow>>>>",productRow)
+    setProductRows([...productRow,
+      ...rows.map((dataOBJ, index) => {
+        // //console.log(dataOBJ);
         // discount decided
         let discount =
           dataOBJ.discount_limit < dataOBJ.category.discount_limit
             ? dataOBJ.category.discount_limit || 0
             : dataOBJ.discount_limit;
-        console.log(discount);
+        //console.log(discount);
         // adding the quantity and order discount details
         setData({
           ...data,
+          display_quantity: { ...data.quantity, [dataOBJ.SKU]: 1 },
           quantity: { ...data.quantity, [dataOBJ.SKU]: 1 },
           product_price: {
             ...data.product_price,
             [dataOBJ.SKU]: dataOBJ.selling_price,
+          },
+          display_discount_per_product: {
+            ...data.discount_per_product,
+            [dataOBJ.SKU]: discount || 0,
           },
           discount_per_product: {
             ...data.discount_per_product,
@@ -405,9 +416,9 @@ export default function CreateOrder() {
             [dataOBJ.SKU]: dataOBJ.assembly_part || 1,
           },
         });
-
+        
         return {
-          id: index + 1,
+          id: productRow.length + 1,
           SKU: dataOBJ.SKU,
           product_title: dataOBJ.product_title,
           product_image: dataOBJ.featured_image,
@@ -421,7 +432,12 @@ export default function CreateOrder() {
           action: dataOBJ,
         };
       })
-    );
+    ]);
+  }
+  else{
+    let newRows = productRow.filter(row=>data.product_array.includes(row.SKU))
+    setProductRows(newRows)
+  }
   }, [data.product_array]);
 
   useEffect(() => {
@@ -442,7 +458,8 @@ export default function CreateOrder() {
       let newProduct = {}; // for the check on removal product
 
       productRow.map((row) => {
-        if (row.assembly_part < 2) {
+        console.log(row.action.assembly_part)
+        if (row.action.assembly_part < 2) {
           newProduct = {
             ...newProduct,
             [row.SKU]: data.product_price[row.SKU],
@@ -454,10 +471,10 @@ export default function CreateOrder() {
           };
         } else {
           let eachProductPrice =
-            data.product_price[row.SKU] / data.product_parts[row.SKU];
+            row.selling_price / data.product_parts[row.SKU];
           let SKU = row.SKU;
           Array.from({ length: data.product_parts[SKU] }, (row, i) => {
-            console.log(i);
+            //console.log(i);
             newProduct = {
               ...newProduct,
               [SKU + `(${alphabets[i]})`]: eachProductPrice,
@@ -516,17 +533,24 @@ export default function CreateOrder() {
 
   // for calculating subtotal
   function calSubtotal() {
+    console.log(data)
     let val = 0;
-    console.log(productRow)
     productRow.map((row) => {
-      return (val +=
-        (row.selling_price -
-          (row.selling_price / 100) * data.discount_per_product[row.SKU]) *
-        (data.quantity[row.SKU]) || 1);
+      if(parseInt(data.product_parts[row.SKU]) < 2)
+      {
+        val += row.selling_price - (row.selling_price / 100) * data.discount_per_product[row.SKU] * data.quantity[row.SKU]; 
+      }
+      else{
+        let newPrice = row.selling_price - (row.selling_price / 100) * data.discount_per_product[row.SKU] * data.quantity[row.SKU]
+        val += newPrice/ data.product_parts[row.SKU] ; 
+      }
     });
+
+    console.log(">>>val>>",val)
 
     return val;
   }
+
 
   // create order data grid  columns
   const product_columns = [
@@ -543,12 +567,19 @@ export default function CreateOrder() {
         <Grid container className="qtyButtons">
           <Grid item xs={12}>
             <TextField
-              value={data.quantity[params.row.SKU]}
+              value={data.display_quantity[params.row.SKU]}
               type="Number"
               size="small"
               onChange={(e) =>
                 setData({
                   ...data,
+                  display_quantity :{
+                    ...data.display_quantity,
+                    [params.row.SKU]:
+                      parseInt(e.target.value) > 0
+                        ? parseInt(e.target.value)
+                        : 1,
+                  },
                   quantity: {
                     ...data.quantity,
                     [params.row.SKU]:
@@ -606,12 +637,20 @@ export default function CreateOrder() {
         <Grid container className="qtyButtons">
           <Grid item xs={12}>
             <TextField
-              value={data.discount_per_product[params.row.SKU]}
+              value={data.display_discount_per_product[params.row.SKU]}
               type="number"
               size="small"
               onChange={(e) =>
                 setData({
                   ...data,
+                  display_discount_per_product: {
+                    ...data.display_discount_per_product,
+                    [params.row.SKU]:
+                      parseInt(e.target.value) >= 0 &&
+                      parseInt(e.target.value) <= 100
+                        ? parseInt(e.target.value)
+                        : params.formattedValue,
+                  },
                   discount_per_product: {
                     ...data.discount_per_product,
                     [params.row.SKU]:
@@ -720,14 +759,14 @@ export default function CreateOrder() {
   // for handling the form data
 
   const handelData = (e) => {
-    console.log(e.target.name);
-    console.log(e.target.value);
+    //console.log(e.target.name);
+    //console.log(e.target.value);
 
     if (e.target.name === "shipping" && catalogs.address.length > 0) {
       const row = catalogs.address.filter((data) => {
         return data.address === e.target.value;
       });
-      console.log(row);
+      //console.log(row);
       setData({
         ...data,
         [e.target.name]: e.target.value,
@@ -862,7 +901,7 @@ export default function CreateOrder() {
     FD.append("polish", cusProductData.polish);
     FD.append("cusPolish", cusProductData.cusPolish);
 
-    console.log(cusProductData);
+    //console.log(cusProductData);
     // return 1
 
     let response = await addCustomProduct(FD);
@@ -926,7 +965,7 @@ export default function CreateOrder() {
   async function handleSubmit(e) {
     /// for adding the note
     try {
-      console.log(data);
+      //console.log(data);
       // return 1
       const res = await addDraft({
         ...data,
@@ -956,7 +995,7 @@ export default function CreateOrder() {
         resetValue();
       }
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       dispatch(
         setAlert({
           open: true,
@@ -968,7 +1007,7 @@ export default function CreateOrder() {
   }
 
   async function handlePincodeSearch(e) {
-    console.log(e.target.value);
+    //console.log(e.target.value);
     let res = await listPincode({
       page: 1,
       limit: 10,
@@ -2555,13 +2594,13 @@ function Customization({ data, setData, catalogs }) {
 
   // while edit the customization
   useEffect(() => {
-    // console.log(data.customizations.filter(row => row.SKU === data.payload.SKU))
+    // //console.log(data.customizations.filter(row => row.SKU === data.payload.SKU))
 
     if (
       data.customizations.filter((row) => row.SKU === data.payload.SKU).length >
       0
     ) {
-      // console.log('i am in')
+      // //console.log('i am in')
       let finalData = data.customizations.filter(
         (row) => row.SKU === data.payload.SKU
       )[0];
@@ -2598,15 +2637,15 @@ function Customization({ data, setData, catalogs }) {
     let res = await uploadAllImage(FD);
 
     if (res.status === 200) {
-      console.log(data.customizations.filter((row) => row.SKU === custom.SKU));
+      //console.log(data.customizations.filter((row) => row.SKU === custom.SKU));
       setData((old) => ({
         ...old,
         customizations:
           old.customizations.filter((row) => row.SKU === custom.SKU).length > 0
             ? old.customizations.map((row) => {
-                console.log(row);
+                //console.log(row);
                 if (row.SKU === custom.SKU) {
-                  console.log(custom);
+                  //console.log(custom);
                   row = {
                     ...custom,
                     polish_images: [...row.polish_images, ...res.data.polish],
@@ -2705,7 +2744,7 @@ function Customization({ data, setData, catalogs }) {
                           }}
                         >
                           {custom.polish_images.map((row) => {
-                            // console.log(row)
+                            // //console.log(row)
                             return (
                               <img width="70px" src={row} alt={"p_image"} />
                             );
@@ -2804,7 +2843,7 @@ function Customization({ data, setData, catalogs }) {
                           }}
                         >
                           {custom.design_images.map((row) => {
-                            // console.log(row)
+                            // //console.log(row)
                             return (
                               <img width="70px" src={row} alt={"p_image"} />
                             );

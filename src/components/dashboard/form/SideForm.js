@@ -1615,24 +1615,24 @@ const SideForm = () => {
           package_weight: form.payload.row.action.package_weight,
           metal_weight: form.payload.row.action.metal_weight,
           dial_qty : form.payload.row.action.dial_qty || 0,
-          cane : form.payload.row.action.cane,
+          cane : form.payload.row.action.cane || false,
           cane_name : form.payload.row.action.cane_name,
           cane_qty : form.payload.row.action.cane_qty || 0,
-          hook : form.payload.row.action.hook,
+          hook : form.payload.row.action.hook || false,
           hook_name : form.payload.row.action.hook_name,
           hook_qty : form.payload.row.action.hook_qty || 0,
-          glass : form.payload.row.action.glass,
+          glass : form.payload.row.action.glass || false,
           glass_size : form.payload.row.action.glass_size || 0,
-          green_glass : form.payload.row.action.green_glass,
+          green_glass : form.payload.row.action.green_glass || false ,
           green_glass_size : form.payload.row.action.green_glass_size || 0,
-          yellow_glass : form.payload.row.action.yellow_glass,
+          yellow_glass : form.payload.row.action.yellow_glass || false,
           yellow_glass_size : form.payload.row.action.yellow_glass_size || 0,
-          red_glass : form.payload.row.action.red_glass,
+          red_glass : form.payload.row.action.red_glass || false,
           red_glass_size : form.payload.row.action.red_glass_size || 0,
           fitting_size : form.payload.row.action.fitting_size || 0,
           mirror_size : form.payload.row.action.mirror_size || 0,
-          silver : form.payload.row.action.silver,
-          mirror : form.payload.row.action.mirror,
+          silver : form.payload.row.action.silver || false,
+          mirror : form.payload.row.action.mirror || false,
         });
 
         setCat(form.payload.row.action.category_id);
@@ -19673,7 +19673,7 @@ const SideForm = () => {
                             </FormControl>
                             {changeData.discount_type === "percentage" ? (
                               <TextField
-                                sx={{ pb: 2 }}
+                                sx={{ pb: 1 }}
                                 size="small"
                                 fullWidth
                                 type="number"
@@ -19688,7 +19688,7 @@ const SideForm = () => {
                                 name="discount"
                                 value={
                                   changeData.discount >= 1 &&
-                                  changeData.discount < 100 &&
+                                  changeData.discount <= 100 &&
                                   changeData.discount
                                 }
                                 onChange={handleProductFields}
@@ -19696,7 +19696,7 @@ const SideForm = () => {
                               />
                             ) : (
                               <TextField
-                                sx={{ pb: 2 }}
+                                sx={{ pb: 1 }}
                                 size="small"
                                 fullWidth
                                 type="number"
@@ -19719,7 +19719,7 @@ const SideForm = () => {
                               />
                             )}
                             <TextField
-                              sx={{ pb: 2 }}
+                              sx={{ pb: 1 }}
                               size="small"
                               fullWidth
                               type="number"
@@ -19925,55 +19925,8 @@ const SideForm = () => {
                                 Continue
                               </Button>
                             </Box>
-                            <FormLabel id="demo-radio-buttons-group-label">
-                              Customer Section
-                            </FormLabel>
-                            <FormControl sx={{ mt: 1 }}>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Classification
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                name="classification"
-                                size="small"
-                                value={changeData.classification}
-                                onChange={handleProductFields}
-                              >
-                                <FormControlLabel
-                                  value="personal"
-                                  control={<Radio />}
-                                  label="Personal"
-                                  size="small"
-                                />
-                                <FormControlLabel
-                                  size="small"
-                                  value="business"
-                                  control={<Radio />}
-                                  label="Business"
-                                />
-                              </RadioGroup>
-                            </FormControl>
                             <TextField
-                              size="small"
-                              fullWidth
-                              id="outlined-select"
-                              value={changeData.customer_type}
-                              onChange={handleProductFields}
-                              select
-                              sx={{ mb: 2, mt: 1 }}
-                              name="customer_type"
-                              label="Customer Type"
-                              multiple
-                              helperText="Please select customer type."
-                            >
-                              {customer_type.map((option) => (
-                                <MenuItem key={option} value={option}>
-                                  {option}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                            <TextField
-                              sx={{ pb: 2 }}
+                              sx={{ pb: 1 }}
                               size="small"
                               fullWidth
                               //required
@@ -19985,7 +19938,7 @@ const SideForm = () => {
                               type="text"
                             />
                             <TextField
-                              sx={{ pb: 2 }}
+                              sx={{ pb: 1 }}
                               size="small"
                               fullWidth
                               //required
@@ -19997,7 +19950,7 @@ const SideForm = () => {
                               type="email"
                             />
                             <TextField
-                              sx={{ pb: 2 }}
+                              sx={{ pb: 1 }}
                               size="small"
                               fullWidth
                               //required
@@ -20007,19 +19960,6 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               label="Contact Number"
                               type="number"
-                            />
-                            <TextField
-                              sx={{ pb: 2 }}
-                              size="small"
-                              fullWidth
-                              disabled
-                              //required
-                              id="outlined-select"
-                              name="country"
-                              value={changeData.country || ""}
-                              onChange={handleProductFields}
-                              label="Country"
-                              type="text"
                             />
                             <Autocomplete
                               freeSolo
@@ -20067,7 +20007,7 @@ const SideForm = () => {
                               ))}
                             </TextField>
                             <TextField
-                              sx={{ pb: 2 }}
+                              sx={{ pb: 1 }}
                               size="small"
                               fullWidth
                               //required

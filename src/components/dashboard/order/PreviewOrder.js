@@ -152,10 +152,14 @@ const PreviewOrder = ({ history }) => {
                 </Typography>
               </Box>
               <Box sx={{ flex: 1, textAlign: "right", color: "grey" }}>
-                <Typography variant={"caption"}>
-                  {new Date(data.order.order_time).toLocaleString()}
+                 <Typography variant={"caption"}>
+                 Placed At : ({new Date(data.order.order_time).toLocaleString()})
                 </Typography>
+                {data.order.updatedAt &&  <Typography variant={"caption"}>
+                &nbsp; Updated At : ({new Date(data.order.updatedAt).toLocaleString()})
+                </Typography>}
               </Box>
+           
               <Box sx={{ textAlign: "right", color: "grey" }}>
                 <IconButton
                   color="primary"
@@ -696,12 +700,12 @@ function Payment({ pay }) {
   return (
     <>
       <Stack className="stackCustom">
-        <div>
+        {/* <div>
           <Typography variant="subtitle2">Payment Method </Typography>
           <Typography variant="subtitle2">
             {pay.pay_method_remaining}
           </Typography>
-        </div>
+        </div> */}
         <div>
           <Typography variant="subtitle2">Subtotal</Typography>
           <Typography variant="subtitle2">
@@ -761,7 +765,7 @@ function Customer({ customer }) {
           <Typography variant="body2" sx={{ fontWeight: "600 !important" }}>
             Billing
           </Typography>
-          <Typography variant="body2">{customer.billing}</Typography>
+          <Typography variant="body2">{customer.billing === customer.shipping ?"Same as shipping address." : customer.billing  }</Typography>
         </Box>
         <Divider />
         <Box>
@@ -806,12 +810,12 @@ function Other({ other }) {
     <>
       <Box>
         <Typography variant="body2">
-          Picture Before Dispatch : {other.pic_before_dispatch}
+          Picture Before Dispatch : {other.pic_before_dispatch || 'NO'}
         </Typography>
         <Typography variant="body2">
-          Sales Person : {other.sales_person}
+          Sales Person : {other.sales_person || 'Company' }
         </Typography>
-        <Typography variant="body2">PO : {other.PO}</Typography>
+        {other.PO && <Typography variant="body2">PO : {other.PO}</Typography>}
       </Box>
     </>
   );

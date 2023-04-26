@@ -29,6 +29,7 @@ import { useDispatch } from "react-redux";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { Lock, LockOpen } from "@mui/icons-material";
+import { useConfirm } from "material-ui-confirm";
 export default function Pincode() {
   const dispatch = useDispatch();
 
@@ -44,6 +45,57 @@ export default function Pincode() {
   const [value, setValue] = useState({ disabled: true });
 
   const [uploadBox, setUploadBox] = useState(false);
+
+
+  const confirm = useConfirm();
+
+  const option = {
+    labels: {
+      confirmable: "Proceed",
+      cancellable: "Cancel",
+    },
+  };
+
+  // confirmBox
+  const confirmBox = (e, action, id) => {
+    e.preventDefault();
+
+    confirm({ description: `This change will displayed in product listing !!!` }, option)
+      .then(async () => {
+        let res = await action(id);
+
+        if (res) {
+
+          setCheck(check.map((row, index) => {
+            // //console.log(parseInt(id[1]) === index)
+            if (parseInt(id[1]) === index)
+              return !row
+            else
+              return row
+          }))
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: res.data.message,
+            })
+          );
+        }
+        else{
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: "Something went wrong !!!",
+            })
+          );
+        }
+      })
+      .catch((err) => {
+        console.log("Operation cancelled because. ", err);
+      });
+  };
+
 
   // const API = 'http://localhost:8000';
   const API = "https://admin.woodshala.in";
@@ -87,16 +139,26 @@ export default function Pincode() {
       renderCell: (params) => (
         <div className="categoryImage">
           <IconButton
-            onClick={async () => {
-              let response = await deleteDelivery(params.formattedValue);
-              if (response) {
-                setPageState((old) => ({
-                  ...old,
-                  data: old.data.filter((row) => {
-                    return row.action !== params.formattedValue;
-                  }),
-                  total: old.total - 1,
-                }));
+            onClick={async (e) => {
+              console.log(params)
+              // let response = await deleteDelivery(params.formattedValue);
+              // if (response) {
+
+                confirmBox(e, addDraft, {
+                  DID: "",
+                  AID: params.formattedValue,
+                  type: "Product",
+                  operation: "deletePinCode",
+                  _id: params.formattedValue,
+                })
+                
+                // setPageState((old) => ({
+                //   ...old,
+                //   data: old.data.filter((row) => {
+                //     return row.action !== params.formattedValue;
+                //   }),
+                //   total: old.total - 1,
+                // }));
                 dispatch(
                   setAlert({
                     open: true,
@@ -105,7 +167,7 @@ export default function Pincode() {
                   })
                 );
               }
-            }}
+            }
             aria-label="delete"
           >
             <DeleteIcon />

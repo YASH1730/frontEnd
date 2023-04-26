@@ -362,7 +362,7 @@ export default function Products(props) {
       DID: "",
       AID: id,
       type: "Product",
-      operation: "updateProductStatus",
+      operation: "deletePinCode",
       _id: id,
       status : e.target.checked
     })
