@@ -159,13 +159,13 @@ export default function Pincode() {
                 //   }),
                 //   total: old.total - 1,
                 // }));
-                dispatch(
-                  setAlert({
-                    open: true,
-                    variant: "success",
-                    message: "Delivery Deleted !!!",
-                  })
-                );
+                // dispatch(
+                //   setAlert({
+                //     open: true,
+                //     variant: "success",
+                //     message: "Delivery Deleted !!!",
+                //   })
+                // );
               }
             }
             aria-label="delete"

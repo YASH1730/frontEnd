@@ -559,7 +559,7 @@ export default function Action() {
             display.data.draftStatus = e.target.action.value;
             sendResponse(display.data);
             break;
-          case "addOrderFulfilment":
+          case "addOrderFulfillment":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.AID = display.data.AID;

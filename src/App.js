@@ -76,7 +76,7 @@ function MyRoutes() {
   const permission = auth.access || [];
 
   useEffect(() => {
-    if (auth.isAuth === false) {
+    if (auth.isAuth === false ) {
       return history("/");
     }
   }, [auth.isAuth]);

@@ -9,9 +9,11 @@ import {
   Grid,
   Box,
   Button,
+  Tooltip,
 } from "@mui/material";
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch } from "react-redux";
@@ -25,7 +27,7 @@ import "../../../assets/custom/css/category.css";
 
 import { DataGrid } from "@mui/x-data-grid";
 
-export default function AbandonedOrders() {
+export default function AbandonedOrders({history}) {
   // context
   const dispatch = useDispatch();
   const [pageState, setPageState] = useState({
@@ -116,49 +118,49 @@ export default function AbandonedOrders() {
       headerName: "ID",
       width: 50,
     },
-    {
-      field: "status",
-      editable: true,
-      headerName: "Status",
-      width: 150,
-      renderCell: (params) => (
-        <TextField
-          size="small"
-          id="outlined-select"
-          sx={{
-            background:
-              params.formattedValue === "completed"
-                ? "#52ffc9"
-                : params.formattedValue === "cancel"
-                ? "#fdabab"
-                : params.formattedValue === "processing"
-                ? "#b9abfd"
-                : "",
-          }}
-          value={status[params.row.action] || params.formattedValue}
-          select
-          name={params.row.action}
-          multiple
-          onChange={handleStatus}
-        >
-          {statusCatalog.map((option) => (
-            <MenuItem key={option.key} value={option.value}>
-              {option.value}
-            </MenuItem>
-          ))}
-        </TextField>
-      ),
-    },
+    // {
+    //   field: "status",
+    //   editable: true,
+    //   headerName: "Status",
+    //   width: 150,
+    //   renderCell: (params) => (
+    //     <TextField
+    //       size="small"
+    //       id="outlined-select"
+    //       sx={{
+    //         background:
+    //           params.formattedValue === "completed"
+    //             ? "#52ffc9"
+    //             : params.formattedValue === "cancel"
+    //             ? "#fdabab"
+    //             : params.formattedValue === "processing"
+    //             ? "#b9abfd"
+    //             : "",
+    //       }}
+    //       value={status[params.row.action] || params.formattedValue}
+    //       select
+    //       name={params.row.action}
+    //       multiple
+    //       onChange={handleStatus}
+    //     >
+    //       {statusCatalog.map((option) => (
+    //         <MenuItem key={option.key} value={option.value}>
+    //           {option.value}
+    //         </MenuItem>
+    //       ))}
+    //     </TextField>
+    //   ),
+    // },
     {
       field: "uuid",
       headerName: "UUID",
-      width: 100,
+      width: 150,
     },
-    {
-      field: "CID",
-      headerName: "Customer ID",
-      width: 100,
-    },
+    // {
+    //   field: "CID",
+    //   headerName: "Customer ID",
+    //   width: 100,
+    // },
     {
       field: "customer_name",
       headerName: "Customer Name",
@@ -192,79 +194,56 @@ export default function AbandonedOrders() {
       width: 200,
       align: "center",
     },
-    {
-      field: "quantity",
-      headerName: "Product $ Quantity",
-      width: 200,
-    },
 
-    {
-      field: "discount",
-      headerName: "Discount",
-      width: 80,
-      align: "center",
-    },
+    // {
+    //   field: "discount",
+    //   headerName: "Discount",
+    //   width: 80,
+    //   align: "center",
+    // },
 
-    {
-      field: "paid",
-      headerName: "Paid Amount",
-      width: 80,
-      align: "center",
-    },
+    // {
+    //   field: "paid",
+    //   headerName: "Paid Amount",
+    //   width: 80,
+    //   align: "center",
+    // },
     {
       field: "total",
       headerName: "Total Amount",
       width: 80,
       align: "center",
     },
-    {
-      field: "note",
-      headerName: "Note",
-      width: 80,
-      align: "center",
-    },
-
     // {
-    //   field: "action",
-    //   headerName: "Actions",
-    //   width: 200,
-    //   renderCell: (params) => (
-    //     <div className="categoryImage">
-    //       {/* <IconButton
-    //         onClick={() => {
-    //           dispatch(setForm({
-    //             state: true,
-    //             formType: "update_order",
-    //             payload: params,
-    //             row: Row,
-    //             setRow: setRows
-    //           }));
-    //         }}
-    //         aria-label="delete"
-    //       >
-    //         <CreateIcon />
-    //       </IconButton> */}
-    //       {/* <IconButton onClick={() => {
-    //         deleteOrder(params.formattedValue).then((res) => {
-    //           setPageState(old => ({
-    //             ...old, total: old.total - 1,
-    //             data: old.data.filter((set) => {
-    //               return set.action !== params.formattedValue;
-    //             })
-    //           }));
-
-    //           dispatch(setAlert({
-    //             open: true,
-    //             variant: 'success',
-    //             message: 'Order Deleted !!!'
-    //           }))
-    //         })
-    //       }} aria-label="delete"  >
-    //         <DeleteIcon />
-    //       </IconButton> */}
-    //     </div>
-    //   ),
+    //   field: "note",
+    //   headerName: "Note",
+    //   width: 80,
+    //   align: "center",
     // },
+
+    {
+      field: "action",
+      headerName: "Actions",
+      width: 200,
+      renderCell: (params) => (
+        <div className="categoryImage">
+           <Tooltip title='Preview Order'>
+            <IconButton
+            disabled
+              onClick={() => {
+                history(`/preview_order/${params.formattedValue._id}`)
+              }}
+              // onClick={() => {
+              //   setPreview(old => ({ open: true, _id: params.formattedValue }))
+              // }}
+              aria-label="delete"
+            >
+              <RemoveRedEyeIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
+      ),
+    },
   ];
 
   const clearFilter = () => {

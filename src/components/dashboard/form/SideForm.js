@@ -562,6 +562,9 @@ const SideForm = () => {
       label: "Glass Jali",
     },
   ];
+
+  const pay = ["Razorpay", "PayTM", "Bank Transfer", "COD"];
+
   const role = [
     {
       value: "Admin",
@@ -1056,6 +1059,7 @@ const SideForm = () => {
           discount: form.payload.order.discount,
           discount_type: form.payload.order.discount_type,
           paid: form.payload.order.paid,
+          paid_show: form.payload.order.paid && true,
           total: form.payload.order.total,
           customer_name: form.payload.order.customer_name,
           customer_email: form.payload.order.customer_email,
@@ -1370,25 +1374,25 @@ const SideForm = () => {
           wood_weight: form.payload.row.action.wood_weight,
           package_weight: form.payload.row.action.package_weight,
           metal_weight: form.payload.row.action.metal_weight,
-          dial_qty : form.payload.row.action.dial_qty || 0,
-          cane : form.payload.row.action.cane,
-          cane_name : form.payload.row.action.cane_name,
-          cane_qty : form.payload.row.action.cane_qty || 0,
-          hook : form.payload.row.action.hook,
-          hook_name : form.payload.row.action.hook_name,
-          hook_qty : form.payload.row.action.hook_qty || 0,
-          glass : form.payload.row.action.glass,
-          glass_size : form.payload.row.action.glass_size || 0,
-          green_glass : form.payload.row.action.green_glass,
-          green_glass_size : form.payload.row.action.green_glass_size || 0,
-          yellow_glass : form.payload.row.action.yellow_glass,
-          yellow_glass_size : form.payload.row.action.yellow_glass_size || 0,
-          red_glass : form.payload.row.action.red_glass,
-          red_glass_size : form.payload.row.action.red_glass_size || 0,
-          fitting_size : form.payload.row.action.fitting_size || 0,
-          mirror_size : form.payload.row.action.mirror_size || 0,
-          silver : form.payload.row.action.silver,
-          mirror : form.payload.row.action.mirror,
+          dial_qty: form.payload.row.action.dial_qty || 0,
+          cane: form.payload.row.action.cane,
+          cane_name: form.payload.row.action.cane_name,
+          cane_qty: form.payload.row.action.cane_qty || 0,
+          hook: form.payload.row.action.hook,
+          hook_name: form.payload.row.action.hook_name,
+          hook_qty: form.payload.row.action.hook_qty || 0,
+          glass: form.payload.row.action.glass,
+          glass_size: form.payload.row.action.glass_size || 0,
+          green_glass: form.payload.row.action.green_glass,
+          green_glass_size: form.payload.row.action.green_glass_size || 0,
+          yellow_glass: form.payload.row.action.yellow_glass,
+          yellow_glass_size: form.payload.row.action.yellow_glass_size || 0,
+          red_glass: form.payload.row.action.red_glass,
+          red_glass_size: form.payload.row.action.red_glass_size || 0,
+          fitting_size: form.payload.row.action.fitting_size || 0,
+          mirror_size: form.payload.row.action.mirror_size || 0,
+          silver: form.payload.row.action.silver,
+          mirror: form.payload.row.action.mirror,
         });
 
         setCat(form.payload.row.action.category_id);
@@ -1614,25 +1618,25 @@ const SideForm = () => {
           wood_weight: form.payload.row.action.wood_weight,
           package_weight: form.payload.row.action.package_weight,
           metal_weight: form.payload.row.action.metal_weight,
-          dial_qty : form.payload.row.action.dial_qty || 0,
-          cane : form.payload.row.action.cane || false,
-          cane_name : form.payload.row.action.cane_name,
-          cane_qty : form.payload.row.action.cane_qty || 0,
-          hook : form.payload.row.action.hook || false,
-          hook_name : form.payload.row.action.hook_name,
-          hook_qty : form.payload.row.action.hook_qty || 0,
-          glass : form.payload.row.action.glass || false,
-          glass_size : form.payload.row.action.glass_size || 0,
-          green_glass : form.payload.row.action.green_glass || false ,
-          green_glass_size : form.payload.row.action.green_glass_size || 0,
-          yellow_glass : form.payload.row.action.yellow_glass || false,
-          yellow_glass_size : form.payload.row.action.yellow_glass_size || 0,
-          red_glass : form.payload.row.action.red_glass || false,
-          red_glass_size : form.payload.row.action.red_glass_size || 0,
-          fitting_size : form.payload.row.action.fitting_size || 0,
-          mirror_size : form.payload.row.action.mirror_size || 0,
-          silver : form.payload.row.action.silver || false,
-          mirror : form.payload.row.action.mirror || false,
+          dial_qty: form.payload.row.action.dial_qty || 0,
+          cane: form.payload.row.action.cane || false,
+          cane_name: form.payload.row.action.cane_name,
+          cane_qty: form.payload.row.action.cane_qty || 0,
+          hook: form.payload.row.action.hook || false,
+          hook_name: form.payload.row.action.hook_name,
+          hook_qty: form.payload.row.action.hook_qty || 0,
+          glass: form.payload.row.action.glass || false,
+          glass_size: form.payload.row.action.glass_size || 0,
+          green_glass: form.payload.row.action.green_glass || false,
+          green_glass_size: form.payload.row.action.green_glass_size || 0,
+          yellow_glass: form.payload.row.action.yellow_glass || false,
+          yellow_glass_size: form.payload.row.action.yellow_glass_size || 0,
+          red_glass: form.payload.row.action.red_glass || false,
+          red_glass_size: form.payload.row.action.red_glass_size || 0,
+          fitting_size: form.payload.row.action.fitting_size || 0,
+          mirror_size: form.payload.row.action.mirror_size || 0,
+          silver: form.payload.row.action.silver || false,
+          mirror: form.payload.row.action.mirror || false,
         });
 
         setCat(form.payload.row.action.category_id);
@@ -2033,7 +2037,7 @@ const SideForm = () => {
     "wheel_included",
     "trolley",
     "mirror",
-    "upholstery"
+    "upholstery",
   ];
 
   //  for product felids
@@ -2552,7 +2556,6 @@ const SideForm = () => {
       trolley: false,
       upholstery: false,
       silver: false,
-
     });
     document.getElementById("myForm").reset();
   };
@@ -2674,7 +2677,6 @@ const SideForm = () => {
     FD.append("metal_weight", changeData.metal_weight);
     FD.append("package_weight", changeData.package_weight);
 
-
     FD.append("cradle_bed", changeData.cradle_bed);
     if (changeData.cradle_bed) {
       FD.append("cradle_bed_depth", changeData.cradle_bed_depth);
@@ -2790,7 +2792,7 @@ const SideForm = () => {
     FD.append("top_size_breadth", changeData.top_size_breadth);
 
     FD.append("dial", changeData.dial);
-    changeData.dial && FD.append("dial_qty",changeData.dial_qty)
+    changeData.dial && FD.append("dial_qty", changeData.dial_qty);
     changeData.dial && FD.append("dial_size", changeData.dial_size);
     changeData.dial && FD.append("dial_name", changeData.dial_name);
     FD.append(
@@ -2823,7 +2825,7 @@ const SideForm = () => {
       FD.append(
         "silver_weight",
         changeData.silver_weight ? changeData.silver_weight : 0
-      )
+      );
 
     changeData.trolley &&
       FD.append("trolley_material", changeData.trolley_material);
@@ -2832,22 +2834,19 @@ const SideForm = () => {
 
     FD.append("mirror", changeData.mirror);
 
-    changeData.mirror && 
+    changeData.mirror &&
       FD.append(
         "mirror_length",
         changeData.mirror_length ? changeData.mirror_length : 0
       );
-    changeData.mirror && 
+    changeData.mirror &&
       FD.append(
         "mirror_width",
         changeData.mirror_width ? changeData.mirror_width : 0
       );
-    
+
     FD.append("joints", changeData.joints ? changeData.joints : "");
-    FD.append(
-      "upholstery",
-      changeData.upholstery
-    );
+    FD.append("upholstery", changeData.upholstery);
     FD.append("trolley", changeData.trolley);
     FD.append("silver", changeData.silver);
     FD.append(
@@ -2897,25 +2896,25 @@ const SideForm = () => {
     FD.append("stackable", changeData.stackable ? changeData.stackable : false);
     FD.append("tax_rate", changeData.tax_rate);
 
-
-
-    FD.append("cane",changeData.cane)
-    changeData.cane && FD.append("cane_name",changeData.cane_name)
-    changeData.cane && FD.append("cane_qty",changeData.cane_qty)
-    FD.append("hook",changeData.hook)
-    changeData.hook && FD.append("hook_name",changeData.hook_name)
-    changeData.hook && FD.append("hook_qty",changeData.hook_qty)
-    FD.append("glass",changeData.glass)
-    changeData.glass && FD.append("glass_size",changeData.glass_size)
-    FD.append("green_glass",changeData.green_glass)
-    changeData.green_glass && FD.append("green_glass_size",changeData.green_glass_size)
-    FD.append("yellow_glass",changeData.yellow_glass)
-    changeData.yellow_glass && FD.append("yellow_glass_size",changeData.yellow_glass_size)
-    FD.append("red_glass",changeData.red_glass)
-    changeData.red_glass && FD.append("red_glass_size",changeData.red_glass_size)
-    changeData.fitting && FD.append("fitting_size",changeData.fitting_size)
-    changeData.mirror && FD.append("mirror_size",changeData.mirror_size)
-
+    FD.append("cane", changeData.cane);
+    changeData.cane && FD.append("cane_name", changeData.cane_name);
+    changeData.cane && FD.append("cane_qty", changeData.cane_qty);
+    FD.append("hook", changeData.hook);
+    changeData.hook && FD.append("hook_name", changeData.hook_name);
+    changeData.hook && FD.append("hook_qty", changeData.hook_qty);
+    FD.append("glass", changeData.glass);
+    changeData.glass && FD.append("glass_size", changeData.glass_size);
+    FD.append("green_glass", changeData.green_glass);
+    changeData.green_glass &&
+      FD.append("green_glass_size", changeData.green_glass_size);
+    FD.append("yellow_glass", changeData.yellow_glass);
+    changeData.yellow_glass &&
+      FD.append("yellow_glass_size", changeData.yellow_glass_size);
+    FD.append("red_glass", changeData.red_glass);
+    changeData.red_glass &&
+      FD.append("red_glass_size", changeData.red_glass_size);
+    changeData.fitting && FD.append("fitting_size", changeData.fitting_size);
+    changeData.mirror && FD.append("mirror_size", changeData.mirror_size);
 
     const res = addDraft(FD);
 
@@ -3740,20 +3739,19 @@ const SideForm = () => {
         "mirror_length",
         changeData.mirror_length ? changeData.mirror_length : 0
       );
-      changeData.mirror &&
+    changeData.mirror &&
       FD.append(
         "mirror_width",
         changeData.mirror_width ? changeData.mirror_width : 0
       );
-      
-    
+
     FD.append("joints", changeData.joints ? changeData.joints : "");
     FD.append(
       "upholstery",
       changeData.upholstery ? changeData.upholstery : "no"
     );
-    FD.append("trolley", changeData.trolley );
-    FD.append("silver", changeData.silver );
+    FD.append("trolley", changeData.trolley);
+    FD.append("silver", changeData.silver);
     FD.append(
       "rotating_seats",
       changeData.rotating_seats ? changeData.rotating_seats : false
@@ -3801,23 +3799,25 @@ const SideForm = () => {
     FD.append("stackable", changeData.stackable ? changeData.stackable : false);
     FD.append("tax_rate", changeData.tax_rate);
 
-
-    FD.append("cane",changeData.cane)
-    changeData.cane && FD.append("cane_name",changeData.cane_name)
-    changeData.cane && FD.append("cane_qty",changeData.cane_qty)
-    FD.append("hook",changeData.hook)
-    changeData.hook && FD.append("hook_name",changeData.hook_name)
-    changeData.hook && FD.append("hook_qty",changeData.hook_qty)
-    FD.append("glass",changeData.glass)
-    changeData.glass && FD.append("glass_size",changeData.glass_size)
-    FD.append("green_glass",changeData.green_glass)
-    changeData.green_glass && FD.append("green_glass_size",changeData.green_glass_size)
-    FD.append("yellow_glass",changeData.yellow_glass)
-    changeData.yellow_glass && FD.append("yellow_glass_size",changeData.yellow_glass_size)
-    FD.append("red_glass",changeData.red_glass)
-    changeData.red_glass && FD.append("red_glass_size",changeData.red_glass_size)
-    changeData.fitting && FD.append("fitting_size",changeData.fitting_size)
-    changeData.mirror && FD.append("mirror_size",changeData.mirror_size)
+    FD.append("cane", changeData.cane);
+    changeData.cane && FD.append("cane_name", changeData.cane_name);
+    changeData.cane && FD.append("cane_qty", changeData.cane_qty);
+    FD.append("hook", changeData.hook);
+    changeData.hook && FD.append("hook_name", changeData.hook_name);
+    changeData.hook && FD.append("hook_qty", changeData.hook_qty);
+    FD.append("glass", changeData.glass);
+    changeData.glass && FD.append("glass_size", changeData.glass_size);
+    FD.append("green_glass", changeData.green_glass);
+    changeData.green_glass &&
+      FD.append("green_glass_size", changeData.green_glass_size);
+    FD.append("yellow_glass", changeData.yellow_glass);
+    changeData.yellow_glass &&
+      FD.append("yellow_glass_size", changeData.yellow_glass_size);
+    FD.append("red_glass", changeData.red_glass);
+    changeData.red_glass &&
+      FD.append("red_glass_size", changeData.red_glass_size);
+    changeData.fitting && FD.append("fitting_size", changeData.fitting_size);
+    changeData.mirror && FD.append("mirror_size", changeData.mirror_size);
 
     const res = addDraft(FD);
 
@@ -5248,12 +5248,7 @@ const SideForm = () => {
           };
           if (!items.hasOwnProperty(SKU))
             Object.assign(items, {
-              [SKU]: {
-                fullfilled: false,
-                shipping_carrier: "",
-                trackingId: "",
-                qty: 0,
-              },
+              [SKU]: [],
             });
         });
       }
@@ -5270,7 +5265,12 @@ const SideForm = () => {
       FD.append("O", changeData.O);
       FD.append("discount_type", changeData.discount_type);
       FD.append("discount", changeData.discount);
-      FD.append("paid", changeData.paid);
+      if(!changeData.paid_show)
+      {
+        FD.append("paid", changeData.paid);
+        FD.append("pay_method_advance", changeData.pay_method_advance);
+        FD.append("pay_method_remaining", changeData.pay_method_remaining);
+      }
       FD.append("customer_name", changeData.customer_name);
       FD.append("customer_email", changeData.customer_email);
       FD.append("customer_mobile", changeData.customer_mobile);
@@ -8102,7 +8102,7 @@ const SideForm = () => {
                                   <TextField
                                     size="small"
                                     fullWidth
-                                    sx={{ mt: 2}}
+                                    sx={{ mt: 2 }}
                                     // autoComplete={false}
                                     id="fullWidth"
                                     label="Mirror Length"
@@ -8124,7 +8124,7 @@ const SideForm = () => {
                                     size="small"
                                     fullWidth
                                     // autoComplete={false}
-                                    sx={{ mt: 2}}
+                                    sx={{ mt: 2 }}
                                     id="fullWidth"
                                     label="Mirror Width"
                                     type="text"
@@ -8144,7 +8144,7 @@ const SideForm = () => {
                                   <TextField
                                     size="small"
                                     fullWidth
-                                    sx={{ mt: 2}}
+                                    sx={{ mt: 2 }}
                                     // autoComplete={false}
                                     id="fullWidth"
                                     label="Mirror Size"
@@ -11178,7 +11178,7 @@ const SideForm = () => {
                                   <TextField
                                     size="small"
                                     fullWidth
-                                    sx={{ mt: 2}}
+                                    sx={{ mt: 2 }}
                                     // autoComplete={false}
                                     id="fullWidth"
                                     label="Mirror Length"
@@ -11200,7 +11200,7 @@ const SideForm = () => {
                                     size="small"
                                     fullWidth
                                     // autoComplete={false}
-                                    sx={{ mt: 2}}
+                                    sx={{ mt: 2 }}
                                     id="fullWidth"
                                     label="Mirror Width"
                                     type="text"
@@ -11220,7 +11220,7 @@ const SideForm = () => {
                                   <TextField
                                     size="small"
                                     fullWidth
-                                    sx={{ mt: 2}}
+                                    sx={{ mt: 2 }}
                                     // autoComplete={false}
                                     id="fullWidth"
                                     label="Mirror Size"
@@ -11633,8 +11633,8 @@ const SideForm = () => {
                       </Step>
                       {/* Miscellaneous ends */}
 
-                       {/* Inventory & Shipping */}
-                       <Step>
+                      {/* Inventory & Shipping */}
+                      <Step>
                         <StepLabel
                           sx={{ cursor: "pointer !important" }}
                           onClick={() => setActiveStep(4)}
@@ -13500,7 +13500,6 @@ const SideForm = () => {
                       </Step>
                       {/* Images End */}
 
-                 
                       {/* Features */}
                       <Step>
                         <StepLabel
@@ -14268,7 +14267,7 @@ const SideForm = () => {
                                   <TextField
                                     size="small"
                                     fullWidth
-                                    sx={{ mt: 2}}
+                                    sx={{ mt: 2 }}
                                     // autoComplete={false}
                                     id="fullWidth"
                                     label="Mirror Length"
@@ -14290,7 +14289,7 @@ const SideForm = () => {
                                     size="small"
                                     fullWidth
                                     // autoComplete={false}
-                                    sx={{ mt: 2}}
+                                    sx={{ mt: 2 }}
                                     id="fullWidth"
                                     label="Mirror Width"
                                     type="text"
@@ -14310,7 +14309,7 @@ const SideForm = () => {
                                   <TextField
                                     size="small"
                                     fullWidth
-                                    sx={{ mt: 2}}
+                                    sx={{ mt: 2 }}
                                     // autoComplete={false}
                                     id="fullWidth"
                                     label="Mirror Size"
@@ -14560,7 +14559,6 @@ const SideForm = () => {
                       </Step>
                       {/* Features ends */}
 
-
                       {/* Miscellaneous */}
                       <Step>
                         <StepLabel
@@ -14724,9 +14722,8 @@ const SideForm = () => {
                       </Step>
                       {/* Miscellaneous ends */}
 
-             
-                       {/* Inventory & Shipping */}
-                       <Step>
+                      {/* Inventory & Shipping */}
+                      <Step>
                         <StepLabel
                           sx={{ cursor: "pointer !important" }}
                           onClick={() => setActiveStep(4)}
@@ -15258,7 +15255,6 @@ const SideForm = () => {
                       </Step>
                       {/* SEO End */}
 
-                  
                       {/* Extra-details */}
                       <Step>
                         <StepLabel
@@ -19718,6 +19714,7 @@ const SideForm = () => {
                                 label="Discount (Value)"
                               />
                             )}
+                            {!changeData.paid_show &&
                             <TextField
                               sx={{ pb: 1 }}
                               size="small"
@@ -19726,6 +19723,13 @@ const SideForm = () => {
                               //required
                               id="outlined-select"
                               name="paid"
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    ₹
+                                  </InputAdornment>
+                                ),
+                              }}
                               value={
                                 changeData.paid >= 1 &&
                                 changeData.paid <= changeData.total &&
@@ -19733,7 +19737,47 @@ const SideForm = () => {
                               }
                               onChange={handleProductFields}
                               label="Paid"
-                            />
+                            />}
+                            { (!changeData.paid_show &&  changeData.paid > 0) && (
+                              <>
+                                <TextField
+                                  sx={{ mb: 1 }}
+                                  size="small"
+                                  fullWidth
+                                  id="outlined-select"
+                                  select
+                                  name="pay_method_advance"
+                                  label="Payment Method for Advance"
+                                  multiple
+                                  value={changeData.pay_method_advance}
+                                  onChange={handleProductFields}
+                                >
+                                  {pay.map((option) => (
+                                    <MenuItem key={option} value={option}>
+                                      {option}
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                                <TextField
+                                  sx={{ mb: 2 }}
+                                  size="small"
+                                  fullWidth
+                                  id="outlined-select"
+                                  select
+                                  name="pay_method_remaining"
+                                  label="Payment Method for Remaining"
+                                  multiple
+                                  value={changeData.pay_method_remaining}
+                                  onChange={handleProductFields}
+                                >
+                                  {pay.map((option) => (
+                                    <MenuItem key={option} value={option}>
+                                      {option}
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                              </>
+                            )}
                             <Editor
                               apiKey="nrxcqobhboeugucjonpg61xo1m65hn8qjxwayuhvqfjzb6j4"
                               defaultValue={changeData.note}
