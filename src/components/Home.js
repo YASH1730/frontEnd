@@ -47,6 +47,7 @@ import GridViewIcon from "@mui/icons-material/GridView";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import MergeIcon from "@mui/icons-material/Merge";
 import HardwareIcon from "@mui/icons-material/Hardware";
+import ChatIcon from '@mui/icons-material/Chat';
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import SecurityIcon from "@mui/icons-material/Security";
 import PolicyIcon from "@mui/icons-material/Policy";
@@ -60,11 +61,14 @@ import {
   setMode,
   setTab,
   setRefreshBox,
+  setSocket,
 } from "../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 
 // refresh component
 import RefreshToken from "./Utility/RefreshToken";
+// socket 
+import Socket from "../sockets/Socket"
 
 const Home = ({history}) => {
   const dispatch = useDispatch();
@@ -115,7 +119,7 @@ const Home = ({history}) => {
           <Grid container sx={{ p: 2.5, mb: 3 }}>
             <Grid item xs={12} sx={{ maxHeight: "1px" }}>
               <Typography variant="h5" sx={{ textAlign: "center" }}>
-                Woodsala
+                Woodshala
               </Typography>
             </Grid>
           </Grid>
@@ -159,6 +163,37 @@ const Home = ({history}) => {
                   </ListItemAvatar>
                   <ListItemText primary="Dashboard" />
                 </ListItem>
+
+{/* 
+                {permission.includes("Hardware") && ( */}
+                  <ListItem
+                    onClick={() => {
+                      handleClose("/chat");
+                    }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar
+                        sx={{
+                          width: "30px",
+                          height: "30px",
+                          svg: {
+                            fontSize: "1.1rem",
+                          },
+                        }}
+                      >
+                        <ChatIcon
+                          color={
+                            window.location.pathname === "/chat"
+                              ? "primary"
+                              : ""
+                          }
+                        />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary="Chat" />
+                  </ListItem>
+                {/* )} */}
+
                 {permission.includes("Product") && (
                   <ListItem
                     onClick={(e) => {
@@ -898,6 +933,7 @@ const Home = ({history}) => {
   }
 
   const handleLogout = () => {
+    Socket.Log_Out(auth)
     localStorage.clear();
     setAnchor(null);
     handleClose();
@@ -908,6 +944,9 @@ const Home = ({history}) => {
         role: null,
         access : []
       })
+    );
+    dispatch(
+      setSocket(null)
     );
     dispatch(
       setAlert({
@@ -936,7 +975,7 @@ const Home = ({history}) => {
   return (
     <Box
       sx={{
-        mb: 3,
+        mb: window.location.pathname !== "/chat" &&  3,
         display: window.location.pathname === "/" ? "none" : "block",
       }}
     >

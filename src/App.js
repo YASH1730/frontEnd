@@ -7,14 +7,14 @@ import {
   useNavigate,
   useLocation,
 } from "react-router-dom";
-
+import Socket from "./sockets/Socket"
 // error boundaries for handling error 
 import ErrorBound from "./components/Utility/ErrorBound";
 import { CssBaseline } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Buffer } from "buffer";
 import { ConfirmProvider } from "material-ui-confirm";
-import { setRefreshBox } from "../src/store/action/action";
+import { setRefreshBox, setSocket } from "../src/store/action/action";
 // state store
 import { useDispatch, useSelector } from "react-redux";
 // json decode
@@ -54,6 +54,7 @@ const Hardware = lazy(() => import("./components/dashboard/hardware/Hardware"));
 const BlogModule = lazy(() => import("./components/dashboard/blog/Blog"));
 const Merge = lazy(() => import("./components/dashboard/product/Merge"));
 const Review = lazy(() => import("./components/dashboard/review/Review"));
+const ChatHome = lazy(() => import("./components/dashboard/chat/Home.js"));
 const ProductDetails = lazy(() =>
   import("./components/Utility/ProductDetails")
 );
@@ -68,7 +69,6 @@ global.Buffer = Buffer;
 
 function MyRoutes() {
   const history = useNavigate();
-
   // store
   const { auth, form, alert } = useSelector((state) => state);
   const dispatch = useDispatch();
@@ -230,6 +230,9 @@ function MyRoutes() {
         {permission.includes("Review") && (
           <Route exact path="/review" element={<Review history={history} />} />
         )}{" "}
+        {/* {permission.includes("Chat") && ( */}
+          <Route exact path="/chat" element={<ChatHome history={history} />} />
+        {/* )}{" "} */}
         <Route path="*" element={<Dashboard />} />
       </Routes>
     </>
@@ -238,7 +241,27 @@ function MyRoutes() {
 
 function App() {
   // store
-  const { mode } = useSelector((state) => state);
+  const { mode, auth, socket } = useSelector((state) => state);
+  const dispatch = useDispatch()
+  
+  Socket.Notifications(dispatch);
+  
+
+  useEffect(()=>{
+    makeConnection()
+  },[auth.isAuth,socket])
+
+
+  
+  function makeConnection(){
+    if(auth.isAuth && socket.id === null)
+    {
+      Socket.Connect(auth);
+      Socket.Get_ID(dispatch);
+    }
+  }
+
+  
 
   const light = createTheme({
     palette: {

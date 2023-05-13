@@ -1,6 +1,7 @@
 {
     "Official_API": "http://localhost:8000/api",
-    "Official_API2": "https://admin.woodshala.in/api",
+    "Socket_Official_API": "http://localhost:8000",
+    "Official_API5": "https://admin.woodshala.in/api",
     "Local_API": "http://localhost:8000/api",
     "Official_API_Image": "https://admin.woodshala.in",
     "PINCODE": "b7b058e0-c221-11ed-a20a-178215b14d9b",

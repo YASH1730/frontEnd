@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 
 // reducers 
-import { alert, auth, mode, tab, form, refresh } from './utility'
+import { alert, auth, mode, tab, form, refresh, socket, message } from './utility'
 
 const globalReducer = combineReducers({
     alert,
@@ -9,7 +9,9 @@ const globalReducer = combineReducers({
     mode,
     tab,
     form,
-    refresh
+    refresh,
+    socket,
+    message
 })
 
 export default globalReducer;

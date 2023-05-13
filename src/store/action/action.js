@@ -42,3 +42,38 @@ export const setRefreshBox = (parameters) => {
         payload: parameters
     }
 }
+
+// for refresh token Box 
+
+export const setSocket = (parameters) => {
+    return {
+        type: 'SETSOCKET',
+        payload: parameters
+    }
+}
+
+// for refresh token Box 
+
+export const setActiveUser = (parameters) => {
+    return {
+        type: 'ACTIVE_USER',
+        payload: parameters
+    }
+}
+
+// for refresh token Box 
+
+export const resetUser = (parameters) => {
+    return {
+        type: 'RESET_USER',
+        payload: parameters
+    }
+}
+// for refresh token Box 
+
+export const setMessage = (parameters) => {
+    return {
+        type: 'NEW_MESSAGE',
+        payload: parameters
+    }
+}
