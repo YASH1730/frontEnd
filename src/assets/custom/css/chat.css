@@ -22,6 +22,7 @@
     display: flex;
     background-color: rgba(255, 81, 0, 0.068);
     padding: 0% 3%;
+    gap: 0.5rem;
     align-items: center;
     justify-content: space-between;
     /* box-shadow: 0px 2px 3px 2px #d3d3d3b0;; */
@@ -29,8 +30,15 @@
 
 }
 
-.control-box-header img {
-  width: 45px;
+.control-box-header-image{
+    width: 20%;
+}
+
+.control-box-header-name{
+    flex: 1;
+}
+.control-box-header-image img {
+  width: 100%;
   border-radius: 100%;
 }
 
@@ -70,7 +78,6 @@
 
 .control-box-chat-text{
     flex : 1;
-    /* width: 80%; */
     text-overflow: clip;
     display: flex;
     flex-direction: row;

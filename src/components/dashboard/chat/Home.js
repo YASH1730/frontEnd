@@ -6,21 +6,25 @@ import '../../../assets/custom/css/chat.css'
 import ChatBox from  './component/ChatBox'
 import ControlPanel from  './component/ControlPanel'
 //APIs 
-import {listUser} from '../../../services/service.js'
+import {getCustomer, getTeam, listUser} from '../../../services/service.js'
 import { useSelector } from 'react-redux';
 
 const Home = ({history}) => {
   const {socket,auth} = useSelector(state=>state)
 
   const [chatTo,setChatTo] = useState(null);
-  const [chatList,setUser] = useState([]);
+  const [chatList,setList] = useState({
+    list : [],
+    type : "team"
+  });
 
   useEffect(()=>{
     fetchUsers()
-  },[socket.active_user])
+  },[socket.active_user,chatList.type])
+
 
   async function fetchUsers(){
-    const res = await listUser(); 
+    const res = chatList.type === 'customer' ? await getCustomer() : await getTeam() ; 
     if(res.status === 200)
     {
       let active_user = socket.active_user.map(row=>row.email)
@@ -34,16 +38,18 @@ const Home = ({history}) => {
 
         return row
       })
-
       
-      setUser(active_user);
+      setList({
+        list : active_user,
+        type : chatList.type
+      });
     }
   }
 
 
     return (
         <Box className ='chat-box-container'>
-                <ControlPanel history = {history} setChatTo = {setChatTo} chatList = {chatList} styleClass = {"control-panel"}/>
+                <ControlPanel history = {history} setChatTo = {setChatTo} chatList = {chatList} setList = {setList} styleClass = {"control-panel"}/>
                 <ChatBox history = {history} chatTo = {chatTo} styleClass = {"chat-box"} />
         </Box>
     );

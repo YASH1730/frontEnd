@@ -5,6 +5,7 @@ import { setActiveUser, setMessage, setSocket } from "../store/action/action";
 const socket = io.connect(config.Socket_Official_API);
 
 function Send_Message(message) {
+  // console.log(message)
   return socket.emit("send_message", message);
 }
 

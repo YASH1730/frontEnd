@@ -61,8 +61,8 @@ function Header({ chatTo }) {
       <Box className="chat-box-avatar">
         <img src={chatTo.image || avatar} alt="avatar" />
         <Box className = "chat-box-name">
-        <Typography variant="h6">{chatTo.user_name}</Typography>
-        <Typography variant = 'caption'>{typing ? chatTo.user_name + "is typing..." : "-" }</Typography>
+        <Typography variant="h6">{chatTo.name}</Typography>
+        <Typography variant = 'caption'>{typing ? chatTo.name + "is typing..." : "-" }</Typography>
         </Box>
       </Box>
       <IconButton>
@@ -113,6 +113,7 @@ function MessageBox({ chatTo, setChat }) {
   }
   
   useEffect(() => {
+    // console.log(message)
     if (message.email === chatTo.email) {
       setChat((old) => [...old, message]);
     }

@@ -1443,5 +1443,22 @@ export const pushOrder = async (data)=>{
     Accept: "*/*",
     "Access-Control-Allow-Origin": "*",
   }})
+}
 
+// ==================== Chat ==================
+
+export const getCustomer = async ()=>{
+  return await axios.get(`${API}/getCustomer`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+}
+
+export const getTeam = async ()=>{
+  return await axios.get(`${API}/getTeam`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
 }
