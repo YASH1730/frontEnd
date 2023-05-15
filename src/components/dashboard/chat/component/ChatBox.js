@@ -5,42 +5,42 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 // image
 import avatar from "../../../../assets/img/avatar.svg";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import {Close, EmojiEmotions, Send } from "@mui/icons-material";
+import { Close, EmojiEmotions, Send } from "@mui/icons-material";
 // redux state
 import { useDispatch, useSelector } from "react-redux";
 
 // Sockets
 import Socket from "../../../../sockets/Socket";
-import  EmojiPicker from "emoji-picker-react";
+import EmojiPicker from "emoji-picker-react";
 import { setMessage } from "../../../../store/action/action";
 // import emojis from "emoji-picker-react/dist/data/emojis";
 
-const ChatBox = ({ history, styleClass, chatTo }) => {
+const ChatBox = ({ styleClass, localState }) => {
   const [chat, setChat] = useState([]);
 
-  useEffect(()=>{
-    setChat([])
-  },[chatTo])
+  useEffect(() => {
+    setChat([]);
+  }, [localState.chat]);
   // Redux State
   // const {socket} = useSelector(state=>state)
   return (
     <>
-      {chatTo ? (
+      {localState.chat ? (
         <Box className={styleClass}>
           {/* header */}
-          <Header chatTo={chatTo} />
+          <Header chatTo={localState.chat} />
           {/* header ends */}
           {/* chat display  */}
-          <ChatDisplay chatTo={chatTo} chat={chat} setChat={setChat} />
+          <ChatDisplay chatTo={localState.chat} chat={chat} setChat={setChat} />
           {/* chat display ends */}
           {/* message display  */}
-          <MessageBox chatTo={chatTo} setChat={setChat} />
+          <MessageBox chatTo={localState.chat} setChat={setChat} />
           {/* message display ends */}
         </Box>
       ) : (
         <Box className="noContent">
           <center>
-            <Typography variant="h6" align="center">
+            <Typography variant="body2" align="center">
               <p>&#128512;</p>
               Please select chat...
             </Typography>
@@ -52,17 +52,21 @@ const ChatBox = ({ history, styleClass, chatTo }) => {
 };
 
 function Header({ chatTo }) {
-  const [typing,setTyping] = useState(false)
-  
-  Socket.Typing(setTyping)
-  
+  const [typing, setTyping] = useState(false);
+
+  Socket.Typing(setTyping);
+
   return (
     <Box className="chat-box-header">
       <Box className="chat-box-avatar">
-        <img src={chatTo.image || avatar} alt="avatar" />
-        <Box className = "chat-box-name">
-        <Typography variant="h6">{chatTo.name}</Typography>
-        <Typography variant = 'caption'>{typing ? chatTo.name + "is typing..." : "-" }</Typography>
+        <Box className="chat-box-header-image">
+          <img src={chatTo.image || avatar} alt="avatar" />
+        </Box>
+        <Box className="chat-box-name">
+          <Typography sx={{ fontWeight: 600 }} variant="body1">
+            {chatTo.name}
+          </Typography>
+          {/* <Typography variant = 'caption'>{typing ? chatTo.name + "is typing..." : "-" }</Typography> */}
         </Box>
       </Box>
       <IconButton>
@@ -102,16 +106,16 @@ function MessageBox({ chatTo, setChat }) {
 
   const [reply, setReply] = useState("");
   const [Attachment, setAttachMent] = useState({
-    emoji : false,
-    files : false,
+    emoji: false,
+    files: false,
   });
 
-  function handleEmojiPanel(){
+  function handleEmojiPanel() {
     setAttachMent({
-      emoji : !Attachment.emoji
-    })
+      emoji: !Attachment.emoji,
+    });
   }
-  
+
   useEffect(() => {
     // console.log(message)
     if (message.email === chatTo.email) {
@@ -119,15 +123,14 @@ function MessageBox({ chatTo, setChat }) {
     }
   }, [message]);
 
-
-//  for typing events 
-  function handleKeyPress(e){
+  //  for typing events
+  function handleKeyPress(e) {
     // console.log(true)
-    Socket.Send_Typing_Alert(true)
+    Socket.Send_Typing_Alert(true);
   }
-  function handleKeyUp(e){
+  function handleKeyUp(e) {
     // console.log(false)
-    Socket.Send_Typing_Alert(false)
+    Socket.Send_Typing_Alert(false);
   }
 
   function handleMessage() {
@@ -145,12 +148,12 @@ function MessageBox({ chatTo, setChat }) {
         message: reply,
       },
     ]);
-    setReply("")
+    setReply("");
   }
 
-  function onEmojiClick(e){
-    console.log(e)
-    setReply(reply+e.emoji)
+  function onEmojiClick(e) {
+    console.log(e);
+    setReply(reply + e.emoji);
   }
 
   function handleMessageVal(e) {
@@ -158,14 +161,18 @@ function MessageBox({ chatTo, setChat }) {
   }
   return (
     <Box className="chat-box-msg-box">
-      {Attachment.emoji && <Box className = 'emoji-wrapper'>
-      <EmojiPicker onEmojiClick = {onEmojiClick}/>
-      </Box>}
+      {Attachment.emoji && (
+        <Box className="emoji-wrapper">
+          <EmojiPicker onEmojiClick={onEmojiClick} />
+        </Box>
+      )}
       {/* Attachments */}
       <IconButton>
-        {Attachment.emoji ?   <Close
-        onClick = {handleEmojiPanel}
-        /> : <EmojiEmotions onClick = {handleEmojiPanel} /> }
+        {Attachment.emoji ? (
+          <Close onClick={handleEmojiPanel} />
+        ) : (
+          <EmojiEmotions onClick={handleEmojiPanel} />
+        )}
       </IconButton>
       <IconButton>
         <AttachFileIcon />

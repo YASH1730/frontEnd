@@ -1,3 +1,8 @@
+:root {
+    --bgColor : rgba(255, 81, 0, 0.068);
+    --borderColor : rgba(0, 0, 0, 0.274);
+}
+
 .chat-box-container{
     display: flex;
     width: 100%;
@@ -6,6 +11,7 @@
 }
 
 /* // control panel CSS  */
+/* // ==================================================  */
 
 .control-panel{
     display: flex;
@@ -14,19 +20,19 @@
     min-width: 200px;
     gap: 0.5rem;
     /* padding: 0.2rem; */
-    border-right: 1px solid rgba(0, 0, 0, 0.274);
+    border-right: 1px solid var(--borderColor);
 }
 
 .control-box-header{
     height: 10%;
     display: flex;
-    background-color: rgba(255, 81, 0, 0.068);
+    background-color: var(--bgColor);
     padding: 0% 3%;
     gap: 0.5rem;
     align-items: center;
     justify-content: space-between;
     /* box-shadow: 0px 2px 3px 2px #d3d3d3b0;; */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.274);
+    border-bottom: 1px solid var(--borderColor);
 
 }
 
@@ -90,6 +96,7 @@
 
 
 /* chat Box css  */
+/* ========================================================   */
 .chat-box{
     flex: 1;
     display: flex;
@@ -102,18 +109,22 @@
 .chat-box-header{
     display: flex;
     height: 10%;
-    background-color: rgba(255, 81, 0, 0.068);
+    background-color: var(--bgColor);
     padding: 0% 3%;
     align-items: center;
     justify-content: space-between;
     /* box-shadow: 0px 2px 3px 2px #d3d3d3b0;; */
-    border-bottom: 1px solid rgba(0, 0, 0, 0.274);
+    border-bottom: 1px solid var(--borderColor);
 
 }
 
-.chat-box-header img {
-  width: 45px;
-  border-radius: 100%;
+.chat-box-header-image{
+    width: 45px;
+}
+
+.chat-box-header-image img {
+    width: 100%;
+    border-radius: 100%;
 }
 
 .chat-box-avatar{
@@ -134,8 +145,8 @@
 }
 .chat-box-msg-box{
     display: flex;
-    background-color: rgba(255, 81, 0, 0.068);
-    border-top: 1px solid rgba(0, 0, 0, 0.274);
+    background-color: var(--bgColor);
+    border-top: 1px solid var(--borderColor);
     height: 10%;
     gap: 0.3rem;
     padding: 1% 1.2%;
@@ -145,6 +156,7 @@
     flex: 1;
     display: flex;
     height : 80vh;
+    text-align: center;
     justify-content: center;
     align-items: center;
     padding: 10%;
@@ -154,7 +166,7 @@
     padding: 1rem;
     width: fit-content;
     max-width: 70%;
-    background-color: rgba(255, 81, 0, 0.068);
+    background-color: var(--bgColor);
     border-radius: 15px;
 }
 
@@ -189,4 +201,61 @@
 }
 
 /* chat Box css ends */
+
+
+/* customer details css  */
+
+.customer-details-wrapper{
+    display: flex;
+    border-left: 1px solid var(--borderColor);
+    flex-direction: column;
+    width: 20% ;
+}
+
+.customer-details-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10%;
+    padding: 5%;
+    background-color: var(--bgColor);
+    border-bottom: 1px solid var(--borderColor);
+}
+
+.customer-general-details{
+    flex: 1;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    gap : 1rem;
+    padding: 3%;
+    overflow-y : scroll;
+}
+.customer-general-details-bubble{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 3%;
+    border-radius: 10px;
+    background-color: var(--bgColor);
+}
+.customer-general-details-bubble-inner{
+    background-color: white;
+    padding: 2%;
+    word-break: break-all;
+    border-radius: 10px;
+}
+
+.customer-general-details-image{
+    display: flex;
+    justify-content: center;
+    padding: 3%;
+}
+
+.customer-general-details-image img {
+    width: 50%;
+    border-radius: 100%;
+}
+
+/* customer details css ends */
 

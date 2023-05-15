@@ -1462,3 +1462,11 @@ export const getTeam = async ()=>{
     },
   });
 }
+
+export const getCustomerByEmail = async (data)=>{
+  return await axios.get(`${API}/getCustomerByEmail?email=${data}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+}

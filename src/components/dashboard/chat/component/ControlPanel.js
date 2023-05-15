@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   IconButton,
   InputAdornment,
   Menu,
@@ -15,26 +14,26 @@ import avatar from "../../../../assets/img/avatar.svg";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useSelector } from "react-redux";
 
-const ControlPanel = ({ history, styleClass, setChatTo, chatList, setList }) => {
+const ControlPanel = ({ styleClass, setChatTo, localState, setList, setState }) => {
 
   const { auth } = useSelector((state) => state);
 
   return (
     <Box className={styleClass}>
       {/* header */}
-      <Header auth={auth} setList={setList} />
+      <Header auth={auth} setList={setList} setState={setState}  localState = {localState}/>
       {/* header ends */}
       {/* search box customer */}
       <Search />
       {/* search box list */}
       {/* listing customer */}
-      <List auth={auth} chatList={chatList} setChatTo={setChatTo} />
+      <List auth={auth} localState={localState} setState = {setState} setChatTo={setChatTo} />
       {/* listing customer list */}
     </Box>
   );
 };
 
-function Header({ auth, setList }) {
+function Header({ auth,setState }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -44,9 +43,9 @@ function Header({ auth, setList }) {
     setAnchorEl(null);
   };
   function renderList (type){
-    setList(old=>({
-      list : old.list ,type
-    }))
+    setState({type : "Set_List_Type",
+    payload : {type}
+  })
     handleClose()
   }
 
@@ -63,7 +62,7 @@ function Header({ auth, setList }) {
       <IconButton onClick={handleClick}>
         <MoreVertIcon />
       </IconButton>
-      <ListMenu renderList = {renderList} setList = {setList} anchorEl={anchorEl} handleClose={handleClose} open={open} />
+      <ListMenu renderList = {renderList}  anchorEl={anchorEl} handleClose={handleClose} open={open} />
     </Box>
   );
 }
@@ -88,18 +87,47 @@ function Search() {
   );
 }
 
-function List({ chatList, setChatTo, auth }) {
-  useEffect(() => {}, [chatList]);
+function List({auth, setState, localState }) {
+  useEffect(() => {}, [localState]);
+  const [anchorEl, setAnchorEl] = useState({});
+
+  const handleClick = (event,i) => {
+    setAnchorEl(old=>({
+      ...old,
+      [i] : event.currentTarget
+    }));
+  };
+  function handleClose (i) {
+    setAnchorEl(old=>({...old,
+      [i] : null
+    }));
+  };
+  function renderDetails (email,i){
+    setState({
+      type : 'Set_Search',
+      payload : {
+        showCusDetails : true,
+        searchEmail : email,
+      }
+    })
+    handleClose(i)
+  }
+  function handleChat(row){
+    setState({
+      type : "Set_Chat",
+      payload : {
+        chat : row
+      }
+    })
+  }
   return (
     <Box className="control-box-list">
-      {chatList.list.map(
-        (row) =>
+      {localState.list.map(
+        (row,i) =>
           auth.email !== row.email && (
             <Box
+            onClick = {()=>handleChat(row)}
               className="control-box-chat-label"
-              onClick={() => {
-                setChatTo(row);
-              }}
             >
               <img
                 className={
@@ -110,17 +138,21 @@ function List({ chatList, setChatTo, auth }) {
                 src={row.image || avatar}
                 alt={"profile"}
               />
-              <Box className="control-box-chat-text">
+              <Box
+              className="control-box-chat-text">
                 <Typography sx={{ fontWeight: 600 }} variant="body2">
                   {row.name}
                 </Typography>
                 {/* <Typography sx = {{ fontWeight : 700, color : row.id ?  "green": 'red'}} variant="body1">{row.id ? "*" : '*'}</Typography> */}
               </Box>
               <Box className="control-box-chat-button">
-                <IconButton>
+                <IconButton onClick={(e)=>handleClick(e,i)} >
                   <MoreVertIcon />
                 </IconButton>
               </Box>
+              {/* // customer menu */}
+              <CustomerProfileMenu  index = {i} cusEmail = {row.email}  renderDetails = {renderDetails} setState = {setState} anchorEl={anchorEl} handleClose={handleClose} 
+              />
             </Box>
           )
       )}
@@ -142,6 +174,26 @@ function ListMenu({ anchorEl,handleClose, renderList, open }) {
       >
         <MenuItem onClick={()=>renderList("customer")}>List Customer</MenuItem>
         <MenuItem onClick={()=>renderList("team")}>List Team</MenuItem>
+        {/* <MenuItem onClick={handleClose}>Logout</MenuItem> */}
+      </Menu>
+    </div>
+  );
+}
+
+function CustomerProfileMenu({index, anchorEl,handleClose, renderDetails,cusEmail}) {
+  return (
+    <div>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl[index]}
+        open={Boolean(anchorEl[index])}
+        onClose={()=>handleClose(index)}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem onClick={()=>renderDetails(cusEmail,index)}>Customer Details</MenuItem>
+        {/* <MenuItem onClick={()=>renderList("team")}>List Team</MenuItem> */}
         {/* <MenuItem onClick={handleClose}>Logout</MenuItem> */}
       </Menu>
     </div>
