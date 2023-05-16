@@ -1470,3 +1470,11 @@ export const getCustomerByEmail = async (data)=>{
     },
   });
 }
+
+export const getMessage = async (data)=>{
+  return await axios.get(`${API}/getMessage?sender=${data.sender}&receiver=${data.receiver}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+}

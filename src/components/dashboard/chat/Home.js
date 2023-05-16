@@ -23,7 +23,7 @@ const Home = ({ history }) => {
     cusData: null,
     list: [],
     type: "team",
-    chat : {}
+    chat : null
   };
 
   const [localState, setState] = useReducer(reducer, initialState);

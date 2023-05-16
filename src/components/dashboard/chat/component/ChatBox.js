@@ -12,17 +12,41 @@ import { useDispatch, useSelector } from "react-redux";
 // Sockets
 import Socket from "../../../../sockets/Socket";
 import EmojiPicker from "emoji-picker-react";
-import { setMessage } from "../../../../store/action/action";
-// import emojis from "emoji-picker-react/dist/data/emojis";
+import { setAlert, setMessage } from "../../../../store/action/action";
+import { getMessage } from "../../../../services/service";
+
+// images
+import startChat from '../../../../assets/img/chat/start_chat.svg'
+import selectChat from '../../../../assets/img/chat/selectChat.svg'
 
 const ChatBox = ({ styleClass, localState }) => {
   const [chat, setChat] = useState([]);
+  // Redux State
+  const {auth} = useSelector(state=>state)
+  const dispatch = useDispatch()
 
   useEffect(() => {
-    setChat([]);
-  }, [localState.chat]);
-  // Redux State
-  // const {socket} = useSelector(state=>state)
+    console.log(localState.chat)
+    if(localState.chat)
+    fetchChats()
+  },[localState.chat]);
+
+  async function fetchChats(){
+    try {
+      const res = await getMessage({sender : auth.email,receiver : localState.chat.email});
+      if(res.status === 200){
+      console.log(res.data.message)
+      setChat(res.data.message)}
+    } catch (error) {
+      dispatch(setAlert({
+        open : true,
+        variant : 'error',
+        message : 'Facing problem in loading messages !!!',
+    }))
+    }
+
+  }
+
   return (
     <>
       {localState.chat ? (
@@ -31,7 +55,7 @@ const ChatBox = ({ styleClass, localState }) => {
           <Header chatTo={localState.chat} />
           {/* header ends */}
           {/* chat display  */}
-          <ChatDisplay chatTo={localState.chat} chat={chat} setChat={setChat} />
+          <ChatDisplay auth = {auth} chatTo={localState.chat} chat={chat} setChat={setChat} />
           {/* chat display ends */}
           {/* message display  */}
           <MessageBox chatTo={localState.chat} setChat={setChat} />
@@ -39,12 +63,10 @@ const ChatBox = ({ styleClass, localState }) => {
         </Box>
       ) : (
         <Box className="noContent">
-          <center>
-            <Typography variant="body2" align="center">
-              <p>&#128512;</p>
+          <img src={selectChat} alt = 'select_chat'/>
+            <Typography variant="body1" align="center">
               Please select chat...
             </Typography>
-          </center>
         </Box>
       )}
     </>
@@ -52,10 +74,6 @@ const ChatBox = ({ styleClass, localState }) => {
 };
 
 function Header({ chatTo }) {
-  const [typing, setTyping] = useState(false);
-
-  Socket.Typing(setTyping);
-
   return (
     <Box className="chat-box-header">
       <Box className="chat-box-avatar">
@@ -66,7 +84,6 @@ function Header({ chatTo }) {
           <Typography sx={{ fontWeight: 600 }} variant="body1">
             {chatTo.name}
           </Typography>
-          {/* <Typography variant = 'caption'>{typing ? chatTo.name + "is typing..." : "-" }</Typography> */}
         </Box>
       </Box>
       <IconButton>
@@ -75,29 +92,41 @@ function Header({ chatTo }) {
     </Box>
   );
 }
-function ChatDisplay({ chatTo, chat }) {
-  useEffect(() => {}, [chatTo.id]);
+function ChatDisplay({ chatTo, chat, auth }) {
+  const [typing, setTyping] = useState(false);
+  useEffect(() => {
+    window.document.getElementById('message-box').scrollTo(0,1000)
+  }, [chat,typing]);
+
+  Socket.Typing(setTyping);
 
   return (
-    <Box className="chat-box-display">
-      {chat.map((row) => {
-        if (row.type === "message")
-          return (
-            <Box className="chat-box-message">
+    <Box id = 'message-box' className="chat-box-display">
+      {chat.length > 0 ? chat.map((row) => {
+        return row.sender_email === auth.email ?
+            <Box className="chat-box-message chat-box-message-right">
+              <Typography sx={{ width: "fitContent" }} variant="body2">
+                {row.message}
+              </Typography>
+            </Box> :
+            <Box className="chat-box-message  ">
               <Typography sx={{ width: "fitContent" }} variant="body2">
                 {row.message}
               </Typography>
             </Box>
-          );
-        else
-          return (
-            <Box className="chat-box-message chat-box-message-right ">
-              <Typography sx={{ width: "fitContent" }} variant="body2">
-                {row.message}
-              </Typography>
-            </Box>
-          );
-      })}
+      }) :
+      <Box className="start-chat">
+        <img src={startChat} alt = 'startChat'/>
+        <Typography variant = 'body1'>Let's start conversation buddy...</Typography>
+      </Box>
+      }
+      {typing && (
+        <Box className="chat-box-message">
+          <Typography sx={{ width: "fitContent" }} variant="body2">
+            {chatTo.name} Is Typing...
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 }
@@ -136,7 +165,7 @@ function MessageBox({ chatTo, setChat }) {
   function handleMessage() {
     Socket.Send_Message({
       from: socket.id,
-      sender_mail: auth.email,
+      sender_email: auth.email,
       to: chatTo.id,
       receiver_email: chatTo.email,
       message: reply,
@@ -144,6 +173,7 @@ function MessageBox({ chatTo, setChat }) {
     setChat((old) => [
       ...old,
       {
+        sender_email: auth.email,
         type: "reply",
         message: reply,
       },
