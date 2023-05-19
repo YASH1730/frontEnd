@@ -49,18 +49,18 @@ import {
   getPrimaryMaterial,
   addSupplier,
   editSupplier,
-  createBlog,
-  updateBlog,
-  getLastHardware,
+  // createBlog,
+  // updateBlog,
+  // getLastHardware,
   addMergeProduct,
   updateMergeProduct,
   getLastMergeProduct,
-  getPresentSKUs,
-  addCustomer,
+  // getPresentSKUs,
+  // addCustomer,
   updateCustomer,
-  addOrder,
-  getLastOrder,
-  customerCatalog,
+  // addOrder,
+  // getLastOrder,
+  // customerCatalog,
   variation,
   getHardwareDropdown,
   getDraftID,
@@ -75,16 +75,16 @@ import {
   getStockSKU,
   // addPolish,
   // editPolish,
-  updateReview,
+  // updateReview,
   getCategoryList,
   applyDiscount,
-  addReview,
+  // addReview,
   getSequence,
   getAddress,
   listPincode,
   addUser,
   updateUser,
-  changeKnobStatus,
+  // changeKnobStatus,
 } from "../../../services/service.js";
 import { useConfirm } from "material-ui-confirm";
 
@@ -93,7 +93,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 import StarIcon from "@mui/icons-material/Star";
 import size from "react-image-size";
-import { fromUnixTime } from "date-fns/esm";
 
 import config from "../../../config.json";
 
@@ -5265,8 +5264,7 @@ const SideForm = () => {
       FD.append("O", changeData.O);
       FD.append("discount_type", changeData.discount_type);
       FD.append("discount", changeData.discount);
-      if(!changeData.paid_show)
-      {
+      if (!changeData.paid_show) {
         FD.append("paid", changeData.paid);
         FD.append("pay_method_advance", changeData.pay_method_advance);
         FD.append("pay_method_remaining", changeData.pay_method_remaining);
@@ -18597,11 +18595,14 @@ const SideForm = () => {
                             Get Image Url
                           </FormLabel>
 
-                          <ImagePreviews
+
+                          <WebBannerPreviews
                             text={"Please Drag and Drop the Image "}
+                            webBanner={Image}
+                            setWebBanner={setImages}
                           >
                             {" "}
-                          </ImagePreviews>
+                          </WebBannerPreviews>
 
                           <TextField
                             size="small"
@@ -18633,11 +18634,15 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <FeaturesPreviews
-                      text={"Please Drag and Drop the Card Image "}
-                    >
-                      {" "}
-                    </FeaturesPreviews>
+
+<WebBannerPreviews
+                            text={"Please Drag and Drop the Image "}
+                            webBanner={featured}
+                            setWebBanner={setFeatured}
+                          >
+                            {" "}
+                          </WebBannerPreviews>
+
 
                     <TextField
                       size="small"
@@ -18814,11 +18819,17 @@ const SideForm = () => {
                       Add Blog Description
                     </FormLabel>
 
-                    <FeaturesPreviews
+                    <FormLabel id="demo-radio-buttons-group-label">
+                      Blog Banner (2880x1620)
+                    </FormLabel>
+
+                    <WebBannerPreviews
                       text={"Please Drag and Drop the Card Image "}
+                      webBanner={featured}
+                      setWebBanner={setFeatured}
                     >
                       {" "}
-                    </FeaturesPreviews>
+                    </WebBannerPreviews>
 
                     <TextField
                       size="small"
@@ -19714,31 +19725,32 @@ const SideForm = () => {
                                 label="Discount (Value)"
                               />
                             )}
-                            {!changeData.paid_show &&
-                            <TextField
-                              sx={{ pb: 1 }}
-                              size="small"
-                              fullWidth
-                              type="number"
-                              //required
-                              id="outlined-select"
-                              name="paid"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    ₹
-                                  </InputAdornment>
-                                ),
-                              }}
-                              value={
-                                changeData.paid >= 1 &&
-                                changeData.paid <= changeData.total &&
-                                changeData.paid
-                              }
-                              onChange={handleProductFields}
-                              label="Paid"
-                            />}
-                            { (!changeData.paid_show &&  changeData.paid > 0) && (
+                            {!changeData.paid_show && (
+                              <TextField
+                                sx={{ pb: 1 }}
+                                size="small"
+                                fullWidth
+                                type="number"
+                                //required
+                                id="outlined-select"
+                                name="paid"
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      ₹
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                value={
+                                  changeData.paid >= 1 &&
+                                  changeData.paid <= changeData.total &&
+                                  changeData.paid
+                                }
+                                onChange={handleProductFields}
+                                label="Paid"
+                              />
+                            )}
+                            {!changeData.paid_show && changeData.paid > 0 && (
                               <>
                                 <TextField
                                   sx={{ mb: 1 }}
@@ -24558,7 +24570,7 @@ const SideForm = () => {
                     method="post"
                   >
                     <FormLabel id="demo-radio-buttons-group-label">
-                      Web View Banner Image (1920*1080)
+                      Web View Banner Image (2880px*1620px)
                     </FormLabel>
                     <WebBannerPreviews
                       webBanner={webBanner}
@@ -25482,7 +25494,7 @@ function WebBannerDimension(images, setWebBanner) {
     console.log(width, height);
     Object.assign(image, {
       preview: URL.createObjectURL(image),
-      validate: width === 1920 && height === 1080 ? true : false,
+      validate: width === 2880 && height === 1620 ? true : false,
     });
     return image;
   });
