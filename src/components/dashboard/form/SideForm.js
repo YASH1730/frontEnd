@@ -564,6 +564,25 @@ const SideForm = () => {
 
   const pay = ["Razorpay", "PayTM", "Bank Transfer", "COD"];
 
+  
+  const department = [
+    {
+      value: "CNC",
+      label: "CNC",
+    },
+    {
+      value: "Office",
+      label: "Office",
+    },
+    {
+      value: "Manufacturing",
+      label: "Manufacturing",
+    },
+    {
+      value: "Polish",
+      label: "Polish",
+    }
+  ];
   const role = [
     {
       value: "Admin",
@@ -676,7 +695,7 @@ const SideForm = () => {
     },
   ];
 
-  const purpose = ["Manufactured", "Repairing", "Packing"];
+  const purpose = ["Manufactured", "Repaired (Polish Pending)", "Packed"];
   const level = [
     "Level 1",
     "Level 2",
@@ -1844,6 +1863,8 @@ const SideForm = () => {
           email: form.payload.formattedValue.email,
           mobile: form.payload.formattedValue.mobile,
           role: form.payload.formattedValue.role,
+          department: form.payload.formattedValue.department,
+          user_id: form.payload.formattedValue.user_id,
           access:
             form.payload.row.access[0] !== "No Permissions Alloted"
               ? form.payload.row.access
@@ -6359,8 +6380,9 @@ const SideForm = () => {
       FD.append("mobile", changeData.mobile);
       FD.append("role", changeData.role);
       FD.append("access", changeData.access);
+      FD.append("department", changeData.department);
+      FD.append("user_id", changeData.user_id);
 
-      // // //console.log(acceptedFiles[0].name, e.target.category_name.value)
 
       const res = await addUser(FD);
 
@@ -6418,6 +6440,8 @@ const SideForm = () => {
       FD.append("mobile", changeData.mobile);
       FD.append("role", changeData.role);
       FD.append("access", changeData.access);
+      FD.append("department", changeData.department);
+      FD.append("user_id", changeData.user_id);
 
       const res = await updateUser(FD);
 
@@ -6440,6 +6464,8 @@ const SideForm = () => {
               set.mobile = changeData.mobile;
               set.role = changeData.role;
               set.access = changeData.access;
+              set.user_id = changeData.user_id;
+              set.department = changeData.department;
               set.action = changeData.action;
             }
             return set;
@@ -24894,6 +24920,17 @@ const SideForm = () => {
                       fullWidth
                       sx={{ mb: 1 }}
                       size="small"
+                      label="User ID (Upto 13 charectar)"
+                      inputProps={{ maxLength: 13 }}
+                      value={changeData.user_id}
+                      onChange={handleProductFields}
+                      variant="outlined"
+                      name="user_id"
+                    />
+                    <TextField
+                      fullWidth
+                      sx={{ mb: 1 }}
+                      size="small"
                       label="Full Name"
                       value={changeData.user_name}
                       onChange={handleProductFields}
@@ -24906,7 +24943,7 @@ const SideForm = () => {
                       size="small"
                       type="email"
                       label="Email Address"
-                      value={changeData.email}
+                      value={changeData.email || ""}
                       onChange={handleProductFields}
                       variant="outlined"
                       name="email"
@@ -24947,6 +24984,26 @@ const SideForm = () => {
                       multiple
                     >
                       {role.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.value}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
+                    <TextField
+                      fullWidth
+                      id="outlined-select"
+                      // required
+                      select
+                      size={"small"}
+                      helperText="Please select the department."
+                      name="department"
+                      label="Select Department"
+                      value={changeData.department || ""}
+                      onChange={handleProductFields}
+                      multiple
+                    >
+                      {department.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.value}
                         </MenuItem>
@@ -25017,6 +25074,17 @@ const SideForm = () => {
                     encType="application/x-www-form-urlencoded"
                     method="post"
                   >
+                     <TextField
+                      fullWidth
+                      sx={{ mb: 1 }}
+                      size="small"
+                      label="User ID (Upto 13 charectar)"
+                      inputProps={{ maxLength: 13 }}
+                      value={changeData.user_id}
+                      onChange={handleProductFields}
+                      variant="outlined"
+                      name="user_id"
+                    />
                     <TextField
                       fullWidth
                       sx={{ mb: 1 }}
@@ -25063,6 +25131,26 @@ const SideForm = () => {
                       multiple
                     >
                       {role.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.value}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
+                    <TextField
+                      fullWidth
+                      id="outlined-select"
+                      // required
+                      select
+                      size={"small"}
+                      helperText="Please select the department."
+                      name="department"
+                      label="Select Department"
+                      value={changeData.department || ""}
+                      onChange={handleProductFields}
+                      multiple
+                    >
+                      {department.map((option) => (
                         <MenuItem key={option.value} value={option.value}>
                           {option.value}
                         </MenuItem>

@@ -48,6 +48,8 @@ export default function UserSetting() {
         setRows(res.data.map((row, index) => {
           return ({
             id: index + 1,
+            user_id: row.user_id,
+            department: row.department,
             user_name : row.user_name,
             email : row.email,
             mobile : row.mobile,

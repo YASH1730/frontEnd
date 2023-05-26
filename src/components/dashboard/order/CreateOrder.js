@@ -316,8 +316,8 @@ export default function CreateOrder() {
     refresh: 0,
     sales_person: auth.role === "Sales Person" ? auth.name : "",
     pincode: "",
-    apartment : "",
-    landmark : "",
+    apartment: "",
+    landmark: "",
   });
 
   //  State for stepper
@@ -375,69 +375,77 @@ export default function CreateOrder() {
 
   // for product data row updating
   useEffect(() => {
-    let existingRow = productRow.map(row=>row.SKU)
-    if(existingRow.length <  data.product_array.length)
-    {
-
-      console.log(data.product_array)
+    let existingRow = productRow.map((row) => row.SKU);
+    if (existingRow.length < data.product_array.length) {
+      console.log(data.product_array);
       const rows = catalogs.product.filter((row) => {
-      return (data.product_array.includes(row.SKU) && !existingRow.includes(row.SKU)) && row ;
-    });
+        return (
+          data.product_array.includes(row.SKU) &&
+          !existingRow.includes(row.SKU) &&
+          row
+        );
+      });
 
-    //console.log("ProductRow>>>>",productRow)
-    setProductRows([...productRow,
-      ...rows.map((dataOBJ, index) => {
-        // //console.log(dataOBJ);
-        // discount decided
-        let discount =
-          dataOBJ.discount_limit < dataOBJ.category.discount_limit
-            ? dataOBJ.category.discount_limit || 0
-            : dataOBJ.discount_limit;
-        //console.log(discount);
-        // adding the quantity and order discount details
-        setData({
-          ...data,
-          display_quantity: { ...data.quantity, [dataOBJ.SKU]: 1 },
-          quantity: { ...data.quantity, [dataOBJ.SKU]: 1 },
-          product_price: {
-            ...data.product_price,
-            [dataOBJ.SKU]: dataOBJ.selling_price,
-          },
-          display_discount_per_product: {
-            ...data.discount_per_product,
-            [dataOBJ.SKU]: discount || 0,
-          },
-          discount_per_product: {
-            ...data.discount_per_product,
-            [dataOBJ.SKU]: discount || 0,
-          },
-          product_parts: {
-            ...data.product_parts,
-            [dataOBJ.SKU]: dataOBJ.assembly_part || 1,
-          },
-        });
-        
-        return {
-          id: productRow.length + 1,
-          SKU: dataOBJ.SKU,
-          product_title: dataOBJ.product_title,
-          product_image: dataOBJ.featured_image,
-          dimension:
-            dataOBJ.length_main + "X" + dataOBJ.breadth + "X" + dataOBJ.height,
-          qty: data.quantity[dataOBJ.SKU] ? data.quantity[dataOBJ.SKU] : 1,
-          selling_price: dataOBJ.selling_price,
-          discount_limit: discount,
-          parts: dataOBJ.assembly_part || 1,
-          range: dataOBJ.range,
-          action: dataOBJ,
-        };
-      })
-    ]);
-  }
-  else{
-    let newRows = productRow.filter(row=>data.product_array.includes(row.SKU))
-    setProductRows(newRows)
-  }
+      //console.log("ProductRow>>>>",productRow)
+      setProductRows([
+        ...productRow,
+        ...rows.map((dataOBJ, index) => {
+          // //console.log(dataOBJ);
+          // discount decided
+          let discount =
+            dataOBJ.discount_limit < dataOBJ.category.discount_limit
+              ? dataOBJ.category.discount_limit || 0
+              : dataOBJ.discount_limit;
+          //console.log(discount);
+          // adding the quantity and order discount details
+          setData({
+            ...data,
+            display_quantity: { ...data.quantity, [dataOBJ.SKU]: 1 },
+            quantity: { ...data.quantity, [dataOBJ.SKU]: 1 },
+            product_price: {
+              ...data.product_price,
+              [dataOBJ.SKU]: dataOBJ.selling_price,
+            },
+            display_discount_per_product: {
+              ...data.discount_per_product,
+              [dataOBJ.SKU]: discount || 0,
+            },
+            discount_per_product: {
+              ...data.discount_per_product,
+              [dataOBJ.SKU]: discount || 0,
+            },
+            product_parts: {
+              ...data.product_parts,
+              [dataOBJ.SKU]: dataOBJ.assembly_part || 1,
+            },
+          });
+
+          return {
+            id: productRow.length + 1,
+            SKU: dataOBJ.SKU,
+            product_title: dataOBJ.product_title,
+            product_image: dataOBJ.featured_image,
+            dimension:
+              dataOBJ.length_main +
+              "X" +
+              dataOBJ.breadth +
+              "X" +
+              dataOBJ.height,
+            qty: data.quantity[dataOBJ.SKU] ? data.quantity[dataOBJ.SKU] : 1,
+            selling_price: dataOBJ.selling_price,
+            discount_limit: discount,
+            parts: dataOBJ.assembly_part || 1,
+            range: dataOBJ.range,
+            action: dataOBJ,
+          };
+        }),
+      ]);
+    } else {
+      let newRows = productRow.filter((row) =>
+        data.product_array.includes(row.SKU)
+      );
+      setProductRows(newRows);
+    }
   }, [data.product_array]);
 
   useEffect(() => {
@@ -458,7 +466,7 @@ export default function CreateOrder() {
       let newProduct = {}; // for the check on removal product
 
       productRow.map((row) => {
-        console.log(row.action.assembly_part)
+        console.log(row.action.assembly_part);
         if (row.action.assembly_part < 2) {
           newProduct = {
             ...newProduct,
@@ -533,24 +541,29 @@ export default function CreateOrder() {
 
   // for calculating subtotal
   function calSubtotal() {
-    console.log(data)
+    console.log(data);
     let val = 0;
     productRow.map((row) => {
-      if(parseInt(data.product_parts[row.SKU]) < 2)
-      {
-        val += row.selling_price - (row.selling_price / 100) * data.discount_per_product[row.SKU] * data.quantity[row.SKU]; 
-      }
-      else{
-        let newPrice = row.selling_price - (row.selling_price / 100) * data.discount_per_product[row.SKU] * data.quantity[row.SKU]
-        val += newPrice/ data.product_parts[row.SKU] ; 
+      if (parseInt(data.product_parts[row.SKU]) < 2) {
+        val +=
+          row.selling_price -
+          (row.selling_price / 100) *
+            data.discount_per_product[row.SKU] *
+            data.quantity[row.SKU];
+      } else {
+        let newPrice =
+          row.selling_price -
+          (row.selling_price / 100) *
+            data.discount_per_product[row.SKU] *
+            data.quantity[row.SKU];
+        val += newPrice / data.product_parts[row.SKU];
       }
     });
 
-    console.log(">>>val>>",val)
+    console.log(">>>val>>", val);
 
     return val;
   }
-
 
   // create order data grid  columns
   const product_columns = [
@@ -573,7 +586,7 @@ export default function CreateOrder() {
               onChange={(e) =>
                 setData({
                   ...data,
-                  display_quantity :{
+                  display_quantity: {
                     ...data.display_quantity,
                     [params.row.SKU]:
                       parseInt(e.target.value) > 0
@@ -1331,42 +1344,42 @@ export default function CreateOrder() {
                             variant="outlined"
                           />
                         )}
-                         <br />
-                        <FormLabel id="demo-radio-buttons-group-label">
-                        Flat/Apartment
-                            </FormLabel>
-                        <TextareaAutosize
-                              minRows={7}
-                              placeholder="Flat/Apartment..."
-                              style={{ marginTop: "10px", width: "100%" }}
-                              size="small"
-                              fullWidth
-                              //required
-                              id="outlined-select"
-                              name="apartment"
-                              value={data.apartment || ""}
-                              onChange={handelData}
-                              label="Flat/Apartment"
-                              type="text"
-                            />
                         <br />
                         <FormLabel id="demo-radio-buttons-group-label">
-                        Landmark
-                            </FormLabel>
+                          Flat/Apartment
+                        </FormLabel>
                         <TextareaAutosize
-                              minRows={7}
-                              placeholder="Landmark..."
-                              style={{ marginTop: "10px", width: "100%" }}
-                              size="small"
-                              fullWidth
-                              //required
-                              id="outlined-select"
-                              name="landmark"
-                              value={data.landmark || ""}
-                              onChange={handelData}
-                              label="Landmark"
-                              type="text"
-                            />
+                          minRows={7}
+                          placeholder="Flat/Apartment..."
+                          style={{ marginTop: "10px", width: "100%" }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="apartment"
+                          value={data.apartment || ""}
+                          onChange={handelData}
+                          label="Flat/Apartment"
+                          type="text"
+                        />
+                        <br />
+                        <FormLabel id="demo-radio-buttons-group-label">
+                          Landmark
+                        </FormLabel>
+                        <TextareaAutosize
+                          minRows={7}
+                          placeholder="Landmark..."
+                          style={{ marginTop: "10px", width: "100%" }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="landmark"
+                          value={data.landmark || ""}
+                          onChange={handelData}
+                          label="Landmark"
+                          type="text"
+                        />
                         <br />
 
                         <FormLabel id="demo-radio-buttons-group-label">
@@ -1612,40 +1625,40 @@ export default function CreateOrder() {
 
                         <br />
                         <FormLabel id="demo-radio-buttons-group-label">
-                        Flat/Apartment
-                            </FormLabel>
+                          Flat/Apartment
+                        </FormLabel>
                         <TextareaAutosize
-                              minRows={7}
-                              placeholder="Flat/Apartment..."
-                              style={{ marginTop: "10px", width: "100%" }}
-                              size="small"
-                              fullWidth
-                              //required
-                              id="outlined-select"
-                              name="apartment"
-                              value={data.apartment || ""}
-                              onChange={handelData}
-                              label="Flat/Apartment"
-                              type="text"
-                            />
+                          minRows={7}
+                          placeholder="Flat/Apartment..."
+                          style={{ marginTop: "10px", width: "100%" }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="apartment"
+                          value={data.apartment || ""}
+                          onChange={handelData}
+                          label="Flat/Apartment"
+                          type="text"
+                        />
                         <br />
                         <FormLabel id="demo-radio-buttons-group-label">
-                        Landmark
-                            </FormLabel>
+                          Landmark
+                        </FormLabel>
                         <TextareaAutosize
-                              minRows={7}
-                              placeholder="Landmark..."
-                              style={{ marginTop: "10px", width: "100%" }}
-                              size="small"
-                              fullWidth
-                              //required
-                              id="outlined-select"
-                              name="landmark"
-                              value={data.landmark || ""}
-                              onChange={handelData}
-                              label="Landmark"
-                              type="text"
-                            />
+                          minRows={7}
+                          placeholder="Landmark..."
+                          style={{ marginTop: "10px", width: "100%" }}
+                          size="small"
+                          fullWidth
+                          //required
+                          id="outlined-select"
+                          name="landmark"
+                          value={data.landmark || ""}
+                          onChange={handelData}
+                          label="Landmark"
+                          type="text"
+                        />
                         <br />
 
                         {catalogs.address.length > 0 ? (
@@ -1822,6 +1835,25 @@ export default function CreateOrder() {
                       p: 2.5,
                     }}
                   >
+                    <TextField
+                      sx={{ mb: 2 }}
+                      size="small"
+                      fullWidth
+                      id="outlined-select"
+                      select
+                      name="sale_channel"
+                      label="Sale Channel"
+                      multiple
+                      value={data.sale_channel || "Online"}
+                      onChange={handelData}
+                    >
+                      {catalogs.channel.map((option) => (
+                        <MenuItem key={option.key} value={option.value}>
+                          {option.value}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
                     <FormControl sx={{ mb: 2 }}>
                       <FormControlLabel
                         label="Pictures Before Dispatch"
@@ -1945,7 +1977,7 @@ export default function CreateOrder() {
                       value={data.PO || ""}
                       onChange={handelData}
                     />
-                    <TextField
+                    {/* <TextField
                       sx={{ mb: 2 }}
                       size="small"
                       fullWidth
@@ -1962,7 +1994,7 @@ export default function CreateOrder() {
                           {option.value}
                         </MenuItem>
                       ))}
-                    </TextField>
+                    </TextField> */}
 
                     <Grid container>
                       <Grid item xs={12}>
