@@ -61,7 +61,7 @@ export default function UserSetting() {
       }
     }
     catch(err){
-      console.log(err)
+      // console.log(err)
     }
   }
 
@@ -131,7 +131,7 @@ export default function UserSetting() {
 
 
   const handelSearch = (e) => {
-    //console.log(e.target.value)
+    //// console.log(e.target.value)
     setSearch(e.target.value)
   }
 

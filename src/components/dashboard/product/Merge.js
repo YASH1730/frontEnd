@@ -75,7 +75,7 @@ export default function Products(props) {
         if (res) {
 
           setCheck(check.map((row, index) => {
-            // //console.log(parseInt(id[1]) === index)
+            // //// console.log(parseInt(id[1]) === index)
             if (parseInt(id[1]) === index)
               return !row
             else
@@ -100,7 +100,7 @@ export default function Products(props) {
         }
       })
       .catch((err) => {
-        console.log("Operation cancelled because. ", err);
+        // console.log("Operation cancelled because. ", err);
       });
   };
 
@@ -288,12 +288,12 @@ export default function Products(props) {
   ];
 
   const handleSwitch = (e) => {
-    // //console.log(e.target.name)
-    // //console.log(check)
+    // //// console.log(e.target.name)
+    // //// console.log(check)
 
     const id = e.target.name.split(' ')[0]
 
-    console.log(id)
+    // console.log(id)
 
     return confirmBox(e, addDraft, {
       DID: "",
@@ -432,7 +432,7 @@ export default function Products(props) {
                       return { [row.SKU]: productUnit[row.SKU] };
                   });
 
-                  console.log(unit);
+                  // console.log(unit);
                   dispatch(
                     setForm({
                       state: true,

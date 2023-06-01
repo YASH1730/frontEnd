@@ -1478,3 +1478,11 @@ export const getMessage = async (data)=>{
     },
   });
 }
+
+export const getOrderByID = async (data)=>{
+  return await axios.get(`${API}/getOrderByID?O=${data}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+}

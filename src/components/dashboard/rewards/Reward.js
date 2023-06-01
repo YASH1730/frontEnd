@@ -217,7 +217,7 @@ export default function Reward() {
         }
       })
       .catch((err) => {
-        console.log("Operation cancelled because. ", err);
+        // console.log("Operation cancelled because. ", err);
       });
   };
   const handleSearch = (e) => {

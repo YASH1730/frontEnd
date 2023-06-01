@@ -91,7 +91,7 @@ export default function Products(props) {
         if (res) {
 
           setCheck(check.map((row, index) => {
-            // //console.log(parseInt(id[1]) === index)
+            // //// console.log(parseInt(id[1]) === index)
             if (parseInt(id[1]) === index)
               return !row
             else
@@ -116,7 +116,7 @@ export default function Products(props) {
         }
       })
       .catch((err) => {
-        console.log("Operation cancelled because. ", err);
+        // console.log("Operation cancelled because. ", err);
       });
   };
 
@@ -175,7 +175,7 @@ export default function Products(props) {
         }));
       }}
       catch(err) {
-        console.log(err)
+        // console.log(err)
         dispatch(setAlert({
           open : true,
           message : "Problem in loading list.",
@@ -271,7 +271,7 @@ export default function Products(props) {
           <Tooltip title="Update">
             <IconButton
               onClick={() => {
-                //console.log(params)
+                //// console.log(params)
 
                 dispatch(
                   setForm({
@@ -321,7 +321,7 @@ export default function Products(props) {
           <Tooltip title="View">
             <IconButton
               onClick={() => {
-                console.log(params);
+                // console.log(params);
                 props.history(`/productDetails/${params.row.SKU}`);
               }}
               aria-label="update"
@@ -351,12 +351,12 @@ export default function Products(props) {
 
 
   const handleSwitch = (e) => {
-    // //console.log(e.target.name)
-    // //console.log(check)
+    // //// console.log(e.target.name)
+    // //// console.log(check)
 
     const id = e.target.name.split(' ')[0]
 
-    console.log(id)
+    // console.log(id)
 
     return confirmBox(e, addDraft, {
       DID: "",
@@ -749,7 +749,7 @@ function DuplicateProduct({ open, setOpen, dispatch }) {
   ];
 
   function handleClose() {
-    console.log(open.data);
+    // console.log(open.data);
     setOpen((old) => ({ ...old, open: false }));
     setChecked({
       Specification: false,

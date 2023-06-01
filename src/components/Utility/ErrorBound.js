@@ -15,7 +15,7 @@ class ErrorBound extends Component {
     }
 
     componentDidCatch(error,info){
-        console.log(error,info)
+        // console.log(error,info)
     }
     
     render() { 

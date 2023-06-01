@@ -118,7 +118,7 @@ const Review = () => {
         }
       })
       .catch((err) => {
-        console.log("Operation cancelled because. ", err);
+        // console.log("Operation cancelled because. ", err);
       });
   };
 
@@ -139,7 +139,7 @@ const Review = () => {
       if (data) {
         setCheck(
           data.data.data.map((row, index) => {
-            // console.log(row);
+            // // console.log(row);
             return row.hide;
           })
         );
@@ -173,7 +173,7 @@ const Review = () => {
         }));
       }
     } catch (err) {
-      console.log("err>>", err);
+      // console.log("err>>", err);
     }
   }
 
@@ -183,7 +183,7 @@ const Review = () => {
 
   useMemo(() => {
     metaReview().then((data) => {
-      // console.log(data);
+      // // console.log(data);
       setPageState((old) => ({
         ...old,
         total_review: data.data.total,
@@ -269,7 +269,7 @@ const Review = () => {
           <Tooltip title="Update">
             <IconButton
               onClick={() => {
-                //console.log(params)
+                //// console.log(params)
 
                 dispatch(
                   setForm({
@@ -333,8 +333,8 @@ const Review = () => {
   ];
 
   const handleSwitch = (e) => {
-    console.log(e.target.name);
-    console.log(check);
+    // console.log(e.target.name);
+    // console.log(check);
 
     const id = e.target.name.split(" ");
     const FD = new FormData();
@@ -348,7 +348,7 @@ const Review = () => {
       .then((data) => {
         setCheck(
           check.map((row, index) => {
-            // //console.log(parseInt(id[1]) === index)
+            // //// console.log(parseInt(id[1]) === index)
             if (parseInt(id[1]) === index) return !row;
             else return row;
           })
@@ -363,7 +363,7 @@ const Review = () => {
         );
       })
       .catch((err) => {
-        //console.log(err)
+        //// console.log(err)
         dispatch(
           setAlert({
             open: true,
@@ -512,7 +512,7 @@ const Review = () => {
               />
             )}
             onChange={(e, newMember) => {
-              console.log(newMember);
+              // console.log(newMember);
               setPageState((old) => ({ ...old, product_id: newMember }));
             }}
           />
@@ -602,7 +602,7 @@ function ReplyModal({ state, setState }) {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      console.log(e.target.reply.value);
+      // console.log(e.target.reply.value);
 
       let data = {
         message: e.target.reply.value,
@@ -628,7 +628,7 @@ function ReplyModal({ state, setState }) {
         }))
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       dispatch(setAlert({
         message : 'Something went wrong.',
         variant : 'success',
@@ -733,7 +733,7 @@ export default Review;
 //             <Box
 //               className={customer.includes(row) ? "message" : "message right"}
 //             >
-//               {console.log(customer.includes(row))}
+//               {// console.log(customer.includes(row))}
 //               <Typography sx={{ display: "block" }} variant="body1">
 //                 {row.message}
 //               </Typography>

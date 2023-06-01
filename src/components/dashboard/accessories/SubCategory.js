@@ -59,7 +59,7 @@ export default function SubCategory() {
         );
       })
       .catch((err) => {
-        //console.log(err)
+        //// console.log(err)
       });
   }, []);
 
@@ -160,7 +160,7 @@ export default function SubCategory() {
       .then((data) => {
         setCheck(
           check.map((row, index) => {
-            // //console.log(parseInt(id[1]) === index)
+            // //// console.log(parseInt(id[1]) === index)
             if (parseInt(id[1]) === index) return !row;
             else return row;
           })
@@ -174,7 +174,7 @@ export default function SubCategory() {
         );
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         dispatch(
           setAlert({
             open: true,
@@ -186,7 +186,7 @@ export default function SubCategory() {
   };
 
   const handelSearch = (e) => {
-    //console.log(e.target.value)
+    //// console.log(e.target.value)
     setSearch(e.target.value);
   };
 

@@ -166,7 +166,7 @@ const SideForm = () => {
     confirm({ description: `Data will listed in Database !!!` }, option)
       .then(() => action(e))
       .catch((err) => {
-        console.log("Operation cancelled because. ", err);
+        // console.log("Operation cancelled because. ", err);
       });
   };
 
@@ -347,7 +347,7 @@ const SideForm = () => {
             return !file.validate ? (
               <div style={thumb} key={file.name}>
                 <div style={thumbInner}>
-                  {/* {console.log(file.validate)} */}
+                  {/* {// console.log(file.validate)} */}
 
                   <img
                     src={URL.createObjectURL(file)}
@@ -370,7 +370,7 @@ const SideForm = () => {
             return file.validate ? (
               <div style={thumb} key={file.name}>
                 <div style={thumbInner}>
-                  {/* {console.log(file.validate)} */}
+                  {/* {// console.log(file.validate)} */}
 
                   <img
                     src={URL.createObjectURL(file)}
@@ -956,7 +956,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
       });
   };
   // function for generating product SKU ID
@@ -965,7 +965,7 @@ const SideForm = () => {
     getLastProduct()
       .then((res) => {
         if (res.data.length > 0) {
-          // // //console.log(res.data[0].SKU)
+          // // //// console.log(res.data[0].SKU)
 
           let index = parseInt(res.data[0].SKU.split("-")[1]) + 1;
 
@@ -975,7 +975,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
       });
   };
   // function for generating hardware  ID
@@ -992,7 +992,7 @@ const SideForm = () => {
   //       }
   //     })
   //     .catch((err) => {
-  //       // //console.log(err);
+  //       // //// console.log(err);
   //     });
   // };
   // function for generating product OID ID
@@ -1009,7 +1009,7 @@ const SideForm = () => {
   //       }
   //     })
   //     .catch((err) => {
-  //       // //console.log(err);
+  //       // //// console.log(err);
   //     });
   // };
   // function for generating product DID ID
@@ -1026,7 +1026,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
       });
   };
   // function for generating product DID ID
@@ -1043,7 +1043,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
       });
   };
 
@@ -1058,7 +1058,7 @@ const SideForm = () => {
       case "edit_order":
         getDID();
 
-        console.log(form.payload);
+        // console.log(form.payload);
 
         let quantity = form.payload.order.quantity || {};
 
@@ -1132,7 +1132,7 @@ const SideForm = () => {
           return setSubCategory(data.data);
         });
 
-        // console.log(category,category.filter((row) => { return row.category_name === 'Hardware' }))
+        // // console.log(category,category.filter((row) => { return row.category_name === 'Hardware' }))
 
         break;
       case "update_hardware":
@@ -1157,7 +1157,7 @@ const SideForm = () => {
 
         const row = form.payload.row;
 
-        console.log(row);
+        // console.log(row);
 
         setData({
           SKU: row.SKU,
@@ -1231,7 +1231,7 @@ const SideForm = () => {
           return setMaterialCatalog(data.data);
         });
 
-        console.log(form);
+        // console.log(form);
 
         if (form.payload) {
           setData((old) => ({ ...old, ...form.payload }));
@@ -1436,7 +1436,7 @@ const SideForm = () => {
         break;
       case "update_PrimaryMaterial":
         getDID();
-        console.log(form.payload.row);
+        // console.log(form.payload.row);
         setData({
           primaryMaterial_name: form.payload.row.primaryMaterial_name,
           primaryMaterial_description:
@@ -1661,7 +1661,7 @@ const SideForm = () => {
 
         break;
       case "update_customer":
-        //console.log(form.payload);
+        //// console.log(form.payload);
         setData({
           CID: form.payload.row.CID,
           register_time: form.payload.row.register_time,
@@ -1716,7 +1716,7 @@ const SideForm = () => {
           return setSubCategory(data.data);
         });
 
-        console.log(form.payload.row.product_articles);
+        // console.log(form.payload.row.product_articles);
 
         // for product qty
         form.payload.row.product_articles.length > 0 &&
@@ -1794,7 +1794,7 @@ const SideForm = () => {
         getSID();
         break;
       case "update_polish":
-        // console.log(form.payload.row)
+        // // console.log(form.payload.row)
         getDID();
         setData({
           ...changeData,
@@ -1821,7 +1821,7 @@ const SideForm = () => {
         getDID();
         break;
       case "update_review":
-        console.log(form.payload);
+        // console.log(form.payload);
         setData((old) => ({
           ...old,
           _id: form.payload.formattedValue._id,
@@ -1840,7 +1840,7 @@ const SideForm = () => {
       case "update_banner":
         setSequenceFunc();
         getDID();
-        console.log(form.payload);
+        // console.log(form.payload);
         setData({
           uuid: form.payload.value.uuid,
           web_banner: form.payload.value.web_banner,
@@ -1855,7 +1855,7 @@ const SideForm = () => {
         });
         break;
       case "update_user":
-        console.log(form.payload);
+        // console.log(form.payload);
         setData((old) => ({
           ...old,
           _id: form.payload.formattedValue._id,
@@ -1877,7 +1877,7 @@ const SideForm = () => {
         break;
       case "update_coupon":
         getDID();
-        // console.log(form.payload.formattedValue.expiry);
+        // // console.log(form.payload.formattedValue.expiry);
         setData((old) => ({
           _id: form.payload.formattedValue._id,
           customer_ids: form.payload.formattedValue.customer_ids,
@@ -1898,7 +1898,7 @@ const SideForm = () => {
 
   async function setSequenceFunc() {
     const data = await getSequence();
-    console.log(data);
+    // console.log(data);
     if (data.status === 200) {
       return setSequence([...data.data]);
     }
@@ -2013,7 +2013,7 @@ const SideForm = () => {
         break;
 
       default:
-      // //console.log("");
+      // //// console.log("");
     }
   };
 
@@ -2073,11 +2073,11 @@ const SideForm = () => {
         [e.target.name]: e.target.value,
       });
     }
-    // //console.log(changeData);
+    // //// console.log(changeData);
   };
 
   const handleChange = (event) => {
-    // //console.log(event.target.name);
+    // //// console.log(event.target.name);
     setCat(event.target.value);
   };
 
@@ -2105,13 +2105,13 @@ const SideForm = () => {
     FD.append("product_description", changeData.product_description);
     FD.append("category_status", e.target.category_status.checked);
 
-    // // //console.log(acceptedFiles[0].name, e.target.category_name.value)
+    // // //// console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     const res = addDraft(FD);
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2150,7 +2150,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -2176,7 +2176,7 @@ const SideForm = () => {
     FD.append("_id", changeData._id);
 
     Image[0] !== undefined && FD.append("category_image", Image[0]);
-    // console.log(Image[0])
+    // // console.log(Image[0])
 
     FD.append("seo_title", changeData.seo_title);
     FD.append("seo_description", changeData.seo_description);
@@ -2206,7 +2206,7 @@ const SideForm = () => {
           //       set.category_name = e.target.category_name.value;
           //       Image[0] !== undefined
           //         ? (set.category_image = `https://admin.woodshala.in/upload/${Image[0].path}`)
-          //         : console.log();
+          //         : // console.log();
           //       set.seo_title = changeData.seo_title;
           //       set.seo_description = changeData.seo_description;
           //       set.seo_keyword = changeData.seo_keyword;
@@ -2227,7 +2227,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -2264,7 +2264,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2305,7 +2305,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -2339,7 +2339,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -2359,7 +2359,7 @@ const SideForm = () => {
                 set.profile_image =
                   Image[0] !== undefined
                     ? `${imageLink}${Image[0].path}`
-                    : console.log();
+                    : // console.log();
                 set.username = changeData.username;
                 set.mobile = changeData.mobile;
                 set.email = changeData.email;
@@ -2383,7 +2383,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -2603,7 +2603,7 @@ const SideForm = () => {
     FD.append("featured_image", changeData.featured_image || "");
     FD.append("mannequin_image", changeData.mannequin_image || "");
 
-    console.log(changeData.primary_material);
+    // console.log(changeData.primary_material);
 
     FD.append(
       "primary_material_name",
@@ -2779,7 +2779,7 @@ const SideForm = () => {
         changeData.drawer_count ? changeData.drawer_count : 0
       );
 
-    //  // //console.log(secMaterial)
+    //  // //// console.log(secMaterial)
     if (changeData.secondary_material_weight !== undefined)
       FD.append(
         "secondary_material_weight",
@@ -2940,7 +2940,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           dispatch(
@@ -2962,7 +2962,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         dispatch(
           setAlert({
             open: true,
@@ -2995,7 +2995,7 @@ const SideForm = () => {
     FD.append("metal_weight", changeData.metal_weight);
     FD.append("package_weight", changeData.package_weight);
 
-    console.log(changeData.primary_material);
+    // console.log(changeData.primary_material);
 
     FD.append(
       "primary_material_name",
@@ -3169,7 +3169,7 @@ const SideForm = () => {
         changeData.drawer_count ? changeData.drawer_count : 0
       );
 
-    //  // //console.log(secMaterial)
+    //  // //// console.log(secMaterial)
     if (changeData.secondary_material_weight !== undefined)
       FD.append(
         "secondary_material_weight",
@@ -3467,7 +3467,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         dispatch(
           setAlert({
             open: true,
@@ -3508,7 +3508,7 @@ const SideForm = () => {
     FD.append("featured_image", changeData.featured_image);
     FD.append("mannequin_image", changeData.mannequin_image);
 
-    console.log(changeData.primary_material);
+    // console.log(changeData.primary_material);
 
     FD.append(
       "primary_material_name",
@@ -3679,7 +3679,7 @@ const SideForm = () => {
         changeData.drawer_count ? changeData.drawer_count : 0
       );
 
-    //  // //console.log(secMaterial)
+    //  // //// console.log(secMaterial)
     if (changeData.secondary_material_weight !== undefined)
       FD.append(
         "secondary_material_weight",
@@ -3843,7 +3843,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           dispatch(
@@ -3865,7 +3865,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
         dispatch(
           setAlert({
             open: true,
@@ -4038,7 +4038,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         dispatch(
           setAlert({
             open: true,
@@ -4157,7 +4157,7 @@ const SideForm = () => {
             })
           );
         } else {
-          console.log(data.data.updates.product_articles);
+          // console.log(data.data.updates.product_articles);
           form.setRow((old) => ({
             ...old,
             data: form.row.map((set) => {
@@ -4211,7 +4211,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         dispatch(
           setAlert({
             open: true,
@@ -4247,14 +4247,14 @@ const SideForm = () => {
     );
     FD.append("customizations", e.target.customizations.checked);
 
-    // // //console.log(acceptedFiles[0].name, e.target.category_name.value)
+    // // //// console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     // const res = addPrimaryMaterial(FD);
     const res = addDraft(FD);
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -4294,7 +4294,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -4336,7 +4336,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -4375,7 +4375,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -4404,7 +4404,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        //console.log(data.status);
+        //// console.log(data.status);
 
         if (data.status === 200) {
           form.setRow([
@@ -4440,7 +4440,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        //console.log(err);
+        //// console.log(err);
         dispatch(
           setAlert({
             open: true,
@@ -4469,7 +4469,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -4506,7 +4506,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -4524,7 +4524,7 @@ const SideForm = () => {
     try {
       const FD = new FormData();
 
-      console.log(changeData.category_discount);
+      // console.log(changeData.category_discount);
       // merge the discount with category name
 
       let discount_array = [];
@@ -4560,7 +4560,7 @@ const SideForm = () => {
             let response = changeData.category_discount.filter((name) => {
               return name === set.category_name;
             });
-            console.log(response);
+            // console.log(response);
             if (response.length > 0)
               set.discount_limit = changeData[set.category_name];
             return set;
@@ -4576,7 +4576,7 @@ const SideForm = () => {
         );
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       dispatch(
         setAlert({
           open: true,
@@ -4662,7 +4662,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         dispatch(
           setAlert({
             open: true,
@@ -4678,7 +4678,7 @@ const SideForm = () => {
     const FD = new FormData();
 
     // merge the Quantities with product SKU number
-    console.log(changeData);
+    // console.log(changeData);
 
     let Product_SKU = [];
     let Hardware_SKU = [];
@@ -4710,7 +4710,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -4756,7 +4756,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
         dispatch(
           setAlert({
             open: true,
@@ -4798,7 +4798,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -4841,7 +4841,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
         dispatch(
           setAlert({
             open: true,
@@ -4876,13 +4876,13 @@ const SideForm = () => {
     FD.append("seo_keyword", changeData.seo_keyword);
     FD.append("product_description", changeData.product_description);
 
-    // // //console.log(acceptedFiles[0].name, e.target.category_name.value)
+    // // //// console.log(acceptedFiles[0].name, e.target.category_name.value)
 
     const res = addDraft(FD);
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -4926,7 +4926,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -4948,7 +4948,7 @@ const SideForm = () => {
     FD.append("type", "Sub Category");
     FD.append("operation", "updateSubCategory");
 
-    // //console.log(form.payload);
+    // //// console.log(form.payload);
     Image[0] !== undefined && FD.append("sub_category_image", Image[0]);
 
     FD.append("_id", changeData._id);
@@ -4975,7 +4975,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -4994,7 +4994,7 @@ const SideForm = () => {
           //       set.category_name = catName;
           //       Image[0] !== undefined
           //         ? (set.sub_category_image = `https://admin.woodshala.in/upload/${Image[0].path}`)
-          //         : console.log();
+          //         : // console.log();
           //       set.seo_title = changeData.seo_title;
           //       set.seo_description = changeData.seo_description;
           //       set.seo_keyword = changeData.seo_keyword;
@@ -5014,7 +5014,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -5041,7 +5041,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -5065,7 +5065,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -5101,7 +5101,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -5140,7 +5140,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -5179,7 +5179,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           setImages([]);
@@ -5221,7 +5221,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
         setImages([]);
         dispatch(
           setAlert({
@@ -5237,7 +5237,7 @@ const SideForm = () => {
     try {
       e.preventDefault();
 
-      console.log(changeData.quantity);
+      // console.log(changeData.quantity);
 
       const FD = new FormData();
 
@@ -5248,7 +5248,7 @@ const SideForm = () => {
       FD.append("operation", "editOrder");
 
       // order
-      console.log(editorRef.current.getContent());
+      // console.log(editorRef.current.getContent());
       FD.append("note", editorRef.current.getContent());
       FD.append("status", changeData.order_status);
 
@@ -5304,7 +5304,7 @@ const SideForm = () => {
       FD.append("classification", changeData.classification);
       FD.append("customer_type", changeData.customer_type);
 
-      console.log(changeData, Product_SKU);
+      // console.log(changeData, Product_SKU);
 
       const res = await addDraft(FD);
 
@@ -5328,7 +5328,7 @@ const SideForm = () => {
         );
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       dispatch(
         setAlert({
           open: true,
@@ -5353,7 +5353,7 @@ const SideForm = () => {
         type: e.target.type.value,
       },
     ]);
-    console.log(address);
+    // console.log(address);
   };
   const handleBillingAddress = (e) => {
     e.preventDefault();
@@ -5369,7 +5369,7 @@ const SideForm = () => {
         type: e.target.type.value,
       },
     ]);
-    console.log(address);
+    // console.log(address);
   };
 
   async function handleHardware(e) {
@@ -5526,7 +5526,7 @@ const SideForm = () => {
         );
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       dispatch(
         setAlert({
           open: true,
@@ -5548,7 +5548,7 @@ const SideForm = () => {
       FD.append("type", "Hardware");
       FD.append("operation", "updateHardware");
 
-      // console.log(form.payload.row.action);
+      // // console.log(form.payload.row.action);
 
       FD.append("_id", form.payload.row.action);
 
@@ -5705,7 +5705,7 @@ const SideForm = () => {
         }
       }
     } catch (err) {
-      console.log("error>>", err);
+      // console.log("error>>", err);
       dispatch(
         setAlert({
           open: true,
@@ -5745,7 +5745,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           dispatch(
@@ -5822,7 +5822,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           dispatch(
@@ -5859,7 +5859,7 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        //console.log(err);
+        //// console.log(err);
         setImages([]);
         setIndoor([]);
         dispatch(
@@ -5896,7 +5896,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           dispatch(
@@ -5964,7 +5964,7 @@ const SideForm = () => {
 
     res
       .then((data) => {
-        // //console.log(data.status);
+        // //// console.log(data.status);
 
         if (data.status === 203) {
           dispatch(
@@ -6015,7 +6015,7 @@ const SideForm = () => {
 
       const FD = new FormData();
 
-      console.log(changeData);
+      // console.log(changeData);
       FD.append("DID", SKU);
       FD.append("AID", "");
       FD.append("type", "Review");
@@ -6032,7 +6032,7 @@ const SideForm = () => {
       });
       const res = await addDraft(FD);
       if (res) {
-        //console.log(data.status);
+        //// console.log(data.status);
 
         if (res.status === 203) {
           dispatch(
@@ -6078,7 +6078,7 @@ const SideForm = () => {
         }
       }
     } catch (err) {
-      //console.log(err);
+      //// console.log(err);
       setImages([]);
       setIndoor([]);
       dispatch(
@@ -6096,7 +6096,7 @@ const SideForm = () => {
 
       const FD = new FormData();
 
-      console.log(changeData);
+      // console.log(changeData);
       FD.append("DID", SKU);
       FD.append("AID", changeData._id);
       FD.append("type", "Review");
@@ -6108,7 +6108,7 @@ const SideForm = () => {
       FD.append("yourTube_url", changeData.yourTube_url);
       const res = await addDraft(FD);
       if (res) {
-        //console.log(data.status);
+        //// console.log(data.status);
 
         if (res.status === 203) {
           dispatch(
@@ -6122,7 +6122,7 @@ const SideForm = () => {
           form.setRow((old) => ({
             ...old,
             data: old.data.map((row, index) => {
-              console.log(row);
+              // console.log(row);
               if (row.action._id === changeData._id) {
                 row.rating = changeData.rating;
                 row.review = changeData.review;
@@ -6143,7 +6143,7 @@ const SideForm = () => {
         }
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       setImages([]);
       setIndoor([]);
       dispatch(
@@ -6254,7 +6254,7 @@ const SideForm = () => {
       FD.append("mobile_banner_status", changeData.mobile_banner_status);
       FD.append("sequence_no", changeData.sequence_no);
 
-      // // //console.log(acceptedFiles[0].name, e.target.category_name.value)
+      // // //// console.log(acceptedFiles[0].name, e.target.category_name.value)
 
       const res = await addDraft(FD);
 
@@ -6290,7 +6290,7 @@ const SideForm = () => {
         );
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       dispatch(
         setAlert({
           open: true,
@@ -6319,7 +6319,7 @@ const SideForm = () => {
       FD.append("mobile_banner_status", changeData.mobile_banner_status);
       FD.append("sequence_no", changeData.sequence_no);
 
-      // // //console.log(acceptedFiles[0].name, e.target.category_name.value)
+      // // //// console.log(acceptedFiles[0].name, e.target.category_name.value)
 
       const res = await addDraft(FD);
 
@@ -6358,7 +6358,7 @@ const SideForm = () => {
         );
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       dispatch(
         setAlert({
           open: true,
@@ -6418,7 +6418,7 @@ const SideForm = () => {
         );
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       dispatch(
         setAlert({
           open: true,
@@ -6455,7 +6455,7 @@ const SideForm = () => {
           })
         );
       } else {
-        console.log(changeData.access);
+        // console.log(changeData.access);
         form.setRow(
           form.row.map((set) => {
             if (set.action === form.payload.row.action) {
@@ -6481,7 +6481,7 @@ const SideForm = () => {
         );
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       dispatch(
         setAlert({
           open: true,
@@ -6497,7 +6497,7 @@ const SideForm = () => {
   }, [changeData.pincode]);
 
   async function handelPincode() {
-    // console.log(changeData.pincode);
+    // // console.log(changeData.pincode);
     if (changeData.pincode.toString().length === 6) {
       let res = await getAddress(changeData.pincode);
       if (res.status === 200) {
@@ -6514,7 +6514,7 @@ const SideForm = () => {
   }
 
   async function handlePincodeSearch(e) {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     let res = await listPincode({
       page: 1,
       limit: 10,
@@ -7192,7 +7192,7 @@ const SideForm = () => {
                                           onClick={() => {
                                             // this function is for removing the image from savedImage array
                                             let temp = files;
-                                            console.log(">>>>>>", temp, files);
+                                            // console.log(">>>>>>", temp, files);
                                             temp.splice(index, 1);
                                             setFiles([...temp]);
                                           }}
@@ -8240,7 +8240,7 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               helperText="Please select your knob."
                             >
-                              {console.log(catalog)}
+                              {/* {// console.log(catalog)} */}
                               {catalog.knob.map(
                                 (option) =>
                                   option.status && (
@@ -10165,7 +10165,7 @@ const SideForm = () => {
                                           onClick={() => {
                                             // this function is for removing the image from savedImage array
                                             let temp = files;
-                                            console.log(">>>>>>", temp, files);
+                                            // console.log(">>>>>>", temp, files);
                                             temp.splice(index, 1);
                                             setFiles([...temp]);
                                           }}
@@ -10274,7 +10274,7 @@ const SideForm = () => {
                                     </MenuItem>
                                   )
                               )}
-                              {/* {console.log(changeData.savedImages)} */}
+                              {/* {// console.log(changeData.savedImages)} */}
                               {changeData.savedImages.map((option) => (
                                 <MenuItem key={option} value={option}>
                                   <Box
@@ -11316,7 +11316,7 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               helperText="Please select your knob."
                             >
-                              {console.log(catalog)}
+                              {/* {// console.log(catalog)} */}
                               {catalog.knob.map(
                                 (option) =>
                                   option.status && (
@@ -13254,7 +13254,7 @@ const SideForm = () => {
                                           onClick={() => {
                                             // this function is for removing the image from savedImage array
                                             let temp = files;
-                                            console.log(">>>>>>", temp, files);
+                                            // console.log(">>>>>>", temp, files);
                                             temp.splice(index, 1);
                                             setFiles([...temp]);
                                           }}
@@ -13363,7 +13363,7 @@ const SideForm = () => {
                                     </MenuItem>
                                   )
                               )}
-                              {/* {console.log(changeData.savedImages)} */}
+                              {/* {// console.log(changeData.savedImages)} */}
                               {changeData.savedImages.map((option) => (
                                 <MenuItem key={option} value={option}>
                                   <Box
@@ -14405,7 +14405,7 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               helperText="Please select your knob."
                             >
-                              {console.log(catalog)}
+                              {/* {// console.log(catalog)} */}
                               {catalog.knob.map(
                                 (option) =>
                                   option.status && (
@@ -16087,7 +16087,7 @@ const SideForm = () => {
                                           onClick={() => {
                                             // this function is for removing the image from savedImage array
                                             let temp = files;
-                                            console.log(">>>>>>", temp, files);
+                                            // console.log(">>>>>>", temp, files);
                                             temp.splice(index, 1);
                                             setFiles([...temp]);
                                           }}
@@ -16794,7 +16794,7 @@ const SideForm = () => {
                                 return row.SKU;
                               })}
                               isOptionEqualToValue={(option, value) => {
-                                // console.log(value);
+                                // // console.log(value);
                                 return typeof value === "Array"
                                   ? value.isInclude(option)
                                   : value === option;
@@ -17104,7 +17104,7 @@ const SideForm = () => {
                                           onClick={() => {
                                             // this function is for removing the image from savedImage array
                                             let temp = files;
-                                            console.log(">>>>>>", temp, files);
+                                            // console.log(">>>>>>", temp, files);
                                             temp.splice(index, 1);
                                             setFiles([...temp]);
                                           }}
@@ -17194,7 +17194,7 @@ const SideForm = () => {
                                     </MenuItem>
                                   )
                               )}
-                              {/* {console.log(changeData.savedImages)} */}
+                              {/* {// console.log(changeData.savedImages)} */}
                               {changeData.savedImages.map((option) => (
                                 <MenuItem key={option} value={option}>
                                   <Box
@@ -19895,7 +19895,7 @@ const SideForm = () => {
                                 return row.SKU;
                               })}
                               isOptionEqualToValue={(option, value) => {
-                                // console.log(value);
+                                // // console.log(value);
                                 return typeof value === "Array"
                                   ? value.isInclude(option)
                                   : value === option;
@@ -20728,7 +20728,7 @@ const SideForm = () => {
                                           onClick={() => {
                                             // this function is for removing the image from savedImage array
                                             let temp = files;
-                                            console.log(">>>>>>", temp, files);
+                                            // console.log(">>>>>>", temp, files);
                                             temp.splice(index, 1);
                                             setFiles([...temp]);
                                           }}
@@ -20769,7 +20769,7 @@ const SideForm = () => {
                                           onClick={() => {
                                             // this function is for removing the image from savedImage array
                                             let temp = files;
-                                            console.log(">>>>>>", temp, files);
+                                            // console.log(">>>>>>", temp, files);
                                             temp.splice(index, 1);
                                             setFiles([...temp]);
                                           }}
@@ -21942,7 +21942,7 @@ const SideForm = () => {
                                           onClick={() => {
                                             // this function is for removing the image from savedImage array
                                             let temp = files;
-                                            console.log(">>>>>>", temp, files);
+                                            // console.log(">>>>>>", temp, files);
                                             temp.splice(index, 1);
                                             setFiles([...temp]);
                                           }}
@@ -22051,7 +22051,7 @@ const SideForm = () => {
                                     </MenuItem>
                                   )
                               )}
-                              {/* {console.log(changeData.savedImages)} */}
+                              {/* {// console.log(changeData.savedImages)} */}
                               {changeData.savedImages.map((option) => (
                                 <MenuItem key={option} value={option}>
                                   <Box
@@ -23773,7 +23773,7 @@ const SideForm = () => {
                                   onClick={() => {
                                     // this function is for removing the image from savedImage array
                                     let temp = files;
-                                    console.log(">>>>>>", temp, files);
+                                    // console.log(">>>>>>", temp, files);
                                     temp.splice(index, 1);
                                     setFiles([...temp]);
                                   }}
@@ -23811,7 +23811,7 @@ const SideForm = () => {
                                   onClick={() => {
                                     // this function is for removing the image from savedImage array
                                     let temp = Indoor;
-                                    console.log(">>>>>>", temp, Indoor);
+                                    // console.log(">>>>>>", temp, Indoor);
                                     temp.splice(index, 1);
                                     setIndoor([...temp]);
                                   }}
@@ -24008,7 +24008,7 @@ const SideForm = () => {
                                   onClick={() => {
                                     // this function is for removing the image from savedImage array
                                     let temp = files;
-                                    console.log(">>>>>>", temp, files);
+                                    // console.log(">>>>>>", temp, files);
                                     temp.splice(index, 1);
                                     setFiles([...temp]);
                                   }}
@@ -24070,7 +24070,7 @@ const SideForm = () => {
                       {" "}
                     </IndoorPreviews>
 
-                    {/* {console.log(Indoor)} */}
+                    {/* {// console.log(Indoor)} */}
                     {Indoor.length > 0 && (
                       <Grid sx={{ p: 2 }} spacing={2} container>
                         {Indoor.map((img, index) => {
@@ -24081,7 +24081,7 @@ const SideForm = () => {
                                   onClick={() => {
                                     // this function is for removing the image from savedImage array
                                     let temp = Indoor;
-                                    console.log(">>>>>>", temp, Indoor);
+                                    // console.log(">>>>>>", temp, Indoor);
                                     temp.splice(index, 1);
                                     setIndoor([...temp]);
                                   }}
@@ -24325,7 +24325,7 @@ const SideForm = () => {
                                   onClick={() => {
                                     // this function is for removing the image from savedImage array
                                     let temp = files;
-                                    console.log(">>>>>>", temp, files);
+                                    // console.log(">>>>>>", temp, files);
                                     temp.splice(index, 1);
                                     setFiles([...temp]);
                                   }}
@@ -25579,7 +25579,7 @@ export default SideForm;
 function WebBannerDimension(images, setWebBanner) {
   let result = images.map(async (image) => {
     let { width, height } = await size(URL.createObjectURL(image));
-    console.log(width, height);
+    // console.log(width, height);
     Object.assign(image, {
       preview: URL.createObjectURL(image),
       validate: width === 2880 && height === 1620 ? true : false,
@@ -25610,7 +25610,7 @@ function WebBannerPreviews({ text, webBanner, setWebBanner }) {
           return !file.validate ? (
             <div style={thumb} key={file.name}>
               <div style={thumbInner}>
-                {/* {console.log(file.validate)} */}
+                {/* {// console.log(file.validate)} */}
 
                 <img
                   src={URL.createObjectURL(file)}
@@ -25633,7 +25633,7 @@ function WebBannerPreviews({ text, webBanner, setWebBanner }) {
           return file.validate ? (
             <div style={thumb} key={file.name}>
               <div style={thumbInner}>
-                {/* {console.log(file.validate)} */}
+                {/* {// console.log(file.validate)} */}
 
                 <img
                   src={URL.createObjectURL(file)}
@@ -25676,7 +25676,7 @@ function WebBannerPreviews({ text, webBanner, setWebBanner }) {
 function MobileBannerDimension(images, setMobileBanner) {
   let result = images.map(async (image) => {
     let { width, height } = await size(URL.createObjectURL(image));
-    // console.log(width,height)
+    // // console.log(width,height)
     Object.assign(image, {
       preview: URL.createObjectURL(image),
       validate: width === 800 && height === 200 ? true : false,
@@ -25707,7 +25707,7 @@ function MobileBannerPreviews({ text, mobileBanner, setMobileBanner }) {
           return !file.validate ? (
             <div style={thumb} key={file.name}>
               <div style={thumbInner}>
-                {/* {console.log(file.validate)} */}
+                {/* {// console.log(file.validate)} */}
 
                 <img
                   src={URL.createObjectURL(file)}
@@ -25730,7 +25730,7 @@ function MobileBannerPreviews({ text, mobileBanner, setMobileBanner }) {
           return file.validate ? (
             <div style={thumb} key={file.name}>
               <div style={thumbInner}>
-                {/* {console.log(file.validate)} */}
+                {/* {// console.log(file.validate)} */}
 
                 <img
                   src={URL.createObjectURL(file)}
@@ -25792,7 +25792,7 @@ function AddressForm({ setOpen, open, confirmBox, handleAddress, setOuter }) {
   };
 
   async function handleSearch(e) {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     let res = await listPincode({
       page: 1,
       limit: 10,
@@ -25977,7 +25977,7 @@ function AddressForm({ setOpen, open, confirmBox, handleAddress, setOuter }) {
 function Dimension(images, setFiles) {
   let result = images.map(async (image) => {
     let { width, height } = await size(URL.createObjectURL(image));
-    // console.log(width,height)
+    // // console.log(width,height)
     Object.assign(image, {
       preview: URL.createObjectURL(image),
       validate: width === height ? true : false,
@@ -26011,7 +26011,7 @@ function ProductsPreviews({ files, setFiles, text }) {
           return !file.validate ? (
             <div style={thumb} key={file.name}>
               <div style={thumbInner}>
-                {/* {console.log(file.validate)} */}
+                {/* {// console.log(file.validate)} */}
 
                 <img
                   src={URL.createObjectURL(file)}
@@ -26034,7 +26034,7 @@ function ProductsPreviews({ files, setFiles, text }) {
           return file.validate ? (
             <div style={thumb} key={file.name}>
               <div style={thumbInner}>
-                {/* {console.log(file.validate)} */}
+                {/* {// console.log(file.validate)} */}
 
                 <img
                   src={URL.createObjectURL(file)}

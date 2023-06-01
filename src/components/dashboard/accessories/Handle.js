@@ -71,7 +71,7 @@ export default function Knob() {
         }))
       })
       .catch((err) => {
-        //console.log(err)
+        //// console.log(err)
       })
   }, []);
 
@@ -139,7 +139,7 @@ export default function Knob() {
 
     res.then((data)=>{
       setCheck(check.map((row,index)=>{
-        // //console.log(parseInt(id[1]) === index)
+        // //// console.log(parseInt(id[1]) === index)
         if (parseInt(id[1]) === index)
         return !row
         else 
@@ -152,7 +152,7 @@ export default function Knob() {
     }})
     })
     .catch((err)=>{
-      //console.log(err)
+      //// console.log(err)
       dispatch({type : Notify,payload : {
         open : true,
         variant : 'error',
@@ -167,7 +167,7 @@ export default function Knob() {
   } 
 
   const handelSearch = (e)=>{
-    //console.log(e.target.value)
+    //// console.log(e.target.value)
     setSearch(e.target.value)
   }
 

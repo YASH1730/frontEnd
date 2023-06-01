@@ -94,7 +94,7 @@ const Home = ({ history }) => {
 };
 
 function reducer(state, action) {
-  console.log(action);
+  // console.log(action);
   switch (action.type) {
     case "Set_Search":
       return (state = { ...state, ...action.payload });

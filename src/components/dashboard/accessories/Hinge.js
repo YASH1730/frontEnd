@@ -71,7 +71,7 @@ const [pageSize, setPageSize] = useState(50);
         }))
       })
       .catch((err) => {
-        //console.log(err)
+        //// console.log(err)
       })
   }, []);
 
@@ -139,7 +139,7 @@ const [pageSize, setPageSize] = useState(50);
 
     res.then((data)=>{
       setCheck(check.map((row,index)=>{
-        // //console.log(parseInt(id[1]) === index)
+        // //// console.log(parseInt(id[1]) === index)
         if (parseInt(id[1]) === index)
         return !row
         else 
@@ -153,7 +153,7 @@ const [pageSize, setPageSize] = useState(50);
       }})
     })
     .catch((err)=>{
-      //console.log(err)
+      //// console.log(err)
       dispatch({type : Notify,payload : {
         open : true,
         variant : 'error',
@@ -168,7 +168,7 @@ const [pageSize, setPageSize] = useState(50);
   } 
 
   const handelSearch = (e)=>{
-    //console.log(e.target.value)
+    //// console.log(e.target.value)
     setSearch(e.target.value)
   }
 

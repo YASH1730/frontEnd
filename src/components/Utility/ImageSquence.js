@@ -13,16 +13,16 @@ const ImageSquence = ({ image, setImage, savedImage, text }) => {
   });
 
   function handleOnDrag(e) {
-    console.log("On Drag", e.target.alt);
+    // console.log("On Drag", e.target.alt);
     setPlace((old) => ({ ...old, from: e.target.alt }));
   }
 
   function handleEndDrag(e) {
-    console.log("End Drag", e.target.alt);
+    // console.log("End Drag", e.target.alt);
     let newImgArr = image;
 
     // let from = parseInt(e.target.alt);
-    console.log(place);
+    // console.log(place);
 
     if (place.from && place.to) {
       // swap
@@ -31,7 +31,7 @@ const ImageSquence = ({ image, setImage, savedImage, text }) => {
       newImgArr[place.to] = temp;
       // swap
 
-      //   console.log(newImgArr);
+      //   // console.log(newImgArr);
       if (savedImage)
         setImage((old) => ({ ...old, savedImage: [...newImgArr] }));
       else setImage([...newImgArr]);
@@ -39,7 +39,7 @@ const ImageSquence = ({ image, setImage, savedImage, text }) => {
   }
 
   function handelPlaceIt(e) {
-    console.log("Place IT", e.target.alt);
+    // console.log("Place IT", e.target.alt);
     setPlace((old) => ({ ...old, to: e.target.alt }));
   }
 

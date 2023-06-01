@@ -49,7 +49,7 @@ const dispatch = useDispatch();
 
             let response = await uploadPincodeCSV(FD);
 
-            console.log(response)
+            // console.log(response)
             if(response.status === 200)
             {
                 handleClose()
@@ -70,7 +70,7 @@ const dispatch = useDispatch();
 
         }
         catch(err){
-            console.log('Error >> ',err)
+            // console.log('Error >> ',err)
             setData(old=>({...old,isLoading : false}))
 
             dispatch(setAlert({

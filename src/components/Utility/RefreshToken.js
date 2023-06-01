@@ -19,7 +19,7 @@ export default function RefreshToken() {
 
     async function handleSubmit(e) {
         e.preventDefault();
-        // console.log('hello')
+        // // console.log('hello')
         const FD = new FormData();
 
         FD.append('email', auth.email);

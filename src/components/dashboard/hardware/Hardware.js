@@ -48,7 +48,7 @@ export default function Hardware() {
 
         setRows(
           data.data.map((row, index) => {
-            // console.log(row.status)
+            // // console.log(row.status)
             return {
               id: index + 1,
               SKU: row.SKU,
@@ -98,7 +98,7 @@ export default function Hardware() {
         );
       })
       .catch((err) => {
-        //console.log(err)
+        //// console.log(err)
       });
   }, []);
 
@@ -229,7 +229,7 @@ export default function Hardware() {
       .then((data) => {
         setCheck(
           check.map((row, index) => {
-            // //console.log(parseInt(id[1]) === index)
+            // //// console.log(parseInt(id[1]) === index)
             if (parseInt(id[1]) === index) return !row;
             else return row;
           })
@@ -243,7 +243,7 @@ export default function Hardware() {
         );
       })
       .catch((err) => {
-        //console.log(err)
+        //// console.log(err)
         dispatch(
           setAlert({
             open: true,
@@ -255,7 +255,7 @@ export default function Hardware() {
   };
 
   const handelSearch = (e) => {
-    //console.log(e.target.value)
+    //// console.log(e.target.value)
     setSearch(e.target.value);
   };
 

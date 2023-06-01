@@ -69,7 +69,7 @@ export default function Customer() {
           } else final.push(row);
         });
 
-        //console.log(final)
+        //// console.log(final)
 
         setRows(
           final.map((row, index) => {
@@ -91,7 +91,7 @@ export default function Customer() {
         );
       })
       .catch((err) => {
-        //console.log(err);
+        //// console.log(err);
       });
   }, [search]);
 
@@ -210,14 +210,14 @@ export default function Customer() {
         }
       })
       .catch((err) => {
-        console.log("Operation cancelled because. ", err);
+        // console.log("Operation cancelled because. ", err);
       });
   };
 
   // const handleStatus = (e) => {
   //   setStatus({ ...status, [e.target.name]: e.target.value });
 
-  //   //console.log(e.target.name);
+  //   //// console.log(e.target.name);
 
   //   const FD = new FormData();
 
@@ -228,7 +228,7 @@ export default function Customer() {
 
   //   res
   //     .then((data) => {
-  //       //console.log(data);
+  //       //// console.log(data);
   //       dispatch({type : Notify,payload : {
   //         open: true,
   //         variant: "success",
@@ -236,7 +236,7 @@ export default function Customer() {
   //       });
   //     })
   //     .catch((err) => {
-  //       //console.log(err);
+  //       //// console.log(err);
   //       dispatch({type : Notify,payload : {
   //         open: true,
   //         variant: "error",

@@ -44,7 +44,7 @@ export default function Products(props) {
   useEffect(()=>{
     getListProduct()
     .then((data) => {
-      //console.log(data.data)
+      //// console.log(data.data)
 
       setRows(data.data.map((row,index) => {
 
@@ -122,7 +122,7 @@ export default function Products(props) {
       }))
     })
     .catch((err) => {
-      //console.log(err)
+      //// console.log(err)
     })
 
 
@@ -186,7 +186,7 @@ export default function Products(props) {
         <Tooltip title = 'Create Variation'>
         <IconButton onClick={() => {
           
-          //console.log(params)
+          //// console.log(params)
               
           dispatch(setForm({
                 state : true,
@@ -204,7 +204,7 @@ export default function Products(props) {
 
         <IconButton onClick={() => {
           
-          console.log(params)
+          // console.log(params)
           props.history(`/productDetails?SKU=${params.row.SKU}`)
               
           // dispatch({type : OpenBox, payload :{
@@ -270,7 +270,7 @@ export default function Products(props) {
   }
 
   const handleSearch = (e)=>{
-    // //console.log(e.target.value)
+    // //// console.log(e.target.value)
      setSearch(e.target.value)
   }
 

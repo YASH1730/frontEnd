@@ -88,7 +88,7 @@ export default function EntryPoints(props) {
     let res = login(FD);
 
     res.then((data) => {
-      //console.log(data)
+      //// console.log(data)
 
       if (data.status === 200) {
         dispatch(
@@ -128,7 +128,7 @@ export default function EntryPoints(props) {
   };
 
   function  handleVerification(e) {
-    // console.log(e)
+    // // console.log(e)
     // // let res = await  verifyRecaptcha(e)
   if(e)
   {

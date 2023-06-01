@@ -358,7 +358,7 @@ const PreviewOrder = ({ history }) => {
                   className="items"
                 >
                   <Typography variant="body1">Product History</Typography>
-                  {console.log(open.items)}
+                  {// console.log(open.items)}
                   {data.order.items &&
                     Object.keys(data.order.items).map((row) => (
                       <FulfillmentHistory
@@ -505,7 +505,7 @@ function SetFullfilForm({ data, setData, dispatch, setAlert, order }) {
   }
 
   function handleChange(e) {
-    // console.log(e.target.value);
+    // // console.log(e.target.value);
     if (e.target.name === "fulfilled") {
       setData((old) => ({
         ...old,
@@ -558,7 +558,7 @@ function SetFullfilForm({ data, setData, dispatch, setAlert, order }) {
       let res = await addDraft(FD);
       // let shipWayRes = await pushOrder(shipwayData);
 
-      // console.log(shipWayRes)
+      // // console.log(shipWayRes)
 
       if (res.status === 200) {
         handleClose();
@@ -572,7 +572,7 @@ function SetFullfilForm({ data, setData, dispatch, setAlert, order }) {
         );
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       dispatch(
         setAlert({
           open: true,
@@ -585,7 +585,7 @@ function SetFullfilForm({ data, setData, dispatch, setAlert, order }) {
 
   return (
     <>
-      {/* {console.log(data)} */}
+      {/* {// console.log(data)} */}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
@@ -672,7 +672,7 @@ function SetFullfilForm({ data, setData, dispatch, setAlert, order }) {
 }
 
 function FulfillmentHistory({ product, item }) {
-  console.log(item);
+  // console.log(item);
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -696,7 +696,7 @@ function FulfillmentHistory({ product, item }) {
         {item &&
           item.map((step, index) => (
             <Step key={step.date}>
-              {console.log(step)}
+              {// console.log(step)}
               <StepLabel
                 optional={
                   index === 2 ? (

@@ -62,7 +62,7 @@ export default function Category() {
         }))
       })
       .catch((err) => {
-        //console.log(err)
+        //// console.log(err)
       })
   }, []);
 
@@ -132,8 +132,8 @@ export default function Category() {
 
 
   const handleSwitch = (e) => {
-    // //console.log(e.target.name)
-    // //console.log(check)
+    // //// console.log(e.target.name)
+    // //// console.log(check)
 
     const id = e.target.name.split(' ')
     const FD = new FormData()
@@ -146,7 +146,7 @@ export default function Category() {
     res.then((data) => {
 
       setCheck(check.map((row, index) => {
-        // //console.log(parseInt(id[1]) === index)
+        // //// console.log(parseInt(id[1]) === index)
         if (parseInt(id[1]) === index)
           return !row
         else
@@ -161,7 +161,7 @@ export default function Category() {
       }))
     })
       .catch((err) => {
-        //console.log(err)
+        //// console.log(err)
         dispatch(setAlert({
           open: true,
           variant: 'error',
@@ -176,7 +176,7 @@ export default function Category() {
   }
 
   const handelSearch = (e) => {
-    //console.log(e.target.value)
+    //// console.log(e.target.value)
     setSearch(e.target.value)
   }
 

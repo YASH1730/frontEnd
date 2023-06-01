@@ -68,7 +68,7 @@ export default function ProductDetails(props) {
         }
       })
       .catch((err) => {
-        console.log(err)
+        // console.log(err)
       })
 
   }, [SKU]);

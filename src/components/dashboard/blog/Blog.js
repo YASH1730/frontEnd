@@ -56,7 +56,7 @@ export default function Bolg() {
   useEffect(() => {
     getBlogHome()
       .then((data) => {
-        //console.log(data);
+        //// console.log(data);
 
         setRows(
           data.data.map((row, index) => {
@@ -72,7 +72,7 @@ export default function Bolg() {
         );
       })
       .catch((err) => {
-        //console.log(err);
+        //// console.log(err);
       });
   }, []);
 
@@ -131,7 +131,7 @@ export default function Bolg() {
           </IconButton>
           <IconButton
             onClick={async () => {
-              console.log(params);
+              // console.log(params);
               let res = await addDraft({
                 DID: '',
                 AID: params.formattedValue.uuid,
@@ -177,7 +177,7 @@ export default function Bolg() {
   ];
 
   const handelSearch = (e) => {
-    //console.log(e.target.value);
+    //// console.log(e.target.value);
     setSearch(e.target.value);
   };
 

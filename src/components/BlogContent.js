@@ -37,7 +37,7 @@ export default function BlogContent() {
   useEffect(()=>{
     getBlog(localStorage.getItem('uuid'))
     .then((data)=>{
-      //console.log(data)
+      //// console.log(data)
       setData(data.data)
     })
   },[])
@@ -53,11 +53,11 @@ export default function BlogContent() {
       visit(tree, 'element', function (node) {
         if (node.tagName[0] === 'h' && parseInt(node.tagName[1]) <= 6 )
         {
-          // console.log(node)
+          // // console.log(node)
           const id = parameterize(node.children[0].value);
           node.properties.id = id;
           toc.push({id : `#${id}`,value : node.children[0].value})
-          //console.log(toc)
+          //// console.log(toc)
         }
       });
       return;

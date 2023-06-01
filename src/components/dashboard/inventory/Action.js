@@ -95,7 +95,7 @@ export default function Action() {
 
   useMemo(() => {
     getMetaDraft().then((data) => {
-      console.log(data);
+      // console.log(data);
       setMeta({ ...data.data });
     });
     fetchData();
@@ -183,7 +183,7 @@ export default function Action() {
           <IconButton
             disabled={params.formattedValue.draftStatus === "Approved" && true}
             onClick={() => {
-              console.log(params);
+              // console.log(params);
               setDisplay({
                 data: params.formattedValue.payload,
                 DID: params.formattedValue.DID,
@@ -256,7 +256,7 @@ export default function Action() {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
       });
   };
 
@@ -275,14 +275,14 @@ export default function Action() {
         }
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
   async function getO() {
     await getLastOrder()
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.data.length > 0) {
           let index = parseInt(res.data[0].O.split("-")[1]) + 1;
           setSKU(`O-0${index}`);
@@ -293,7 +293,7 @@ export default function Action() {
         }
       })
       .catch((err) => {
-        // //console.log(err);
+        // //// console.log(err);
       });
   }
 
@@ -305,7 +305,7 @@ export default function Action() {
     async function sendResponse(data) {
       let response = await dropDraft(data);
       if (response.status === 200) {
-        console.log(display.data.DID);
+        // console.log(display.data.DID);
         setPageState((old) => ({
           ...old,
           data: [
@@ -354,14 +354,14 @@ export default function Action() {
     const handleSubmit = async (e) => {
       e.preventDefault();
       if (e.target.action.value === "Approved") {
-        // console.log(typeof (display.operation))
+        // // console.log(typeof (display.operation))
         switch (display.operation) {
           case "insertProduct":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
             display.data.SKU = SKU;
             display.data.AID = SKU;
-            // console.log(display.data);
+            // // console.log(display.data);
             sendResponse(display.data);
             break;
           case "updateProduct":
@@ -401,7 +401,7 @@ export default function Action() {
             display.data.status = true;
             display.data.SKU = SKU;
             display.data.AID = SKU;
-            console.log(display.data);
+            // console.log(display.data);
             sendResponse(display.data);
             break;
           case "updateCategory":
@@ -414,7 +414,7 @@ export default function Action() {
             display.data.status = true;
             display.data.SKU = SKU;
             display.data.AID = SKU;
-            console.log(display.data);
+            // console.log(display.data);
             sendResponse(display.data);
             break;
           case "updateSubCategory":
@@ -586,7 +586,7 @@ export default function Action() {
               sendResponse(display.data);
             break;  
             default:
-            console.log("no operation found");
+            // console.log("no operation found");
             break;
         }
       } else setDisplay({ status: false });
@@ -627,7 +627,7 @@ export default function Action() {
             if (res) {
               res.data = JSON.stringify(res.data);
               res.data = JSON.parse(res.data);
-              // console.log(res.data)
+              // // console.log(res.data)
               if (res.data) setPeer(res.data);
             }
             break;
@@ -636,7 +636,7 @@ export default function Action() {
             if (res) {
               res.data = JSON.stringify(res.data);
               res.data = JSON.parse(res.data);
-              console.log(res.data);
+              // console.log(res.data);
               if (res.data) setPeer(res.data);
             }
             break;
@@ -645,19 +645,19 @@ export default function Action() {
             if (res) {
               res.data = JSON.stringify(res.data);
               res.data = JSON.parse(res.data);
-              console.log(res.data);
+              // console.log(res.data);
               if (res.data) setPeer(res.data);
             }
             break;
           case "updateMaterial":
             res = await getMaterialDetails(display.data.AID);
             if (res) {
-              console.log(res.data);
+              // console.log(res.data);
               if (res.data) setPeer(res.data);
             }
             break;
           case "updatePolish":
-            console.log(display.data.AID);
+            // console.log(display.data.AID);
             res = await getPolishDetails(display.data.AID);
             if (res) { 
               if (res.data) setPeer(res.data);
@@ -665,7 +665,7 @@ export default function Action() {
 
             break;
           case "updateBlog":
-            console.log(display.data.AID);
+            // console.log(display.data.AID);
             res = await getBlog(display.data.AID);
             if (res) {  
               if (res.data) setPeer(res.data);
@@ -675,7 +675,7 @@ export default function Action() {
             getO();
             break;
           case "updateBanner":
-            console.log(display.data.AID);
+            // console.log(display.data.AID);
             res = await getBannerDetails(display.data.AID);
             if (res) {
 
@@ -683,7 +683,7 @@ export default function Action() {
             }
             break;
           case "updateCoupon":
-            console.log(display.data.AID);
+            // console.log(display.data.AID);
             res = await getCouponDetails(display.data.AID);
             if (res) {
  
@@ -691,7 +691,7 @@ export default function Action() {
             }
             break;
           case "updateReview":
-            console.log(display.data.AID);
+            // console.log(display.data.AID);
             res = await getReviewDetails(display.data.AID);
             if (res) {
               if (res.data) setPeer(res.data);
@@ -748,7 +748,7 @@ export default function Action() {
                           </Typography>
                         ) : (
                           <Typography variant="button">
-                            {console.log(typeof display.data[key])}
+                            {/* {// console.log(typeof display.data[key])} */}
 
                             {peer[key]}
                           </Typography>
@@ -820,7 +820,7 @@ export default function Action() {
                               sx={{ color: "green !important" }}
                               variant="button"
                             >
-                              {console.log(typeof display.data[key])}
+                              {/* {// console.log(typeof display.data[key])} */}
 
                               {typeof display.data[key] == "object"
                                 ? JSON.stringify(display.data[key])
@@ -828,7 +828,7 @@ export default function Action() {
                             </Typography>
                           ) : (
                             <Typography variant="button">
-                              {console.log(typeof display.data[key])}
+                              {/* {// console.log(typeof display.data[key])} */}
                               {typeof display.data[key] == "object"
                                 ? JSON.stringify(display.data[key])
                                 : display.data[key]}
@@ -985,7 +985,7 @@ export default function Action() {
   // Data Grid Ends
 
   // const handleSearch = (e) => {
-  //   // //console.log(e.target.value)
+  //   // //// console.log(e.target.value)
   //   setSearch(e.target.value);
   // };
 

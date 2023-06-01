@@ -49,6 +49,7 @@ const Reward = lazy(() => import("./components/dashboard/rewards/Reward"));
 const Profile = lazy(() => import("./components/dashboard/admin/Setting"));
 const Banner = lazy(() => import("./components/dashboard/banner/Banner"));
 const Action = lazy(() => import("./components/dashboard/inventory/Action"));
+const Inventory2 = lazy(() => import("./components/dashboard/OnAir/Inventory2"));
 const Accessories = lazy(() => import("./components/Accessories"));
 const Hardware = lazy(() => import("./components/dashboard/hardware/Hardware"));
 const BlogModule = lazy(() => import("./components/dashboard/blog/Blog"));
@@ -168,6 +169,13 @@ function MyRoutes() {
             exact
             path="/inventory"
             element={<Inventory history={history} />}
+          />
+        )}
+        {permission.includes("Inventory") && (
+          <Route
+            exact
+            path="/inventory2"
+            element={<Inventory2 history={history} />}
           />
         )}
         {permission.includes("Product") && (

@@ -67,7 +67,7 @@ export default function Pincode() {
         if (res) {
 
           setCheck(check.map((row, index) => {
-            // //console.log(parseInt(id[1]) === index)
+            // //// console.log(parseInt(id[1]) === index)
             if (parseInt(id[1]) === index)
               return !row
             else
@@ -92,7 +92,7 @@ export default function Pincode() {
         }
       })
       .catch((err) => {
-        console.log("Operation cancelled because. ", err);
+        // console.log("Operation cancelled because. ", err);
       });
   };
 
@@ -140,7 +140,7 @@ export default function Pincode() {
         <div className="categoryImage">
           <IconButton
             onClick={async (e) => {
-              console.log(params)
+              // console.log(params)
               // let response = await deleteDelivery(params.formattedValue);
               // if (response) {
 
@@ -178,8 +178,8 @@ export default function Pincode() {
   ];
 
   const handleSwitch = async (e) => {
-    console.log(e.target.name);
-    // //console.log(check)
+    // console.log(e.target.name);
+    // //// console.log(check)
     try {
       const id = e.target.name.split(" ");
       const FD = new FormData();
@@ -192,7 +192,7 @@ export default function Pincode() {
       if (res) {
         setCheck(
           check.map((row, index) => {
-            // //console.log(parseInt(id[1]) === index)
+            // //// console.log(parseInt(id[1]) === index)
             if (parseInt(id[1]) === index) return !row;
             else return row;
           })
@@ -207,7 +207,7 @@ export default function Pincode() {
         );
       }
     } catch (err) {
-      //console.log(err)
+      //// console.log(err)
       dispatch(
         setAlert({
           open: true,
@@ -285,7 +285,7 @@ export default function Pincode() {
         }));
       }
     } catch (err) {
-      console.log("error>>", err);
+      // console.log("error>>", err);
     }
   }
 
@@ -346,7 +346,7 @@ export default function Pincode() {
       }
     }
     catch (err) {
-      console.log(err)
+      // console.log(err)
       dispatch(setAlert({
         open: true,
         message: 'Something Went Wrong !!!',

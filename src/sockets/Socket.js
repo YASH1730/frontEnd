@@ -5,7 +5,7 @@ import { setActiveUser, setMessage, setSocket } from "../store/action/action";
 const socket = io.connect(config.Socket_Official_API);
 
 function Send_Message(message) {
-  // console.log(message)
+  // // console.log(message)
   return socket.emit("send_message", message);
 }
 
@@ -41,20 +41,20 @@ function Log_Out(data) {
 
 function Notifications(dispatch) {
   return socket.on("receive_notification", (data) => {
-    // console.log(data);
+    // // console.log(data);
     switch (data.type) {
       case "Adding_New_User":
         dispatch(setActiveUser(data.payload));
         break;
         case "User_Logout":
-          console.log(data.payload)
+          // console.log(data.payload)
           dispatch(setActiveUser(data.payload));
           break;
       case "New_Message":
         dispatch(setMessage(data.payload));
         break;
       case "REFRESH":
-        console.log(data.payload);
+        // console.log(data.payload);
         dispatch(setActiveUser(data.payload));
         break;
       default:

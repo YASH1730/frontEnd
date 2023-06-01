@@ -117,7 +117,7 @@ const {dispatch} = Store();
 
       })
       .catch((err) => {
-        //console.log(err);
+        //// console.log(err);
       });
   }, [changeData]);
 
@@ -174,7 +174,7 @@ const {dispatch} = Store();
         <div>
           <IconButton
             onClick={() => {
-              //console.log(params);
+              //// console.log(params);
              dispatch({type : OpenBox,payload : {
                 state: true,
                 formType: "update_product",
@@ -218,7 +218,7 @@ const {dispatch} = Store();
     const res = updateProduct(FD);
 
     res.then((data) => {
-      //console.log(data)
+      //// console.log(data)
       dispatch({type : Notify,payload : {
         open: true,
         variant: 'success',
@@ -227,7 +227,7 @@ const {dispatch} = Store();
       } })
     })
       .catch((err) => {
-        //console.log(err)
+        //// console.log(err)
         dispatch({type : Notify,payload : {
           open: true,
           variant: 'error',
@@ -274,7 +274,7 @@ const {dispatch} = Store();
   }
 
   const handleSearch = (e) => {
-    //console.log(e.target.name)
+    //// console.log(e.target.name)
     setChangeData({
       ...changeData, [e.target.name]: e.target.value
     })
@@ -291,14 +291,14 @@ const {dispatch} = Store();
     if (e.target.returnable.value !== '') FD.append('returnable', e.target.returnable.value)
     FD.append('SKUs',JSON.stringify(selectedSKU))
 
-    // //console.log(e.target.COD.value,
+    // //// console.log(e.target.COD.value,
     //   e.target.returnable.value,
     //   selectedSKU)
 
     const res = updateBulk(FD);
 
     res.then((data) => {
-      //console.log(data)
+      //// console.log(data)
       dispatch({type : Notify,payload : {
         open: true,
         variant: 'success',
@@ -307,7 +307,7 @@ const {dispatch} = Store();
       } })
     })
       .catch((err) => {
-        //console.log(err)
+        //// console.log(err)
         dispatch({type : Notify,payload : {
           open: true,
           variant: 'error',

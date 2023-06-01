@@ -7,7 +7,6 @@ const CustomerDetails = ({ localState }) => {
     <Fragment>
       <Box className="customer-details-wrapper">
         <Header />
-        {console.log(localState.cusData)}
         {localState.cusData ? (
           <GeneralDetails data={localState.cusData} />
         ) : (

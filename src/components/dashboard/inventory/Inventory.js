@@ -173,7 +173,7 @@ export default function Inventory() {
         ]);
         res = await listEntires(pageState);
         if (res.status === 200) {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           setPageState((lastState) => ({
             ...lastState,
             data: res.data.data.map((row, index) => {
@@ -237,7 +237,7 @@ export default function Inventory() {
   }
 
   const handelSearch = (e) => {
-    //console.log(e)
+    //// console.log(e)
     setSearch(e.target.value);
   };
 

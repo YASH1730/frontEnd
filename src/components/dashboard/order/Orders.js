@@ -383,7 +383,7 @@ export default function Order({history}) {
   const handleStatus = (e) => {
     setStatus({ ...status, [e.target.name]: e.target.value });
 
-    //console.log(e.target.name);
+    //// console.log(e.target.name);
 
     const FD = new FormData();
 
@@ -394,7 +394,7 @@ export default function Order({history}) {
 
     res
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         dispatch(
           setAlert({
             open: true,
@@ -404,7 +404,7 @@ export default function Order({history}) {
         );
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         dispatch(
           setAlert({
             open: true,

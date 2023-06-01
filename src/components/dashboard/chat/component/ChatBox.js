@@ -26,7 +26,7 @@ const ChatBox = ({ styleClass, localState }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    console.log(localState.chat)
+    // console.log(localState.chat)
     if(localState.chat)
     fetchChats()
   },[localState.chat]);
@@ -35,7 +35,7 @@ const ChatBox = ({ styleClass, localState }) => {
     try {
       const res = await getMessage({sender : auth.email,receiver : localState.chat.email});
       if(res.status === 200){
-      console.log(res.data.message)
+      // console.log(res.data.message)
       setChat(res.data.message)}
     } catch (error) {
       dispatch(setAlert({
@@ -146,7 +146,7 @@ function MessageBox({ chatTo, setChat }) {
   }
 
   useEffect(() => {
-    // console.log(message)
+    // // console.log(message)
     if (message.email === chatTo.email) {
       setChat((old) => [...old, message]);
     }
@@ -154,11 +154,11 @@ function MessageBox({ chatTo, setChat }) {
 
   //  for typing events
   function handleKeyPress(e) {
-    // console.log(true)
+    // // console.log(true)
     Socket.Send_Typing_Alert(true);
   }
   function handleKeyUp(e) {
-    // console.log(false)
+    // // console.log(false)
     Socket.Send_Typing_Alert(false);
   }
 
@@ -182,7 +182,7 @@ function MessageBox({ chatTo, setChat }) {
   }
 
   function onEmojiClick(e) {
-    console.log(e);
+    // console.log(e);
     setReply(reply + e.emoji);
   }
 

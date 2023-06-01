@@ -34,7 +34,7 @@ export default function Knob() {
     const res = getGallery(`WS-${localStorage.getItem("SKU")}`);
 
     res.then((res) => {
-      // //console.log(res)
+      // //// console.log(res)
       if (res.status !== 203) {
         setImages(res.data);
         setSKU(`${localStorage.getItem("SKU")}`);
@@ -47,7 +47,7 @@ export default function Knob() {
     const res = getGallery(`WS-${SKU}`);
     localStorage.setItem("SKU", e.target.value);
     res.then((res) => {
-      //console.log(res);
+      //// console.log(res);
       if (res.status !== 203) {
         setImages(res.data);
       }
@@ -78,7 +78,7 @@ export default function Knob() {
   };
 
   const handleHover = (e) => {
-    //console.log(typeof e.target.alt);
+    //// console.log(typeof e.target.alt);
     setButtonState({
       open: true,
       index: e.target.alt,
