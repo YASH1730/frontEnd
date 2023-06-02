@@ -501,6 +501,35 @@ const Home = ({history}) => {
                       </ListItemAvatar>
                       <ListItemText primary="Orders" />
                     </ListItem>
+                  <ListItem
+                      sx={{ pl: 4 }}
+
+                    onClick={() => {
+                      handleClose("/order_status");
+                    }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar
+                        sx={{
+                          width: "30px",
+                          height: "30px",
+                          svg: {
+                            fontSize: "1.1rem",
+                          },
+                        }}
+                      >
+                        <InventoryIcon
+                          color={
+                            window.location.pathname === "/order_status"
+                              ? "primary"
+                              : ""
+                          }
+                        />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary="Order Status" />
+                  </ListItem>
+
                   </List>
                 </Collapse>
 
@@ -677,34 +706,7 @@ const Home = ({history}) => {
                     <ListItemText primary="Inventory" />
                   </ListItem>
                 )}
-                {permission.includes("Inventory") && (
-                  <ListItem
-                    onClick={() => {
-                      handleClose("/inventory2");
-                    }}
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          width: "30px",
-                          height: "30px",
-                          svg: {
-                            fontSize: "1.1rem",
-                          },
-                        }}
-                      >
-                        <InventoryIcon
-                          color={
-                            window.location.pathname === "/inventory2"
-                              ? "primary"
-                              : ""
-                          }
-                        />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="Inventory2" />
-                  </ListItem>
-                )}
+              
 
                 {/* <ListItem
                   onClick={(e) => {

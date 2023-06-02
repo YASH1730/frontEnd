@@ -1437,52 +1437,89 @@ export const getAddress = async (data) => {
 
 // ============================= Shipway =====================
 
-export const pushOrder = async (data)=>{
-  return await axios.post(`https://shipway.in/api/PushOrderData`,data,{headers: {
-    "Content-Type": "application/json",
-    Accept: "*/*",
-    "Access-Control-Allow-Origin": "*",
-  }})
-}
+export const pushOrder = async (data) => {
+  return await axios.post(`https://shipway.in/api/PushOrderData`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "*/*",
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
+};
 
 // ==================== Chat ==================
 
-export const getCustomer = async ()=>{
+export const getCustomer = async () => {
   return await axios.get(`${API}/getCustomer`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
-}
+};
 
-export const getTeam = async ()=>{
+export const getTeam = async () => {
   return await axios.get(`${API}/getTeam`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
-}
+};
 
-export const getCustomerByEmail = async (data)=>{
+export const getCustomerByEmail = async (data) => {
   return await axios.get(`${API}/getCustomerByEmail?email=${data}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
-}
+};
 
-export const getMessage = async (data)=>{
-  return await axios.get(`${API}/getMessage?sender=${data.sender}&receiver=${data.receiver}`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-}
+export const getMessage = async (data) => {
+  return await axios.get(
+    `${API}/getMessage?sender=${data.sender}&receiver=${data.receiver}`,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+  );
+};
 
-export const getOrderByID = async (data)=>{
+export const getOrderByID = async (data) => {
   return await axios.get(`${API}/getOrderByID?O=${data}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
-}
+};
+
+export const setOrderStatus = async (data) => {
+  return await axios.post(`${API}/setOrderStatus`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+
+export const setOrderStatusToNext = async (data) => {
+  return await axios.post(`${API}/setOrderStatusToNext`, data, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+
+export const getStageList = async (data) => {
+  return await axios.get(`${API}/getStageList`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+
+export const getOrderStatus = async (data) => {
+  return await axios.get(`${API}/getOrderStatus?O=${data.O}&status=${data.status}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};

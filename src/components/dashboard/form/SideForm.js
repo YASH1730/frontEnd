@@ -84,6 +84,8 @@ import {
   listPincode,
   addUser,
   updateUser,
+  setOrderStatus,
+  setOrderStatusToNext,
   // changeKnobStatus,
 } from "../../../services/service.js";
 import { useConfirm } from "material-ui-confirm";
@@ -762,6 +764,9 @@ const SideForm = () => {
   const [changeData, setData] = useState({
     CVW: 0,
     ACIN: "",
+    supplier_type: "",
+    supplier_name: "",
+    location: "",
     role: "Staff",
     primary_material: [],
     product_articles: [],
@@ -1891,7 +1896,18 @@ const SideForm = () => {
           coupon_description: form.payload.formattedValue.coupon_description,
         }));
         break;
-      default:
+      case "order_status":
+        console.log(form)
+        setData((old) => ({
+          ...old,
+          _id: form.payload.row.value._id,
+          O: form.payload.row.row.O,
+          SKU: form.payload.row.row.SKU,
+          status: form.payload.next_stage,
+          quantity: form.payload.row.row.quantity,
+        }));
+        break;
+        default:
         break;
     }
   }, [form.formType, form.state]);
@@ -1924,98 +1940,7 @@ const SideForm = () => {
     });
   };
 
-  // for update
-  const handleChangeData = (e) => {
-    switch (form.formType) {
-      case "update_category":
-        setData({
-          ...changeData,
-          category: e.target.value,
-        });
-        break;
-      case "update_PrimaryMaterial":
-        setData({
-          ...changeData,
-          [e.target.name]: e.target.value,
-        });
-        break;
-      case "update_polish":
-        setData({
-          ...changeData,
-          polish: e.target.value,
-        });
-        break;
-      case "update_knob":
-        setData({
-          ...changeData,
-          knob: e.target.value,
-        });
-        break;
-      case "update_fitting":
-        setData({
-          ...changeData,
-          fitting: e.target.value,
-        });
-        break;
-      case "update_hinge":
-        setData({
-          ...changeData,
-          hinge: e.target.value,
-        });
-        break;
-      case "update_supplier":
-        setData({
-          ...changeData,
-          [e.target.name]: e.target.value,
-        });
-        break;
-      case "update_handle":
-        setData({
-          ...changeData,
-          handle: e.target.value,
-        });
-        break;
-      case "update_secondaryMaterial":
-        setData({
-          ...changeData,
-          secMater: e.target.value,
-        });
-        break;
-      case "update_product":
-        setData({
-          ...changeData,
-          [e.target.name]: e.target.value,
-        });
-        break;
-      case "update_blog":
-        setData({
-          ...changeData,
-          [e.target.name]: e.target.value,
-        });
-        break;
-      case "update_fabric":
-        setData({
-          ...changeData,
-          [e.target.name]: e.target.value,
-        });
-        break;
-      case "update_textile":
-        setData({
-          ...changeData,
-          [e.target.name]: e.target.value,
-        });
-        break;
-      case "inward":
-        setData({
-          ...changeData,
-          [e.target.name]: e.target.value,
-        });
-        break;
 
-      default:
-      // //// console.log("");
-    }
-  };
 
   const feature = [
     "web_banner_status",
@@ -2576,6 +2501,9 @@ const SideForm = () => {
       trolley: false,
       upholstery: false,
       silver: false,
+      supplier_type: "",
+    supplier_name: "",
+    location: "",
     });
     document.getElementById("myForm").reset();
   };
@@ -4566,6 +4494,56 @@ const SideForm = () => {
             return set;
           })
         );
+        handleClose();
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: res.data.message,
+          })
+        );
+      }
+    } catch (err) {
+      // console.log(err);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        })
+      );
+    }
+  };
+  const handleOrderStatus = async (e) => {
+    e.preventDefault();
+
+    try {
+      const FD = new FormData();
+
+      FD.append("O",changeData.O );
+      FD.append("SKU",changeData.SKU );
+      FD.append("quantity",changeData.quantity );
+      FD.append("depart_date",changeData.depart_date );
+      FD.append("supplier_type",changeData.supplier_type );
+      FD.append("supplier",changeData.supplier );
+      FD.append("staff",changeData.staff );
+      FD.append("status",changeData.status );
+      FD.append("location",changeData.location );
+      form.payload.next_stage !== "Manufacturing" && FD.append("_id",changeData._id ); 
+      
+
+      const res =  form.payload.next_stage === "Manufacturing" ? await setOrderStatus(FD) : await setOrderStatusToNext(FD)
+
+      if (res.status === 203) {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: res.data.message,
+          })
+        );
+      } else {
+
         handleClose();
         dispatch(
           setAlert({
@@ -17979,7 +17957,7 @@ const SideForm = () => {
                       size="small"
                       fullWidth
                       id="outlined-select"
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       value={changeData.category}
                       name="category_name"
                       label="Category"
@@ -18287,7 +18265,7 @@ const SideForm = () => {
                     <TextField
                       size="small"
                       fullWidth
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="primaryMaterial_name"
                       label="Material"
@@ -18300,7 +18278,7 @@ const SideForm = () => {
                       minRows={5}
                       id="outlined-select"
                       name="primaryMaterial_description"
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       defaultValue={changeData.primaryMaterial_description}
                       type="text"
                       helperText="Please enter your primary material description"
@@ -18367,7 +18345,7 @@ const SideForm = () => {
                       name="SID"
                       disabled
                       value={SKU || ""}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       label="Supplier ID"
                       type="text"
                     />
@@ -18376,7 +18354,7 @@ const SideForm = () => {
                       fullWidth
                       // required
                       value={changeData.supplier_name}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="supplier_name"
                       label="Supplier Name"
@@ -18386,7 +18364,7 @@ const SideForm = () => {
                       size="small"
                       fullWidth
                       value={changeData.mobile}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="mobile"
                       label="Mobile"
@@ -18397,7 +18375,7 @@ const SideForm = () => {
                       fullWidth
                       // required
                       value={changeData.alt_mobile}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="alt_mobile"
                       label="Alternate Number"
@@ -18409,7 +18387,7 @@ const SideForm = () => {
                       // required
                       id="outlined-select"
                       value={changeData.specialization}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       name="specialization"
                       label="Specialization"
                       type="text"
@@ -18419,7 +18397,7 @@ const SideForm = () => {
                       fullWidth
                       // required
                       value={changeData.gst_no}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="gst_no"
                       label="GST Number"
@@ -18433,7 +18411,7 @@ const SideForm = () => {
                       minRows={5}
                       maxRows={5}
                       value={changeData.address}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="address"
                       label="Address"
@@ -18488,7 +18466,7 @@ const SideForm = () => {
                       id="outlined-select"
                       name="SID"
                       value={changeData.SID || ""}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       label="Supplier ID"
                       type="text"
                     />
@@ -18497,7 +18475,7 @@ const SideForm = () => {
                       fullWidth
                       // required
                       value={changeData.supplier_name || ""}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="supplier_name"
                       label="Supplier Name"
@@ -18507,7 +18485,7 @@ const SideForm = () => {
                       size="small"
                       fullWidth
                       value={changeData.mobile || ""}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="mobile"
                       label="Mobile"
@@ -18518,7 +18496,7 @@ const SideForm = () => {
                       fullWidth
                       // required
                       value={changeData.alt_mobile || ""}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="alt_mobile"
                       label="Alternate Number"
@@ -18530,7 +18508,7 @@ const SideForm = () => {
                       // required
                       id="outlined-select"
                       value={changeData.specialization || ""}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       name="specialization"
                       label="Specialization"
                       type="text"
@@ -18540,7 +18518,7 @@ const SideForm = () => {
                       fullWidth
                       // required
                       value={changeData.gst_no || ""}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="gst_no"
                       label="GST Number"
@@ -18554,7 +18532,7 @@ const SideForm = () => {
                       minRows={5}
                       maxRows={5}
                       value={changeData.address || ""}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       id="outlined-select"
                       name="address"
                       label="Address"
@@ -18678,7 +18656,7 @@ const SideForm = () => {
                       name="seo_title"
                       label="SEO Title"
                       value={changeData.seo_title}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                     />
                     <TextField
                       size="small"
@@ -18688,7 +18666,7 @@ const SideForm = () => {
                       name="seo_description"
                       label="SEO Description"
                       value={changeData.seo_description}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                     />
 
                     <TextField
@@ -18697,7 +18675,7 @@ const SideForm = () => {
                       // required
                       id="outlined-select"
                       value={changeData.card_description}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       name="card_description"
                       label="Card Description"
                     />
@@ -18708,7 +18686,7 @@ const SideForm = () => {
                       // required
                       id="outlined-select"
                       value={changeData.title}
-                      onChange={handleChangeData}
+                      onChange={handleProductFields}
                       name="title"
                       label="Blog Title"
                     />
@@ -25561,8 +25539,162 @@ const SideForm = () => {
                 </Grid>
               </Grid>
             )}
-
             {/* update coupon */}
+
+
+            {/*  discount Category */}
+
+            {form.formType === "order_status" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography component={"span"} variant="h5">
+                    Move for {form.payload.next_stage}
+                    <Typography
+                      component={"span"}
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add ordered SKUs state details here.
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={2}>
+                  <form
+                    className="form"
+                    id="myForm"
+                    onSubmit={(e) => {
+                      confirmBox(e, handleOrderStatus);
+                    }}
+                    encType="multipart/form-data"
+                    method="post"
+                  >
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="O"
+                      inputProps={{ style: { textTransform: "uppercase" } }}
+                      label="Order ID"
+                      disabled
+                      onChange={handleProductFields}
+                      value={changeData.O}
+                      type="text"
+                    />
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="SKU"
+                      inputProps={{ style: { textTransform: "uppercase" } }}
+                      label="SKU"
+                      disabled
+                      onChange={handleProductFields}
+                      value={changeData.SKU}
+                      type="text"
+                    />
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="quantity"
+                      inputProps={{ style: { textTransform: "uppercase" } }}
+                      label="Quantity"
+                      onChange={handleProductFields}
+                      value={changeData.quantity}
+                      type="number"
+                      helperText="Please enter the quantity for tranfer."
+                    />
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      id="outlined-select"
+                      name="depart_date"
+                      label="Departure"
+                      onChange={handleProductFields}
+                      value={changeData.depart_date || new Date()}
+                      type="date"
+                      helperText="Please enter the departure for tranfer."
+                    />
+
+                  <FormControl>
+                    <FormLabel id="demo-radio-buttons-group-label">Supplier Type</FormLabel>
+                    <RadioGroup
+                      aria-labelledby="demo-radio-buttons-group-label"
+                      defaultValue = {'staff'}
+                      onChange={handleProductFields}
+                      name="supplier_type"
+                    >
+                      <FormControlLabel value="staff" control={<Radio />} label="Staff" />
+                      <FormControlLabel value="supplier" control={<Radio />} label="Supplier" />
+                    </RadioGroup>
+                  </FormControl>
+
+                  {changeData.supplier_type === "supplier" ?<TextField
+                      size="small"
+                      fullWidth
+                      // required
+                      id="outlined-select"
+                      name="supplier"
+                      label="Supplier"
+                      onChange={handleProductFields}
+                      value={changeData.supplier || ""}
+                      type="text"
+                      helperText="Please enter your supplier must be unique."
+                    />
+                      :
+                      <TextField
+                      size="small"
+                      fullWidth
+                      // required
+                      id="outlined-select"
+                      name="staff"
+                      label="Staff"
+                      onChange={handleProductFields}
+                      value={changeData.staff || ""}
+                      type="text"
+                      helperText="Please enter your staff must be unique."
+                      />
+                      }
+
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="location"
+                      label="Location"
+                      // disabled
+                      onChange={handleProductFields}
+                      value={changeData.location}
+                      type="text"
+                    />
+
+
+
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Send for {form.payload.next_stage}
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* discount Category Ends */}
+
           </Box>
         </Backdrop>
       </Slide>
