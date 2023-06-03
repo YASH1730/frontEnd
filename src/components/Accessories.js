@@ -34,6 +34,7 @@ import Polish from "./dashboard/accessories/Polish";
 // import Fabric from "./dashboard/Fabric";
 // import Textile from "./dashboard/Textile";
 // import Policy from "./dashboard/Policy";
+import WarehouseIcon from '@mui/icons-material/Warehouse';
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import SecurityIcon from "@mui/icons-material/Security";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
@@ -41,6 +42,7 @@ import Suppliers from "./dashboard/accessories/Suppliers";
 import Security from "./dashboard/accessories/Security";
 import UserSetting from "./dashboard/accessories/UserSetting";
 import COD from "./dashboard/accessories/COD";
+import Warehouse from "./dashboard/accessories/Warehouse";
 const components = [
   Category,
   SubCategory,
@@ -50,6 +52,7 @@ const components = [
   Security,
   Suppliers,
   UserSetting,
+  Warehouse
 ];
 
 function TabPanel(props) {
@@ -158,12 +161,12 @@ export default function Admin() {
                   label="User Setting"
                   {...a11yProps(7)}
                 />
-                {/* <Tab
+                <Tab
                   wrapped
-                  icon={<DragHandleIcon />}
-                  label="Handle Material"
+                  icon={<WarehouseIcon />}
+                  label="Warehouse"
                   {...a11yProps(8)}
-                /> */}
+                />
             {/* <Tab
                   wrapped
                   icon={<WavesIcon />}

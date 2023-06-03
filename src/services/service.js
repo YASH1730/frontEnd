@@ -1523,3 +1523,19 @@ export const getOrderStatus = async (data) => {
     },
   });
 };
+
+export const getWarehouse = async () => {
+  return await axios.get(`${API}/getWarehouse`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+
+export const getWarehouseDetails = async (data) => {
+  return await axios.get(`${API}/getWarehouseDetails?_id=${data}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};

@@ -764,9 +764,9 @@ const SideForm = () => {
   const [changeData, setData] = useState({
     CVW: 0,
     ACIN: "",
-    supplier_type: "",
+    supplier_type: "supplier",
     supplier_name: "",
-    location: "",
+    location: "Jodhpur",
     role: "Staff",
     primary_material: [],
     product_articles: [],
@@ -1866,6 +1866,7 @@ const SideForm = () => {
           _id: form.payload.formattedValue._id,
           user_name: form.payload.formattedValue.user_name,
           email: form.payload.formattedValue.email,
+          location: form.payload.formattedValue.location,
           mobile: form.payload.formattedValue.mobile,
           role: form.payload.formattedValue.role,
           department: form.payload.formattedValue.department,
@@ -1905,6 +1906,15 @@ const SideForm = () => {
           SKU: form.payload.row.row.SKU,
           status: form.payload.next_stage,
           quantity: form.payload.row.row.quantity,
+        }));
+        break;
+      case "update_warehouse":
+        console.log(form)
+        setData((old) => ({
+          ...old,
+          _id: form.payload.value._id,
+          name: form.payload.row.name,
+          address: form.payload.row.address,
         }));
         break;
         default:
@@ -2501,9 +2511,9 @@ const SideForm = () => {
       trolley: false,
       upholstery: false,
       silver: false,
-      supplier_type: "",
+      supplier_type: "supplier",
     supplier_name: "",
-    location: "",
+    location: "Jodhpur",
     });
     document.getElementById("myForm").reset();
   };
@@ -6134,6 +6144,103 @@ const SideForm = () => {
     }
   }
 
+  async function handleAddWarehouse(e) {
+    try {
+      e.preventDefault();
+
+      const FD = new FormData();
+      FD.append("DID", "");
+      FD.append("AID", changeData._id);
+      FD.append("type", "Warehouse");
+      FD.append("operation", "updateWarehouse");
+      FD.append("name", changeData.name);
+      FD.append("address", changeData.address);
+      
+      const res = await addDraft(FD);
+      if (res) {
+      
+        if (res.status === 203) {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: res.data.message,
+            })
+          );
+        } else {
+          handleClose();
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: res.data.message,
+            })
+          );
+        }
+      }
+    } catch (err) {
+      //// console.log(err);
+      setImages([]);
+      setIndoor([]);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        })
+      );
+    }
+  }
+  async function handleUpdateWarehouse(e) {
+    try {
+      e.preventDefault();
+
+      const FD = new FormData();
+
+      FD.append("DID", "");
+      FD.append("AID", changeData._id);
+      FD.append("type", "Warehouse");
+      FD.append("operation", "updateWarehouse");
+      FD.append("_id", changeData._id);
+      FD.append("name", changeData.name);
+      FD.append("address", changeData.address);
+      
+      const res = await addDraft(FD);
+      if (res) {
+      
+        if (res.status === 203) {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: res.data.message,
+            })
+          );
+        } else {
+          handleClose();
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: res.data.message,
+            })
+          );
+        }
+      }
+    } catch (err) {
+      //// console.log(err);
+      setImages([]);
+      setIndoor([]);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        })
+      );
+    }
+  }
+
   // load new searchList
   const handleSupplierList = async (e) => {
     const delayDebounceFn = setTimeout(() => {
@@ -6356,6 +6463,7 @@ const SideForm = () => {
       FD.append("password", changeData.password);
       FD.append("email", changeData.email);
       FD.append("mobile", changeData.mobile);
+      FD.append("location", changeData.location);
       FD.append("role", changeData.role);
       FD.append("access", changeData.access);
       FD.append("department", changeData.department);
@@ -6382,6 +6490,8 @@ const SideForm = () => {
             email: res.data.response.email,
             mobile: res.data.response.mobile,
             role: res.data.response.role,
+            location: res.data.response.location,
+            department: res.data.response.department,
             access: res.data.response.access,
             action: res.data.response,
           },
@@ -6416,6 +6526,7 @@ const SideForm = () => {
       FD.append("user_name", changeData.user_name);
       FD.append("email", changeData.email);
       FD.append("mobile", changeData.mobile);
+      FD.append("location", changeData.location);
       FD.append("role", changeData.role);
       FD.append("access", changeData.access);
       FD.append("department", changeData.department);
@@ -6443,6 +6554,7 @@ const SideForm = () => {
               set.role = changeData.role;
               set.access = changeData.access;
               set.user_id = changeData.user_id;
+              set.location = changeData.location;
               set.department = changeData.department;
               set.action = changeData.action;
             }
@@ -24940,6 +25052,16 @@ const SideForm = () => {
                       fullWidth
                       sx={{ mb: 1 }}
                       size="small"
+                      label="Location"
+                      value={changeData.location}
+                      onChange={handleProductFields}
+                      variant="outlined"
+                      name="location"
+                    />
+                    <TextField
+                      fullWidth
+                      sx={{ mb: 1 }}
+                      size="small"
                       type={"password"}
                       label="Password"
                       value={changeData.password}
@@ -25093,6 +25215,16 @@ const SideForm = () => {
                       onChange={handleProductFields}
                       variant="outlined"
                       name="mobile"
+                    />
+                      <TextField
+                      fullWidth
+                      sx={{ mb: 1 }}
+                      size="small"
+                      label="Location"
+                      value={changeData.location}
+                      onChange={handleProductFields}
+                      variant="outlined"
+                      name="location"
                     />
 
                     <TextField
@@ -25542,7 +25674,7 @@ const SideForm = () => {
             {/* update coupon */}
 
 
-            {/*  discount Category */}
+            {/*  discount order status */}
 
             {form.formType === "order_status" && (
               <Grid container p={5}>
@@ -25628,7 +25760,7 @@ const SideForm = () => {
                     <FormLabel id="demo-radio-buttons-group-label">Supplier Type</FormLabel>
                     <RadioGroup
                       aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue = {'staff'}
+                      defaultValue = {'supplier'}
                       onChange={handleProductFields}
                       name="supplier_type"
                     >
@@ -25693,7 +25825,159 @@ const SideForm = () => {
               </Grid>
             )}
 
-            {/* discount Category Ends */}
+            {/* discount order status Ends */}
+
+
+            {/*  discount order status */}
+
+            {form.formType === "add_warehouse" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography component={"span"} variant="h5">
+                    Warehouse
+                    <Typography
+                      component={"span"}
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add warehouse details here.
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={2}>
+                  <form
+                    className="form"
+                    id="myForm"
+                    onSubmit={(e) => {
+                      confirmBox(e, handleAddWarehouse );
+                    }}
+                    encType="multipart/form-data"
+                    method="post"
+                  >
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="name"
+                      // inputProps={{ style: { textTransform: "uppercase" } }}
+                      label="Warehouse Name"
+                      onChange={handleProductFields}
+                      value={changeData.name}
+                      type="text"
+                      helperText={"Please enter the name of the warehouse."}
+                    />
+
+                    <TextField
+                      multiline
+                      minRows={5}
+                      size="small"
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="address"
+                      inputProps={{ style: { resize: "none" } }}
+                      label="Warehouse Address"
+                      onChange={handleProductFields}
+                      value={changeData.address}
+                      type="text"
+                      helperText={"Please enter full address of the warehouse."}
+
+                    />
+
+
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Add Warehouse
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* discount order status Ends */}
+
+            {/*  discount order status */}
+
+            {form.formType === "update_warehouse" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography component={"span"} variant="h5">
+                    Update Warehouse
+                    <Typography
+                      component={"span"}
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update warehouse details here.
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={2}>
+                  <form
+                    className="form"
+                    id="myForm"
+                    onSubmit={(e) => {
+                      confirmBox(e, handleUpdateWarehouse );
+                    }}
+                    encType="multipart/form-data"
+                    method="post"
+                  >
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="name"
+                      // inputProps={{ style: { textTransform: "uppercase" } }}
+                      label="Warehouse Name"
+                      onChange={handleProductFields}
+                      value={changeData.name || ""}
+                      type="text"
+                      helperText={"Please enter the name of the warehouse."}
+                    />
+
+                    <TextField
+                      multiline
+                      minRows={5}
+                      size="small"
+                      fullWidth
+                      required
+                      id="outlined-select"
+                      name="address"
+                      inputProps={{ style: { resize: "none" } }}
+                      label="Warehouse Address"
+                      onChange={handleProductFields}
+                      value={changeData.address}
+                      type="text"
+                      helperText={"Please enter full address of the warehouse."}
+
+                    />
+
+
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Add Warehouse
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+            {/* discount order status Ends */}
+
 
           </Box>
         </Backdrop>

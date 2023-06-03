@@ -13,6 +13,15 @@ export default function DataTable({state}) {
             paginationModel: { page: 0, pageSize: 5 },
           },
         }}
+        filterModel={{
+          items: [
+            {
+              columnField: "O",
+              operatorValue: "contains",
+              value: `${state.O}`,
+            },
+          ],
+        }}
         pageSizeOptions={[5, 10]}
         // checkboxSelection
       />

@@ -34,6 +34,8 @@ import {
   getBannerDetails,
   getCouponDetails,
   getReviewDetails,
+  getWarehouse,
+  getWarehouseDetails,
 } from "../../../services/service";
 
 import {
@@ -118,7 +120,7 @@ export default function Action() {
             return {
               id: index + 1,
               DID: row.DID,
-              AID: row.AID,
+              AID: row.AID || "Not Given",
               type: row.type,
               operation: row.operation,
               message: row.message,
@@ -585,6 +587,19 @@ export default function Action() {
               display.data.status = true;
               sendResponse(display.data);
             break;  
+          case "addWarehouse":
+            display.data.operation = display.operation;
+            display.data.DID = display.DID;
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display.data);
+            break;  
+            case "updateWarehouse":
+              display.data.operation = display.operation;
+              display.data.DID = display.DID;
+              display.data.draftStatus = e.target.action.value;
+              sendResponse(display.data);
+              break    
             default:
             // console.log("no operation found");
             break;
@@ -664,6 +679,15 @@ export default function Action() {
             }
 
             break;
+          case "updateWarehouse":
+            // console.log(display.data.AID);
+            res = await getWarehouseDetails(display.data.AID);
+            console.log(res)
+            if (res) { 
+              if (res.data) setPeer(res.data);
+            }
+
+            break;
           case "updateBlog":
             // console.log(display.data.AID);
             res = await getBlog(display.data.AID);
@@ -723,6 +747,7 @@ export default function Action() {
               display.operation === "updateBanner" ||
               display.operation === "updateCoupon" ||
               display.operation === "updateReview" ||
+              display.operation === "updateWarehouse" ||
               display.operation === "updateCategory") && (
               <Grid item xs={6} p={1}>
                 <Typography variant="h6" sx={{ textAlign: "center" }}>
@@ -775,6 +800,7 @@ export default function Action() {
                 display.operation === "updateBanner" ||
                 display.operation === "updatePolish" ||
                 display.operation === "updateCoupon" ||
+                display.operation === "updateWarehouse" ||
                 display.operation === "updateCategory"
                   ? 6
                   : 12
@@ -783,6 +809,7 @@ export default function Action() {
               <Typography variant="h6" sx={{ textAlign: "center" }}>
                 {display.operation === "updateProduct" ||
                 display.operation === "updateHardware" ||
+                display.operation === "updateWarehouse" ||
                 display.operation === "updateSubCategory" ||
                 display.operation === "updateReview" ||
                 display.operation === "updateBanner" ||
@@ -804,6 +831,7 @@ export default function Action() {
                 display.operation === "updateBlog" ||
                 display.operation === "updateCoupon" ||
                 display.operation === "updatePolish" ||
+                display.operation === "updateWarehouse" ||
                 display.operation === "updateCategory"
                   ? Object.keys(display.data).map(function (key) {
                       return (

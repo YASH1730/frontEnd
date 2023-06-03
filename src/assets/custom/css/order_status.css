@@ -46,4 +46,11 @@
 .order-status-dashboard-search{
     display: flex;
     gap : 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-status-dashboard-heading{
+    display: flex;
+    justify-content: space-between;
 }
