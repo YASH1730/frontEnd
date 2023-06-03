@@ -1905,7 +1905,8 @@ const SideForm = () => {
           O: form.payload.row.row.O,
           SKU: form.payload.row.row.SKU,
           status: form.payload.next_stage,
-          quantity: form.payload.row.row.quantity,
+          total_quantity: form.payload.row.row.quantity,
+          quantity: 0,
         }));
         break;
       case "update_warehouse":
@@ -25739,7 +25740,7 @@ const SideForm = () => {
                       inputProps={{ style: { textTransform: "uppercase" } }}
                       label="Quantity"
                       onChange={handleProductFields}
-                      value={changeData.quantity}
+                      value={changeData.quantity <= changeData.total_quantity ? changeData.quantity : 0 }
                       type="number"
                       helperText="Please enter the quantity for tranfer."
                     />
