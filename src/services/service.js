@@ -1539,3 +1539,11 @@ export const getWarehouseDetails = async (data) => {
     },
   });
 };
+
+export const searchWarehouseDetails = async (data) => {
+  return await axios.get(`${API}/searchWarehouseDetails?name=${data}`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};

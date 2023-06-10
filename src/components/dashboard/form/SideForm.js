@@ -86,6 +86,7 @@ import {
   updateUser,
   setOrderStatus,
   setOrderStatusToNext,
+  searchWarehouseDetails,
   // changeKnobStatus,
 } from "../../../services/service.js";
 import { useConfirm } from "material-ui-confirm";
@@ -97,55 +98,6 @@ import StarIcon from "@mui/icons-material/Star";
 import size from "react-image-size";
 
 import config from "../../../config.json";
-
-const option = {
-  labels: {
-    confirmable: "Proceed",
-    cancellable: "Cancel",
-  },
-};
-
-const thumbsContainer = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  marginTop: 16,
-};
-
-const thumb = {
-  display: "inline-flex",
-  borderRadius: 2,
-  border: "1px solid #eaeaea",
-  marginBottom: 8,
-  marginRight: 8,
-  width: 50,
-  height: 50,
-  padding: 4,
-  boxSizing: "border-box",
-};
-
-const thumbInner = {
-  display: "flex",
-  minWidth: 0,
-  overflow: "hidden",
-};
-
-const img = {
-  display: "block",
-  width: "auto",
-  height: "100%",
-};
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  boxShadow: 24,
-  p: 3,
-};
 
 const SideForm = () => {
   // multiple images
@@ -183,47 +135,7 @@ const SideForm = () => {
   const [address, setAddress] = useState([]);
   const [billing, setBillingAddress] = useState([]);
 
-  function FeaturesPreviews(props) {
-    const { getRootProps, getInputProps } = useDropzone({
-      accept: "image/*",
-      multiple: false,
-      onDrop: (acceptedFiles) => {
-        setFeatured(
-          acceptedFiles.map((file) =>
-            Object.assign(file, {
-              preview: URL.createObjectURL(file),
-            })
-          )
-        );
-      },
-    });
 
-    const thumbs = featured.map((file) => (
-      <div style={thumb} key={file.name}>
-        <div style={thumbInner}>
-          <img
-            src={file.preview}
-            style={img}
-            alt="Images"
-            // Revoke data uri after image is loaded
-            onLoad={() => {
-              URL.revokeObjectURL(file.preview);
-            }}
-          />
-        </div>
-      </div>
-    ));
-
-    return (
-      <section className="container dorpContainer">
-        <div {...getRootProps({ className: "dropzone" })}>
-          <input {...getInputProps()} />
-          <p>{props.text}</p>
-        </div>
-        <aside style={thumbsContainer}>{thumbs}</aside>
-      </section>
-    );
-  }
 
   const labels = {
     0.5: "Useless",
@@ -286,6 +198,13 @@ const SideForm = () => {
       value: "Packed & Shipped",
     },
   ];
+
+  const dispatch_time = [
+    "1 to 2 weeks",
+    "2 to 3 weeks",
+    "4 to 6 weeks",
+    "6 to 8 weeks",
+  ]
 
   function ImagePreviews(props) {
     const { getRootProps, getInputProps } = useDropzone({
@@ -618,32 +537,17 @@ const SideForm = () => {
     "DEV(Direct Courier)",
     "Shree Maruti Courier",
   ];
-  // const rangeCatalog = [
-  //   {
-  //     value: "Traditional",
-  //     label: "Traditional",
-  //   },
+  const rangeCatalog = [
+    {
+      value: "Modern & Contemporary",
+      label: "Modern & Contemporary",
+    },
 
-  //   {
-  //     value: "Distressed",
-  //     label: "Distressed",
-  //   },
-
-  //   {
-  //     value: "Crackle",
-  //     label: "Crackle",
-  //   },
-
-  //   {
-  //     value: "Painting",
-  //     label: "Painting",
-  //   },
-
-  //   {
-  //     value: "Antique",
-  //     label: "Antique",
-  //   },
-  // ];
+    {
+      value: "Heritage Furniture",
+      label: "Heritage Furniture",
+    }
+  ];
 
   const coupon_type = ["FLAT", "OFF(%)"];
 
@@ -737,6 +641,7 @@ const SideForm = () => {
     H_SKU: [],
     supplier: [],
     category: [],
+    warehouse: [],
   });
 
   const [catalog, setCatalog] = useState({
@@ -764,6 +669,8 @@ const SideForm = () => {
   const [changeData, setData] = useState({
     CVW: 0,
     ACIN: "",
+    range: "Modern & Contemporary",
+    dispatch_time : "4 to 6 weeks",
     supplier_type: "supplier",
     supplier_name: "",
     location: "Jodhpur",
@@ -773,7 +680,6 @@ const SideForm = () => {
     hardware_articles: [],
     category_discount: [],
     supplier: "",
-    range: "None",
     product_array: [],
     variation_array: [],
     warehouse: [],
@@ -2339,6 +2245,7 @@ const SideForm = () => {
       H_SKU: [],
       supplier: [],
       category: [],
+      warehouse: [],
     });
     setWebBanner([]);
     setMobileBanner([]);
@@ -2348,6 +2255,8 @@ const SideForm = () => {
     setActiveStep(0);
     setData({
       mirror: false,
+      range: "Modern & Contemporary",
+    dispatch_time : "4 to 6 weeks",
       restock: false,
       return: false,
       refund: false,
@@ -2364,7 +2273,6 @@ const SideForm = () => {
       hardware_articles: [],
       category_discount: [],
       supplier: "",
-      range: "None",
       product_array: [],
       variation_array: [],
       warehouse: [],
@@ -2685,6 +2593,7 @@ const SideForm = () => {
     FD.append("plywood", changeData.plywood);
 
     FD.append("range", changeData.range);
+    FD.append("dispatch_time", changeData.dispatch_time);
     FD.append("category_id", changeData.category_name);
     FD.append("back_style", changeData.back_style);
     FD.append("sub_category_id", changeData.sub_category_name);
@@ -2925,6 +2834,7 @@ const SideForm = () => {
 
     FD.append("SKU", SKU);
     FD.append("ACIN", changeData.ACIN);
+    FD.append("dispatch_time", changeData.dispatch_time);
 
     FD.append("variant_label", changeData.variant_label);
     FD.append("specification_image", changeData.specification_image);
@@ -3446,6 +3356,7 @@ const SideForm = () => {
     FD.append("specification_image", changeData.specification_image);
     FD.append("featured_image", changeData.featured_image);
     FD.append("mannequin_image", changeData.mannequin_image);
+    FD.append("dispatch_time", changeData.dispatch_time);
 
     // console.log(changeData.primary_material);
 
@@ -4487,12 +4398,6 @@ const SideForm = () => {
           })
         );
       } else {
-        setProductSKU({
-          P_SKU: [],
-          H_SKU: [],
-          supplier: [],
-          category: [],
-        });
 
         form.setRow(
           form.row.map((set) => {
@@ -4505,6 +4410,8 @@ const SideForm = () => {
             return set;
           })
         );
+        resetAll()
+
         handleClose();
         dispatch(
           setAlert({
@@ -4618,12 +4525,6 @@ const SideForm = () => {
             })
           );
         } else {
-          setProductSKU({
-            P_SKU: [],
-            H_SKU: [],
-            supplier: [],
-            category: [],
-          });
           form.setRow([
             ...form.row,
             {
@@ -4640,6 +4541,8 @@ const SideForm = () => {
               date: data.data.response.date,
             },
           ]);
+          resetAll()
+
           handleClose();
           dispatch(
             setAlert({
@@ -4711,11 +4614,6 @@ const SideForm = () => {
             })
           );
         } else {
-          setProductSKU({
-            P_SKU: [],
-            H_SKU: [],
-            supplier: [],
-          });
           form.setRow([
             ...form.row,
             {
@@ -4734,6 +4632,8 @@ const SideForm = () => {
               date: data.data.response.date,
             },
           ]);
+          resetAll()
+
           handleClose();
           dispatch(
             setAlert({
@@ -4799,11 +4699,6 @@ const SideForm = () => {
             })
           );
         } else {
-          setProductSKU({
-            P_SKU: [],
-            H_SKU: [],
-            supplier: [],
-          });
           form.setRow([
             ...form.row,
             {
@@ -4819,6 +4714,7 @@ const SideForm = () => {
               date: data.data.response.date,
             },
           ]);
+          resetAll()
           handleClose();
           dispatch(
             setAlert({
@@ -6151,9 +6047,9 @@ const SideForm = () => {
 
       const FD = new FormData();
       FD.append("DID", "");
-      FD.append("AID", changeData._id);
+      FD.append("AID", "");
       FD.append("type", "Warehouse");
-      FD.append("operation", "updateWarehouse");
+      FD.append("operation", "addWarehouse");
       FD.append("name", changeData.name);
       FD.append("address", changeData.address);
       
@@ -6296,6 +6192,24 @@ const SideForm = () => {
             ...old,
             P_SKU: [],
             H_SKU: [],
+          }));
+        });
+    }, 1000);
+    return () => clearTimeout(delayDebounceFn);
+  }
+  async function handleSearchWarehouse(e) {
+    const delayDebounceFn = setTimeout(() => {
+      searchWarehouseDetails(e.target.value)
+        .then((res) => {
+          setProductSKU((old) => ({
+            ...old,
+            warehouse: res.data,
+          }));
+        })
+        .catch((err) => {
+          setProductSKU((old) => ({
+            ...old,
+            warehouse: [],
           }));
         });
     }, 1000);
@@ -6719,6 +6633,34 @@ const SideForm = () => {
                               variant="outlined"
                               name="SKU"
                             />
+
+<TextField
+                              size="small"
+                              fullWidth
+                              required
+                              id="outlined-select"
+                              select
+                              name="dispatch_time"
+                              label="Dispatch Time"
+                              value={changeData.dispatch_time || ""}
+                              multiple
+                              onChange={handleProductFields}
+                              helperText="Please select your category"
+                            >
+                              {dispatch_time.map(
+                                (option) =>
+                                    <MenuItem
+                                      key={option}
+                                      value={option}
+                                    >
+                                      {option}
+                                    </MenuItem>
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+
                             <TextField
                               size="small"
                               fullWidth
@@ -6951,7 +6893,7 @@ const SideForm = () => {
                                 </MenuItem>
                               ))}
                             </Select>
-                            {/* <TextField
+                            <TextField
                               size="small"
                               fullWidth
                               id="outlined-select"
@@ -6974,7 +6916,7 @@ const SideForm = () => {
                               <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
-                            </TextField> */}
+                            </TextField>
                             <InputLabel id="demo-multiple-checkbox-label">
                               Polish
                             </InputLabel>
@@ -8778,7 +8720,7 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               helperText="Please select your manufacturing time"
                             />
-                            <InputLabel id="demo-multiple-checkbox-label">
+                            {/* <InputLabel id="demo-multiple-checkbox-label">
                               Stock Warehouse
                             </InputLabel>
                             <Select
@@ -8824,7 +8766,7 @@ const SideForm = () => {
                                   />
                                 </>
                               );
-                            })}
+                            })} */}
                             <TextField
                               size="small"
                               fullWidth
@@ -9697,6 +9639,34 @@ const SideForm = () => {
                               variant="outlined"
                               name="SKU"
                             />
+
+<TextField
+                              size="small"
+                              fullWidth
+                              required
+                              id="outlined-select"
+                              select
+                              name="dispatch_time"
+                              label="Dispatch Time"
+                              value={changeData.dispatch_time || ""}
+                              multiple
+                              onChange={handleProductFields}
+                              helperText="Please select your category"
+                            >
+                              {dispatch_time.map(
+                                (option) =>
+                                    <MenuItem
+                                      key={option}
+                                      value={option}
+                                    >
+                                      {option}
+                                    </MenuItem>
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+
                             <TextField
                               size="small"
                               fullWidth
@@ -9929,7 +9899,7 @@ const SideForm = () => {
                                 </MenuItem>
                               ))}
                             </Select>
-                            {/* <TextField
+                            <TextField
                               size="small"
                               fullWidth
                               id="outlined-select"
@@ -9952,7 +9922,7 @@ const SideForm = () => {
                               <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
-                            </TextField> */}
+                            </TextField>
                             <InputLabel id="demo-multiple-checkbox-label">
                               Polish
                             </InputLabel>
@@ -11854,7 +11824,7 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               helperText="Please select your manufacturing time"
                             />
-                            <InputLabel id="demo-multiple-checkbox-label">
+                            {/* <InputLabel id="demo-multiple-checkbox-label">
                               Stock Warehouse
                             </InputLabel>
                             <Select
@@ -11900,7 +11870,7 @@ const SideForm = () => {
                                   />
                                 </>
                               );
-                            })}
+                            })} */}
                             <TextField
                               size="small"
                               fullWidth
@@ -12792,6 +12762,33 @@ const SideForm = () => {
                               required
                               id="outlined-select"
                               select
+                              name="dispatch_time"
+                              label="Dispatch Time"
+                              value={changeData.dispatch_time || ""}
+                              multiple
+                              onChange={handleProductFields}
+                              helperText="Please select your category"
+                            >
+                              {dispatch_time.map(
+                                (option) =>
+                                    <MenuItem
+                                      key={option}
+                                      value={option}
+                                    >
+                                      {option}
+                                    </MenuItem>
+                              )}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+
+                            <TextField
+                              size="small"
+                              fullWidth
+                              required
+                              id="outlined-select"
+                              select
                               name="category_name"
                               label="Category"
                               value={changeData.category_name || ""}
@@ -14943,7 +14940,7 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               helperText="Please select your manufacturing time"
                             />
-                            <InputLabel id="demo-multiple-checkbox-label">
+                            {/* <InputLabel id="demo-multiple-checkbox-label">
                               Stock Warehouse
                             </InputLabel>
                             <Select
@@ -14989,7 +14986,7 @@ const SideForm = () => {
                                   />
                                 </>
                               );
-                            })}
+                            })} */}
                             <TextField
                               size="small"
                               fullWidth
@@ -22978,7 +22975,33 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <TextField
+                     <Autocomplete
+                      disablePortal
+                      size="small"
+                      fullWidth
+                      noOptionsText={"warehouse name..."}
+                      // multiple
+                      autoHighlight
+                      id="combo-box-demo"
+                      options={productSKU.warehouse.map((row) => {
+                        return row.name;
+                      })}
+                      renderInput={(params) => (
+                        <TextField
+                          onKeyUpCapture={handleSearchWarehouse}
+                          value={changeData.warehouse || ""}
+                          {...params}
+                          label="Warehouse"
+                        />
+                      )}
+                      onChange={(e, newMember) =>
+                        setData((old) => ({
+                          ...old,
+                          warehouse: newMember,
+                        }))
+                      }
+                    />
+                    {/* <TextField
                       fullWidth
                       id="outlined-select"
                       required
@@ -22999,7 +23022,7 @@ const SideForm = () => {
                       {/* <MenuItem key={"none"} value="None">
                         {"None"}
                       </MenuItem> */}
-                    </TextField>
+                    {/* </TextField>  */}
 
                     <Autocomplete
                       disablePortal
@@ -23259,7 +23282,35 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <TextField
+
+<Autocomplete
+                      disablePortal
+                      size="small"
+                      fullWidth
+                      noOptionsText={"warehouse name..."}
+                      // multiple
+                      autoHighlight
+                      id="combo-box-demo"
+                      options={productSKU.warehouse.map((row) => {
+                        return row.name;
+                      })}
+                      renderInput={(params) => (
+                        <TextField
+                          onKeyUpCapture={handleSearchWarehouse}
+                          value={changeData.warehouse || ""}
+                          {...params}
+                          label="Warehouse"
+                        />
+                      )}
+                      onChange={(e, newMember) =>
+                        setData((old) => ({
+                          ...old,
+                          warehouse: newMember,
+                        }))
+                      }
+                    />
+
+                    {/* <TextField
                       fullWidth
                       id="outlined-select"
                       required
@@ -23280,7 +23331,7 @@ const SideForm = () => {
                       {/* <MenuItem key={"none"} value="None">
                         {"None"}
                       </MenuItem> */}
-                    </TextField>
+                    {/* </TextField>  */}
 
                     <Autocomplete
                       disablePortal
@@ -23574,7 +23625,61 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <TextField
+
+<Autocomplete
+                      disablePortal
+                      size="small"
+                      fullWidth
+                      noOptionsText={"warehouse name..."}
+                      // multiple
+                      autoHighlight
+                      id="combo-box-demo"
+                      options={productSKU.warehouse.map((row) => {
+                        return row.name;
+                      })}
+                      renderInput={(params) => (
+                        <TextField
+                          onKeyUpCapture={handleSearchWarehouse}
+                          value={changeData.warehouse || ""}
+                          {...params}
+                          label="Warehouse"
+                        />
+                      )}
+                      onChange={(e, newMember) =>
+                        setData((old) => ({
+                          ...old,
+                          warehouse: newMember,
+                        }))
+                      }
+                    />
+
+<Autocomplete
+                      disablePortal
+                      size="small"
+                      fullWidth
+                      noOptionsText={"warehouse name..."}
+                      // multiple
+                      autoHighlight
+                      id="combo-box-demo"
+                      options={productSKU.warehouse.map(row=>row.name).filter((row) => {
+                        return row !== changeData.warehouse;
+                      })}
+                      renderInput={(params) => (
+                        <TextField
+                          onKeyUpCapture={handleSearchWarehouse}
+                          value={changeData.warehouse_to || ""}
+                          {...params}
+                          label="Warehouse To"
+                        />
+                      )}
+                      onChange={(e, newMember) =>
+                        setData((old) => ({
+                          ...old,
+                          warehouse_to: newMember,
+                        }))
+                      }
+                    />
+                    {/* <TextField
                       fullWidth
                       id="outlined-select"
                       select
@@ -23591,9 +23696,9 @@ const SideForm = () => {
                           {option.value}
                         </MenuItem>
                       ))}
-                    </TextField>
+                    </TextField> */}
 
-                    <TextField
+                    {/* <TextField
                       fullWidth
                       id="outlined-select"
                       select
@@ -23613,7 +23718,7 @@ const SideForm = () => {
                             </MenuItem>
                           )
                       )}
-                    </TextField>
+                    </TextField> */}
 
                     <Autocomplete
                       disablePortal
@@ -25970,7 +26075,7 @@ const SideForm = () => {
                       fullWidth
                       variant="contained"
                     >
-                      Add Warehouse
+                      Update Warehouse
                     </Button>
                   </form>
                 </Grid>
@@ -26490,3 +26595,53 @@ function ProductsPreviews({ files, setFiles, text }) {
     </section>
   );
 }
+
+
+const option = {
+  labels: {
+    confirmable: "Proceed",
+    cancellable: "Cancel",
+  },
+};
+
+const thumbsContainer = {
+  display: "flex",
+  flexDirection: "row",
+  flexWrap: "wrap",
+  marginTop: 16,
+};
+
+const thumb = {
+  display: "inline-flex",
+  borderRadius: 2,
+  border: "1px solid #eaeaea",
+  marginBottom: 8,
+  marginRight: 8,
+  width: 50,
+  height: 50,
+  padding: 4,
+  boxSizing: "border-box",
+};
+
+const thumbInner = {
+  display: "flex",
+  minWidth: 0,
+  overflow: "hidden",
+};
+
+const img = {
+  display: "block",
+  width: "auto",
+  height: "100%",
+};
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  boxShadow: 24,
+  p: 3,
+};
