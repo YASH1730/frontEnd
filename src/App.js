@@ -56,6 +56,8 @@ const BlogModule = lazy(() => import("./components/dashboard/blog/Blog"));
 const Merge = lazy(() => import("./components/dashboard/product/Merge"));
 const Review = lazy(() => import("./components/dashboard/review/Review"));
 const ChatHome = lazy(() => import("./components/dashboard/chat/Home.js"));
+const Catalog = lazy(() => import("./components/dashboard/catalogs/Catalog.js"));
+const MobileIntro = lazy(() => import("./components/dashboard/mobile/IntroPage.js"));
 const ProductDetails = lazy(() =>
   import("./components/Utility/ProductDetails")
 );
@@ -222,6 +224,9 @@ function MyRoutes() {
         {permission.includes("Reward") && (
           <Route exact path="/reward" element={<Reward history={history} />} />
         )}
+        {permission.includes("Catalog") && (
+          <Route exact path="/catalog" element={<Catalog history={history} />} />
+        )}
         {/* <Route
           exact
           path="/security"
@@ -237,6 +242,9 @@ function MyRoutes() {
         )}
         {permission.includes("Review") && (
           <Route exact path="/review" element={<Review history={history} />} />
+        )}{" "}
+        {permission.includes("Mobile") && (
+          <Route exact path="/intro_page" element={<MobileIntro history={history} />} />
         )}{" "}
         {/* {permission.includes("Chat") && ( */}
           <Route exact path="/chat" element={<ChatHome history={history} />} />

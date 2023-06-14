@@ -87,6 +87,8 @@ import {
   setOrderStatus,
   setOrderStatusToNext,
   searchWarehouseDetails,
+  addCatalog,
+  addMobileIntro,
   // changeKnobStatus,
 } from "../../../services/service.js";
 import { useConfirm } from "material-ui-confirm";
@@ -134,8 +136,6 @@ const SideForm = () => {
   // address object
   const [address, setAddress] = useState([]);
   const [billing, setBillingAddress] = useState([]);
-
-
 
   const labels = {
     0.5: "Useless",
@@ -204,7 +204,7 @@ const SideForm = () => {
     "2 to 3 weeks",
     "4 to 6 weeks",
     "6 to 8 weeks",
-  ]
+  ];
 
   function ImagePreviews(props) {
     const { getRootProps, getInputProps } = useDropzone({
@@ -405,6 +405,24 @@ const SideForm = () => {
     },
   ];
 
+  const catalog_type = [
+    {
+      id: "C-01",
+      value: "Best Seller",
+      label: "Best Seller",
+    },
+    {
+      id: "C-02",
+      value: "Trending",
+      label: "Trending",
+    },
+    {
+      id: "C-03",
+      value: "New Arrived",
+      label: "New Arrived",
+    },
+  ];
+
   const weightCapCatalog = [
     {
       value: "Child",
@@ -485,7 +503,6 @@ const SideForm = () => {
 
   const pay = ["Razorpay", "PayTM", "Bank Transfer", "COD"];
 
-  
   const department = [
     {
       value: "CNC",
@@ -502,7 +519,7 @@ const SideForm = () => {
     {
       value: "Polish",
       label: "Polish",
-    }
+    },
   ];
   const role = [
     {
@@ -546,7 +563,7 @@ const SideForm = () => {
     {
       value: "Heritage Furniture",
       label: "Heritage Furniture",
-    }
+    },
   ];
 
   const coupon_type = ["FLAT", "OFF(%)"];
@@ -565,6 +582,8 @@ const SideForm = () => {
     "Banner",
     "Hardware",
     "Review",
+    "Catalog",
+    "Mobile",
   ];
 
   const assemblyLevelCatalog = [
@@ -670,7 +689,7 @@ const SideForm = () => {
     CVW: 0,
     ACIN: "",
     range: "Modern & Contemporary",
-    dispatch_time : "4 to 6 weeks",
+    dispatch_time: "4 to 6 weeks",
     supplier_type: "supplier",
     supplier_name: "",
     location: "Jodhpur",
@@ -1744,6 +1763,16 @@ const SideForm = () => {
           action: form.payload.row.action,
         }));
         break;
+      case "updateIntro":
+        // console.log(form.payload);
+        setData((old) => ({
+          ...old,
+          _id: form.payload.formattedValue._id,
+          title: form.payload.row.title,
+          display_content: form.payload.row.display_content,
+          status: form.payload.row.status,
+        }));
+        break;
       case "add_banner":
         getDID();
         setSequenceFunc();
@@ -1804,7 +1833,7 @@ const SideForm = () => {
         }));
         break;
       case "order_status":
-        console.log(form)
+        console.log(form);
         setData((old) => ({
           ...old,
           _id: form.payload.row.value._id,
@@ -1816,7 +1845,7 @@ const SideForm = () => {
         }));
         break;
       case "update_warehouse":
-        console.log(form)
+        console.log(form);
         setData((old) => ({
           ...old,
           _id: form.payload.value._id,
@@ -1824,7 +1853,7 @@ const SideForm = () => {
           address: form.payload.row.address,
         }));
         break;
-        default:
+      default:
         break;
     }
   }, [form.formType, form.state]);
@@ -1856,8 +1885,6 @@ const SideForm = () => {
       [e.target.name]: e.target.value,
     });
   };
-
-
 
   const feature = [
     "web_banner_status",
@@ -2202,7 +2229,7 @@ const SideForm = () => {
                   Image[0] !== undefined
                     ? `${imageLink}${Image[0].path}`
                     : // console.log();
-                set.username = changeData.username;
+                      (set.username = changeData.username);
                 set.mobile = changeData.mobile;
                 set.email = changeData.email;
                 set.password = changeData.password;
@@ -2256,7 +2283,7 @@ const SideForm = () => {
     setData({
       mirror: false,
       range: "Modern & Contemporary",
-    dispatch_time : "4 to 6 weeks",
+      dispatch_time: "4 to 6 weeks",
       restock: false,
       return: false,
       refund: false,
@@ -2421,8 +2448,8 @@ const SideForm = () => {
       upholstery: false,
       silver: false,
       supplier_type: "supplier",
-    supplier_name: "",
-    location: "Jodhpur",
+      supplier_name: "",
+      location: "Jodhpur",
     });
     document.getElementById("myForm").reset();
   };
@@ -4398,7 +4425,6 @@ const SideForm = () => {
           })
         );
       } else {
-
         form.setRow(
           form.row.map((set) => {
             let response = changeData.category_discount.filter((name) => {
@@ -4410,7 +4436,7 @@ const SideForm = () => {
             return set;
           })
         );
-        resetAll()
+        resetAll();
 
         handleClose();
         dispatch(
@@ -4432,25 +4458,25 @@ const SideForm = () => {
       );
     }
   };
-  const handleOrderStatus = async (e) => {
+  const handleAddCatalog = async (e) => {
     e.preventDefault();
 
     try {
       const FD = new FormData();
 
-      FD.append("O",changeData.O );
-      FD.append("SKU",changeData.SKU );
-      FD.append("quantity",changeData.quantity );
-      FD.append("depart_date",changeData.depart_date );
-      FD.append("supplier_type",changeData.supplier_type );
-      FD.append("supplier",changeData.supplier );
-      FD.append("staff",changeData.staff );
-      FD.append("status",changeData.status );
-      FD.append("location",changeData.location );
-      form.payload.next_stage !== "Manufacturing" && FD.append("_id",changeData._id ); 
-      
+      FD.append("catalog_type", changeData.catalog_type);
+      FD.append("SKU", changeData.SKU);
+      FD.append(
+        "title",
+        changeData.SKU
+          ? productSKU.P_SKU.find((row) => row.SKU === changeData.SKU && row)
+            ? productSKU.P_SKU.find((row) => row.SKU === changeData.SKU && row)
+                .product_title
+            : ""
+          : ""
+      );
 
-      const res =  form.payload.next_stage === "Manufacturing" ? await setOrderStatus(FD) : await setOrderStatusToNext(FD)
+      const res = await addCatalog(FD);
 
       if (res.status === 203) {
         dispatch(
@@ -4461,7 +4487,183 @@ const SideForm = () => {
           })
         );
       } else {
+        form.setState({
+          type: "Set_Display_Data",
+          payload: {
+            rows: [
+              ...form.localState.rows,
+              {
+                id: form.localState.rows.length + 1,
+                ...res.data.data,
+                action: res.data.data._id,
+              },
+            ],
+          },
+        });
+        handleClose();
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: res.data.message,
+          })
+        );
+      }
+    } catch (err) {
+      console.log(err);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        })
+      );
+    }
+  };
+  const handleAddIntro = async (e) => {
+    e.preventDefault();
 
+    try {
+      const FD = new FormData();
+
+      FD.append("display_content", changeData.display_content);
+      FD.append("title", changeData.title);
+      FD.append("banner", mobileBanner[0]);
+      FD.append("status", true);
+
+
+      const res = await addMobileIntro(FD);
+
+      if (res.status === 203) {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: res.data.message,
+          })
+        );
+      } else {
+        form.setState({
+          type: "Set_Display_Data",
+          payload: {
+            rows: [
+              ...form.localState.rows,
+              {
+                id: form.localState.rows.length + 1,
+                ...res.data.data,
+                action: res.data.data._id,
+              },
+            ],
+          },
+        });
+        handleClose();
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: res.data.message,
+          })
+        );
+      }
+    } catch (err) {
+      console.log(err);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        })
+      );
+    }
+  };
+  const handleUpdateIntro = async (e) => {
+    e.preventDefault();
+
+    try {
+      const FD = new FormData();
+
+      FD.append("display_content", changeData.display_content);
+      FD.append("title", changeData.title);
+      FD.append("banner", mobileBanner[0]);
+      FD.append("status", true);
+
+
+      const res = await addMobileIntro(FD);
+
+      if (res.status === 203) {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: res.data.message,
+          })
+        );
+      } else {
+        form.setState({
+          type: "Set_Display_Data",
+          payload: {
+            rows: [
+              ...form.localState.rows,
+              {
+                id: form.localState.rows.length + 1,
+                ...res.data.data,
+                action: res.data.data._id,
+              },
+            ],
+          },
+        });
+        handleClose();
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: res.data.message,
+          })
+        );
+      }
+    } catch (err) {
+      console.log(err);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        })
+      );
+    }
+  };
+  const handleOrderStatus = async (e) => {
+    e.preventDefault();
+
+    try {
+      const FD = new FormData();
+
+      FD.append("O", changeData.O);
+      FD.append("SKU", changeData.SKU);
+      FD.append("quantity", changeData.quantity);
+      FD.append("depart_date", changeData.depart_date);
+      FD.append("supplier_type", changeData.supplier_type);
+      FD.append("supplier", changeData.supplier);
+      FD.append("staff", changeData.staff);
+      FD.append("status", changeData.status);
+      FD.append("location", changeData.location);
+      form.payload.next_stage !== "Manufacturing" &&
+        FD.append("_id", changeData._id);
+
+      const res =
+        form.payload.next_stage === "Manufacturing"
+          ? await setOrderStatus(FD)
+          : await setOrderStatusToNext(FD);
+
+      if (res.status === 203) {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: res.data.message,
+          })
+        );
+      } else {
         handleClose();
         dispatch(
           setAlert({
@@ -4541,7 +4743,7 @@ const SideForm = () => {
               date: data.data.response.date,
             },
           ]);
-          resetAll()
+          resetAll();
 
           handleClose();
           dispatch(
@@ -4632,7 +4834,7 @@ const SideForm = () => {
               date: data.data.response.date,
             },
           ]);
-          resetAll()
+          resetAll();
 
           handleClose();
           dispatch(
@@ -4714,7 +4916,7 @@ const SideForm = () => {
               date: data.data.response.date,
             },
           ]);
-          resetAll()
+          resetAll();
           handleClose();
           dispatch(
             setAlert({
@@ -6052,10 +6254,9 @@ const SideForm = () => {
       FD.append("operation", "addWarehouse");
       FD.append("name", changeData.name);
       FD.append("address", changeData.address);
-      
+
       const res = await addDraft(FD);
       if (res) {
-      
         if (res.status === 203) {
           dispatch(
             setAlert({
@@ -6101,10 +6302,9 @@ const SideForm = () => {
       FD.append("_id", changeData._id);
       FD.append("name", changeData.name);
       FD.append("address", changeData.address);
-      
+
       const res = await addDraft(FD);
       if (res) {
-      
         if (res.status === 203) {
           dispatch(
             setAlert({
@@ -6384,7 +6584,6 @@ const SideForm = () => {
       FD.append("department", changeData.department);
       FD.append("user_id", changeData.user_id);
 
-
       const res = await addUser(FD);
 
       if (res.status === 203) {
@@ -6633,8 +6832,7 @@ const SideForm = () => {
                               variant="outlined"
                               name="SKU"
                             />
-
-<TextField
+                            <TextField
                               size="small"
                               fullWidth
                               required
@@ -6647,20 +6845,15 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               helperText="Please select your category"
                             >
-                              {dispatch_time.map(
-                                (option) =>
-                                    <MenuItem
-                                      key={option}
-                                      value={option}
-                                    >
-                                      {option}
-                                    </MenuItem>
-                              )}
+                              {dispatch_time.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
                               <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
-
                             <TextField
                               size="small"
                               fullWidth
@@ -9639,8 +9832,7 @@ const SideForm = () => {
                               variant="outlined"
                               name="SKU"
                             />
-
-<TextField
+                            <TextField
                               size="small"
                               fullWidth
                               required
@@ -9653,20 +9845,15 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               helperText="Please select your category"
                             >
-                              {dispatch_time.map(
-                                (option) =>
-                                    <MenuItem
-                                      key={option}
-                                      value={option}
-                                    >
-                                      {option}
-                                    </MenuItem>
-                              )}
+                              {dispatch_time.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
                               <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
-
                             <TextField
                               size="small"
                               fullWidth
@@ -12769,20 +12956,15 @@ const SideForm = () => {
                               onChange={handleProductFields}
                               helperText="Please select your category"
                             >
-                              {dispatch_time.map(
-                                (option) =>
-                                    <MenuItem
-                                      key={option}
-                                      value={option}
-                                    >
-                                      {option}
-                                    </MenuItem>
-                              )}
+                              {dispatch_time.map((option) => (
+                                <MenuItem key={option} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
                               <MenuItem key={"none"} value="None">
                                 {"None"}
                               </MenuItem>
                             </TextField>
-
                             <TextField
                               size="small"
                               fullWidth
@@ -18709,7 +18891,6 @@ const SideForm = () => {
                             Get Image Url
                           </FormLabel>
 
-
                           <WebBannerPreviews
                             text={"Please Drag and Drop the Image "}
                             webBanner={Image}
@@ -18748,15 +18929,13 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-
-<WebBannerPreviews
-                            text={"Please Drag and Drop the Image "}
-                            webBanner={featured}
-                            setWebBanner={setFeatured}
-                          >
-                            {" "}
-                          </WebBannerPreviews>
-
+                    <WebBannerPreviews
+                      text={"Please Drag and Drop the Image "}
+                      webBanner={featured}
+                      setWebBanner={setFeatured}
+                    >
+                      {" "}
+                    </WebBannerPreviews>
 
                     <TextField
                       size="small"
@@ -22975,7 +23154,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                     <Autocomplete
+                    <Autocomplete
                       disablePortal
                       size="small"
                       fullWidth
@@ -23282,8 +23461,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-
-<Autocomplete
+                    <Autocomplete
                       disablePortal
                       size="small"
                       fullWidth
@@ -23625,8 +23803,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-
-<Autocomplete
+                    <Autocomplete
                       disablePortal
                       size="small"
                       fullWidth
@@ -23653,7 +23830,7 @@ const SideForm = () => {
                       }
                     />
 
-<Autocomplete
+                    <Autocomplete
                       disablePortal
                       size="small"
                       fullWidth
@@ -23661,9 +23838,11 @@ const SideForm = () => {
                       // multiple
                       autoHighlight
                       id="combo-box-demo"
-                      options={productSKU.warehouse.map(row=>row.name).filter((row) => {
-                        return row !== changeData.warehouse;
-                      })}
+                      options={productSKU.warehouse
+                        .map((row) => row.name)
+                        .filter((row) => {
+                          return row !== changeData.warehouse;
+                        })}
                       renderInput={(params) => (
                         <TextField
                           onKeyUpCapture={handleSearchWarehouse}
@@ -25280,7 +25459,7 @@ const SideForm = () => {
                     encType="application/x-www-form-urlencoded"
                     method="post"
                   >
-                     <TextField
+                    <TextField
                       fullWidth
                       sx={{ mb: 1 }}
                       size="small"
@@ -25322,7 +25501,7 @@ const SideForm = () => {
                       variant="outlined"
                       name="mobile"
                     />
-                      <TextField
+                    <TextField
                       fullWidth
                       sx={{ mb: 1 }}
                       size="small"
@@ -25779,7 +25958,6 @@ const SideForm = () => {
             )}
             {/* update coupon */}
 
-
             {/*  discount order status */}
 
             {form.formType === "order_status" && (
@@ -25807,7 +25985,6 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-
                     <TextField
                       size="small"
                       fullWidth
@@ -25845,7 +26022,11 @@ const SideForm = () => {
                       inputProps={{ style: { textTransform: "uppercase" } }}
                       label="Quantity"
                       onChange={handleProductFields}
-                      value={changeData.quantity <= changeData.total_quantity ? changeData.quantity : 0 }
+                      value={
+                        changeData.quantity <= changeData.total_quantity
+                          ? changeData.quantity
+                          : 0
+                      }
                       type="number"
                       helperText="Please enter the quantity for tranfer."
                     />
@@ -25862,46 +26043,56 @@ const SideForm = () => {
                       helperText="Please enter the departure for tranfer."
                     />
 
-                  <FormControl>
-                    <FormLabel id="demo-radio-buttons-group-label">Supplier Type</FormLabel>
-                    <RadioGroup
-                      aria-labelledby="demo-radio-buttons-group-label"
-                      defaultValue = {'supplier'}
-                      onChange={handleProductFields}
-                      name="supplier_type"
-                    >
-                      <FormControlLabel value="staff" control={<Radio />} label="Staff" />
-                      <FormControlLabel value="supplier" control={<Radio />} label="Supplier" />
-                    </RadioGroup>
-                  </FormControl>
+                    <FormControl>
+                      <FormLabel id="demo-radio-buttons-group-label">
+                        Supplier Type
+                      </FormLabel>
+                      <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        defaultValue={"supplier"}
+                        onChange={handleProductFields}
+                        name="supplier_type"
+                      >
+                        <FormControlLabel
+                          value="staff"
+                          control={<Radio />}
+                          label="Staff"
+                        />
+                        <FormControlLabel
+                          value="supplier"
+                          control={<Radio />}
+                          label="Supplier"
+                        />
+                      </RadioGroup>
+                    </FormControl>
 
-                  {changeData.supplier_type === "supplier" ?<TextField
-                      size="small"
-                      fullWidth
-                      // required
-                      id="outlined-select"
-                      name="supplier"
-                      label="Supplier"
-                      onChange={handleProductFields}
-                      value={changeData.supplier || ""}
-                      type="text"
-                      helperText="Please enter your supplier must be unique."
-                    />
-                      :
+                    {changeData.supplier_type === "supplier" ? (
                       <TextField
-                      size="small"
-                      fullWidth
-                      // required
-                      id="outlined-select"
-                      name="staff"
-                      label="Staff"
-                      onChange={handleProductFields}
-                      value={changeData.staff || ""}
-                      type="text"
-                      helperText="Please enter your staff must be unique."
+                        size="small"
+                        fullWidth
+                        // required
+                        id="outlined-select"
+                        name="supplier"
+                        label="Supplier"
+                        onChange={handleProductFields}
+                        value={changeData.supplier || ""}
+                        type="text"
+                        helperText="Please enter your supplier must be unique."
                       />
-                      }
-
+                    ) : (
+                      <TextField
+                        size="small"
+                        fullWidth
+                        // required
+                        id="outlined-select"
+                        name="staff"
+                        label="Staff"
+                        onChange={handleProductFields}
+                        value={changeData.staff || ""}
+                        type="text"
+                        helperText="Please enter your staff must be unique."
+                      />
+                    )}
 
                     <TextField
                       size="small"
@@ -25915,8 +26106,6 @@ const SideForm = () => {
                       value={changeData.location}
                       type="text"
                     />
-
-
 
                     <Button
                       color="primary"
@@ -25932,7 +26121,6 @@ const SideForm = () => {
             )}
 
             {/* discount order status Ends */}
-
 
             {/*  discount order status */}
 
@@ -25956,12 +26144,11 @@ const SideForm = () => {
                     className="form"
                     id="myForm"
                     onSubmit={(e) => {
-                      confirmBox(e, handleAddWarehouse );
+                      confirmBox(e, handleAddWarehouse);
                     }}
                     encType="multipart/form-data"
                     method="post"
                   >
-
                     <TextField
                       size="small"
                       fullWidth
@@ -25990,9 +26177,7 @@ const SideForm = () => {
                       value={changeData.address}
                       type="text"
                       helperText={"Please enter full address of the warehouse."}
-
                     />
-
 
                     <Button
                       color="primary"
@@ -26031,12 +26216,11 @@ const SideForm = () => {
                     className="form"
                     id="myForm"
                     onSubmit={(e) => {
-                      confirmBox(e, handleUpdateWarehouse );
+                      confirmBox(e, handleUpdateWarehouse);
                     }}
                     encType="multipart/form-data"
                     method="post"
                   >
-
                     <TextField
                       size="small"
                       fullWidth
@@ -26065,9 +26249,7 @@ const SideForm = () => {
                       value={changeData.address}
                       type="text"
                       helperText={"Please enter full address of the warehouse."}
-
                     />
-
 
                     <Button
                       color="primary"
@@ -26083,8 +26265,280 @@ const SideForm = () => {
             )}
 
             {/* discount order status Ends */}
+            {/* add catalog starts */}
+
+            {form.formType === "addCatalog" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography component={"span"} variant="h5">
+                    Add Catalog
+                    <Typography
+                      component={"span"}
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add catalog details here.
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={2}>
+                  <form
+                    className="form"
+                    id="myForm"
+                    onSubmit={(e) => {
+                      confirmBox(e, handleAddCatalog);
+                    }}
+                    encType="multipart/form-data"
+                    method="post"
+                  >
+                    <TextField
+                      fullWidth
+                      id="outlined-select"
+                      required
+                      select
+                      size={"small"}
+                      helperText="Please select the catalog."
+                      name="catalog_type"
+                      label="Select catalog..."
+                      value={changeData.catalog_type || ""}
+                      onChange={handleProductFields}
+                      // multiple
+                    >
+                      {catalog_type.map((option) => (
+                        <MenuItem key={option.id} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
+                    <Autocomplete
+                      disablePortal
+                      size="small"
+                      fullWidth
+                      noOptionsText={"ex : P-01001"}
+                      // multiple
+                      autoHighlight
+                      id="combo-box-demo"
+                      options={productSKU.P_SKU.map((row) => {
+                        return row.SKU;
+                      })}
+                      renderInput={(params) => (
+                        <TextField
+                          onKeyUpCapture={handleSearch}
+                          value={changeData.SKU || ""}
+                          {...params}
+                          label="Product SKU"
+                        />
+                      )}
+                      onChange={(e, newMember) =>
+                        setData((old) => ({
+                          ...old,
+                          SKU: newMember,
+                        }))
+                      }
+                    />
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      disabled
+                      id="outlined-select"
+                      name="SKU"
+                      value={
+                        changeData.SKU
+                          ? productSKU.P_SKU.find(
+                              (row) => row.SKU === changeData.SKU && row
+                            )
+                            ? productSKU.P_SKU.find(
+                                (row) => row.SKU === changeData.SKU && row
+                              ).product_title
+                            : ""
+                          : ""
+                      }
+                      inputProps={{ style: { textTransform: "uppercase" } }}
+                      label="Product Title"
+                      onChange={handleProductFields}
+                      type="text"
+                    />
+
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Add Catalog
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+                {/* add Intro starts */}
+
+                {form.formType === "addIntro" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography component={"span"} variant="h5">
+                    Add Intro 
+                    <Typography
+                      component={"span"}
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Add Intro details here.
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={2}>
+                  <form
+                    className="form"
+                    id="myForm"
+                    onSubmit={(e) => {
+                      confirmBox(e, handleAddIntro);
+                    }}
+                    encType="multipart/form-data"
+                    method="post"
+                  >
+
+<FormLabel id="demo-radio-buttons-group-label">
+                      Mobile View Banner Image ( width less than equal to 800px or greatter than 6000px * greatter than equal to 200px or less than 600px)
+                    </FormLabel>
+                    <MobileBannerPreviews
+                      mobileBanner={mobileBanner}
+                      setMobileBanner={setMobileBanner}
+                      text={"Please Drag and Drop the Mobile Banner."}
+                    >
+                      {" "}
+                    </MobileBannerPreviews>
 
 
+                    <TextField
+                      size="small"
+                      fullWidth
+                      id="outlined-select"
+                      name="title"
+                      value={changeData.title}
+                      label="Title"
+                      onChange={handleProductFields}
+                      type="text"
+                    />
+
+
+                    <TextField
+                      rows = {5}
+                      multiline
+                      size="small"
+                      fullWidth
+                      id="outlined-select"
+                      name="display_content"
+                      value={changeData.display_content}
+                      label="Display Content"
+                      onChange={handleProductFields}
+                      type="text"
+                    />
+
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Add Catalog
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
+
+{form.formType === "updateIntro" && (
+              <Grid container p={5}>
+                <Grid item xs={12}>
+                  <Typography component={"span"} variant="h5">
+                    Update Intro 
+                    <Typography
+                      component={"span"}
+                      sx={{ display: "block !important" }}
+                      variant="caption"
+                    >
+                      Update Intro details here.
+                    </Typography>
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} mt={2}>
+                  <form
+                    className="form"
+                    id="myForm"
+                    onSubmit={(e) => {
+                      confirmBox(e, handleUpdateIntro);
+                    }}
+                    encType="multipart/form-data"
+                    method="post"
+                  >
+
+<FormLabel id="demo-radio-buttons-group-label">
+                      Mobile View Banner Image ( width less than equal to 800px or greatter than 6000px * greatter than equal to 200px or less than 600px)
+                    </FormLabel>
+                    <MobileBannerPreviews
+                      mobileBanner={mobileBanner}
+                      setMobileBanner={setMobileBanner}
+                      text={"Please Drag and Drop the Mobile Banner."}
+                    >
+                      {" "}
+                    </MobileBannerPreviews>
+
+
+                    <TextField
+                      size="small"
+                      fullWidth
+                      id="outlined-select"
+                      name="title"
+                      value={changeData.title || ""}
+                      label="Title"
+                      onChange={handleProductFields}
+                      type="text"
+                    />
+
+
+                    <TextField
+                      rows = {5}
+                      multiline
+                      size="small"
+                      fullWidth
+                      id="outlined-select"
+                      name="display_content"
+                      value={changeData.display_content || "" }
+                      label="Display Content"
+                      onChange={handleProductFields}
+                      type="text"
+                    />
+
+<FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={changeData.status}
+                            onChange={handleProductFields}
+                            name="status"
+                          />
+                        }
+                        label="Status"
+                      />
+
+                    <Button
+                      color="primary"
+                      type="submit"
+                      fullWidth
+                      variant="contained"
+                    >
+                      Add Catalog
+                    </Button>
+                  </form>
+                </Grid>
+              </Grid>
+            )}
           </Box>
         </Backdrop>
       </Slide>
@@ -26198,10 +26652,10 @@ function WebBannerPreviews({ text, webBanner, setWebBanner }) {
 function MobileBannerDimension(images, setMobileBanner) {
   let result = images.map(async (image) => {
     let { width, height } = await size(URL.createObjectURL(image));
-    // // console.log(width,height)
+    console.log(width,height)
     Object.assign(image, {
       preview: URL.createObjectURL(image),
-      validate: width === 800 && height === 200 ? true : false,
+      validate: (width <= 800 && height >= 200) && (width >= 300 && height <= 600) ? true : false,
     });
     return image;
   });
@@ -26595,7 +27049,6 @@ function ProductsPreviews({ files, setFiles, text }) {
     </section>
   );
 }
-
 
 const option = {
   labels: {

@@ -266,6 +266,7 @@ function Dashboard({ state, setState, handleStage }) {
       type: "Set_Any",
       payload: {
         O: e.target.value,
+        search: e.target.value,
       },
     });
   }

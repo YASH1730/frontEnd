@@ -16,9 +16,9 @@ export default function DataTable({state}) {
         filterModel={{
           items: [
             {
-              columnField: "O",
+              columnField: `${state.searchCol}`,
               operatorValue: "contains",
-              value: `${state.O}`,
+              value: `${state.search}`,
             },
           ],
         }}

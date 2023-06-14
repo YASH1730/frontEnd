@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState } from "react";
 import {
   IconButton,
   Menu,
@@ -21,6 +21,7 @@ import "../assets/custom/css/home.css";
 import logo from "../assets/img/Blog/logo.webp";
 
 // icons
+import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import PendingIcon from "@mui/icons-material/Pending";
@@ -33,7 +34,7 @@ import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import AddIcon from "@mui/icons-material/Add";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import CategoryIcon from "@mui/icons-material/Category";
+// import CategoryIcon from "@mui/icons-material/Category";
 import PlaylistAddCheckCircleIcon from "@mui/icons-material/PlaylistAddCheckCircle";
 import InboxIcon from "@mui/icons-material/Inbox";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
@@ -47,33 +48,35 @@ import GridViewIcon from "@mui/icons-material/GridView";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import MergeIcon from "@mui/icons-material/Merge";
 import HardwareIcon from "@mui/icons-material/Hardware";
-import ChatIcon from '@mui/icons-material/Chat';
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import SecurityIcon from "@mui/icons-material/Security";
-import PolicyIcon from "@mui/icons-material/Policy";
+import ChatIcon from "@mui/icons-material/Chat";
+import StayCurrentPortraitIcon from '@mui/icons-material/StayCurrentPortrait';
+// import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+// import SecurityIcon from "@mui/icons-material/Security";
+// import PolicyIcon from "@mui/icons-material/Policy";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 // import AccountTreeIcon from '@mui/icons-material/AccountTree';
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+// import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
 // import redux
 import {
   setAlert,
   setAuth,
   setMode,
   setTab,
-  setRefreshBox,
+  // setRefreshBox,
   setSocket,
 } from "../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 
 // refresh component
 import RefreshToken from "./Utility/RefreshToken";
-// socket 
-import Socket from "../sockets/Socket"
+// socket
+import Socket from "../sockets/Socket";
 
-const Home = ({history}) => {
+const Home = ({ history }) => {
   const dispatch = useDispatch();
   const { auth, mode, tab } = useSelector((state) => state);
-  const permission = auth.access || [] 
+  const permission = auth.access || [];
 
   // states
   const [anchor, setAnchor] = useState(null);
@@ -102,6 +105,7 @@ const Home = ({history}) => {
       product: false,
       admin: false,
       order: false,
+      mobile: false,
     });
 
     function ListTabs() {
@@ -164,34 +168,32 @@ const Home = ({history}) => {
                   <ListItemText primary="Dashboard" />
                 </ListItem>
 
-{/* 
+                {/* 
                 {permission.includes("Hardware") && ( */}
-                  <ListItem
-                    onClick={() => {
-                      handleClose("/chat");
-                    }}
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          width: "30px",
-                          height: "30px",
-                          svg: {
-                            fontSize: "1.1rem",
-                          },
-                        }}
-                      >
-                        <ChatIcon
-                          color={
-                            window.location.pathname === "/chat"
-                              ? "primary"
-                              : ""
-                          }
-                        />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="Chat" />
-                  </ListItem>
+                <ListItem
+                  onClick={() => {
+                    handleClose("/chat");
+                  }}
+                >
+                  <ListItemAvatar>
+                    <Avatar
+                      sx={{
+                        width: "30px",
+                        height: "30px",
+                        svg: {
+                          fontSize: "1.1rem",
+                        },
+                      }}
+                    >
+                      <ChatIcon
+                        color={
+                          window.location.pathname === "/chat" ? "primary" : ""
+                        }
+                      />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary="Chat" />
+                </ListItem>
                 {/* )} */}
 
                 {permission.includes("Product") && (
@@ -501,35 +503,33 @@ const Home = ({history}) => {
                       </ListItemAvatar>
                       <ListItemText primary="Orders" />
                     </ListItem>
-                  <ListItem
+                    <ListItem
                       sx={{ pl: 4 }}
-
-                    onClick={() => {
-                      handleClose("/order_status");
-                    }}
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        sx={{
-                          width: "30px",
-                          height: "30px",
-                          svg: {
-                            fontSize: "1.1rem",
-                          },
-                        }}
-                      >
-                        <InventoryIcon
-                          color={
-                            window.location.pathname === "/order_status"
-                              ? "primary"
-                              : ""
-                          }
-                        />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary="Order Status" />
-                  </ListItem>
-
+                      onClick={() => {
+                        handleClose("/order_status");
+                      }}
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          sx={{
+                            width: "30px",
+                            height: "30px",
+                            svg: {
+                              fontSize: "1.1rem",
+                            },
+                          }}
+                        >
+                          <InventoryIcon
+                            color={
+                              window.location.pathname === "/order_status"
+                                ? "primary"
+                                : ""
+                            }
+                          />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary="Order Status" />
+                    </ListItem>
                   </List>
                 </Collapse>
 
@@ -620,6 +620,35 @@ const Home = ({history}) => {
                   </ListItem>
                 )}
 
+                {permission.includes("Catalog") && (
+                  <ListItem
+                    onClick={() => {
+                      handleClose("/catalog");
+                    }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar
+                        sx={{
+                          width: "30px",
+                          height: "30px",
+                          svg: {
+                            fontSize: "1.1rem",
+                          },
+                        }}
+                      >
+                        <ViewStreamIcon
+                          color={
+                            window.location.pathname === "/catalog"
+                              ? "primary"
+                              : ""
+                          }
+                        />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary="Catalog" />
+                  </ListItem>
+                )}
+
                 {permission.includes("Blog") && (
                   <ListItem
                     onClick={() => {
@@ -706,46 +735,45 @@ const Home = ({history}) => {
                     <ListItemText primary="Inventory" />
                   </ListItem>
                 )}
-              
 
-                {/* <ListItem
-                  onClick={(e) => {
-                    setType({ ...type, admin: !type.admin });
-                  }}
-                >
-                  <ListItemAvatar>
-                    <Avatar
-                      sx={{
-                        width: "30px",
-                        height: "30px",
-                        svg: {
-                          fontSize: "1.1rem",
-                        },
-                      }}
-                    >
-                      <AdminPanelSettingsIcon
-                        color={
-                          window.location.pathname === "/admin" ||
-                          window.location.pathname === "/security" ||
-                          window.location.pathname === "/suppliers" ||
-                          window.location.pathname === "/settings"
-                            ? "primary"
-                            : ""
-                        }
-                      />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary="Admin" />
-                  {type.admin ? <ExpandLess /> : <ExpandMore />}
-                </ListItem> */}
-                {/* // admin nested menu */}
-                {/* <Collapse in={type.admin} timeout="auto" unmountOnExit>
+{permission.includes("Mobile") && (
+                  <ListItem
+                    onClick={(e) => {
+                      setType({ ...type, mobile: !type.mobile });
+                    }}
+                  >
+                    <ListItemAvatar>
+                      <Avatar
+                        sx={{
+                          width: "30px",
+                          height: "30px",
+                          svg: {
+                            fontSize: "1.1rem",
+                          },
+                        }}
+                      >
+                        <StayCurrentPortraitIcon
+                          color={
+                            window.location.pathname === "/mobile"
+                              ? "primary"
+                              : ""
+                          }
+                        />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary="Mobile App" />
+                    {type.mobile ? <ExpandLess /> : <ExpandMore />}
+                  </ListItem>
+                )}
+                
+
+                {/* // product nested menu */}
+                <Collapse in={type.mobile} timeout="auto" unmountOnExit>
                   <List dense={true} component="div" disablePadding>
-                    // this code shifted to the setting tab 
                     <ListItem
                       sx={{ pl: 4 }}
                       onClick={() => {
-                        handleClose("/pincode");
+                        handleClose("/intro_page");
                       }}
                     >
                       <ListItemAvatar>
@@ -758,103 +786,19 @@ const Home = ({history}) => {
                             },
                           }}
                         >
-                          <LocalShippingIcon
+                          <PlayCircleFilledWhiteIcon
                             color={
-                              window.location.pathname === "/pincode"
+                              window.location.pathname === "/intro_page"
                                 ? "primary"
                                 : ""
                             }
                           />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary="Pin Code" />
-                    </ListItem>
-
-                    <ListItem
-                      sx={{ pl: 4 }}
-                      onClick={() => {
-                        handleClose("/security");
-                      }}
-                    >
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            width: "30px",
-                            height: "30px",
-                            svg: {
-                              fontSize: "1rem",
-                            },
-                          }}
-                        >
-                          <SecurityIcon
-                            color={
-                              window.location.pathname === "/security"
-                                ? "primary"
-                                : ""
-                            }
-                          />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary="Security" />
-                    </ListItem>
-
-                    <ListItem
-                      sx={{ pl: 4 }}
-                      onClick={() => {
-                        handleClose("/suppliers");
-                      }}
-                    >
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            width: "30px",
-                            height: "30px",
-                            svg: {
-                              fontSize: "1rem",
-                            },
-                          }}
-                        >
-                          <AssignmentIndIcon
-                            color={
-                              window.location.pathname === "/suppliers"
-                                ? "primary"
-                                : ""
-                            }
-                          />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary="Suppliers" />
-                    </ListItem>
-                    
-                    <ListItem
-                      sx={{ pl: 4 }}
-                      onClick={() => {
-                        handleClose("/settings");
-                      }}
-                    >
-                      <ListItemAvatar>
-                        <Avatar
-                          sx={{
-                            width: "30px",
-                            height: "30px",
-                            svg: {
-                              fontSize: "1rem",
-                            },
-                          }}
-                        >
-                          <SettingsOutlinedIcon
-                            color={
-                              window.location.pathname === "/settings"
-                                ? "primary"
-                                : ""
-                            }
-                          />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary="Settings" />
+                      <ListItemText primary="Intro Page" />
                     </ListItem>
                   </List>
-                </Collapse> */}
+                </Collapse>
 
                 {permission.includes("Settings") && (
                   <ListItem
@@ -963,7 +907,7 @@ const Home = ({history}) => {
   }
 
   const handleLogout = () => {
-    Socket.Log_Out(auth)
+    Socket.Log_Out(auth);
     localStorage.clear();
     setAnchor(null);
     handleClose();
@@ -972,12 +916,10 @@ const Home = ({history}) => {
         isAuth: false,
         WDToken: null,
         role: null,
-        access : []
+        access: [],
       })
     );
-    dispatch(
-      setSocket(null)
-    );
+    dispatch(setSocket(null));
     dispatch(
       setAlert({
         open: true,
@@ -990,8 +932,11 @@ const Home = ({history}) => {
 
   // capitalize the first letter in word
   function titleCase(str) {
-    var splitStr = str.toLowerCase().split(" ")[0].length >0 ?str.toLowerCase().split(" ") : ['Woodshala Admin'];
-    
+    var splitStr =
+      str.toLowerCase().split(" ")[0].length > 0
+        ? str.toLowerCase().split(" ")
+        : ["Woodshala Admin"];
+
     for (var i = 0; i < splitStr.length; i++) {
       // You do not need to check if i is larger than splitStr length, as your for does that for you
       // Assign it back to the array
@@ -1005,7 +950,7 @@ const Home = ({history}) => {
   return (
     <Box
       sx={{
-        mb: window.location.pathname !== "/chat" &&  3,
+        mb: window.location.pathname !== "/chat" && 3,
         display: window.location.pathname === "/" ? "none" : "block",
       }}
     >

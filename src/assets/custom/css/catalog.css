@@ -1,0 +1,38 @@
+
+.catalog-main-container{
+    padding: 1rem 2rem;
+}
+
+.catalog-card-container{
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:left;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.catalog-card-wrapper{
+    padding: 1.5rem;
+    min-width: 250px;
+    gap: 1rem;
+    color: white;
+    border-radius: 10px;
+    background-color: #682D2D;
+
+}
+
+.catalog-button-container{
+    padding: 1rem;
+    gap : 1rem;
+    align-items: center;
+
+}
+
+.catalog-button-container button{
+    min-width: 150px;
+
+}
+
+.catalog-list-container{
+ padding: 1rem;
+}

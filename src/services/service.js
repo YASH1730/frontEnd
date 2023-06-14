@@ -1547,3 +1547,50 @@ export const searchWarehouseDetails = async (data) => {
     },
   });
 };
+
+export const addCatalog = async (data) => {
+  return await axios.post(`${API}/addCatalog`,data,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+
+export const listCatalog = async (data) => {
+  return await axios.get(`${API}/listCatalog?catalog_type=${data}`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+
+export const deleteCatalog = async (data) => {
+  return await axios.delete(`${API}/deleteCatalog?id=${data}`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+export const deleteIntroBanner = async (data) => {
+  return await axios.delete(`${API}/deleteIntroBanner?id=${data}`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+
+export const addMobileIntro = async (data) => {
+  return await axios.post(`${API}/addMobileIntro`,data,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+
+export const listMobileIntro = async () => {
+  return await axios.get(`${API}/listMobileIntro`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};

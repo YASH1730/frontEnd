@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import CssBaseline from "@mui/material/CssBaseline";
-
+import config from './config.json'
 // Redux Setup
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react"; // for persisting data
@@ -13,7 +13,7 @@ import { store, persistor as persister } from "./store/store";
 // subscribe
 
 // subscribe this function is used for console the current state if there is no Redux extension there
-store.subscribe(() => console.log(store.getState()));
+store.subscribe(() => config.SHOW_STATE && console.log(store.getState()));
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
