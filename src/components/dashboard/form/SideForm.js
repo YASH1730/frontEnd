@@ -556,6 +556,10 @@ const SideForm = () => {
   ];
   const rangeCatalog = [
     {
+      value: "Antique & Distressed Furniture",
+      label: "Antique & Distressed Furniture",
+    },
+    {
       value: "Modern & Contemporary",
       label: "Modern & Contemporary",
     },
@@ -723,7 +727,7 @@ const SideForm = () => {
     secMater: "",
     secMater_weight: "",
     selling_price: 0,
-    mrp: 0,
+    MRP: 0,
     discount_cap: 0,
     polish_time: 0,
     manufacturing_time: 0,
@@ -2328,7 +2332,7 @@ const SideForm = () => {
       secMater: "",
       secMater_weight: "",
       selling_price: 0,
-      mrp: 0,
+      MRP: 0,
       discount_cap: 0,
       polish_time: 0,
       manufacturing_time: 0,
@@ -3825,6 +3829,8 @@ const SideForm = () => {
     );
     FD.append("warehouse", changeData.warehouse);
 
+    FD.append("MRP", changeData.MRP ? changeData.MRP : 0);
+
     FD.append(
       "showroom_price",
       changeData.showroom_price ? changeData.showroom_price : 0
@@ -3999,6 +4005,9 @@ const SideForm = () => {
       changeData.package_breadth ? changeData.package_breadth : 0
     );
     FD.append("warehouse", changeData.warehouse);
+
+    FD.append("MRP", changeData.MRP ? changeData.MRP : 0);
+
 
     FD.append(
       "showroom_price",
@@ -6930,7 +6939,7 @@ const SideForm = () => {
                               // autoComplete={false}
                               id="fullWidth"
                               // required
-                              label="Showroom Price"
+                              label="MRP"
                               type="number"
                               InputProps={{
                                 startAdornment: (
@@ -6940,8 +6949,8 @@ const SideForm = () => {
                                 ),
                               }}
                               variant="outlined"
-                              name="showroom_price"
-                              value={changeData.showroom_price}
+                              name="MRP"
+                              value={changeData.MRP}
                               onChange={handleProductFields}
                             />
                             <TextField
@@ -7313,7 +7322,7 @@ const SideForm = () => {
                                   helperText="Check it if want it to sell when out of Inventory."
                                 />
                               }
-                              label="Continue Selling"
+                              label="Continue selling when out of Stock"
                             />
                             {/*                            
                              <TextField sx = {{mb : 2}}
@@ -7585,13 +7594,13 @@ const SideForm = () => {
                       </Step>
                       {/* Images End */}
 
-                      {/* Features */}
+                      {/* Feature & Specification */}
                       <Step>
                         <StepLabel
                           sx={{ cursor: "pointer !important" }}
                           onClick={() => setActiveStep(2)}
                         >
-                          Features
+                          Feature & Specification
                         </StepLabel>
                         <StepContent className="stepContent">
                           <Box className="fields">
@@ -8620,6 +8629,236 @@ const SideForm = () => {
                                 name="fitting_size"
                               />
                             )}
+
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="back_style"
+                              label="Back Style"
+                              multiple
+                              value={changeData.back_style || ""}
+                              onChange={handleProductFields}
+                              helperText="Please select your Back Style."
+                            >
+                              {backStyleCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="weight_capacity"
+                              label="Weight Capacity"
+                              multiple
+                              value={changeData.weight_capacity}
+                              onChange={handleProductFields}
+                              helperText="Please select your Weight Capacity."
+                            >
+                              {weightCapCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Drawer
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.drawer || "no"}
+                                onChange={handleProductFields}
+                                name="drawer"
+                              >
+                                <FormControlLabel
+                                  value="mechanical"
+                                  control={<Radio />}
+                                  label="Mechanical"
+                                />
+                                <FormControlLabel
+                                  value="wooden"
+                                  control={<Radio />}
+                                  label="Wooden"
+                                />
+                                <FormControlLabel
+                                  value="none"
+                                  control={<Radio />}
+                                  label="None"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            {(changeData.drawer === "mechanical" ||
+                              changeData.drawer === "wooden") && (
+                              <TextField
+                                size="small"
+                                fullWidth
+                                type="number"
+                                id="outlined-select"
+                                name="drawer_count"
+                                label="Drawer Count"
+                                value={changeData.drawer_count}
+                                onChange={handleProductFields}
+                              />
+                            )}
+                                         <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Mattress
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.mattress || "no"}
+                                onChange={handleProductFields}
+                                name="mattress"
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            {changeData.mattress === "yes" && (
+                              <>
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  type="number"
+                                  id="outlined-select"
+                                  name="mattress_length"
+                                  label="Mattress Length"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  value={changeData.mattress_length}
+                                  onChange={handleProductFields}
+                                />
+                                <TextField
+                                  size="small"
+                                  type="number"
+                                  fullWidth
+                                  id="outlined-select"
+                                  name="mattress_breadth"
+                                  label="Mattress Breadth"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  value={changeData.mattress_breadth}
+                                  onChange={handleProductFields}
+                                />
+                              </>
+                            )}
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Cradle Bed
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.cradle_bed || "no"}
+                                onChange={handleProductFields}
+                                name="cradle_bed"
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            {changeData.cradle_bed === "yes" && (
+                              <>
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  type="number"
+                                  id="outlined-select"
+                                  name="cradle_bed_height"
+                                  label="Cradle Bed Height"
+                                  value={changeData.cradle_bed_height}
+                                  onChange={handleProductFields}
+                                />
+                                <TextField
+                                  size="small"
+                                  type="number"
+                                  fullWidth
+                                  id="outlined-select"
+                                  name="cradle_bed_width"
+                                  label="Cradle Bed Width"
+                                  value={changeData.cradle_bed_width}
+                                  onChange={handleProductFields}
+                                />
+                                <TextField
+                                  size="small"
+                                  type="number"
+                                  fullWidth
+                                  id="outlined-select"
+                                  name="cradle_bed_depth"
+                                  label="Cradle Bed Depth"
+                                  value={changeData.cradle_bed_depth}
+                                  onChange={handleProductFields}
+                                />
+                              </>
+                            )}
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Joints ((Useful in products where info about
+                                joints are shown))
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="joints"
+                                value={changeData.joints}
+                                onChange={handleProductFields}
+                              >
+                                <FormControlLabel
+                                  value="single"
+                                  control={<Radio />}
+                                  label="Single"
+                                />
+                                <FormControlLabel
+                                  value="multi"
+                                  control={<Radio />}
+                                  label="Multiple"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+
+
                           </Box>
 
                           <Box className="stepAction">
@@ -8642,18 +8881,18 @@ const SideForm = () => {
                           </Box>
                         </StepContent>
                       </Step>
-                      {/* Features ends */}
+                      {/* Feature & Specification ends */}
 
-                      {/* Miscellaneous */}
+                      {/* Hardware */}
                       <Step>
                         <StepLabel
                           sx={{ cursor: "pointer !important" }}
                           onClick={() => setActiveStep(3)}
                         >
-                          Miscellaneous
+                          Hardware
                         </StepLabel>
                         <StepContent className="stepContent">
-                          <Box className="fields">
+                          {/* <Box className="fields">
                             {" "}
                             <Box className="stepAction">
                               <Button
@@ -8784,7 +9023,7 @@ const SideForm = () => {
                                 />
                               </RadioGroup>
                             </FormControl>
-                          </Box>
+                          </Box> */}
                           <Box className="stepAction">
                             <Button
                               variant="outlined"
@@ -8805,7 +9044,7 @@ const SideForm = () => {
                           </Box>
                         </StepContent>
                       </Step>
-                      {/* Miscellaneous ends */}
+                      {/* Hardware ends */}
 
                       {/* Inventory & Shipping */}
                       <Step>
@@ -9566,122 +9805,7 @@ const SideForm = () => {
                                 />
                               </RadioGroup>
                             </FormControl>
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Mattress
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                value={changeData.mattress || "no"}
-                                onChange={handleProductFields}
-                                name="mattress"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.mattress === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  type="number"
-                                  id="outlined-select"
-                                  name="mattress_length"
-                                  label="Mattress Length"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        In Feet
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  value={changeData.mattress_length}
-                                  onChange={handleProductFields}
-                                />
-                                <TextField
-                                  size="small"
-                                  type="number"
-                                  fullWidth
-                                  id="outlined-select"
-                                  name="mattress_breadth"
-                                  label="Mattress Breadth"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        In Feet
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  value={changeData.mattress_breadth}
-                                  onChange={handleProductFields}
-                                />
-                              </>
-                            )}
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Cradle Bed
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                value={changeData.cradle_bed || "no"}
-                                onChange={handleProductFields}
-                                name="cradle_bed"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.cradle_bed === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  type="number"
-                                  id="outlined-select"
-                                  name="cradle_bed_height"
-                                  label="Cradle Bed Height"
-                                  value={changeData.cradle_bed_height}
-                                  onChange={handleProductFields}
-                                />
-                                <TextField
-                                  size="small"
-                                  type="number"
-                                  fullWidth
-                                  id="outlined-select"
-                                  name="cradle_bed_width"
-                                  label="Cradle Bed Width"
-                                  value={changeData.cradle_bed_width}
-                                  onChange={handleProductFields}
-                                />
-                                <TextField
-                                  size="small"
-                                  type="number"
-                                  fullWidth
-                                  id="outlined-select"
-                                  name="cradle_bed_depth"
-                                  label="Cradle Bed Depth"
-                                  value={changeData.cradle_bed_depth}
-                                  onChange={handleProductFields}
-                                />
-                              </>
-                            )}
+                          
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Vendor URLs
@@ -9930,7 +10054,7 @@ const SideForm = () => {
                               // autoComplete={false}
                               id="fullWidth"
                               // required
-                              label="Showroom Price"
+                              label="MRP"
                               type="number"
                               InputProps={{
                                 startAdornment: (
@@ -9940,8 +10064,8 @@ const SideForm = () => {
                                 ),
                               }}
                               variant="outlined"
-                              name="showroom_price"
-                              value={changeData.showroom_price}
+                              name="MRP"
+                              value={changeData.MRP}
                               onChange={handleProductFields}
                             />
                             <TextField
@@ -10314,7 +10438,7 @@ const SideForm = () => {
                                   helperText="Check it if want it to sell when out of Inventory."
                                 />
                               }
-                              label="Continue Selling"
+                              label="Continue selling when out of Stock"
                             />
                             {/*                            
                              <TextField sx = {{mb : 2}}
@@ -10683,13 +10807,13 @@ const SideForm = () => {
                       </Step>
                       {/* Images End */}
 
-                      {/* Features */}
+                      {/* Feature & Specification */}
                       <Step>
                         <StepLabel
                           sx={{ cursor: "pointer !important" }}
                           onClick={() => setActiveStep(2)}
                         >
-                          Features
+                          Feature & Specification
                         </StepLabel>
                         <StepContent className="stepContent">
                           <Box className="fields">
@@ -11718,6 +11842,233 @@ const SideForm = () => {
                                 name="fitting_size"
                               />
                             )}
+                             <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="back_style"
+                              label="Back Style"
+                              multiple
+                              value={changeData.back_style || ""}
+                              onChange={handleProductFields}
+                              helperText="Please select your Back Style."
+                            >
+                              {backStyleCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="weight_capacity"
+                              label="Weight Capacity"
+                              multiple
+                              value={changeData.weight_capacity}
+                              onChange={handleProductFields}
+                              helperText="Please select your Weight Capacity."
+                            >
+                              {weightCapCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Drawer
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.drawer || "no"}
+                                onChange={handleProductFields}
+                                name="drawer"
+                              >
+                                <FormControlLabel
+                                  value="mechanical"
+                                  control={<Radio />}
+                                  label="Mechanical"
+                                />
+                                <FormControlLabel
+                                  value="wooden"
+                                  control={<Radio />}
+                                  label="Wooden"
+                                />
+                                <FormControlLabel
+                                  value="none"
+                                  control={<Radio />}
+                                  label="None"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            {(changeData.drawer === "mechanical" ||
+                              changeData.drawer === "wooden") && (
+                              <TextField
+                                size="small"
+                                fullWidth
+                                type="number"
+                                id="outlined-select"
+                                name="drawer_count"
+                                label="Drawer Count"
+                                value={changeData.drawer_count}
+                                onChange={handleProductFields}
+                              />
+                            )}
+                              <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Mattress
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.mattress || "no"}
+                                onChange={handleProductFields}
+                                name="mattress"
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            {changeData.mattress === "yes" && (
+                              <>
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  type="number"
+                                  id="outlined-select"
+                                  name="mattress_length"
+                                  label="Mattress Length"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  value={changeData.mattress_length}
+                                  onChange={handleProductFields}
+                                />
+                                <TextField
+                                  size="small"
+                                  type="number"
+                                  fullWidth
+                                  id="outlined-select"
+                                  name="mattress_breadth"
+                                  label="Mattress Breadth"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  value={changeData.mattress_breadth}
+                                  onChange={handleProductFields}
+                                />
+                              </>
+                            )}
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Cradle Bed
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.cradle_bed || "no"}
+                                onChange={handleProductFields}
+                                name="cradle_bed"
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            {changeData.cradle_bed === "yes" && (
+                              <>
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  type="number"
+                                  id="outlined-select"
+                                  name="cradle_bed_height"
+                                  label="Cradle Bed Height"
+                                  value={changeData.cradle_bed_height}
+                                  onChange={handleProductFields}
+                                />
+                                <TextField
+                                  size="small"
+                                  type="number"
+                                  fullWidth
+                                  id="outlined-select"
+                                  name="cradle_bed_width"
+                                  label="Cradle Bed Width"
+                                  value={changeData.cradle_bed_width}
+                                  onChange={handleProductFields}
+                                />
+                                <TextField
+                                  size="small"
+                                  type="number"
+                                  fullWidth
+                                  id="outlined-select"
+                                  name="cradle_bed_depth"
+                                  label="Cradle Bed Depth"
+                                  value={changeData.cradle_bed_depth}
+                                  onChange={handleProductFields}
+                                />
+                              </>
+                            )}
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Joints ((Useful in products where info about
+                                joints are shown))
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="joints"
+                                value={changeData.joints}
+                                onChange={handleProductFields}
+                              >
+                                <FormControlLabel
+                                  value="single"
+                                  control={<Radio />}
+                                  label="Single"
+                                />
+                                <FormControlLabel
+                                  value="multi"
+                                  control={<Radio />}
+                                  label="Multiple"
+                                />
+                              </RadioGroup>
+                            </FormControl>
                           </Box>
 
                           <Box className="stepAction">
@@ -11740,18 +12091,18 @@ const SideForm = () => {
                           </Box>
                         </StepContent>
                       </Step>
-                      {/* Features ends */}
+                      {/* Feature & Specification ends */}
 
-                      {/* Miscellaneous */}
+                      {/* Hardware */}
                       <Step>
                         <StepLabel
                           sx={{ cursor: "pointer !important" }}
                           onClick={() => setActiveStep(3)}
                         >
-                          Miscellaneous
+                          Hardware
                         </StepLabel>
                         <StepContent className="stepContent">
-                          <Box className="fields">
+                          {/* <Box className="fields">
                             {" "}
                             <Box className="stepAction">
                               <Button
@@ -11882,7 +12233,7 @@ const SideForm = () => {
                                 />
                               </RadioGroup>
                             </FormControl>
-                          </Box>
+                          </Box> */}
                           <Box className="stepAction">
                             <Button
                               variant="outlined"
@@ -11903,7 +12254,7 @@ const SideForm = () => {
                           </Box>
                         </StepContent>
                       </Step>
-                      {/* Miscellaneous ends */}
+                      {/* Hardware ends */}
 
                       {/* Inventory & Shipping */}
                       <Step>
@@ -12664,122 +13015,7 @@ const SideForm = () => {
                                 />
                               </RadioGroup>
                             </FormControl>
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Mattress
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                value={changeData.mattress || "no"}
-                                onChange={handleProductFields}
-                                name="mattress"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.mattress === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  type="number"
-                                  id="outlined-select"
-                                  name="mattress_length"
-                                  label="Mattress Length"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        In Feet
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  value={changeData.mattress_length}
-                                  onChange={handleProductFields}
-                                />
-                                <TextField
-                                  size="small"
-                                  type="number"
-                                  fullWidth
-                                  id="outlined-select"
-                                  name="mattress_breadth"
-                                  label="Mattress Breadth"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        In Feet
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  value={changeData.mattress_breadth}
-                                  onChange={handleProductFields}
-                                />
-                              </>
-                            )}
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Cradle Bed
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                value={changeData.cradle_bed || "no"}
-                                onChange={handleProductFields}
-                                name="cradle_bed"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.cradle_bed === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  type="number"
-                                  id="outlined-select"
-                                  name="cradle_bed_height"
-                                  label="Cradle Bed Height"
-                                  value={changeData.cradle_bed_height}
-                                  onChange={handleProductFields}
-                                />
-                                <TextField
-                                  size="small"
-                                  type="number"
-                                  fullWidth
-                                  id="outlined-select"
-                                  name="cradle_bed_width"
-                                  label="Cradle Bed Width"
-                                  value={changeData.cradle_bed_width}
-                                  onChange={handleProductFields}
-                                />
-                                <TextField
-                                  size="small"
-                                  type="number"
-                                  fullWidth
-                                  id="outlined-select"
-                                  name="cradle_bed_depth"
-                                  label="Cradle Bed Depth"
-                                  value={changeData.cradle_bed_depth}
-                                  onChange={handleProductFields}
-                                />
-                              </>
-                            )}
+                            
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Vendor URLs
@@ -13041,7 +13277,7 @@ const SideForm = () => {
                               // autoComplete={false}
                               id="fullWidth"
                               // required
-                              label="Showroom Price"
+                              label="MRP"
                               type="number"
                               InputProps={{
                                 startAdornment: (
@@ -13051,8 +13287,8 @@ const SideForm = () => {
                                 ),
                               }}
                               variant="outlined"
-                              name="showroom_price"
-                              value={changeData.showroom_price}
+                              name="MRP"
+                              value={changeData.MRP}
                               onChange={handleProductFields}
                             />
                             <TextField
@@ -13425,7 +13661,7 @@ const SideForm = () => {
                                   helperText="Check it if want it to sell when out of Inventory."
                                 />
                               }
-                              label="Continue Selling"
+                              label="Continue selling when out of Stock"
                             />
                             {/*                            
                              <TextField sx = {{mb : 2}}
@@ -13794,13 +14030,13 @@ const SideForm = () => {
                       </Step>
                       {/* Images End */}
 
-                      {/* Features */}
+                      {/* Feature & Specification */}
                       <Step>
                         <StepLabel
                           sx={{ cursor: "pointer !important" }}
                           onClick={() => setActiveStep(2)}
                         >
-                          Features
+                          Feature & Specification
                         </StepLabel>
                         <StepContent className="stepContent">
                           <Box className="fields">
@@ -14829,6 +15065,233 @@ const SideForm = () => {
                                 name="fitting_size"
                               />
                             )}
+                               <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="back_style"
+                              label="Back Style"
+                              multiple
+                              value={changeData.back_style || ""}
+                              onChange={handleProductFields}
+                              helperText="Please select your Back Style."
+                            >
+                              {backStyleCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            <TextField
+                              size="small"
+                              fullWidth
+                              id="outlined-select"
+                              select
+                              name="weight_capacity"
+                              label="Weight Capacity"
+                              multiple
+                              value={changeData.weight_capacity}
+                              onChange={handleProductFields}
+                              helperText="Please select your Weight Capacity."
+                            >
+                              {weightCapCatalog.map((option) => (
+                                <MenuItem
+                                  key={option.value}
+                                  value={option.value}
+                                >
+                                  {option.label}
+                                </MenuItem>
+                              ))}
+                              <MenuItem key={"none"} value="None">
+                                {"None"}
+                              </MenuItem>
+                            </TextField>
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Drawer
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.drawer || "no"}
+                                onChange={handleProductFields}
+                                name="drawer"
+                              >
+                                <FormControlLabel
+                                  value="mechanical"
+                                  control={<Radio />}
+                                  label="Mechanical"
+                                />
+                                <FormControlLabel
+                                  value="wooden"
+                                  control={<Radio />}
+                                  label="Wooden"
+                                />
+                                <FormControlLabel
+                                  value="none"
+                                  control={<Radio />}
+                                  label="None"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            {(changeData.drawer === "mechanical" ||
+                              changeData.drawer === "wooden") && (
+                              <TextField
+                                size="small"
+                                fullWidth
+                                type="number"
+                                id="outlined-select"
+                                name="drawer_count"
+                                label="Drawer Count"
+                                value={changeData.drawer_count}
+                                onChange={handleProductFields}
+                              />
+                            )}
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Joints ((Useful in products where info about
+                                joints are shown))
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                name="joints"
+                                value={changeData.joints}
+                                onChange={handleProductFields}
+                              >
+                                <FormControlLabel
+                                  value="single"
+                                  control={<Radio />}
+                                  label="Single"
+                                />
+                                <FormControlLabel
+                                  value="multi"
+                                  control={<Radio />}
+                                  label="Multiple"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Mattress
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.mattress || "no"}
+                                onChange={handleProductFields}
+                                name="mattress"
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            {changeData.mattress === "yes" && (
+                              <>
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  type="number"
+                                  id="outlined-select"
+                                  name="mattress_length"
+                                  label="Mattress Length"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  value={changeData.mattress_length}
+                                  onChange={handleProductFields}
+                                />
+                                <TextField
+                                  size="small"
+                                  type="number"
+                                  fullWidth
+                                  id="outlined-select"
+                                  name="mattress_breadth"
+                                  label="Mattress Breadth"
+                                  InputProps={{
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        In Feet
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  value={changeData.mattress_breadth}
+                                  onChange={handleProductFields}
+                                />
+                              </>
+                            )}
+                            <FormControl>
+                              <FormLabel id="demo-radio-buttons-group-label">
+                                Cradle Bed
+                              </FormLabel>
+                              <RadioGroup
+                                aria-labelledby="demo-radio-buttons-group-label"
+                                value={changeData.cradle_bed || "no"}
+                                onChange={handleProductFields}
+                                name="cradle_bed"
+                              >
+                                <FormControlLabel
+                                  value="yes"
+                                  control={<Radio />}
+                                  label="Yes"
+                                />
+                                <FormControlLabel
+                                  value="no"
+                                  control={<Radio />}
+                                  label="No"
+                                />
+                              </RadioGroup>
+                            </FormControl>
+                            {changeData.cradle_bed === "yes" && (
+                              <>
+                                <TextField
+                                  size="small"
+                                  fullWidth
+                                  type="number"
+                                  id="outlined-select"
+                                  name="cradle_bed_height"
+                                  label="Cradle Bed Height"
+                                  value={changeData.cradle_bed_height}
+                                  onChange={handleProductFields}
+                                />
+                                <TextField
+                                  size="small"
+                                  type="number"
+                                  fullWidth
+                                  id="outlined-select"
+                                  name="cradle_bed_width"
+                                  label="Cradle Bed Width"
+                                  value={changeData.cradle_bed_width}
+                                  onChange={handleProductFields}
+                                />
+                                <TextField
+                                  size="small"
+                                  type="number"
+                                  fullWidth
+                                  id="outlined-select"
+                                  name="cradle_bed_depth"
+                                  label="Cradle Bed Depth"
+                                  value={changeData.cradle_bed_depth}
+                                  onChange={handleProductFields}
+                                />
+                              </>
+                            )}
                           </Box>
 
                           <Box className="stepAction">
@@ -14851,18 +15314,18 @@ const SideForm = () => {
                           </Box>
                         </StepContent>
                       </Step>
-                      {/* Features ends */}
+                      {/* Feature & Specification ends */}
 
-                      {/* Miscellaneous */}
+                      {/* Hardware */}
                       <Step>
                         <StepLabel
                           sx={{ cursor: "pointer !important" }}
                           onClick={() => setActiveStep(3)}
                         >
-                          Miscellaneous
+                          Hardware
                         </StepLabel>
                         <StepContent className="stepContent">
-                          <Box className="fields">
+                          {/* <Box className="fields">
                             {" "}
                             <Box className="stepAction">
                               <Button
@@ -14993,7 +15456,7 @@ const SideForm = () => {
                                 />
                               </RadioGroup>
                             </FormControl>
-                          </Box>
+                          </Box> */}
                           <Box className="stepAction">
                             <Button
                               variant="outlined"
@@ -15014,7 +15477,7 @@ const SideForm = () => {
                           </Box>
                         </StepContent>
                       </Step>
-                      {/* Miscellaneous ends */}
+                      {/* Hardware ends */}
 
                       {/* Inventory & Shipping */}
                       <Step>
@@ -15774,122 +16237,7 @@ const SideForm = () => {
                                 />
                               </RadioGroup>
                             </FormControl>
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Mattress
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                value={changeData.mattress || "no"}
-                                onChange={handleProductFields}
-                                name="mattress"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.mattress === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  type="number"
-                                  id="outlined-select"
-                                  name="mattress_length"
-                                  label="Mattress Length"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        In Feet
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  value={changeData.mattress_length}
-                                  onChange={handleProductFields}
-                                />
-                                <TextField
-                                  size="small"
-                                  type="number"
-                                  fullWidth
-                                  id="outlined-select"
-                                  name="mattress_breadth"
-                                  label="Mattress Breadth"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        In Feet
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  value={changeData.mattress_breadth}
-                                  onChange={handleProductFields}
-                                />
-                              </>
-                            )}
-                            <FormControl>
-                              <FormLabel id="demo-radio-buttons-group-label">
-                                Cradle Bed
-                              </FormLabel>
-                              <RadioGroup
-                                aria-labelledby="demo-radio-buttons-group-label"
-                                value={changeData.cradle_bed || "no"}
-                                onChange={handleProductFields}
-                                name="cradle_bed"
-                              >
-                                <FormControlLabel
-                                  value="yes"
-                                  control={<Radio />}
-                                  label="Yes"
-                                />
-                                <FormControlLabel
-                                  value="no"
-                                  control={<Radio />}
-                                  label="No"
-                                />
-                              </RadioGroup>
-                            </FormControl>
-                            {changeData.cradle_bed === "yes" && (
-                              <>
-                                <TextField
-                                  size="small"
-                                  fullWidth
-                                  type="number"
-                                  id="outlined-select"
-                                  name="cradle_bed_height"
-                                  label="Cradle Bed Height"
-                                  value={changeData.cradle_bed_height}
-                                  onChange={handleProductFields}
-                                />
-                                <TextField
-                                  size="small"
-                                  type="number"
-                                  fullWidth
-                                  id="outlined-select"
-                                  name="cradle_bed_width"
-                                  label="Cradle Bed Width"
-                                  value={changeData.cradle_bed_width}
-                                  onChange={handleProductFields}
-                                />
-                                <TextField
-                                  size="small"
-                                  type="number"
-                                  fullWidth
-                                  id="outlined-select"
-                                  name="cradle_bed_depth"
-                                  label="Cradle Bed Depth"
-                                  value={changeData.cradle_bed_depth}
-                                  onChange={handleProductFields}
-                                />
-                              </>
-                            )}
+                          
                             <FormControl>
                               <FormLabel id="demo-radio-buttons-group-label">
                                 Vendor URLs
@@ -16178,7 +16526,7 @@ const SideForm = () => {
                               // autoComplete={false}
                               id="fullWidth"
                               // required
-                              label="Showroom Price"
+                              label="MRP"
                               type="number"
                               InputProps={{
                                 startAdornment: (
@@ -16188,8 +16536,8 @@ const SideForm = () => {
                                 ),
                               }}
                               variant="outlined"
-                              name="showroom_price"
-                              value={changeData.showroom_price}
+                              name="MRP"
+                              value={changeData.MRP}
                               onChange={handleProductFields}
                             />
                             <TextField
@@ -16278,7 +16626,7 @@ const SideForm = () => {
                                   helperText="Check it if want it to sell when out of Inventory."
                                 />
                               }
-                              label="Continue Selling"
+                              label="Continue selling when out of Stock"
                             />
                           </Box>
                           <Box className="stepAction">
@@ -17197,7 +17545,7 @@ const SideForm = () => {
                               // autoComplete={false}
                               id="fullWidth"
                               // required
-                              label="Showroom Price"
+                              label="MRP"
                               type="number"
                               InputProps={{
                                 startAdornment: (
@@ -17207,8 +17555,8 @@ const SideForm = () => {
                                 ),
                               }}
                               variant="outlined"
-                              name="showroom_price"
-                              value={changeData.showroom_price}
+                              name="MRP"
+                              value={changeData.MRP}
                               onChange={handleProductFields}
                             />
                             <TextField
@@ -17297,7 +17645,7 @@ const SideForm = () => {
                                   helperText="Check it if want it to sell when out of Inventory."
                                 />
                               }
-                              label="Continue Selling"
+                              label="Continue selling when out of Stock"
                             />
                           </Box>
                           <Box className="stepAction">
@@ -21444,7 +21792,7 @@ const SideForm = () => {
                                     name="continue_selling"
                                   />
                                 }
-                                label="Continue Selling"
+                                label="Continue selling when out of Stock"
                               />
                             </FormGroup>
                           </Box>
@@ -22711,7 +23059,7 @@ const SideForm = () => {
                                     name="continue_selling"
                                   />
                                 }
-                                label="Continue Selling"
+                                label="Continue selling when out of Stock"
                               />
                             </FormGroup>
                           </Box>
