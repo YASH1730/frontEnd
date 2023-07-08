@@ -76,11 +76,8 @@ export default function Action() {
     page: 1,
     limit: 10,
     total: 0,
-    title: "",
-    category: undefined,
-    SKU: undefined,
-    subCategory: undefined,
-    filter: false,
+    approved : false,
+    pending : false
   });
 
   const style = {
@@ -101,18 +98,14 @@ export default function Action() {
       setMeta({ ...data.data });
     });
     fetchData();
-  }, [pageState.page, pageState.limit, pageState.filter]);
+  }, [pageState.page, pageState.limit, pageState.filter,pageState.pending,pageState.approved]);
 
   function fetchData() {
     setPageState((lastState) => ({
       ...lastState,
       isLoading: true,
     }));
-    getDraft({
-      page: pageState.page,
-      limit: pageState.limit,
-      total: pageState.total,
-    })
+    getDraft(pageState)
       .then((data) => {
         setPageState((lastState) => ({
           ...lastState,
@@ -238,48 +231,11 @@ export default function Action() {
       key: "Approved",
       value: "Approved",
     },
-    {
-      key: "Hold",
-      value: "Hold",
-    },
+    // {
+    //   key: "Hold",
+    //   value: "Hold",
+    // },
   ];
-
-  // function for generating product  ID
-
-  const getSKU = () => {
-    getLastProduct()
-      .then((res) => {
-        if (res.data.length > 0) {
-          let index = parseInt(res.data[0].SKU.split("-")[1]) + 1;
-
-          setSKU(`P-0${index}`);
-        } else {
-          setSKU("P-01001");
-        }
-      })
-      .catch((err) => {
-        // //// console.log(err);
-      });
-  };
-
-  // function for generating hardware  ID
-
-  const getHKU = async () => {
-    try {
-      let res = await getLastHardware();
-      if (res) {
-        if (res.data.length > 0) {
-          let index = parseInt(res.data[0].SKU.split("-")[1]) + 1;
-
-          setSKU(`H-0${index}`);
-        } else {
-          setSKU("H-01001");
-        }
-      }
-    } catch (err) {
-      // console.log(err);
-    }
-  };
 
   async function getO() {
     await getLastOrder()
@@ -297,7 +253,7 @@ export default function Action() {
       .catch((err) => {
         // //// console.log(err);
       });
-  }
+  };
 
   const handleClose = () => setDisplay({ status: false });
 
@@ -305,9 +261,9 @@ export default function Action() {
   function SpringModal() {
     // final response function
     async function sendResponse(data) {
-      let response = await dropDraft(data);
+      console.log(display);
+      let response = await dropDraft({...data.data,DID : data.DID});
       if (response.status === 200) {
-        // console.log(display.data.DID);
         setPageState((old) => ({
           ...old,
           data: [
@@ -361,42 +317,36 @@ export default function Action() {
           case "insertProduct":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            display.data.SKU = SKU;
-            display.data.AID = SKU;
-            // // console.log(display.data);
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "updateProduct":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "insertHardware":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            display.data.SKU = SKU;
-            display.data.AID = SKU;
-
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "updateHardware":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "deleteHardware":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "deleteCustomer":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "insertCategory":
             display.data.draftStatus = e.target.action.value;
@@ -404,86 +354,85 @@ export default function Action() {
             display.data.SKU = SKU;
             display.data.AID = SKU;
             // console.log(display.data);
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "updateCategory":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "insertSubCategory":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
             display.data.SKU = SKU;
             display.data.AID = SKU;
-            // console.log(display.data);
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "updateSubCategory":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "deleteBlog":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "insertMaterial":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
             display.data.SKU = SKU;
             display.data.AID = SKU;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "updateMaterial":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "insertPolish":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "updatePolish":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "insertBlog":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "updateBlog":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "createOrder":
             display.data.draftStatus = e.target.action.value;
             display.data.O = SKU;
             display.data.AID = SKU;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "addBanner":
             display.data.draftStatus = e.target.action.value;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "updateBanner":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "deleteBanner":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "applyCOD":
             display.data.operation = display.operation;
@@ -491,7 +440,7 @@ export default function Action() {
             display.data.limit = "CODLIMIT2023";
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "addCoupon":
             display.data.operation = display.operation;
@@ -499,7 +448,7 @@ export default function Action() {
             display.data.AID = display.data.coupon_code;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "updateCoupon":
             display.data.operation = display.operation;
@@ -507,21 +456,21 @@ export default function Action() {
             display.data.AID = display.data.coupon_code;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "deleteCoupon":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "addReview":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "updateReview":
             display.data.operation = display.operation;
@@ -529,7 +478,7 @@ export default function Action() {
             display.data.AID = display.data._id;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
           break;
           case "addReply":
             display.data.operation = display.operation;
@@ -537,14 +486,14 @@ export default function Action() {
             display.data.AID = display.data._id;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
           break;
           case "deleteReview":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
           break;
           case "addCustomer":
             display.data.operation = display.operation;
@@ -552,53 +501,53 @@ export default function Action() {
             display.data.AID = display.data.CID;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
           break;
           case "editOrder":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.AID = display.data.AID;
             display.data.draftStatus = e.target.action.value;
-            sendResponse(display.data);
+            sendResponse(display);
             break;
           case "addOrderFulfillment":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.AID = display.data.AID;
             display.data.draftStatus = e.target.action.value;
-            sendResponse(display.data);
+            sendResponse(display);
             break         
           case "updateProductStatus":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.draftStatus = e.target.action.value;
-            sendResponse(display.data);
+            sendResponse(display);
             break         
           case "updateMergeProductStatus":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.draftStatus = e.target.action.value;
-            sendResponse(display.data);
+            sendResponse(display);
             break         
           case "deletePinCode":
               display.data.operation = display.operation;
               display.data.DID = display.DID;
               display.data.draftStatus = e.target.action.value;
               display.data.status = true;
-              sendResponse(display.data);
+              sendResponse(display);
             break;  
           case "addWarehouse":
             display.data.operation = display.operation;
             display.data.DID = display.DID;
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
-            sendResponse(display.data);
+            sendResponse(display);
             break;  
             case "updateWarehouse":
               display.data.operation = display.operation;
               display.data.DID = display.DID;
               display.data.draftStatus = e.target.action.value;
-              sendResponse(display.data);
+              sendResponse(display);
               break    
             default:
             // console.log("no operation found");
@@ -621,11 +570,11 @@ export default function Action() {
         switch (display.operation) {
           case "insertProduct":
             setPeer([]);
-            getSKU();
+            
             break;
           case "insertHardware":
             setPeer([]);
-            getHKU();
+            
             break;
           case "updateProduct":
             res = await getProductDetails(display.data.AID);
@@ -1012,10 +961,22 @@ export default function Action() {
   }
   // Data Grid Ends
 
-  // const handleSearch = (e) => {
-  //   // //// console.log(e.target.value)
-  //   setSearch(e.target.value);
-  // };
+  function handleFilter(filter){
+    switch(filter){
+      case "pending" :
+        setPageState(old=>({...old,pending : true,approved:false}))
+        break;
+      case "approved" :
+        setPageState(old=>({...old,approved : true,pending:false}))
+        break;
+      case "all" :
+        setPageState(old=>({...old,pending: false,approved : false}))
+        break;
+        default:
+        setPageState(old=>({...old,pending: false,approved : false}))
+        break;
+    }
+  }
 
   // main container
   return (
@@ -1028,6 +989,7 @@ export default function Action() {
 
       <Grid className="actionDash" container>
         <Grid
+        onClick = {()=>handleFilter("all")}
           sx={{ backgroundColor: "#0000ff8c" }}
           item
           xs={12}
@@ -1039,6 +1001,7 @@ export default function Action() {
           <Typography variant="h4">{meta.total}</Typography>
         </Grid>
         <Grid
+                onClick = {()=>handleFilter("pending")}
           sx={{ backgroundColor: "#ffbd29" }}
           className="card"
           item
@@ -1050,6 +1013,7 @@ export default function Action() {
           <Typography variant="h4">{meta.pending}</Typography>
         </Grid>
         <Grid
+        onClick = {()=>handleFilter("approved")}
           sx={{ backgroundColor: "#40b13e" }}
           item
           xs={12}

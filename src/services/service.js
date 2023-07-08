@@ -739,7 +739,8 @@ export const updateBlog = async (data) => {
 // ================== CURD for Draft ==========================
 
 export const getDraft = async (data) => {
-  return await axios.get(`${API}/getDraft?filter=${JSON.stringify(data)}`, {
+  return await axios.get(`${API}/getDraft?pending=${data.pending}&approved=${data.approved}&total=${data.total}
+  &page=${data.page}&limit=${data.limit}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },

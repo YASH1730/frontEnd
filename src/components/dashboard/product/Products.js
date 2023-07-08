@@ -196,8 +196,8 @@ export default function Products(props) {
 
     if(cat.status === 200 && subCat.status === 200)
     setCatalog({
-      category: cat.data,
-      subCategory: subCat.data,
+      category: cat.data.data,
+      subCategory: subCat.data.data,
     });
   }
 
