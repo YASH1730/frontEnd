@@ -4,8 +4,7 @@ import {
   TextField,
   Grid,
   Button,
-  IconButton,
-  Switch,
+  IconButton
 } from "@mui/material";
 // import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from "@mui/icons-material/Create";
@@ -33,14 +32,30 @@ export default function Polish() {
   useEffect(() => {
     getPolish()
       .then((data) => {
+
+      })
+      .catch((err) => {
+        //// console.log(err)
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchList();
+  }, []);
+
+  async function fetchList(){
+
+    try {
+      let list = await getPolish(true)
+      if(list.data.status === 200) {
         setCheck(
-          data.data.map((row, index) => {
+          list.data.data.map((row, index) => {
             return row.polish_status;
           })
         );
 
         setRows(
-          data.data.map((row, index) => {
+          list.data.data.map((row, index) => {
             return {
               id: index + 1,
               polish_name: row.polish_name,
@@ -53,11 +68,27 @@ export default function Polish() {
             };
           })
         );
-      })
-      .catch((err) => {
-        //// console.log(err)
-      });
-  }, []);
+      }
+      else 
+      dispatch(setAlert({
+        variant : "warning",
+        open : true,
+        message : list.data.message
+      }))
+
+
+    } catch (error) {
+
+      dispatch(setAlert({
+        variant : "error",
+        open : true,
+        message : "Facing an issue while fetching the list."
+      }))
+      
+    }
+  }
+
+
 
   const columns = [
     {

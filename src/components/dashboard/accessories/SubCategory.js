@@ -28,19 +28,24 @@ export default function SubCategory() {
   const [pageSize, setPageSize] = useState(50);
 
   const [Row, setRows] = useState([]);
-  // function for get cetegory list
 
   useEffect(() => {
-    getSubCatagories()
-      .then((data) => {
+    fetchList();
+  }, []);
+
+  async function fetchList(){
+
+    try {
+      let list = await getSubCatagories(true)
+      if(list.data.status === 200) {
         setCheck(
-          data.data.map((row, index) => {
+          list.data.data.map((row, index) => {
             return row.sub_category_status;
           })
         );
 
         setRows(
-          data.data.map((row, index) => {
+          list.data.data.map((row, index) => {
             return {
               id: index + 1,
               category_id: row.category_id,
@@ -57,11 +62,25 @@ export default function SubCategory() {
             };
           })
         );
-      })
-      .catch((err) => {
-        //// console.log(err)
-      });
-  }, []);
+      }
+      else 
+      dispatch(setAlert({
+        variant : "warning",
+        open : true,
+        message : list.data.message
+      }))
+
+
+    } catch (error) {
+
+      dispatch(setAlert({
+        variant : "error",
+        open : true,
+        message : "Facing an issue while fetching the list."
+      }))
+      
+    }
+  }
 
   const columns = [
     {

@@ -108,7 +108,7 @@ export default function Customer() {
       width: 200,
       renderCell: (params) => (
         <div className="categoryImage">
-          {<img src={params.formattedValue && params.formattedValue !== 'undefined' ? params.formattedValue  :question} alt="profile_image" />}
+          {<img src={params.formattedValue && params.formattedValue? params.formattedValue  :question} alt="profile_image" />}
         </div>
       ),
     },

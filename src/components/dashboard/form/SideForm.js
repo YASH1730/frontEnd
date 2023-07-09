@@ -190,47 +190,6 @@ const SideForm = () => {
     "6 to 8 weeks",
   ];
 
-  function ImagePreviews(props) {
-    const { getRootProps, getInputProps } = useDropzone({
-      accept: "image/*",
-      multiple: false,
-      onDrop: (acceptedFiles) => {
-        setImages(
-          acceptedFiles.map((file) =>
-            Object.assign(file, {
-              preview: URL.createObjectURL(file),
-            })
-          )
-        );
-      },
-    });
-
-    const thumbs = Image.map((file) => (
-      <div style={thumb} key={file.name}>
-        <div style={thumbInner}>
-          <img
-            src={file.preview}
-            style={img}
-            alt="Images"
-            // Revoke data uri after image is loaded
-            onLoad={() => {
-              URL.revokeObjectURL(file.preview);
-            }}
-          />
-        </div>
-      </div>
-    ));
-
-    return (
-      <section className="container dorpContainer">
-        <div {...getRootProps({ className: "dropzone" })}>
-          <input {...getInputProps()} />
-          <p>{props.text}</p>
-        </div>
-        <aside style={thumbsContainer}>{thumbs}</aside>
-      </section>
-    );
-  }
   function IndoorPreviews(props) {
     const [acceptedFileItems, setAcceptedFileItems] = useState([]);
     const [fileRejectionItems, setFileRejectionItems] = useState([]);
@@ -18235,7 +18194,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <ImagePreviews
+                    <ImagePreviews setImages = {setImages} Images = {Image}
                       text={"Please Drag and Drop the Category image"}
                     >
                       {" "}
@@ -18359,7 +18318,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <ImagePreviews
+                    <ImagePreviews setImages = {setImages} Images = {Image}
                       text={"Please Drag and Drop the Category image"}
                     >
                       {" "}
@@ -18586,7 +18545,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <ImagePreviews
+                    <ImagePreviews setImages = {setImages} Images = {Image}
                       text={"Please Drag and Drop the Material image"}
                     >
                       {" "}
@@ -18668,7 +18627,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <ImagePreviews
+                    <ImagePreviews setImages = {setImages} Images = {Image}
                       text={"Please Drag and Drop the Material image"}
                     >
                       {" "}
@@ -19192,7 +19151,7 @@ const SideForm = () => {
                             Get Image Url
                           </FormLabel>
 
-                          <ImagePreviews
+                          <ImagePreviews setImages = {setImages} Images = {Image}
                             text={"Please Drag and Drop the Image "}
                           >
                             {" "}
@@ -19351,7 +19310,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <ImagePreviews
+                    <ImagePreviews setImages = {setImages} Images = {Image}
                       text={
                         "Please Drag and Drop a image for sub Category image"
                       }
@@ -19500,7 +19459,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <ImagePreviews
+                    <ImagePreviews setImages = {setImages} Images = {Image}
                       text={"Please Drag and Drop a image for Sub Category."}
                     >
                       {" "}
@@ -19655,7 +19614,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <ImagePreviews
+                    <ImagePreviews setImages = {setImages} Images = {Image}
                       text={"Please Drag and Drop the Profile Picture"}
                     >
                       {" "}
@@ -19880,7 +19839,7 @@ const SideForm = () => {
                     encType="multipart/form-data"
                     method="post"
                   >
-                    <ImagePreviews
+                    <ImagePreviews setImages = {setImages} Images = {Image}
                       text={"Please Drag and Drop the Profile Picture"}
                     >
                       {" "}
@@ -27163,6 +27122,49 @@ function ProductsPreviews({ files, setFiles, text }) {
         <h4>Rejected files</h4>
         <aside style={thumbsContainer}>{fileRejectionItems}</aside>
       </aside>
+    </section>
+  );
+}
+
+
+function ImagePreviews({text,setImages,Images}) {
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: "image/*",
+    multiple: false,
+    onDrop: (acceptedFiles) => {
+      setImages(
+        acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+    },
+  });
+
+  const thumbs = Images.map((file) => (
+    <div style={thumb} key={file.name}>
+      <div style={thumbInner}>
+        <img
+          src={file.preview}
+          style={img}
+          alt="Images"
+          // Revoke data uri after image is loaded
+          onLoad={() => {
+            URL.revokeObjectURL(file.preview);
+          }}
+        />
+      </div>
+    </div>
+  ));
+
+  return (
+    <section className="container dorpContainer">
+      <div {...getRootProps({ className: "dropzone" })}>
+        <input {...getInputProps()} />
+        <p>{text}</p>
+      </div>
+      <aside style={thumbsContainer}>{thumbs}</aside>
     </section>
   );
 }

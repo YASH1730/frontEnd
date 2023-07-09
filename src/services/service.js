@@ -45,7 +45,7 @@ export const addCategory = async (data) => {
 
 // for list of category
 export const categoryList = async (data) => {
-  return await axios.get(`${API}/listCategory`, {
+  return await axios.get(`${API}/listCategory?list=${data}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
@@ -268,8 +268,8 @@ export const addSubCategories = async (data) => {
 
 // list subcategories
 
-export const getSubCatagories = async () => {
-  return await axios.get(`${API}/getSubCatagories`, {
+export const getSubCatagories = async (data) => {
+  return await axios.get(`${API}/getSubCatagories?list=${data}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
@@ -307,8 +307,8 @@ export const addPrimaryMaterial = async (data) => {
 
 // // list getPrimaryMaterial
 
-export const getPrimaryMaterial = async () => {
-  return await axios.get(`${API}/getPrimaryMaterial`, {
+export const getPrimaryMaterial = async (data) => {
+  return await axios.get(`${API}/getPrimaryMaterial?list=${data}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },

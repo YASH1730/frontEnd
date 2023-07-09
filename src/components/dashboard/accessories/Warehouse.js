@@ -22,7 +22,7 @@ import {
 } from "@mui/x-data-grid";
 // import Pagination from '@mui/material/Pagination';
 
-import { setForm } from "../../../store/action/action";
+import { setAlert, setForm } from "../../../store/action/action";
 import { useDispatch } from "react-redux";
 
 export default function Warehouse() {
@@ -33,15 +33,19 @@ export default function Warehouse() {
   const [Row, setRows] = useState([]);
 
   useEffect(() => {
-   fetchWarehouse()
+    fetchList()
   }, []);
 
-  async function fetchWarehouse(){
-    let data = await getWarehouse()
-    if(data) {
+  
+  async function fetchList(){
+
+    try {
+      let list = await getWarehouse(true)
+      if(list.data.status === 200) {
+
 
       setRows(
-        data.data.map((row, index) => {
+        list.data.data.map((row, index) => {
           return {
             id: index + 1,
             name: row.name,
@@ -50,8 +54,26 @@ export default function Warehouse() {
           };
         })
       );
+      }
+      else 
+      dispatch(setAlert({
+        variant : "warning",
+        open : true,
+        message : list.data.message
+      }))
+
+
+    } catch (error) {
+
+      dispatch(setAlert({
+        variant : "error",
+        open : true,
+        message : "Facing an issue while fetching the list."
+      }))
+      
     }
   }
+
 
   const columns = [
     {

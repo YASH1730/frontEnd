@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   TextField,
@@ -20,10 +20,6 @@ import question from "../../../assets/img/question.svg";
 
 import {
   DataGrid,
-  // gridPageCountSelector,
-  // gridPageSelector,
-  // useGridApiContext,
-  // useGridSelector,
 } from "@mui/x-data-grid";
 // import Pagination from '@mui/material/Pagination';
 
@@ -35,19 +31,25 @@ export default function PrimaryMaterial() {
   const [pageSize, setPageSize] = useState(50);
 
   const [Row, setRows] = useState([]);
-  // function for get category list
+  
+  useEffect(() => {
+    fetchList();
+  }, []);
 
-  useMemo(() => {
-    getPrimaryMaterial()
-      .then((data) => {
+  async function fetchList(){
+
+    try {
+      let list = await getPrimaryMaterial(true)
+      if(list.data.status === 200) {
+
         setCheck(
-          data.data.map((row, index) => {
+          list.data.data.map((row, index) => {
             return row.primaryMaterial_status;
           })
         );
 
         setRows(
-          data.data.map((row, index) => {
+          list.data.data.map((row, index) => {
             return {
               id: index + 1,
               primaryMaterial_name: row.primaryMaterial_name,
@@ -59,11 +61,26 @@ export default function PrimaryMaterial() {
             };
           })
         );
-      })
-      .catch((err) => {
-        //// console.log(err)
-      });
-  }, []);
+      }
+      else 
+      dispatch(setAlert({
+        variant : "warning",
+        open : true,
+        message : list.data.message
+      }))
+
+
+    } catch (error) {
+
+      dispatch(setAlert({
+        variant : "error",
+        open : true,
+        message : "Facing an issue while fetching the list."
+      }))
+      
+    }
+  }
+
 
   const columns = [
     {
@@ -85,7 +102,7 @@ export default function PrimaryMaterial() {
           {
             <img
               src={
-                params.formattedValue !== undefined
+                params.formattedValue
                   ? params.formattedValue
                   : question
               }

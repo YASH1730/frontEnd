@@ -38,15 +38,20 @@ export default function Category() {
   const [Row, setRows] = useState([])
 
   useEffect(() => {
-    categoryList()
-      .then((data) => {
+    fetchList();
+  }, []);
 
-        setCheck(data.data.map((row, index) => {
+  async function fetchList(){
+
+    try {
+      let list = await categoryList(true)
+      if(list.data.status === 200) {
+
+        setCheck(list.data.data.map((row, index) => {
           return row.category_status
         }))
 
-        setRows(data.data.map((row, index) => {
-
+        setRows(list.data.data.map((row, index) => {
           return ({
             id: index + 1,
             category_image: row.category_image,
@@ -60,12 +65,25 @@ export default function Category() {
             action: row._id
           })
         }))
-      })
-      .catch((err) => {
-        //// console.log(err)
-      })
-  }, []);
+      }
+      else 
+      dispatch(setAlert({
+        variant : "warning",
+        open : true,
+        message : list.data.message
+      }))
 
+
+    } catch (error) {
+
+      dispatch(setAlert({
+        variant : "error",
+        open : true,
+        message : "Facing an issue while fetching the list."
+      }))
+      
+    }
+  }
 
   const columns = [
     {
@@ -78,7 +96,7 @@ export default function Category() {
       align: 'center',
       headerName: 'Image',
       width: 200,
-      renderCell: (params) => <div className="categoryImage" >{<img src={params.formattedValue !== 'undefined' ? params.formattedValue : question} alt='category' />}</div>,
+      renderCell: (params) => <div className="categoryImage" >{<img src={params.formattedValue? params.formattedValue : question} alt='category' />}</div>,
     },
     {
       field: "category_name",
