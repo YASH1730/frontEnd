@@ -1595,3 +1595,11 @@ export const listMobileIntro = async () => {
     },
   });
 };
+
+export const listPurseOrder = async () => {
+  return await axios.get(`${API}/getPurchaseOrder`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};

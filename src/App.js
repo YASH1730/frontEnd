@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import decode from "jwt-decode";
 import ImageSquence from "./components/Utility/ImageSquence";
 import PreviewOrder from "./components/dashboard/order/PreviewOrder";
+import PurchaseOrder from "./components/dashboard/order/PurchaseOrder";
 
 // component
 const EntryPoints = lazy(() => import("./components/EntryPoints"));
@@ -185,6 +186,9 @@ function MyRoutes() {
         )}
         {permission.includes("Order") && (
           <Route exact path="/order" element={<Orders history={history} />} />
+        )}
+        {permission.includes("Order") && (
+          <Route exact path="/purchase_order" element={<PurchaseOrder history={history} />} />
         )}
         {permission.includes("Order") && (
           <Route

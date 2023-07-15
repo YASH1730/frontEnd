@@ -49,14 +49,15 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import MergeIcon from "@mui/icons-material/Merge";
 import HardwareIcon from "@mui/icons-material/Hardware";
 import ChatIcon from "@mui/icons-material/Chat";
-import StayCurrentPortraitIcon from '@mui/icons-material/StayCurrentPortrait';
+import StayCurrentPortraitIcon from "@mui/icons-material/StayCurrentPortrait";
 // import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 // import SecurityIcon from "@mui/icons-material/Security";
 // import PolicyIcon from "@mui/icons-material/Policy";
 import ReviewsIcon from "@mui/icons-material/Reviews";
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 // import AccountTreeIcon from '@mui/icons-material/AccountTree';
 // import LocalShippingIcon from "@mui/icons-material/LocalShipping";
-import PlayCircleFilledWhiteIcon from '@mui/icons-material/PlayCircleFilledWhite';
+import PlayCircleFilledWhiteIcon from "@mui/icons-material/PlayCircleFilledWhite";
 // import redux
 import {
   setAlert,
@@ -530,6 +531,33 @@ const Home = ({ history }) => {
                       </ListItemAvatar>
                       <ListItemText primary="Order Status" />
                     </ListItem>
+                    <ListItem
+                      sx={{ pl: 4 }}
+                      onClick={() => {
+                        handleClose("/purchase_order");
+                      }}
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          sx={{
+                            width: "30px",
+                            height: "30px",
+                            svg: {
+                              fontSize: "1.1rem",
+                            },
+                          }}
+                        >
+                          <ShoppingBasketIcon
+                            color={
+                              window.location.pathname === "/purchase_order"
+                                ? "primary"
+                                : ""
+                            }
+                          />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary="Purchase Order" />
+                    </ListItem>
                   </List>
                 </Collapse>
 
@@ -736,7 +764,7 @@ const Home = ({ history }) => {
                   </ListItem>
                 )}
 
-{permission.includes("Mobile") && (
+                {permission.includes("Mobile") && (
                   <ListItem
                     onClick={(e) => {
                       setType({ ...type, mobile: !type.mobile });
@@ -765,7 +793,6 @@ const Home = ({ history }) => {
                     {type.mobile ? <ExpandLess /> : <ExpandMore />}
                   </ListItem>
                 )}
-                
 
                 {/* // product nested menu */}
                 <Collapse in={type.mobile} timeout="auto" unmountOnExit>

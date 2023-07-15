@@ -319,6 +319,18 @@ export default function Action() {
             display.data.status = true;
             sendResponse(display);
             break;
+          case "add_purchase_order":
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display);
+            break;
+            case "deletePurchaseOrder":
+              display.data.operation = display.operation;
+              display.data.DID = display.DID;
+              display.data.draftStatus = e.target.action.value;
+              display.data.status = true;
+              sendResponse(display);
+              break;
           case "updateProduct":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
@@ -568,14 +580,6 @@ export default function Action() {
       async function getContent() {
         let res = "";
         switch (display.operation) {
-          case "insertProduct":
-            setPeer([]);
-            
-            break;
-          case "insertHardware":
-            setPeer([]);
-            
-            break;
           case "updateProduct":
             res = await getProductDetails(display.data.AID);
             if (res) {
@@ -584,7 +588,6 @@ export default function Action() {
               
               if (res.data) setPeer(res.data);
             }
-
             break;
           case "updateHardware":
             res = await getHardwareDetails(display.data.AID);

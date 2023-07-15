@@ -12,9 +12,7 @@ import {
   Autocomplete,
   Step,
   Box,
-  Select,
   Checkbox,
-  ListItemText,
   InputLabel,
   Modal,
   Backdrop,
@@ -41,23 +39,15 @@ import { setAlert } from "../../../store/action/action";
 import defaultIMg from "../../../assets/img/question.svg";
 import {
   DataGrid,
-  // gridPageCountSelector,
-  // gridPageSelector,
-  // useGridApiContext,
-  // useGridSelector,
-} from "@mui/x-data-grid";
+  } from "@mui/x-data-grid";
 // import Pagination from "@mui/material/Pagination";
 
 import {
   customerCatalog,
   getPresentSKUs,
-  getLastOrder,
-  addOrder,
   getLastCp,
   addCustomProduct,
-  getArticlesId,
   addDraft,
-  getDraftID,
   getHardwareDropdown,
   uploadAllImage,
   getAddress,
@@ -520,23 +510,13 @@ export default function CreateOrder() {
   async function getCatalogs() {
     let polish = await getHardwareDropdown();
     let cus = await customerCatalog();
-    let DID = await getDraftID();
 
-    // draft
-    if (DID.status === 200) {
-      if (DID.data.length > 0) {
-        let index = parseInt(DID.data[0].DID.split("-")[1]) + 1;
-        setSKU(`DID-0${index}`);
-      } else {
-        setSKU("DID-01001");
-      }
-    }
     // customer
     if (cus.status === 200)
       setCatalogs((old) => ({ ...old, customer: cus.data }));
     // for polish
     if (polish.status === 200)
-      setCatalogs((old) => ({ ...old, polish: [...polish.data.polish] }));
+      setCatalogs((old) => ({ ...old, polish: [...polish.data.data.polish] }));
   }
 
   // for calculating subtotal
