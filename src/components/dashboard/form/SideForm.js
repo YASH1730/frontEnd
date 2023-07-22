@@ -41,7 +41,6 @@ import AddIcon from "@mui/icons-material/Add";
 import ImageSquence from "../../Utility/ImageSquence";
 // service APIS
 import {
-  getLastProduct,
   categoryList,
   getSubCatagories,
   getPrimaryMaterial,
@@ -51,7 +50,6 @@ import {
   updateMergeProduct,
   getLastMergeProduct,
   updateCustomer,
-  variation,
   getHardwareDropdown,
   addDraft,
   getArticlesId,
@@ -74,6 +72,7 @@ import {
   searchWarehouseDetails,
   addCatalog,
   addMobileIntro,
+  searchPurchaseOrder,
 } from "../../../services/service.js";
 import { useConfirm } from "material-ui-confirm";
 
@@ -605,6 +604,7 @@ const SideForm = () => {
   const [productSKU, setProductSKU] = useState({
     P_SKU: [],
     H_SKU: [],
+    PID: [],
     supplier: [],
     category: [],
     warehouse: [],
@@ -634,6 +634,9 @@ const SideForm = () => {
   // pres data
   const [changeData, setData] = useState({
     CVW: 0,
+    valid_from:"",
+    expiry:"",
+    coupon_description:"",
     video_link: "",
     ACIN: "",
     range: "Modern & Contemporary",
@@ -647,6 +650,7 @@ const SideForm = () => {
     hardware_articles: [],
     category_discount: [],
     supplier: "",
+    PID: [],
     product_array: [],
     variation_array: [],
     warehouse: [],
@@ -741,7 +745,7 @@ const SideForm = () => {
     cradle_bed_depth: 0,
     cradle_bed_height: 0,
     cradle_bed_width: 0,
-    showroom_price: 0,
+    fabric_qty: 0,
     discount_limit: 0,
     length_main: 0,
     ceramic_drawer_qty: 0,
@@ -814,6 +818,7 @@ const SideForm = () => {
     trolley: false,
     mirror: false,
     upholstery: false,
+    times : 0,
   });
 
   function getLabelText(value) {
@@ -834,64 +839,9 @@ const SideForm = () => {
         }
       })
       .catch((err) => {
-        // //// console.log(err);
+        console.log(err);
       });
   };
-  // function for generating product SKU ID
-
-  const getSKU = () => {
-    getLastProduct()
-      .then((res) => {
-        if (res.data.length > 0) {
-          // // //// console.log(res.data[0].SKU)
-
-          let index = parseInt(res.data[0].SKU.split("-")[1]) + 1;
-
-          setSKU(`P-0${index}`);
-        } else {
-          setSKU("P-01001");
-        }
-      })
-      .catch((err) => {
-        // //// console.log(err);
-      });
-  };
-  // function for generating hardware  ID
-
-  // const getHKU = () => {
-  //   getLastHardware()
-  //     .then((res) => {
-  //       if (res.data.length > 0) {
-  //         let index = parseInt(res.data[0].SKU.split("-")[1]) + 1;
-
-  //         setSKU(`H-0${index}`);
-  //       } else {
-  //         setSKU("H-01001");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       // //// console.log(err);
-  //     });
-  // };
-  // function for generating product OID ID
-
-  // const getOID = () => {
-  //   getLastOrder()
-  //     .then((res) => {
-  //       if (res.data.length > 0) {
-  //         let index = parseInt(res.data[0].OID.split("-")[1]) + 1;
-
-  //         setSKU(`OID-0${index}`);
-  //       } else {
-  //         setSKU("OID-01001");
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       // //// console.log(err);
-  //     });
-  // };
-  // function for generating product DID ID
-
   const getSID = () => {
     getLastSupplier()
       .then((res) => {
@@ -1080,14 +1030,12 @@ const SideForm = () => {
 
         break;
       case "variation":
-        getSKU();
         UtilityFetch({
           HardWare: true,
           Material: true,
           Category: true,
           Sub_Category: true,
         });
-
         setData({
           _id: form.payload.value._id || form.payload.row.action._id,
           SKU: form.payload.row.action.SKU,
@@ -1239,7 +1187,6 @@ const SideForm = () => {
           mirror: form.payload.row.action.mirror,
           dispatch_time: form.payload.row.action.dispatch_time,
         });
-
         setCat(form.payload.row.action.category_id);
         break;
       case "update_category":
@@ -2049,6 +1996,7 @@ const SideForm = () => {
       H_SKU: [],
       supplier: [],
       category: [],
+      PID: [],
       warehouse: [],
     });
     setWebBanner([]);
@@ -2058,6 +2006,9 @@ const SideForm = () => {
     setFiles([]);
     setActiveStep(0);
     setData({
+      valid_from:"",
+      expiry:"",
+      coupon_description:"",  
       video_link: "",
       mirror: false,
       range: "Modern & Contemporary",
@@ -2066,6 +2017,8 @@ const SideForm = () => {
       return: false,
       refund: false,
       CVW: 0,
+    PID: [],
+    fabric_qty: 0,
       ACIN: "",
       web_banner_status: false,
       mobile_banner_status: false,
@@ -2228,6 +2181,7 @@ const SideForm = () => {
       supplier_type: "supplier",
       supplier_name: "",
       location: "Jodhpur",
+    times : 0,
     });
     document.getElementById("myForm").reset();
   };
@@ -2377,7 +2331,7 @@ const SideForm = () => {
       FD.append("knob_qty", changeData.knob_qty);
     }
     if (changeData.fabric !== "None") {
-      FD.append("fabric_qty", changeData.fabric_qty);
+      FD.append("fabric_qty", changeData.fabric_qty ? changeData.fabric_qty : 0 );
     }
 
     FD.append("ceramic_drawer_included", changeData.ceramic_drawer_included);
@@ -2463,8 +2417,8 @@ const SideForm = () => {
     FD.append("height", changeData.height ? changeData.height : 0);
     FD.append("weight", changeData.weight ? changeData.weight : 0);
 
-    FD.append("top_size_length", changeData.top_size_length);
-    FD.append("top_size_breadth", changeData.top_size_breadth);
+    FD.append("top_size_length", changeData.top_size_length ? changeData.top_size_length : 0);
+    FD.append("top_size_breadth", changeData.top_size_breadth ? changeData.top_size_breadth : 0);
 
     FD.append("dial", changeData.dial);
     changeData.dial && FD.append("dial_qty", changeData.dial_qty);
@@ -2631,6 +2585,12 @@ const SideForm = () => {
     e.preventDefault();
 
     const FD = new FormData();
+
+    FD.append("DID", SKU);
+    FD.append("AID", changeData.SKU);
+    FD.append("type", "Product");
+    FD.append("operation", "variantProduct");
+
     files.map((element) => {
       if (element.validate) return FD.append("product_image", element);
     });
@@ -2855,8 +2815,8 @@ const SideForm = () => {
     FD.append("height", changeData.height ? changeData.height : 0);
     FD.append("weight", changeData.weight ? changeData.weight : 0);
 
-    FD.append("top_size_length", changeData.top_size_length);
-    FD.append("top_size_breadth", changeData.top_size_breadth);
+    FD.append("top_size_length", changeData.top_size_length ? changeData.top_size_length :0);
+    FD.append("top_size_breadth", changeData.top_size_breadth ? changeData.top_size_breadth :0);
     FD.append("dial", changeData.dial);
     changeData.dial && FD.append("dial_size", changeData.dial_size);
     changeData.dial && FD.append("dial_name", changeData.dial_name);
@@ -2964,10 +2924,9 @@ const SideForm = () => {
     FD.append("stackable", changeData.stackable ? changeData.stackable : false);
     FD.append("tax_rate", changeData.tax_rate);
 
-    const res = variation(FD);
+    const res = addDraft(FD);
 
-    res
-      .then((data) => {
+    res.then((data) => {
         if (data.status === 203) {
           dispatch(
             setAlert({
@@ -2977,142 +2936,7 @@ const SideForm = () => {
             })
           );
         } else {
-          form.setRow((old) => ({
-            ...old,
-            data: [
-              ...old.data,
-              {
-                id: old.data.length + 1,
-                SKU: data.data.response.SKU,
-                CVW: data.data.response.CVW,
-                product_title: data.data.response.product_title,
-                category_name: data.data.response.category_name,
-                category_id: data.data.response.category_id,
-                sub_category_name: data.data.response.sub_category_name,
-                sub_category_id: data.data.response.sub_category_id,
-                product_description: data.data.response.product_description,
-                seo_title: data.data.response.seo_title,
-                seo_description: data.data.response.seo_description,
-                seo_keyword: data.data.response.seo_keyword,
-                product_image: data.data.response.product_image,
-                featured_image: data.data.response.featured_image,
-                mannequin_image: data.data.response.mannequin_image,
-                specification_image: data.data.response.specification_image,
-                primary_material: data.data.response.primary_material,
-                primary_material_name: data.data.response.primary_material_name,
-                warehouse: data.data.response.warehouse,
-                warehouse_name: data.data.response.warehouse_name,
-                length_main: data.data.response.length_main,
-                breadth: data.data.response.breadth,
-                height: data.data.response.height,
-                bangalore_stock: data.data.response.bangalore_stock,
-                jodhpur_stock: data.data.response.jodhpur_stock,
-                weight: data.data.response.weight,
-                polish: data.data.response.polish,
-                polish_name: data.data.response.polish_name,
-                hinge: data.data.response.hinge,
-                hinge_qty: data.data.response.hinge_qty,
-                hinge_name: data.data.response.hinge_name,
-                knob: data.data.response.knob,
-                knob_qty: data.data.response.knob_qty,
-                knob_name: data.data.response.knob_name,
-                handle: data.data.response.handle,
-                handle_qty: data.data.response.handle_qty,
-                handle_name: data.data.response.handle_name,
-                door: data.data.response.door,
-                door_qty: data.data.response.door_qty,
-                door_name: data.data.response.door_name,
-                fitting: data.data.response.fitting,
-                fitting_name: data.data.response.fitting_name,
-                selling_points: data.data.response.selling_points,
-                dial_size: data.data.response.dial_size,
-                seating_size_width: data.data.response.seating_size_width,
-                seating_size_depth: data.data.response.seating_size_depth,
-                seating_size_height: data.data.response.seating_size_height,
-                weight_capacity: data.data.response.weight_capacity,
-                fabric: data.data.response.fabric,
-                fabric_qty: data.data.response.fabric_qty,
-                fabric_name: data.data.response.fabric_name,
-                wall_hanging: data.data.response.wall_hanging,
-                assembly_required: data.data.response.assembly_required,
-                assembly_part: data.data.response.assembly_part,
-                legs: data.data.response.legs,
-                mirror: data.data.response.mirror,
-                mirror_length: data.data.response.mirror_length,
-                mirror_width: data.data.response.mirror_width,
-                silver: data.data.response.silver,
-                silver_weight: data.data.response.silver_weight,
-                joints: data.data.response.joints,
-                upholstery: data.data.response.upholstery,
-                trolley: data.data.response.trolley,
-                trolley_material: data.data.response.trolley_material,
-                rotating_seats: data.data.response.rotating_seats,
-                eatable_oil_polish: data.data.response.eatable_oil_polish,
-                no_chemical: data.data.response.no_chemical,
-                straight_back: data.data.response.straight_back,
-                lean_back: data.data.response.lean_back,
-                weaving: data.data.response.weaving,
-                knife: data.data.response.knife,
-                not_suitable_for_Micro_Dish:
-                  data.data.response.not_suitable_for_Micro_Dish,
-                tilt_top: data.data.response.tilt_top,
-                inside_compartments: data.data.response.inside_compartments,
-                stackable: data.data.response.stackable,
-                MRP: data.data.response.MRP,
-                tax_rate: data.data.response.tax_rate,
-                selling_price: data.data.response.selling_price,
-                showroom_price: data.data.response.showroom_price,
-                discount_limit: data.data.response.discount_limit,
-                polish_time: data.data.response.polish_time,
-                manufacturing_time: data.data.response.manufacturing_time,
-                status: data.data.response.status,
-                returnDays: data.data.response.returnDays,
-                COD: data.data.response.COD,
-                returnable: data.data.response.returnable,
-                drawer: data.data.response.drawer,
-                drawer_count: data.data.response.drawer_count,
-                mobile_store: data.data.response.mobile_store,
-                online_store: data.data.response.online_store,
-                range: data.data.response.range,
-                back_style: data.data.response.back_style,
-                package_length: data.data.response.package_length,
-                package_height: data.data.response.package_height,
-                package_breadth: data.data.response.package_breadth,
-                quantity: data.data.response.quantity,
-                unit: data.data.response.unit,
-                assembly_level: data.data.response.assembly_level,
-                continue_selling: data.data.response.continue_selling,
-                wheel: data.data.response.wheel,
-                wheel_included: data.data.response.wheel_included,
-                wheel_qty: data.data.response.wheel_qty,
-                wheel_name: data.data.response.wheel_name,
-                ceramic_tiles: data.data.response.ceramic_tiles,
-                ceramic_tiles_qty: data.data.response.ceramic_tiles_qty,
-                ceramic_tiles_included:
-                  data.data.response.ceramic_tiles_included,
-                ceramic_tiles_name: data.data.response.ceramic_tiles_name,
-                ceramic_drawers: data.data.response.ceramic_drawers,
-                ceramic_drawers_included:
-                  data.data.response.ceramic_drawers_included,
-                ceramic_drawers_name: data.data.response.ceramic_drawers_name,
-                mattress: data.data.response.mattress,
-                mattress_length: data.data.response.mattress_length,
-                mattress_breadth: data.data.response.mattress_breadth,
-                plywood: data.data.response.plywood,
-                top_size_breadth: data.data.response.top_size_breadth,
-                top_size_length: data.data.response.top_size_length,
-                ceramic_drawers_qty: data.data.response.ceramic_drawers_qty,
-                variations: data.data.response.variations,
-                variant_label: data.data.response.variant_label,
-                parent_SKU: data.data.response.parent_SKU,
-                amazon_url: data.data.response.amazon_url,
-                flipkart_url: data.data.response.flipkart_url,
-                jiomart_url: data.data.response.jiomart_url,
-
-                action: data.data.response,
-              },
-            ],
-          }));
+          
           handleClose();
           dispatch(
             setAlert({
@@ -3280,7 +3104,7 @@ const SideForm = () => {
       FD.append("knob_qty", changeData.knob_qty);
     }
     if (changeData.fabric !== "None") {
-      FD.append("fabric_qty", changeData.fabric_qty);
+      FD.append("fabric_qty", changeData.fabric_qty? changeData.fabric_qty : 0);
     }
 
     FD.append("ceramic_drawer_included", changeData.ceramic_drawer_included);
@@ -3367,8 +3191,8 @@ const SideForm = () => {
     FD.append("height", changeData.height ? changeData.height : 0);
     FD.append("weight", changeData.weight ? changeData.weight : 0);
 
-    FD.append("top_size_length", changeData.top_size_length);
-    FD.append("top_size_breadth", changeData.top_size_breadth);
+    FD.append("top_size_length", changeData.top_size_length ? changeData.top_size_length : 0);
+    FD.append("top_size_breadth", changeData.top_size_breadth ? changeData.top_size_breadth : 0);
     FD.append("dial", changeData.dial);
     changeData.dial && FD.append("dial_qty", changeData.dial_qty);
     changeData.dial && FD.append("dial_size", changeData.dial_size);
@@ -5762,7 +5586,7 @@ const SideForm = () => {
     FD.append("level", changeData.level);
     FD.append("polish_name", changeData.polish_name);
     FD.append("lock", changeData.lock);
-    FD.append("price", changeData.price);
+    FD.append("price", changeData.price || 0);
     FD.append("savedOutDoor", JSON.stringify(changeData.savedImages));
     FD.append("savedIndoor", JSON.stringify(changeData.indoorSavedImage));
 
@@ -5904,7 +5728,7 @@ const SideForm = () => {
     FD.append("AID", "Not Assigned " + SKU);
     FD.append("type", "Coupon");
     FD.append("operation", "addCoupon");
-    FD.append("times", changeData.times);
+    FD.append("times", changeData.times || 0);
     FD.append("coupon_code", changeData.coupon_code);
     FD.append("coupon_type", changeData.coupon_type);
     changeData.coupon_type === "FLAT" &&
@@ -5912,7 +5736,7 @@ const SideForm = () => {
     changeData.coupon_type === "OFF(%)" && FD.append("off", changeData.off);
     FD.append("valid_from", changeData.valid_from);
     FD.append("expiry", changeData.expiry);
-    FD.append("coupon_description", changeData.coupon_description);
+    FD.append("coupon_description", changeData.coupon_description || "");
 
     // const res = addPolish(FD);
     const res = addDraft(FD);
@@ -6278,6 +6102,25 @@ const SideForm = () => {
           setProductSKU((old) => ({
             ...old,
             warehouse: [],
+          }));
+        });
+    }, 1000);
+    return () => clearTimeout(delayDebounceFn);
+  }
+  async function handleSearchPurchaseOrder(e) {
+    const delayDebounceFn = setTimeout(() => {
+      searchPurchaseOrder(e.target.value)
+        .then((res) => {
+          console.log(res)
+          setProductSKU((old) => ({
+            ...old,
+            PID: res.data.PID,
+          }));
+        })
+        .catch((err) => {
+          setProductSKU((old) => ({
+            ...old,
+            PID: [],
           }));
         });
     }, 1000);
@@ -8195,7 +8038,7 @@ const SideForm = () => {
                                   </TextField>
 
                                   <TextField
-                                    value={changeData.fabric_qty}
+                                    value={changeData.fabric_qty || 0}
                                     onChange={handleProductFields}
                                     size={"small"}
                                     sx={{ mt: 2 }}
@@ -8244,7 +8087,7 @@ const SideForm = () => {
                                       ),
                                     }}
                                     variant="outlined"
-                                    value={changeData.mirror_length}
+                                    value={changeData.mirror_length || 0}
                                     onChange={handleProductFields}
                                     name="mirror_length"
                                   />
@@ -8266,7 +8109,7 @@ const SideForm = () => {
                                     }}
                                     variant="outlined"
                                     name="mirror_width"
-                                    value={changeData.mirror_width}
+                                    value={changeData.mirror_width || 0}
                                     onChange={handleProductFields}
                                   />
 
@@ -8420,7 +8263,7 @@ const SideForm = () => {
                                       </InputAdornment>
                                     ),
                                   }}
-                                  value={changeData.mattress_length}
+                                  value={changeData.mattress_length || 0}
                                   onChange={handleProductFields}
                                 />
                                 <TextField
@@ -8603,7 +8446,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.hinge !== "None" && (
                               <TextField
-                                value={changeData.hinge_qty}
+                                value={changeData.hinge_qty || 0}
                                 size={"small"}
                                 helperText="Enter the number of hinges pieces ."
                                 fullWidth
@@ -8646,7 +8489,7 @@ const SideForm = () => {
                                 size={"small"}
                                 fullWidth
                                 helperText="Enter the number of knob pieces ."
-                                value={changeData.knob_qty}
+                                value={changeData.knob_qty || 0}
                                 onChange={handleProductFields}
                                 label="Knob Quantity"
                                 type="number"
@@ -8682,7 +8525,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.door !== "None" && (
                               <TextField
-                                value={changeData.door_qty}
+                                value={changeData.door_qty || 0}
                                 helperText="Enter the number of doors."
                                 size={"small"}
                                 fullWidth
@@ -8721,7 +8564,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.handle !== "None" && (
                               <TextField
-                                value={changeData.handle_qty}
+                                value={changeData.hinge_qty || 0}
                                 helperText="Enter the number of handles."
                                 onChange={handleProductFields}
                                 size={"small"}
@@ -11303,7 +11146,7 @@ const SideForm = () => {
                                   </TextField>
 
                                   <TextField
-                                    value={changeData.fabric_qty}
+                                    value={changeData.fabric_qty || 0}
                                     onChange={handleProductFields}
                                     size={"small"}
                                     sx={{ mt: 2 }}
@@ -11352,7 +11195,7 @@ const SideForm = () => {
                                       ),
                                     }}
                                     variant="outlined"
-                                    value={changeData.mirror_length}
+                                    value={changeData.mirror_length || 0}
                                     onChange={handleProductFields}
                                     name="mirror_length"
                                   />
@@ -11374,7 +11217,7 @@ const SideForm = () => {
                                     }}
                                     variant="outlined"
                                     name="mirror_width"
-                                    value={changeData.mirror_width}
+                                    value={changeData.mirror_width || 0}
                                     onChange={handleProductFields}
                                   />
 
@@ -11528,7 +11371,7 @@ const SideForm = () => {
                                       </InputAdornment>
                                     ),
                                   }}
-                                  value={changeData.mattress_length}
+                                  value={changeData.mattress_length || 0}
                                   onChange={handleProductFields}
                                 />
                                 <TextField
@@ -11711,7 +11554,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.hinge !== "None" && (
                               <TextField
-                                value={changeData.hinge_qty}
+                                value={changeData.hinge_qty || 0}
                                 size={"small"}
                                 helperText="Enter the number of hinges pieces ."
                                 fullWidth
@@ -11754,7 +11597,7 @@ const SideForm = () => {
                                 size={"small"}
                                 fullWidth
                                 helperText="Enter the number of knob pieces ."
-                                value={changeData.knob_qty}
+                                value={changeData.knob_qty || 0}
                                 onChange={handleProductFields}
                                 label="Knob Quantity"
                                 type="number"
@@ -11790,7 +11633,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.door !== "None" && (
                               <TextField
-                                value={changeData.door_qty}
+                                value={changeData.door_qty || 0}
                                 helperText="Enter the number of doors."
                                 size={"small"}
                                 fullWidth
@@ -11829,7 +11672,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.handle !== "None" && (
                               <TextField
-                                value={changeData.handle_qty}
+                                value={changeData.hinge_qty || 0}
                                 helperText="Enter the number of handles."
                                 onChange={handleProductFields}
                                 size={"small"}
@@ -12819,7 +12662,7 @@ const SideForm = () => {
                               value={changeData.ACIN}
                               onChange={handleProductFields}
                             />
-                            <TextField
+                            {/* <TextField
                               size="small"
                               fullWidth
                               // autoComplete={false}
@@ -12831,7 +12674,7 @@ const SideForm = () => {
                               disabled
                               variant="outlined"
                               name="SKU"
-                            />
+                            /> */}
                             <TextField
                               size="small"
                               fullWidth
@@ -14424,7 +14267,7 @@ const SideForm = () => {
                                   </TextField>
 
                                   <TextField
-                                    value={changeData.fabric_qty}
+                                    value={changeData.fabric_qty || 0}
                                     onChange={handleProductFields}
                                     size={"small"}
                                     sx={{ mt: 2 }}
@@ -14473,7 +14316,7 @@ const SideForm = () => {
                                       ),
                                     }}
                                     variant="outlined"
-                                    value={changeData.mirror_length}
+                                    value={changeData.mirror_length || 0}
                                     onChange={handleProductFields}
                                     name="mirror_length"
                                   />
@@ -14495,7 +14338,7 @@ const SideForm = () => {
                                     }}
                                     variant="outlined"
                                     name="mirror_width"
-                                    value={changeData.mirror_width}
+                                    value={changeData.mirror_width || 0}
                                     onChange={handleProductFields}
                                   />
 
@@ -14552,7 +14395,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.hinge !== "None" && (
                               <TextField
-                                value={changeData.hinge_qty}
+                                value={changeData.hinge_qty || 0}
                                 size={"small"}
                                 helperText="Enter the number of hinges pieces ."
                                 fullWidth
@@ -14595,7 +14438,7 @@ const SideForm = () => {
                                 size={"small"}
                                 fullWidth
                                 helperText="Enter the number of knob pieces ."
-                                value={changeData.knob_qty}
+                                value={changeData.knob_qty || 0}
                                 onChange={handleProductFields}
                                 label="Knob Quantity"
                                 type="number"
@@ -14631,7 +14474,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.door !== "None" && (
                               <TextField
-                                value={changeData.door_qty}
+                                value={changeData.door_qty || 0}
                                 helperText="Enter the number of doors."
                                 size={"small"}
                                 fullWidth
@@ -14670,7 +14513,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.handle !== "None" && (
                               <TextField
-                                value={changeData.handle_qty}
+                                value={changeData.hinge_qty || 0}
                                 helperText="Enter the number of handles."
                                 onChange={handleProductFields}
                                 size={"small"}
@@ -14877,7 +14720,7 @@ const SideForm = () => {
                                       </InputAdornment>
                                     ),
                                   }}
-                                  value={changeData.mattress_length}
+                                  value={changeData.mattress_length || 0}
                                   onChange={handleProductFields}
                                 />
                                 <TextField
@@ -15037,7 +14880,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.hinge !== "None" && (
                               <TextField
-                                value={changeData.hinge_qty}
+                                value={changeData.hinge_qty || 0}
                                 size={"small"}
                                 helperText="Enter the number of hinges pieces ."
                                 fullWidth
@@ -15080,7 +14923,7 @@ const SideForm = () => {
                                 size={"small"}
                                 fullWidth
                                 helperText="Enter the number of knob pieces ."
-                                value={changeData.knob_qty}
+                                value={changeData.knob_qty || 0}
                                 onChange={handleProductFields}
                                 label="Knob Quantity"
                                 type="number"
@@ -15116,7 +14959,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.door !== "None" && (
                               <TextField
-                                value={changeData.door_qty}
+                                value={changeData.door_qty || 0}
                                 helperText="Enter the number of doors."
                                 size={"small"}
                                 fullWidth
@@ -15155,7 +14998,7 @@ const SideForm = () => {
                             </TextField>
                             {changeData.handle !== "None" && (
                               <TextField
-                                value={changeData.handle_qty}
+                                value={changeData.hinge_qty || 0}
                                 helperText="Enter the number of handles."
                                 onChange={handleProductFields}
                                 size={"small"}
@@ -18358,7 +18201,7 @@ const SideForm = () => {
                       fullWidth
                       id="outlined-select"
                       onChange={handleProductFields}
-                      value={changeData.category}
+                      value={changeData.category_name}
                       name="category_name"
                       label="Category"
                       helperText="Please enter the update"
@@ -23303,6 +23146,33 @@ const SideForm = () => {
                       disablePortal
                       size="small"
                       fullWidth
+                      noOptionsText={"ex : PID-01001"}
+                      multiple
+                      autoHighlight
+                      id="combo-box-demo"
+                      options={productSKU.PID.map((row) => {
+                        return row.PID;
+                      })}
+                      renderInput={(params) => (
+                        <TextField
+                          onKeyUpCapture={handleSearchPurchaseOrder}
+                          value={changeData.product_articles || ""}
+                          {...params}
+                          label="Purchase Order ID (Optional)"
+                        />
+                      )}
+                      onChange={(e, newMember) =>
+                        setData((old) => ({
+                          ...old,
+                          PID: newMember,
+                        }))
+                      }
+                    />
+
+                    <Autocomplete
+                      disablePortal
+                      size="small"
+                      fullWidth
                       noOptionsText={"ex : P-01001"}
                       multiple
                       autoHighlight
@@ -23584,28 +23454,32 @@ const SideForm = () => {
                       }
                     />
 
-                    {/* <TextField
+<Autocomplete
+                      disablePortal
+                      size="small"
                       fullWidth
-                      id="outlined-select"
-                      required
-                      select
-                      size={"small"}
-                      helperText="Please select the wearhouse for this operation."
-                      name="warehouse"
-                      label="Select Warehouse..."
-                      value={changeData.warehouse || ""}
-                      onChange={handleProductFields}
+                      noOptionsText={"ex : PID-01001"}
                       multiple
-                    >
-                      {warehouse.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.value}
-                        </MenuItem>
-                      ))}
-                      {/* <MenuItem key={"none"} value="None">
-                        {"None"}
-                      </MenuItem> */}
-                    {/* </TextField>  */}
+                      autoHighlight
+                      id="combo-box-demo"
+                      options={productSKU.PID.map((row) => {
+                        return row.PID;
+                      })}
+                      renderInput={(params) => (
+                        <TextField
+                          onKeyUpCapture={handleSearchPurchaseOrder}
+                          value={changeData.product_articles || ""}
+                          {...params}
+                          label="Purchase Order ID (Optional)"
+                        />
+                      )}
+                      onChange={(e, newMember) =>
+                        setData((old) => ({
+                          ...old,
+                          PID: newMember,
+                        }))
+                      }
+                    />
 
                     <Autocomplete
                       disablePortal
@@ -26824,7 +26698,7 @@ export default SideForm;
 function WebBannerDimension(images, setWebBanner) {
   let result = images.map(async (image) => {
     let { width, height } = await size(URL.createObjectURL(image));
-    // console.log(width, height);
+    console.log(width, height);
     Object.assign(image, {
       preview: URL.createObjectURL(image),
       validate: width === 2880 && height === 1620 ? true : false,

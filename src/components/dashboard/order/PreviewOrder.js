@@ -261,7 +261,6 @@ const PreviewOrder = ({ history }) => {
                   />
                 </Grid>
                 {/* Customizations ends */}
-      
               </Grid>
             </Grid>
             {/* leftWing end*/}
@@ -349,8 +348,8 @@ const PreviewOrder = ({ history }) => {
                 </Grid>
                 {/* Other ends*/}
 
-                          {/* fulfilled history */}
-                          <Grid
+                {/* fulfilled history */}
+                <Grid
                   item
                   xs={12}
                   p={2}
@@ -494,6 +493,12 @@ function SetFullfilForm({ data, setData, dispatch, setAlert, order }) {
     "XpressBees",
     "DEV(Direct Courier)",
     "Shree Maruti Courier",
+    "Delhivery",
+    "India Post",
+    "Gati",
+    "DHL",
+    "FedEx",
+    "UPS",
   ];
 
   function handleClose() {
@@ -689,8 +694,10 @@ function FulfillmentHistory({ product, item }) {
 
   return (
     <>
-      <Box mt = {1} mb = {1}>
-      <Typography sx = {{fontWeight : 600}}  variant="body2">{product}</Typography>
+      <Box mt={1} mb={1}>
+        <Typography sx={{ fontWeight: 600 }} variant="body2">
+          {product}
+        </Typography>
       </Box>
       <Stepper activeStep={activeStep} orientation="vertical">
         {item &&
@@ -731,7 +738,7 @@ function FulfillmentHistory({ product, item }) {
                   <Box>
                     <Typography variant="body2">Fulfilled</Typography>
                     <Typography variant="button">
-                      {step.fulfilled ? "yes":"no"}
+                      {step.fulfilled ? "yes" : "no"}
                     </Typography>
                   </Box>
                 </Box>
@@ -763,7 +770,7 @@ function FulfillmentHistory({ product, item }) {
       {activeStep === item.length && (
         <Paper square elevation={0} sx={{ p: 3 }}>
           <Typography>Yup no more history...</Typography>
-          <Button size = 'small' onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
+          <Button size="small" onClick={handleReset} sx={{ mt: 1, mr: 1 }}>
             Reset
           </Button>
         </Paper>

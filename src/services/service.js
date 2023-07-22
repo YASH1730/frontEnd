@@ -1603,3 +1603,11 @@ export const listPurseOrder = async () => {
     },
   });
 };
+
+export const searchPurchaseOrder = async (data) => {
+  return await axios.get(`${API}/searchPurchaseOrder?search=${data}`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};

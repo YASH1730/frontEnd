@@ -319,6 +319,11 @@ export default function Action() {
             display.data.status = true;
             sendResponse(display);
             break;
+          case "variantProduct":
+            display.data.draftStatus = e.target.action.value;
+            display.data.status = true;
+            sendResponse(display);
+            break;
           case "add_purchase_order":
             display.data.draftStatus = e.target.action.value;
             display.data.status = true;
