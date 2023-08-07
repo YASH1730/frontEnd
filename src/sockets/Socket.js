@@ -1,6 +1,6 @@
 import io from "socket.io-client";
 import config from "../config.json";
-import { setActiveUser, setMessage, setSocket } from "../store/action/action";
+import { setActiveUser, setMessage, setSocket,setLogout } from "../store/action/action";
 
 const socket = io.connect(config.Socket_Official_API);
 
@@ -39,7 +39,7 @@ function Log_Out(data) {
 
 
 
-function Notifications(dispatch) {
+function Notifications(auth,dispatch) {
   return socket.on("receive_notification", (data) => {
     // // console.log(data);
     switch (data.type) {
@@ -47,16 +47,19 @@ function Notifications(dispatch) {
         dispatch(setActiveUser(data.payload));
         break;
         case "User_Logout":
-          // console.log(data.payload)
-          dispatch(setActiveUser(data.payload));
+          console.log(data.payload)
+          dispatch(setLogout(data.payload));
           break;
       case "New_Message":
+        console.log("New_Message",data)
         dispatch(setMessage(data.payload));
         break;
       case "REFRESH":
         // console.log(data.payload);
         dispatch(setActiveUser(data.payload));
         break;
+      case "Repair_Session":
+      return socket.emit("connect_user",auth);
       default:
         return 1;
     }

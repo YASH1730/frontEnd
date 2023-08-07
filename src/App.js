@@ -264,7 +264,7 @@ function App() {
   const { mode, auth, socket } = useSelector((state) => state);
   const dispatch = useDispatch()
   
-  Socket.Notifications(dispatch);
+  Socket.Notifications(auth,dispatch);
   
 
   useEffect(()=>{

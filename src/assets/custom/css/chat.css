@@ -171,9 +171,13 @@
 }
 
 .chat-box-message{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
     padding: 1rem;
     width: fit-content;
-    max-width: 70%;
+    max-width: 50%;
     background-color: var(--bgColor);
     border-radius: 15px;
 }
@@ -181,6 +185,7 @@
 .chat-box-message-right{
     align-self: flex-end;
 }
+
 
 .chat-box-name{
     display: flex;

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { useReducer, useState, useEffect } from "react";
+import React, { useReducer,  useEffect } from "react";
 // chat css
 import "../../../assets/custom/css/chat.css";
 // component
@@ -59,21 +59,10 @@ const Home = ({ history }) => {
   async function fetchUsers() {
     const res =
       localState.type === "customer" ? await getCustomer() : await getTeam();
-    if (res.status === 200) {
-      let active_user = socket.active_user.map((row) => row.email);
-      const active_user_id = socket.active_user.map((row) => row.id);
-
-      active_user = res.data.map((row) => {
-        if (active_user.includes(row.email)) {
-          row.id = active_user_id[active_user.indexOf(row.email)];
-        }
-
-        return row;
-      });
-
+    if (res.data.status === 200) {
       setState({type : "Set_User_List",
       payload : {
-        list: active_user,
+        list: res.data.data,
       }});
     }
   }

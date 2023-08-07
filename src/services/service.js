@@ -1485,6 +1485,17 @@ export const getMessage = async (data) => {
   );
 };
 
+export const uploadImageForSend = async (data) => {
+  return await axios.post(
+    `${API}/uploadImageForSend`,data,
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+  );
+};
+
 export const getOrderByID = async (data) => {
   return await axios.get(`${API}/getOrderByID?O=${data}`, {
     headers: {

@@ -61,6 +61,13 @@ export const setActiveUser = (parameters) => {
     }
 }
 
+export const setLogout = (parameters) => {
+    return {
+        type: 'LOGOUT',
+        payload: parameters
+    }
+}
+
 // for refresh token Box 
 
 export const resetUser = (parameters) => {

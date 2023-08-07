@@ -16,7 +16,7 @@ import {
   Checkbox,
   Switch,
 } from "@mui/material";
-// import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CreateIcon from "@mui/icons-material/Create";
 import AddIcon from "@mui/icons-material/Add";
@@ -28,6 +28,7 @@ import {
   categoryList,
   getSubCatagories,
   addDraft,
+  deleteProduct,
 } from "../../../services/service";
 import {
   DataGrid,
@@ -45,7 +46,6 @@ import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 import { Message } from "@mui/icons-material";
 import { useConfirm } from "material-ui-confirm";
-
 
 export default function Products(props) {
   // store
@@ -84,19 +84,21 @@ export default function Products(props) {
   const confirmBox = (e, action, id) => {
     e.preventDefault();
 
-    confirm({ description: `This change will displayed in product listing !!!` }, option)
+    confirm(
+      { description: `This change will displayed in product listing !!!` },
+      option
+    )
       .then(async () => {
         let res = await action(id);
 
         if (res) {
-
-          setCheck(check.map((row, index) => {
-            // //// console.log(parseInt(id[1]) === index)
-            if (parseInt(id[1]) === index)
-              return !row
-            else
-              return row
-          }))
+          setCheck(
+            check.map((row, index) => {
+              // //// console.log(parseInt(id[1]) === index)
+              if (parseInt(id[1]) === index) return !row;
+              else return row;
+            })
+          );
           dispatch(
             setAlert({
               open: true,
@@ -104,8 +106,7 @@ export default function Products(props) {
               message: res.data.message,
             })
           );
-        }
-        else{
+        } else {
           dispatch(
             setAlert({
               open: true,
@@ -120,7 +121,7 @@ export default function Products(props) {
       });
   };
 
-  const [check, setCheck] = useState([])
+  const [check, setCheck] = useState([]);
 
   // catalog State
   const [catalog, setCatalog] = useState({
@@ -128,30 +129,29 @@ export default function Products(props) {
     subCategory: [],
   });
 
-  async function fetchData  ()  {
-
+  async function fetchData() {
     try {
-    setPageState((lastState) => ({
-      ...lastState,
-      isLoading: true,
-    }));
+      setPageState((lastState) => ({
+        ...lastState,
+        isLoading: true,
+      }));
 
-    let response = await getListProduct({
-      page: pageState.page,
-      limit: pageState.limit,
-      total: pageState.total,
-      title: pageState.title,
-      category: pageState.category,
-      SKU: pageState.SKU,
-      subCategory: pageState.subCategory,
-    })
-      if(response.status === 200)  {
-
-
+      let response = await getListProduct({
+        page: pageState.page,
+        limit: pageState.limit,
+        total: pageState.total,
+        title: pageState.title,
+        category: pageState.category,
+        SKU: pageState.SKU,
+        subCategory: pageState.subCategory,
+      });
+      if (response.status === 200) {
         // set status check
-        setCheck(response.data.data.map((row, index) => {
-          return row.status
-        }))
+        setCheck(
+          response.data.data.map((row, index) => {
+            return row.status;
+          })
+        );
 
         setPageState((lastState) => ({
           ...lastState,
@@ -173,32 +173,33 @@ export default function Products(props) {
           total: response.data.total,
           filter: false,
         }));
-      }}
-      catch(err) {
-        // console.log(err)
-        dispatch(setAlert({
-          open : true,
-          message : "Problem in loading list.",
-          variant : 'error'
-      }))
-      };
-  };
+      }
+    } catch (err) {
+      // console.log(err)
+      dispatch(
+        setAlert({
+          open: true,
+          message: "Problem in loading list.",
+          variant: "error",
+        })
+      );
+    }
+  }
 
   useEffect(() => {
     fetchData();
     fetchCategories();
   }, [pageState.page, pageState.limit, pageState.filter]);
 
- 
-  async function fetchCategories(){
-    let cat =  await categoryList();
-    let subCat =  await getSubCatagories();
+  async function fetchCategories() {
+    let cat = await categoryList();
+    let subCat = await getSubCatagories();
 
-    if(cat.status === 200 && subCat.status === 200)
-    setCatalog({
-      category: cat.data.data,
-      subCategory: subCat.data.data,
-    });
+    if (cat.status === 200 && subCat.status === 200)
+      setCatalog({
+        category: cat.data.data,
+        subCategory: subCat.data.data,
+      });
   }
 
   const columns = [
@@ -208,8 +209,13 @@ export default function Products(props) {
       field: "status",
       headerName: "Status",
       width: 100,
-      renderCell: (params) => <Switch onChange={handleSwitch} name={`${params.row.action._id + ' ' + (params.row.id - 1)}`} checked={check[params.row.id - 1]}></Switch>,
-
+      renderCell: (params) => (
+        <Switch
+          onChange={handleSwitch}
+          name={`${params.row.action._id + " " + (params.row.id - 1)}`}
+          checked={check[params.row.id - 1]}
+        ></Switch>
+      ),
     },
     {
       field: "featured_image",
@@ -330,31 +336,25 @@ export default function Products(props) {
             </IconButton>
           </Tooltip>
           {/* // ============== delete product */}
-          {/* <IconButton onClick={() => { deleteProduct(params.formattedValue._id).then((res)=>{
-                 //setRows(Row.filter((set)=>{
-                  return  set.action._id !== params.formattedValue._id  ;
-                }))
-              dispatch({type: Notify,payload:{
-                open : true,
-                variant : 'success',
-                message : "Product deleted successfully !!!"
-              }})
+          <IconButton
+            onClick={(e) =>
+              {
+                return confirmBox(e, deleteProduct,params.formattedValue._id);
             }
-            
-            )}} >
-              <DeleteIcon />
-        </IconButton> */}
+            }
+          >
+            <DeleteIcon />
+          </IconButton>
         </Box>
       ),
     },
   ];
 
-
   const handleSwitch = (e) => {
     // //// console.log(e.target.name)
     // //// console.log(check)
 
-    const id = e.target.name.split(' ')[0]
+    const id = e.target.name.split(" ")[0];
 
     // console.log(id)
 
@@ -364,11 +364,9 @@ export default function Products(props) {
       type: "Product",
       operation: "updateProductStatus",
       _id: id,
-      status : e.target.checked
-    })
-
-  
-  }
+      status: e.target.checked,
+    });
+  };
 
   function DataGridView() {
     return (

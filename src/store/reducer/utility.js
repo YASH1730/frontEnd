@@ -94,8 +94,11 @@ export const socket = (state = initialSocket, action) => {
         case 'SETSOCKET':
             return state = {...state,id : action.payload};
         case 'ACTIVE_USER':
-            // // console.log(action.payload)
-            return state = {...state,active_user : action.payload};
+            // console.log(action.payload,state)
+            return state = {...state,active_user : [...state.active_user,action.payload]};
+        case 'LOGOUT':
+            // console.log(action.payload,state)
+            return state = {...state,active_user : state.active_user.filter(row=>!row[action.payload])};
         default:
             return state;
     }
@@ -108,7 +111,7 @@ const initialMessage = {
 export const message = (state = initialMessage, action) => {
     switch (action.type) {
         case 'NEW_MESSAGE':
-            // console.log(action.payload)
+            console.log(action.payload)
             return state = {...action.payload};
         default:
             return state;
