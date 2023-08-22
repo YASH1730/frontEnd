@@ -786,7 +786,7 @@ export const getProduct = async () => {
 };
 
 export const getArticlesId = async (data) => {
-  return await axios.get(`${API}/getArticlesId?search=${data}`, {
+  return await axios.get(`${API}/getArticlesId?search=${data.search}&PID=${data.PID}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },

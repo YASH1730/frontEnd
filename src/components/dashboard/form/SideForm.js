@@ -4576,6 +4576,7 @@ const SideForm = () => {
     FD.append("product_articles", JSON.stringify(Product_SKU));
     FD.append("hardware_articles", JSON.stringify(Hardware_SKU));
     FD.append("note", changeData.note);
+    FD.append("sample", changeData.sample ? true : false);
     
     const res = addDraft(FD);
 
@@ -6071,7 +6072,7 @@ const SideForm = () => {
   }
   async function handleSearch(e) {
     const delayDebounceFn = setTimeout(() => {
-      getArticlesId(e.target.value)
+      getArticlesId({search : e.target.value,PID : changeData.PID })
         .then((res) => {
           setProductSKU((old) => ({
             ...old,
@@ -6111,7 +6112,7 @@ const SideForm = () => {
     const delayDebounceFn = setTimeout(() => {
       searchPurchaseOrder(e.target.value)
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           setProductSKU((old) => ({
             ...old,
             PID: res.data.PID,
@@ -23147,7 +23148,7 @@ const SideForm = () => {
                       size="small"
                       fullWidth
                       noOptionsText={"ex : PID-01001"}
-                      multiple
+                      // multiple
                       autoHighlight
                       id="combo-box-demo"
                       options={productSKU.PID.map((row) => {
@@ -23459,7 +23460,7 @@ const SideForm = () => {
                       size="small"
                       fullWidth
                       noOptionsText={"ex : PID-01001"}
-                      multiple
+                      // multiple
                       autoHighlight
                       id="combo-box-demo"
                       options={productSKU.PID.map((row) => {
@@ -26668,6 +26669,16 @@ const SideForm = () => {
                     label = "Note" 
                     rows = {5} 
                     onChange={handleProductFields}
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={changeData.smpale_sent}
+                          onChange={handleProductFields}
+                          name="smpale_sent"
+                        />
+                      }
+                      label="Smpale"
                     />
 
                     <Button
