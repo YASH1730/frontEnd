@@ -15,6 +15,7 @@ import {
   FormControlLabel,
   Checkbox,
   Switch,
+  Autocomplete,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -29,13 +30,13 @@ import {
   getSubCatagories,
   addDraft,
   deleteProduct,
+  getLinkedProduct,
+  getArticlesId,
+  unlinkFromVariations,
+  linkToVariations,
 } from "../../../services/service";
 import {
-  DataGrid,
-  // gridPageCountSelector,
-  // gridPageSelector,
-  // useGridApiContext,
-  // useGridSelector,
+  DataGrid
 } from "@mui/x-data-grid";
 // import Pagination from '@mui/material/Pagination';
 import { useDispatch } from "react-redux";
@@ -46,7 +47,8 @@ import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import finalPropsSelectorFactory from "react-redux/es/connect/selectorFactory";
 import { Message } from "@mui/icons-material";
 import { useConfirm } from "material-ui-confirm";
-
+import ModalBox from "../../Utility/ModalBox";
+import LanIcon from '@mui/icons-material/Lan';
 export default function Products(props) {
   // store
   const dispatch = useDispatch();
@@ -65,11 +67,20 @@ export default function Products(props) {
     filter: false,
   });
 
+
   const [open, setModelBox] = useState({
     open: false,
     data: null,
     setRow: setPageState,
   });
+
+  // this state is for the universal state
+  const [modelState, setModelState] = useState({
+    open: false,
+    content: <></>,
+    width: 500,
+    unlink: []
+  })
 
   const confirm = useConfirm();
 
@@ -271,7 +282,7 @@ export default function Products(props) {
     {
       field: "action",
       headerName: "Actions",
-      width: 250,
+      width: 300,
       renderCell: (params) => (
         <Box sx={{ display: "flex", gap: "5px" }}>
           <Tooltip title="Update">
@@ -335,11 +346,18 @@ export default function Products(props) {
               <RemoveRedEyeIcon />
             </IconButton>
           </Tooltip>
+          <Tooltip title="Variation Linking">
+            <IconButton
+              onClick={() => handleVariationLinking(params.row.action)}
+              aria-label="update"
+            >
+              <LanIcon />
+            </IconButton>
+          </Tooltip>
           {/* // ============== delete product */}
           <IconButton
-            onClick={(e) =>
-              {
-                return confirmBox(e, deleteProduct,params.formattedValue._id);
+            onClick={(e) => {
+              return confirmBox(e, deleteProduct, params.formattedValue._id);
             }
             }
           >
@@ -349,6 +367,33 @@ export default function Products(props) {
       ),
     },
   ];
+
+  async function handleVariationLinking(product) {
+    return setModelState({
+      ...modelState, open: true, content: <>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <Typography variant='h6'>Variation Linking</Typography>
+          </Grid>
+          {/* // Linked Products */}
+          <Grid item xs={12}>
+            <LinkedProduct product={product} setState= {setModelState} />
+          </Grid>
+          {/* Add new products under the ACIN */}
+          <Grid item xs={12}>
+            <Grid container>
+              <Grid item sx={12}>
+                <Typography variant="body1">Add Product as Variants</Typography>
+              </Grid>
+              <Grid item xs={12} p={1}>
+                <SelectProducts ACIN = {product.ACIN}  setState = {setModelState} />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+      </>
+    })
+  }
 
   const handleSwitch = (e) => {
     // //// console.log(e.target.name)
@@ -419,6 +464,9 @@ export default function Products(props) {
 
   return (
     <Box sx={{ pl: 4, pr: 4 }}>
+      <ModalBox
+        state={modelState} setState={setModelState}
+      ></ModalBox>
       <Typography component={"span"} sx={{ display: "block" }} variant="h5">
         Products
       </Typography>
@@ -948,4 +996,165 @@ function DuplicateProduct({ open, setOpen, dispatch }) {
       </div>
     </>
   );
+}
+
+// these are the part of the variation link and Unlink
+
+// component for selecting multiple projects at a time 
+function SelectProducts({ACIN,setState}) {
+  const dispatch = useDispatch();
+  const [articles, setArticles] = useState({ P_SKU: [] })
+  const [products, setProductToAdd] = useState()
+
+  async function handleSearch(e) {
+    const delayDebounceFn = setTimeout(() => {
+      getArticlesId({ search: e.target.value })
+        .then((res) => {
+          setArticles((old) => ({
+            P_SKU: res.data.P_SKU,
+          }));
+        })
+        .catch((err) => {
+          setArticles((old) => ({
+            P_SKU: []
+          }));
+        });
+    }, 1000);
+    return () => clearTimeout(delayDebounceFn);
+  }
+
+  async function handleSubmit() {
+    let FD = new FormData();
+
+    FD.append("products",products.product_articles);
+    FD.append("ACIN",ACIN)
+
+    let res =await linkToVariations(FD)
+    if(res.data.status === 200)
+    dispatch(setAlert({
+      variant : "success",
+      open : true,
+      message : res.data.message || "Products has been linked."
+    }))
+  else
+  dispatch(setAlert({
+    variant : "error",
+    open : true,
+    message : res.data.message || "Error while performing the operation."
+  }))
+
+  setState(old => ({...old,open : false}))
+  }
+
+  return (<>
+    <Autocomplete
+      disablePortal
+      size="small"
+      fullWidth
+      noOptionsText={"ex : P-01001"}
+      multiple
+      autoHighlight
+      id="combo-box-demo"
+      options={articles.P_SKU.map((row) => {
+        return row.SKU;
+      })}
+      renderInput={(params) => (
+        <TextField
+          onKeyUpCapture={handleSearch}
+          value={articles.product_articles || ""}
+          {...params}
+          label="Product SKU"
+        />
+      )}
+      onChange={(e, newMember) =>
+        setProductToAdd((old) => ({
+          ...old,
+          product_articles: newMember,
+        }))
+      }
+    />
+    <Box sx={{ float: "right" }} mt={1}>
+      <Button onClick={handleSubmit} variant="contained" size="small">Link</Button>
+    </Box>
+  </>)
+}
+
+function LinkedProduct({ product, setState}) {
+const dispatch = useDispatch()
+  const [children, setChildren] = useState([])
+  const [unlink, setUnlink] = useState([])
+  useEffect(() => {
+    handleGetProductVariants(product.ACIN);
+  }, [product])
+  useEffect(() => {
+    //  handleGetProductVariants(product.ACIN);
+  }, [unlink])
+
+  async function handleSubmit(id) {
+    let FD = new FormData();
+
+    if(id)
+    FD.append('products', id);
+    else
+    FD.append('products', unlink);
+
+    let res = await unlinkFromVariations(FD)
+
+    if(res.data.status === 200)
+      dispatch(setAlert({
+        variant : "success",
+        open : true,
+        message : res.data.message || "Products has been unlinked."
+      }))
+    else
+    dispatch(setAlert({
+      variant : "error",
+      open : true,
+      message : res.data.message || "Error while performing the operation."
+    }))
+
+    setState(old => ({...old,open : false}))
+  }
+
+
+  async function handleGetProductVariants() {
+    const res = await getLinkedProduct(product.ACIN);
+    setChildren([...res.data.data])
+  }
+
+
+  function handleUnlink(e) {
+    if (e.target.checked === true)
+      return setUnlink(old => [...old, e.target.name])
+
+    return setUnlink(old => old.filter(row => row !== e.target.name))
+
+  }
+
+  return <Grid container>
+    <Grid item xs={12}>
+      <Grid container>
+        <Grid item sx={12} ><Typography variant="body1">Linked Products</Typography></Grid>
+        {children.map(row => product.SKU !== row.SKU && <Grid key={row._id} item xs={12} p={1} >
+          <FormControlLabel control={<Checkbox onChange={handleUnlink} size="small" name={row._id} >
+          </Checkbox>} label={
+            <Box sx={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <Typography variant="body1">{row.SKU}</Typography>
+              <Box >
+              <Typography sx={{textOverflow:'ellipsis',maxWidth:"250px",overflow : 'hidden',whiteSpace : "nowrap"}} variant="body1" >{row.product_title}</Typography>
+              </Box>
+            </Box>
+          } />
+          <Box sx={{ float: "right" }}>
+            <Button disabled = {unlink.length > 0 ? true :false} variant="contained" onClick={old => handleSubmit(row._id)} size="small" >Unlink</Button>
+          </Box>
+        </Grid>)}
+      </Grid>
+    </Grid>
+    {unlink.length > 0 && <Grid item xs={12}>
+      <Box sx={{ float: "right" }}>
+        <Button variant="contained" size="small" onClick={()=>handleSubmit()} >Unlink Selected</Button>
+      </Box>
+    </Grid>}
+  </Grid>
 }
